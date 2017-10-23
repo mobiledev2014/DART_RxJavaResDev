@@ -137,6 +137,10 @@ public class TemplateAdapter extends BaseAdapter {
         dialogViewApprover.show();
     }
 
+    public void test()
+    {
+
+    }
     public class Widgets {
         TextView product_type, stand_ref, date_modified;
         LinearLayout rowBackground;
