@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/ll_row_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f7f7f7"
+        android:orientation="horizontal"
+        android:padding="3dp">
+
+        <HorizontalScrollView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:fadeScrollbars="false"
+            android:layout_gravity="center"
+            android:layout_marginRight="1dp">
+
+            <TextView
+                android:id="@+id/tv_template_type"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="18dp"
+                android:text="Drugs"
+                android:gravity="center"
+                android:textColor="#444444"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"/>
+
+        </HorizontalScrollView>
+
+        <HorizontalScrollView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:fadeScrollbars="false"
+            android:layout_gravity="center"
+            android:layout_marginRight="1dp">
+
+            <TextView
+                android:id="@+id/tv_template_stand"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="18dp"
+                android:text="Good Manufacturing"
+                android:gravity="center"
+                android:textColor="#444444"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"/>
+
+        </HorizontalScrollView>
+
+        <HorizontalScrollView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:fadeScrollbars="false"
+            android:layout_gravity="center"
+            android:layout_marginRight="1dp">
+
+            <TextView
+                android:id="@+id/tv_template_date_modified"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="18dp"
+                android:text="07-17-2017 3:05 PM"
+                android:gravity="center"
+                android:textColor="#444444"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"/>
+
+        </HorizontalScrollView>
+
+        <HorizontalScrollView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:fadeScrollbars="false"
+            android:layout_gravity="center"
+            android:layout_marginRight="1dp">
+
+            <!--<TextView
+                android:id="@+id/tv_template_action"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="18dp"
+                android:text="Use this Template"
+                android:gravity="center"
+                android:textColor="#444444"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"/>-->
+
+            <Button
+                android:id="@+id/btn_use_template"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:textSize="15dp"
+                android:text="Use"
+                android:textColor="#fff"
+                android:layout_gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:background="@drawable/submit_button"
+                android:layout_margin="5dp"/>
+
+
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
+</RelativeLayout>

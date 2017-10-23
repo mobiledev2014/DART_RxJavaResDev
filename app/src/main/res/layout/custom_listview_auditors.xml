@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/row_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f7f7f7"
+        android:orientation="vertical"
+        android:padding="3dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:showDividers="beginning|end"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:id="@+id/tr_row"
+                android:descendantFocusability="blocksDescendants" >
+
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5"
+                    android:fadeScrollbars="false"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="1dp">
+
+                    <TextView
+                        android:id="@+id/tv_auditors_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+                        android:text="Juan Dela Crus"
+                        android:gravity="center"
+                        android:textColor="#444444"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"/>
+
+                </HorizontalScrollView>
+
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5"
+                    android:fadeScrollbars="false"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="1dp">
+
+                    <TextView
+                        android:id="@+id/tv_auditors_designation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+                        android:text="Corporate GMP Auditor"
+                        android:gravity="center"
+                        android:textColor="#444444"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"/>
+
+                </HorizontalScrollView>
+
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5"
+                    android:fadeScrollbars="false"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="1dp">
+
+                    <!--<TextView
+                        android:id="@+id/tv_auditors_action"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="18dp"
+                        android:text=" "
+                        android:gravity="center"
+                        android:textColor="#444444"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"/>-->
+
+                    <Button
+                        android:id="@+id/btn_view_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:textSize="15dp"
+                        android:text="View"
+                        android:textColor="#fff"
+                        android:layout_gravity="center"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:background="@drawable/submit_button"/>
+
+                </HorizontalScrollView>
+
+            </TableRow>
+
+        </TableLayout>
+
+    </LinearLayout>
+
+    <!--<LinearLayout
+        android:id="@+id/ll_row"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:orientation="horizontal"></LinearLayout>-->
+
+</RelativeLayout>

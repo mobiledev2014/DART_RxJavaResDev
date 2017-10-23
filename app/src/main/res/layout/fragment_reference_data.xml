@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eaeaea"
+    tools:context="com.unilab.gmp.activity.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="30dp"
+        android:background="#fff">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".2">
+            
+            <ImageView
+                android:id="@+id/iv_auditor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/btnrd_auditors"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="60dp"
+                android:layout_marginLeft="60dp"/>
+            
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".2">
+
+            <ImageView
+                android:id="@+id/iv_reviewer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/btnrd_reviewer"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="60dp"
+                android:layout_marginLeft="60dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".2">
+
+            <ImageView
+                android:id="@+id/iv_approver"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/btnrd_approver"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="60dp"
+                android:layout_marginLeft="60dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".2">
+
+            <ImageView
+                android:id="@+id/iv_supplier"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/btnrd_scinfo"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="60dp"
+                android:layout_marginLeft="60dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EBEBEB"
+    tools:context="com.unilab.gmp.activity.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fcfcfc"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".06"
+            android:background="#EBEBEB"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="AUDIT REPORT"
+                android:textColor="#4594cd"
+                android:textSize="@dimen/sub_title_size"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".94"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".95">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".5"
+                                android:gravity="center|left"
+                                android:text="Audit Report Number"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_template_gmp_num"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".5"
+                                android:gravity="center|left"
+                                android:text="-"
+                                android:textSize="20sp" />
+
+                        </LinearLayout><!--report number-->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".5"
+                                android:gravity="center|left"
+                                android:text="Name of Site: "
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <AutoCompleteTextView
+                                android:id="@+id/et_template_site"
+                                android:layout_width="0dp"
+                                android:layout_height="35dp"
+                                android:layout_marginBottom="5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_weight=".5"
+                                android:background="@drawable/template_field"
+                                android:gravity="center|left"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:singleLine="true"
+                                android:textSize="20sp" />
+
+                        </LinearLayout><!--name of site-->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".5"
+                                android:gravity="center|left"
+                                android:text="Site Address 1 (Street, City)"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <EditText
+                                android:id="@+id/et_template_site_address_one"
+                                android:layout_width="0dp"
+                                android:layout_height="35dp"
+                                android:layout_weight=".5"
+                                android:background="@drawable/template_button_one"
+                                android:gravity="center|left"
+                                android:layout_marginTop="3dp"
+                                android:paddingLeft="10dp"
+                                android:textColor="#000"
+                                android:paddingRight="10dp"
+                                android:singleLine="true"
+                                android:textSize="20sp"
+                                android:enabled="false"/>
+
+                        </LinearLayout><!--address 1-->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".5"
+                                android:gravity="center|left"
+                                android:text="Site Address 2 (State/Province, Country)"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <EditText
+                                android:id="@+id/et_template_site_address_two"
+                                android:layout_width="0dp"
+                                android:layout_height="35dp"
+                                android:layout_weight=".5"
+                                android:background="@drawable/template_button_one"
+                                android:gravity="center|left"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:textColor="#000"
+                                android:singleLine="true"
+                                android:textSize="20sp"
+                                android:enabled="false"/>
+
+                        </LinearLayout><!--address 2-->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".5"
+                                android:gravity="center|left"
+                                android:text="Date of Audit"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".5"
+                                android:orientation="horizontal">
+
+                                <!--<Button
+                                    android:id="@+id/btn_template_date_from"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight=".5"
+                                    android:text="Date from"
+                                    android:background="@drawable/template_button_one"
+                                    android:layout_marginRight="5dp"/>
+
+                                <Button
+                                    android:id="@+id/btn_template_date_to"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight=".5"
+                                    android:text="Date to"
+                                    android:background="@drawable/template_button_one"
+                                    android:layout_marginLeft="5dp"/>-->
+
+                                <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                    android:id="@+id/lv_template_audit_date"
+                                    android:layout_width="0dp"
+                                    android:layout_weight=".7"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="3dp"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight=".3"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <Button
+                                        android:id="@+id/btn_template_audit_date_add"
+                                        android:layout_width="0dp"
+                                        android:layout_height="40dp"
+                                        android:layout_margin="3dp"
+                                        android:layout_weight=".5"
+                                        android:background="@drawable/template_button_two"
+                                        android:text="+" />
+
+                                    <Button
+                                        android:id="@+id/btn_template_audit_date_delete"
+                                        android:layout_width="0dp"
+                                        android:layout_height="40dp"
+                                        android:layout_margin="3dp"
+                                        android:layout_weight=".5"
+                                        android:background="@drawable/template_button_two"
+                                        android:text="-" />
+
+                                </LinearLayout><!--buttons-->
+
+
+                            </LinearLayout>
+                            <LinearLayout
+                                android:visibility="gone"
+                                android:layout_width="0dp"
+                                android:layout_height="35dp"
+                                android:layout_weight=".5"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/btn_template_date_from"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight=".5"
+                                    android:text="Date from"
+                                    android:background="@drawable/template_button_one"
+                                    android:layout_marginRight="5dp"/>
+
+                                <Button
+                                    android:id="@+id/btn_template_date_to"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight=".5"
+                                    android:text="Date to"
+                                    android:background="@drawable/template_button_one"
+                                    android:layout_marginLeft="5dp"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout><!--date audit-->
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp">
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:showDividers="beginning|end">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="1dp"
+                                    android:layout_weight=".5"
+                                    android:background="#767676"
+                                    android:paddingBottom="10dp"
+                                    android:paddingTop="10dp"
+                                    android:text="Elements and Questions"
+                                    android:textColor="#f7f7f7"
+                                    android:textSize="20dp"
+                                    android:paddingLeft="10dp"/>
+
+                            </TableRow>
+
+                        </TableLayout> <!--elements and questions-->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center|left"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center|left"
+                                android:text="Product Type: "
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_template_product_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center|left"
+                                android:text="DRUGS"
+                                android:textSize="20sp" />
+
+                        </LinearLayout><!--prudct type-->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top|left"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="top|left"
+                                android:text="Standard/Reference: "
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_template_standard"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="top|left"
+                                android:text="PIC/S Part 1 - Guide to Good Manufacturing Practice for Medicinal Products (PE 009-13) and its relevant annexes"
+                                android:textSize="20sp" />
+
+                        </LinearLayout><!--standard reference-->
+
+                        <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                            android:id="@+id/lv_template_element"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="3dp"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".05"
+                android:gravity="center|end"
+                android:layout_margin="3dp">
+
+                <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Cancel"
+                    android:textColor="#fff"
+                    android:background="@drawable/cancel_button"
+                    android:layout_marginRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"/>
+
+                <Button
+                    android:id="@+id/btn_save_draft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Save as Draft"
+                    android:textColor="#fff"
+                    android:background="@drawable/draft_button"
+                    android:layout_marginRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"/>
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Next"
+                    android:textColor="#fff"
+                    android:background="@drawable/submit_button"
+                    android:layout_marginRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

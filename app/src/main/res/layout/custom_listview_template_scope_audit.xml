@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:layout_marginTop="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:orientation="horizontal"
+            android:padding="3dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Type of Audit"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_weight=".5"
+                android:background="@drawable/template_field">
+
+                <Spinner
+                    android:id="@+id/s_template_next_next_scope_audit"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"></Spinner>
+
+            </LinearLayout>
+
+        </LinearLayout><!--type of audit-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:orientation="horizontal"
+            android:padding="3dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Remarks"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_weight=".5">
+
+                <EditText
+                    android:id="@+id/et_template_next_scope_audit_remarks"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight=".5"
+                    android:background="@drawable/template_field"
+                    android:gravity="top|left"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+        </LinearLayout><!--scope_detail-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|end"
+            android:orientation="horizontal"
+            android:background="#fff"
+            android:padding="3dp">
+
+            <Button
+                android:id="@+id/btn_template_next_scope_audit_interest_add"
+                android:layout_width="110dp"
+                android:layout_height="40dp"
+                android:layout_margin="3dp"
+                android:background="@drawable/template_button_two"
+                android:text="Add"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btn_template_next_scope_audit_interest_delete"
+                android:layout_width="110dp"
+                android:layout_height="40dp"
+                android:layout_margin="3dp"
+                android:background="@drawable/template_button_two"
+                android:text="Delete"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+
+        </LinearLayout><!--buttons-->
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="3dp">-->
+
+        <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+            android:id="@+id/lv_template_next_scope_audit_interest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:divider="@android:color/transparent"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+
+        <!--</LinearLayout>-->
+
+    </LinearLayout>
+
+</RelativeLayout>

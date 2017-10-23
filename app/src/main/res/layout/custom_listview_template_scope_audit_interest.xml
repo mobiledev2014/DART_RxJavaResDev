@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="3dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Product of Interest"
+                    android:layout_marginTop="5dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/template_field">
+
+                <Spinner
+                    android:id="@+id/s_template_next_next_scope_audit_interest"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"></Spinner>
+
+            </LinearLayout>
+
+        </LinearLayout><!--product of interest-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="3dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight=".5"
+                android:text="Disposition: "
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_weight=".5"
+                android:background="@drawable/template_field">
+
+                <Spinner
+                    android:id="@+id/s_template_next_summary_recommendation_disposition"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"></Spinner>
+
+            </LinearLayout>
+
+        </LinearLayout><!--disposition-->
+
+    </LinearLayout>
+
+</RelativeLayout>

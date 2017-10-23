@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">DART</string>
+    <string name="supplier">Supplier &amp; Company Information</string>
+    <string name="supplier_title">SUPPLIER &amp; COMPANY INFORMATION</string>
+    <string name="sample_question">A1. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
+
+    <string name="same_supplier_description">
+        - Manufacturing License
+        \n- Food and Drug Administrator (Philippines)
+        \n- XYZ123
+        \n- Validity
+        \n- 21 December 2017
+        \n- Manufacturing License
+        \n- Food and Drug Administrator (Philippines)
+        \n- XYZ123
+        \n- Validity
+        \n- 21 December 2017
+    </string>
+
+    <string name="sample_supplier_background">Ownership Background and History The Jenz Creative Studio was founded in 2000 by Muhd Fazzuan and colleagues. A year before, Muhd Fazzuan who was working as the staff in the marketing department discovered a big problem in meeting the need of the Jenz Group in maintaining their first web page to meet the current e-marketing demand on that time. Muhd Fazzuan later initiated a plan to create Jenz’s own sub company which is not only providing graphic design, website creator and advertising consultant service to the main company but also to others as well. Together working with him in this effort is his colleagues Nurhaziqah Anuar, Nur Aqilah, Nur Izza and Romaizatul who each of them possess unique knowledge in information technology field.</string>
+    <string name="sample_supplier_products">1. Ownership Background and History The Jenz Creative Studio was founded in 2000 by Muhd Fazzuan and colleagues.\n2. A year before, Muhd Fazzuan who was working as the staff in the marketing department discovered a big problem in meeting the need of the Jenz Group in maintaining their first web page to meet the current e-marketing demand on that time.\n3. Muhd Fazzuan later initiated a plan to create Jenz’s own sub company which is not only providing graphic design, website creator and advertising consultant service to the main company but also to others as well.\n4. Together working with him in this effort is his colleagues Nurhaziqah Anuar, Nur Aqilah, Nur Izza and Romaizatul who each of them possess unique knowledge in information technology field.</string>
+
+    <string name="default_answer">Contrary to popular belief, Lorem Ipsum is not simply random test.</string>
+</resources>

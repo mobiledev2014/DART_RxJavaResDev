@@ -1,0 +1,243 @@
+package com.unilab.gmp.adapter;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
+import com.unilab.gmp.R;
+import com.unilab.gmp.model.ModelTemplateElements;
+import com.unilab.gmp.model.ModelTemplateQuestionDetails;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by c_jhcanuto on 11/21/2016.
+ */
+public class TemplateElementAdapter extends BaseAdapter {
+
+    LayoutInflater inflater = null;
+    Context context;
+    ArrayList<TemplateElementQuestionAdapter> templateElementQuestionAdapters;
+    Dialog dialogElementNa;
+    boolean pick;
+    int size = 0;
+    private List<ModelTemplateElements> questionModel;
+
+    public TemplateElementAdapter(Context context, List<ModelTemplateElements> questionModel, String report_id) {
+        this.questionModel = questionModel;
+        this.context = context;
+        this.notifyDataSetChanged();
+        templateElementQuestionAdapters = new ArrayList<>();
+        for (ModelTemplateElements mte : questionModel) {
+            mte.setModelTemplateQuestionDetails(ModelTemplateQuestionDetails.find(ModelTemplateQuestionDetails.class,
+                    "elementid = ? ", mte.getElement_id()));
+            TemplateElementQuestionAdapter questionList = new TemplateElementQuestionAdapter(context, mte.getModelTemplateQuestionDetails(), report_id);
+            templateElementQuestionAdapters.add(questionList);
+            size++;
+        }
+
+        inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        try {
+
+            ListAdapter listAdapter = listView.getAdapter();
+            if (listAdapter == null) {
+                return;
+            }
+            int totalHeight = listView.getPaddingTop()
+                    + listView.getPaddingBottom();
+            int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
+                    View.MeasureSpec.EXACTLY);
+            for (int i = 0; i < listAdapter.getCount(); i++) {
+                View listItem = listAdapter.getView(i, null, listView);
+
+                if (listItem != null) {
+                    // This next line is needed before you call measure or else
+                    // you won't get measured height at all. The listitem needs
+                    // to be drawn first to know the height.
+                    listItem.setLayoutParams(new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.WRAP_CONTENT,
+                            RelativeLayout.LayoutParams.WRAP_CONTENT));
+                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+                    totalHeight += listItem.getMeasuredHeight();
+
+                }
+            }
+
+            ViewGroup.LayoutParams params = listView.getLayoutParams();
+            params.height = totalHeight
+                    + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+            listView.setLayoutParams(params);
+            listView.requestLayout();
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+
+    @Override
+    public int getCount() {
+        return questionModel.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final Widgets widgets = new Widgets();
+        final View rowView;
+        final int z = position;
+        final String elementNumber;
+        //String pick = "";
+
+        rowView = inflater.inflate(R.layout.custom_listview_element, null);
+        widgets.tvElementNumber = (TextView) rowView.findViewById(R.id.tv_element_number);
+        widgets.lvQuestionList = (ExpandableHeightListView) rowView.findViewById(R.id.lv_question_list);
+        widgets.cbElementNa = (CheckBox) rowView.findViewById(R.id.cb_element_na);
+
+        elementNumber = questionModel.get(position).getElement_name();
+
+//        if (size != templateElementQuestionAdapters.size()) {
+//            Log.e("JHUN---", "pasok sa check NAasdasd");
+//            TemplateElementQuestionAdapter questionList = new TemplateElementQuestionAdapter(context, ModelTemplateQuestionDetails.find(ModelTemplateQuestionDetails.class,
+//                    "elementid = ? ", questionModel.get(position).getElement_id()), this);
+//            templateElementQuestionAdapters.add(questionList);
+//        }
+//
+//        boolean valid = true;
+//        for (ModelTemplateQuestionDetails mtqd : templateElementQuestionAdapters.get(position).questionList) {
+//            if (mtqd.getAnswer_id() != "3") {
+//                valid = false;
+//            }
+//        }
+//        widgets.cbElementNa.setChecked(valid);
+
+        widgets.tvElementNumber.setText(elementNumber);
+        widgets.lvQuestionList.setAdapter(templateElementQuestionAdapters.get(position));
+        widgets.lvQuestionList.setExpanded(true);
+
+        //setListViewHeightBasedOnChildren(widgets.lvQuestionList);
+
+//        widgets.cbElementNa.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                if (b) {
+//                    dialogElementNa(widgets.cbElementNa, z);
+//                } else {
+//                    widgets.cbElementNa.setText("N/A");
+//                }
+//            }
+//        });
+
+        if(!templateElementQuestionAdapters.get(position).isChecked().isEmpty()){
+            widgets.cbElementNa.setText(templateElementQuestionAdapters.get(position).isChecked());
+            widgets.cbElementNa.setChecked(true);
+        }
+
+        widgets.cbElementNa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (widgets.cbElementNa.isChecked()) {
+                    dialogElementNa(widgets.cbElementNa, z);
+                } else {
+                    templateElementQuestionAdapters.get(z).setAnswer("", "");
+                    templateElementQuestionAdapters.get(z).notifyDataSetChanged();
+                    widgets.cbElementNa.setText("N/A");
+                }
+            }
+        });
+
+
+        return rowView;
+    }
+
+    public void save(String report_id) {
+
+        for (TemplateElementQuestionAdapter t : templateElementQuestionAdapters) {
+            t.save(report_id);
+        }
+    }
+
+    public boolean validate() {
+        boolean valid = true;
+        for (TemplateElementQuestionAdapter t : templateElementQuestionAdapters) {
+            for (ModelTemplateQuestionDetails mtqd : t.questionList) {
+                Log.e("JHUN---", mtqd.getAnswer_id() + "asd");
+                if (mtqd.getAnswer_id().isEmpty()) {
+                    valid = false;
+                }
+            }
+        }
+        return valid;
+    }
+
+    public void dialogElementNa(final CheckBox pick, final int z) {
+        dialogElementNa = new Dialog(context);
+        dialogElementNa.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialogElementNa.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogElementNa.setCancelable(false);
+        dialogElementNa.setContentView(R.layout.dialog_element_na);
+        dialogElementNa.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        Button na = (Button) dialogElementNa.findViewById(R.id.btn_element_na);
+        Button nc = (Button) dialogElementNa.findViewById(R.id.btn_element_nc);
+
+        na.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(context, "Not applicable", Toast.LENGTH_SHORT).show();
+                templateElementQuestionAdapters.get(z).setAnswer("3", "Not applicable");
+                templateElementQuestionAdapters.get(z).notifyDataSetChanged();
+                pick.setText("Not applicable");
+                dialogElementNa.dismiss();
+            }
+        });
+
+        nc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(context, "Not covered", Toast.LENGTH_SHORT).show();
+                templateElementQuestionAdapters.get(z).setAnswer("4", "Not covered");
+                templateElementQuestionAdapters.get(z).notifyDataSetChanged();
+                pick.setText("Not covered");
+                dialogElementNa.dismiss();
+            }
+        });
+
+
+        dialogElementNa.show();
+    }
+
+    public class Widgets {
+        TextView tvElementNumber;
+        ExpandableHeightListView lvQuestionList;
+        CheckBox cbElementNa;
+    }
+}

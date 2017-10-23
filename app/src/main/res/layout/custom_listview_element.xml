@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#767676"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tv_element_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".75"
+            android:layout_marginRight="1dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="10dp"
+            android:text="ELEMENT A - PHARMACEUTICAL QUALITY SYSTEM"
+            android:textColor="#f7f7f7"
+            android:textSize="20dp" />
+
+        <CheckBox
+            android:id="@+id/cb_element_na"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".25"
+            android:buttonTint="#f7f7f7"
+            android:text="N/A"
+            android:textColor="#f7f7f7"
+            android:textSize="20dp"
+            android:gravity="left|center"/>
+
+    </LinearLayout>
+
+    <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+        android:id="@+id/lv_question_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@android:color/transparent"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+
+</LinearLayout>
+
