@@ -46,45 +46,42 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".35"
+            android:layout_weight=".4"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".4"></LinearLayout>
+                android:layout_weight=".35"></LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".5"
+                android:layout_weight=".55"
                 android:orientation="vertical"
                 android:gravity="center">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight=".2">
+                    android:layout_weight=".35">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="@string/app_name"
-                        android:textColor="#000000"
-                        android:textSize="35sp"
-                        android:gravity="center"
-                        android:textStyle="bold"/>
+                        android:src="@drawable/dart_logo"
+                        android:adjustViewBounds="true"/>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight=".2"
+                    android:layout_weight=".16"
                     android:gravity="center"
                     android:focusableInTouchMode="true"
-                    android:paddingLeft="35dp"
-                    android:paddingRight="35dp">
+                    android:paddingLeft="55dp"
+                    android:paddingRight="55dp">
 
                     <EditText
                         android:id="@+id/et_username"
@@ -99,18 +96,19 @@
                         android:background="@drawable/login_textbox_final"
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
-                        android:textSize="@dimen/login_text_size"/>
+                        android:textSize="@dimen/login_text_size"
+                        android:textAlignment="center"/>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight=".2"
+                    android:layout_weight=".16"
                     android:gravity="center"
                     android:focusableInTouchMode="true"
-                    android:paddingLeft="35dp"
-                    android:paddingRight="35dp">
+                    android:paddingLeft="55dp"
+                    android:paddingRight="55dp">
 
                     <EditText
                         android:id="@+id/et_password"
@@ -124,26 +122,29 @@
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
                         android:textSize="@dimen/login_text_size"
-                        android:inputType="textPassword"/>
+                        android:inputType="textPassword"
+                        android:textAlignment="center"/>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight=".2"
+                    android:layout_weight=".19"
                     android:gravity="center"
-                    android:paddingLeft="35dp"
-                    android:paddingRight="35dp">
+                    android:paddingLeft="55dp"
+                    android:paddingRight="55dp">
 
                     <Button
                         android:id="@+id/btn_login"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="LOG-IN"
                         android:textColor="#ffffff"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
                         android:background="@drawable/login_button_final"
                         android:textSize="@dimen/login_text_size"/>
 
@@ -152,11 +153,11 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight=".2"
+                    android:layout_weight=".15"
                     android:orientation="horizontal"
                     android:gravity="top|left"
-                    android:paddingLeft="25dp"
-                    android:paddingRight="25dp">
+                    android:paddingLeft="55dp"
+                    android:paddingRight="55dp">
 
                     <CheckBox
                         android:id="@+id/cb_remember"
@@ -182,7 +183,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".5"></LinearLayout>
+            android:layout_weight=".45"></LinearLayout>
 
     </LinearLayout>
 
