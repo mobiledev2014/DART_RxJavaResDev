@@ -7,4 +7,5 @@
     <color name="row_color">#7ec1f1</color>
     <color name="template_new">#ffafb1</color>
     <color name="dividerColor">#7c7777</color>
+    <color name="checkbox_color">#3360ac</color>
 </resources>

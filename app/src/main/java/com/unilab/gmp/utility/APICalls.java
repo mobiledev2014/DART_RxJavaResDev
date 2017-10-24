@@ -428,7 +428,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                             modelSiteAuditHistory.setMajor_changes(mc.getMajor_changes());
                             modelSiteAuditHistory.save();
                             Log.e("testing", " CompanySite:major" + mc.getMajor_changes() + " date : ");
-                                    //+ modelSiteAuditHistory.getModelSiteDates().size());
+                            //+ modelSiteAuditHistory.getModelSiteDates().size());
                             if (modelSiteAuditHistory.getModelSiteDates() != null) {
                                 for (ModelSiteDate msd : modelSiteAuditHistory.getModelSiteDates()) {
                                     ModelSiteDate modelSiteDate = new ModelSiteDate();
@@ -470,6 +470,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 Log.e("numberoftemplates", "numberoftemplates : " + numberoftemplates);
                 for (TemplateDetailsModel tdm : templateListModel.getTemplate_list()) {
                     final String templateid = tdm.getTemplate_id();
+                    final String templateStatus = tdm.getStatus();
                     Call<ModelTemplates> listCall = ApiClient.getApiClientTemplate().create(ApiInterface.class).getData(tdm.getTemplate_id() + ".json");
                     listCall.enqueue(new Callback<ModelTemplates>() {
                         @Override
@@ -486,7 +487,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                     modelTemplate.setDateUpdated(modelTemplates.getDateUpdated());
                                     modelTemplate.setModelTemplateElements(modelTemplates.getModelTemplateElements());
                                     modelTemplate.setModelTemplateActivities(modelTemplates.getModelTemplateActivities());
-                                    modelTemplate.setStatus("1");
+                                    modelTemplate.setStatus(templateStatus);
+                                    Log.i("S T A T U S", "value : " + templateStatus);
                                     for (ModelTemplateElements mte : modelTemplates.getModelTemplateElements()) {
                                         mte.setTemplate_id(modelTemplates.getTemplateID() + "");
                                         if (isElementIDExisting(mte))
@@ -1555,9 +1557,14 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         if (!template.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
             changes++;
             template.setStatus("1");
-        } else {
+        } else if (modelTemplates.getStatus().equals("-2")){
+
+        } /*else if (modelTemplates.getStatus().equals("3")){
+
+        } */else {
             template.setStatus("2");
         }
+
 
         template.setDateUpdated(modelTemplates.getDateUpdated());
 

@@ -15,7 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".30"
+            android:layout_weight=".15"
             android:gravity="top|right">
 
             <LinearLayout
@@ -52,12 +52,12 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".3"></LinearLayout>
+                android:layout_weight=".4"></LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".4"
+                android:layout_weight=".5"
                 android:orientation="vertical"
                 android:gravity="center">
 
@@ -82,7 +82,9 @@
                     android:layout_height="0dp"
                     android:layout_weight=".2"
                     android:gravity="center"
-                    android:focusableInTouchMode="true">
+                    android:focusableInTouchMode="true"
+                    android:paddingLeft="35dp"
+                    android:paddingRight="35dp">
 
                     <EditText
                         android:id="@+id/et_username"
@@ -94,9 +96,9 @@
                         android:inputType="textEmailAddress"
                         android:maxLength="30"
                         android:paddingLeft="10dp"
-                        android:background="@drawable/login_textbox"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
+                        android:background="@drawable/login_textbox_final"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
                         android:textSize="@dimen/login_text_size"/>
 
                 </LinearLayout>
@@ -106,7 +108,9 @@
                     android:layout_height="0dp"
                     android:layout_weight=".2"
                     android:gravity="center"
-                    android:focusableInTouchMode="true">
+                    android:focusableInTouchMode="true"
+                    android:paddingLeft="35dp"
+                    android:paddingRight="35dp">
 
                     <EditText
                         android:id="@+id/et_password"
@@ -116,9 +120,9 @@
                         android:singleLine="true"
                         android:paddingRight="10dp"
                         android:paddingLeft="10dp"
-                        android:background="@drawable/login_textbox"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
+                        android:background="@drawable/login_textbox_final"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
                         android:textSize="@dimen/login_text_size"
                         android:inputType="textPassword"/>
 
@@ -128,7 +132,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight=".2"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:paddingLeft="35dp"
+                    android:paddingRight="35dp">
 
                     <Button
                         android:id="@+id/btn_login"
@@ -138,7 +144,7 @@
                         android:textColor="#ffffff"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:background="#0097a7"
+                        android:background="@drawable/login_button_final"
                         android:textSize="@dimen/login_text_size"/>
 
                 </LinearLayout>
@@ -148,7 +154,9 @@
                     android:layout_height="0dp"
                     android:layout_weight=".2"
                     android:orientation="horizontal"
-                    android:gravity="top|left">
+                    android:gravity="top|left"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="25dp">
 
                     <CheckBox
                         android:id="@+id/cb_remember"
@@ -156,7 +164,8 @@
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:text="Remember me"
-                        android:textColor="#565353"
+                        android:textColor="#ffffff"
+                        android:buttonTint="@color/checkbox_color"
                         android:textSize="@dimen/login_text_size"/>
 
                 </LinearLayout>
@@ -166,14 +175,14 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".3"></LinearLayout>
+                android:layout_weight=".1"></LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".35"></LinearLayout>
+            android:layout_weight=".5"></LinearLayout>
 
     </LinearLayout>
 
