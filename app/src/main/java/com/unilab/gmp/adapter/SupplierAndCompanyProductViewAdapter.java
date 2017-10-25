@@ -48,7 +48,7 @@ public class SupplierAndCompanyProductViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View rowview, ViewGroup viewGroup) {
         Widgets widgets;
-        if (rowview == null) {
+//        if (rowview == null) {
             widgets = new Widgets();
             rowview = inflater.inflate(R.layout.custom_listview_product_views, null);
 
@@ -65,9 +65,9 @@ public class SupplierAndCompanyProductViewAdapter extends BaseAdapter {
             widgets.type.setText(product.getType());
             widgets.name.setText(product.getProduct_name());
             rowview.setTag(widgets);
-        } else {
-            widgets = (Widgets) rowview.getTag();
-        }
+//        } else {
+//            widgets = (Widgets) rowview.getTag();
+//        }
         return rowview;
     }
 

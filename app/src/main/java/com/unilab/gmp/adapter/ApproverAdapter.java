@@ -55,7 +55,7 @@ public class ApproverAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View rowView, ViewGroup viewGroup) {
         Widgets widgets;
-        if (rowView == null) {
+//        if (rowView == null) {
             widgets = new Widgets();
             rowView = inflater.inflate(R.layout.custom_listview_approver, null);
             widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.row_background);
@@ -89,10 +89,10 @@ public class ApproverAdapter extends BaseAdapter {
                             email);
                 }
             });
-            rowView.setTag(widgets);
-        } else {
-            widgets = (Widgets) rowView.getTag();
-        }
+//            rowView.setTag(widgets);
+//        } else {
+//            widgets = (Widgets) rowView.getTag();
+//        }
         return rowView;
     }
 

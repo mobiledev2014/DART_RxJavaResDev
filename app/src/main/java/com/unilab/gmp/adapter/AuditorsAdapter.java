@@ -55,7 +55,7 @@ public class AuditorsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View rowView, ViewGroup viewGroup) {
         Widgets widgets;
-        if (rowView == null) {
+//        if (rowView == null) {
             widgets = new Widgets();
             rowView = inflater.inflate(R.layout.custom_listview_auditors, null);
 
@@ -95,10 +95,10 @@ public class AuditorsAdapter extends BaseAdapter {
                             email);
                 }
             });
-            rowView.setTag(widgets);
-        } else {
-            widgets = (Widgets) rowView.getTag();
-        }
+//            rowView.setTag(widgets);
+//        } else {
+//            widgets = (Widgets) rowView.getTag();
+//        }
 
         return rowView;
     }

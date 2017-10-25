@@ -58,46 +58,46 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View rowView, ViewGroup viewGroup) {
         Widgets widgets;
-        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_supplier, null);
+//        if (rowView == null) {
+        widgets = new Widgets();
+        rowView = inflater.inflate(R.layout.custom_listview_supplier, null);
 
-            widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.row_background);
-            if (position % 2 == 0)
-                widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
-            else
-                widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
+        widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.row_background);
+        if (position % 2 == 0)
+            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
+        else
+            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
 
-            widgets.address = (TextView) rowView.findViewById(R.id.tv_supplier_address);
-            widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
-            widgets.name_of_site = (TextView) rowView.findViewById(R.id.tv_supplier_name_site);
+        widgets.address = (TextView) rowView.findViewById(R.id.tv_supplier_address);
+        widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
+        widgets.name_of_site = (TextView) rowView.findViewById(R.id.tv_supplier_name_site);
 
-            final ModelCompany supplierModel = supplierModels.get(position);
-            final String address1 = supplierModel.getAddress1();
-            final String address3 = supplierModel.getAddress2();
-            final String address4 = supplierModel.getAddress3();
-            final String company_name = supplierModel.getCompany_name();
-            final String company_id = supplierModel.getCompany_id();
-            final String background = supplierModel.getBackground();
-            widgets.address.setText(address1 + ", " + address3 + ", " + address4);
+        final ModelCompany supplierModel = supplierModels.get(position);
+        final String address1 = supplierModel.getAddress1();
+        final String address3 = supplierModel.getAddress2();
+        final String address4 = supplierModel.getAddress3();
+        final String company_name = supplierModel.getCompany_name();
+        final String company_id = supplierModel.getCompany_id();
+        final String background = supplierModel.getBackground();
+        widgets.address.setText(address1 + ", " + address3 + ", " + address4);
 
-            widgets.name_of_site.setText(company_name);
+        widgets.name_of_site.setText(company_name);
 
-            widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //Toast.makeText(context, "View supplier info and products", Toast.LENGTH_SHORT).show();
+        widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(context, "View supplier info and products", Toast.LENGTH_SHORT).show();
 
-                    dialogViewSupplier(company_id,
-                            company_name,
-                            address1 + ", " + address3 + ", " + address4,
-                            background);
-                }
-            });
-            rowView.setTag(widgets);
-        } else {
-            widgets = (Widgets) rowView.getTag();
-        }
+                dialogViewSupplier(company_id,
+                        company_name,
+                        address1 + ", " + address3 + ", " + address4,
+                        background);
+            }
+        });
+//            rowView.setTag(widgets);
+//        } else {
+//            widgets = (Widgets) rowView.getTag();
+//        }
         return rowView;
     }
 

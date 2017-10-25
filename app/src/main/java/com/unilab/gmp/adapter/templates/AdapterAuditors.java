@@ -57,7 +57,6 @@ public class AdapterAuditors extends BaseAdapter {
         if (rowView == null) {
             widgets = new Widgets();
 
-
             rowView = inflater.inflate(R.layout.custom_listview_template_auditors, null);
 
             widgets.name = (Spinner) rowView.findViewById(R.id.s_template_next_auditor_co_name);
