@@ -23,6 +23,7 @@ public class ModelCompany extends SugarRecord {
     String background;
     String create_date;
     String update_date;
+    String status;
 
     ArrayList<ModelSiteAuditHistory> audit_history;
 }
