@@ -1,48 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.unilab.gmp.activity.MainActivity"
-    android:background="#f7f7f7">
+    android:background="#f7f7f7"
+    tools:context="com.unilab.gmp.activity.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingBottom="30dp">
+        android:paddingBottom="30dp"
+        android:paddingTop="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".35"
-            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_weight=".35"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".5"
+                android:background="@drawable/btn_main_1"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_margin="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_margin="30dp"
                     android:layout_weight=".85"
-                    android:gravity="center"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginBottom="20dp">
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/iv_template"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/btn_reference"/>
+                        android:src="@drawable/btn_template" />
 
                 </LinearLayout>
 
@@ -50,14 +49,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight=".15"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TEMPLATE"
                         android:textSize="@dimen/home_font_size"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -67,24 +67,23 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".5"
+                android:background="@drawable/btn_main_2"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_margin="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_margin="30dp"
                     android:layout_weight=".85"
-                    android:gravity="center"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginBottom="20dp">
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/iv_report"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/btn_reference"/>
+                        android:src="@drawable/btn_report" />
 
                 </LinearLayout>
 
@@ -92,14 +91,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight=".15"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="REPORT"
                         android:textSize="@dimen/home_font_size"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -110,33 +110,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".35"
-            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_weight=".35"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".5"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@drawable/btn_main_3"
+                android:layout_margin="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_margin="30dp"
                     android:layout_weight=".85"
-                    android:gravity="center"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginBottom="20dp">
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/iv_supplier"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/btn_reference"/>
+                        android:src="@drawable/btn_supplier" />
 
                 </LinearLayout>
 
@@ -144,14 +143,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight=".15"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="SUPPLIER"
                         android:textSize="@dimen/home_font_size"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -162,23 +162,22 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".5"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@drawable/btn_main_4"
+                android:layout_margin="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_margin="30dp"
                     android:layout_weight=".85"
-                    android:gravity="center"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginBottom="20dp">
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/iv_auditor"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/btn_reference"/>
+                        android:src="@drawable/btn_auditor" />
 
                 </LinearLayout>
 
@@ -186,14 +185,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight=".15"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="AUDITOR"
                         android:textSize="@dimen/home_font_size"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -204,32 +204,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".35"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_weight=".35">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".5"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@drawable/btn_main_5"
+                android:layout_margin="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_margin="30dp"
                     android:layout_weight=".85"
-                    android:gravity="center"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginBottom="20dp">
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/iv_reviewer"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/btn_reference"/>
+                        android:src="@drawable/btn_reviewer" />
 
                 </LinearLayout>
 
@@ -237,14 +236,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight=".15"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="REVIEWER"
                         android:textSize="@dimen/home_font_size"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -255,23 +255,22 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".5"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@drawable/btn_main_6"
+                android:layout_margin="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_margin="30dp"
                     android:layout_weight=".85"
-                    android:gravity="center"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginBottom="20dp">
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/iv_approver"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/btn_reference"/>
+                        android:src="@drawable/btn_approver" />
 
                 </LinearLayout>
 
@@ -279,14 +278,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight=".15"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="APPROVER"
                         android:textSize="@dimen/home_font_size"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
