@@ -9,14 +9,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Created by c_rcmiguel on 10/19/2017.
+ * Created by c_jhcanuto on 10/19/2017.
  */
 
 @Setter
 @Getter
 
 public class ModelSiteAuditHistory extends SugarRecord {
-    String major_changes;
+    ArrayList<ModelSiteMajorChanges> major_changes;
     @SerializedName("audit_dates")
     ArrayList<ModelSiteDate> modelSiteDates;
     ArrayList<ModelSiteInspectors> inspectors;
