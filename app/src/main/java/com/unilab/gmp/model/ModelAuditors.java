@@ -22,4 +22,5 @@ public class ModelAuditors{
     String create_date;
     String update_date;
     String email;
+    String status;
 }

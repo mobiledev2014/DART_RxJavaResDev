@@ -352,6 +352,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     auditorsModel.setCreate_date(modelAuditorInfo.getModelAuditors().get(x).getCreate_date());
                     auditorsModel.setUpdate_date(modelAuditorInfo.getModelAuditors().get(x).getUpdate_date());
                     auditorsModel.setEmail(modelAuditorInfo.getModelAuditors().get(x).getEmail());
+                    auditorsModel.setStatus(modelAuditorInfo.getModelAuditors().get(x).getStatus());
                     isAuditorExisting(auditorsModel);
                 }
 

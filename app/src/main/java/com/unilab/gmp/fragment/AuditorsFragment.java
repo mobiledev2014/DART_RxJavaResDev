@@ -71,7 +71,8 @@ public class AuditorsFragment extends Fragment {
         sharedPref = new SharedPreferenceManager(context);
 
         //auditorsList = AuditorsModel.listAll(AuditorsModel.class);
-        auditorsList = AuditorsModel.listAll(AuditorsModel.class, "createdate DESC");
+        //auditorsList = AuditorsModel.listAll(AuditorsModel.class, "createdate DESC");
+        auditorsList = AuditorsModel.find(AuditorsModel.class, "status = '1'");
         Log.d("SIZE", auditorsList.size() + "");
         auditorsAdapter = new AuditorsAdapter(context, auditorsList);
         lvAuditList.setAdapter(auditorsAdapter);
@@ -90,7 +91,7 @@ public class AuditorsFragment extends Fragment {
     @OnClick(R.id.iv_search)
     public void onViewClicked() {
         searchAuditor();
-        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(etSearchAuditor.getWindowToken(), 0);
     }
 
@@ -103,11 +104,11 @@ public class AuditorsFragment extends Fragment {
                     "mname LIKE '%" + audName + "%' OR " +
                     "lname LIKE '%" + audName + "%' " +
                     "ORDER BY createdate DESC");
-            Log.e("AuditorsCount",auditorsList.size()+"");
-            if (auditorsList.size() > 0){
+            Log.e("AuditorsCount", auditorsList.size() + "");
+            if (auditorsList.size() > 0) {
                 setAuditorList();
                 tvNoResult.setVisibility(View.GONE);
-            } else if (auditorsList.size() <= 0){
+            } else if (auditorsList.size() <= 0) {
                 setAuditorList();
                 tvNoResult.setVisibility(View.VISIBLE);
             }
@@ -118,7 +119,7 @@ public class AuditorsFragment extends Fragment {
         }
     }
 
-    public void setAuditorList(){
+    public void setAuditorList() {
         auditorsAdapter = new AuditorsAdapter(context, auditorsList);
         lvAuditList.setAdapter(auditorsAdapter);
         tvAuditCount.setText(auditorsList.size() + " Total Record(s)");
