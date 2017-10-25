@@ -865,7 +865,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         ModelReportReviewer mrr = new ModelReportReviewer();
         mrr.setReport_id(report_id);
-        mrr.setReviewer_id(reviewerModels.get(sTemplateNextApproverName.getSelectedItemPosition()).getReviewer_id());
+        mrr.setReviewer_id(reviewerModels.get(sTemplateNextReviewerName.getSelectedItemPosition()).getReviewer_id());
         mrr.save();
 
         ModelReportApprover mra = new ModelReportApprover();
@@ -1287,7 +1287,9 @@ public class NextSelectedTemplateFragment extends Fragment {
         List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", report.getReport_id());
         for (ModelReportQuestion t : mrq) {
             //question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + t.getAnswer_id() + ",\"naoption_id\":\"" + t.getNaoption_id() + "\",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id()) + ",\"answer_details\":\"" + t.getAnswer_details() + "\"}";
-            question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + t.getAnswer_id() + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id()) + ",\"answer_details\":\"" + t.getAnswer_details() + "\"}";
+            question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + t.getAnswer_id()
+                    + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id())
+                    + ",\"answer_details\":\"" + t.getAnswer_details() + "\",\"na_option\":\"" + t.getNaoption_id() + "\"}";
             if (++counter != mrq.size()) {
                 question += ",";
             }
