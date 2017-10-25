@@ -51,7 +51,7 @@ public class ReferenceAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View rowview, ViewGroup viewGroup) {
         Widgets widgets;
-//        if (rowview == null) {
+
             widgets = new Widgets();
             rowview = inflater.inflate(R.layout.custom_listview_reference, null);
 
@@ -70,10 +70,7 @@ public class ReferenceAdapter extends BaseAdapter {
             widgets.date_modified.setText(referenceModel.getDate_modified());
             widgets.name_of_site.setText(referenceModel.getName_of_site());
 
-//            rowview.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowview.getTag();
-//        }
+
 
         return rowview;
     }
