@@ -67,7 +67,7 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
 
         boolean notcovered = true;
         for (ModelTemplateQuestionDetails mtqd : questionList) {
-            if (!mtqd.getAnswer_id().equals("3") || !mtqd.getNaoption_id().contains("Not covered")) {
+            if (!mtqd.getAnswer_id().equals("4") || !mtqd.getNaoption_id().contains("Not covered")) {
                 notcovered = false;
                 break;
             }

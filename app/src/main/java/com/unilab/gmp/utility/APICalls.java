@@ -92,6 +92,9 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
     int numberoftemplates, templatesdownloaded;
     boolean isdone = false;
 
+//    int numberoftemplates2, templatesdownloaded2;
+//    boolean isdone2 = false;
+
     ApiClient apiClient;
     ApiInterface apiInterface;
     ProgressDialog progressDialog;
@@ -167,6 +170,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         //add product type...
 
         while (!isdone || templatesdownloaded != numberoftemplates) ;
+
+      //  while (!isdone2 || templatesdownloaded2 != numberoftemplates2) ;
         Log.e("changes", "changes : " + changes);
 
         return result;
@@ -691,6 +696,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             @Override
             public void onResponse(Call<ModelAuditReportsList> call, Response<ModelAuditReportsList> response) {
                 ModelAuditReportsList modelAuditReportsList = response.body();
+//                numberoftemplates2 = modelAuditReportsList.getAudit_report_list().size();
+//                isdone2 = true;
                 for (ModelAuditReportDetails mar : modelAuditReportsList.getAudit_report_list()) {
                     String reportId = mar.getReport_id();
                     String modifiedDate = mar.getModified_date();
@@ -777,12 +784,13 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                 isAuditReportExisting(reports);
 
                             }
-
+//                            Log.e("templatesdownloaded", "templatesdownloaded2 : " + ++templatesdownloaded2);
                         }
 
                         @Override
                         public void onFailure(Call<ModelAuditReports> call, Throwable t) {
                             Log.e("testing", t.getMessage());
+//                            Log.e("templatesdownloaded", "templatesdownloaded2 : " + ++templatesdownloaded2);
                         }
                     });
                 }
@@ -948,7 +956,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
             @Override
             public void onFailure(Call<ModelAuditReportsList> call, Throwable throwable) {
-
+//                isdone2 = true;
             }
         });
 

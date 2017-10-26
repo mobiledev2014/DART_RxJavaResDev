@@ -72,7 +72,7 @@ public class TemplateFragment extends Fragment {
         //templateList = ModelTemplates.listAll(ModelTemplates.class, "date_Created DESC");
         templateList = ModelTemplates.find(ModelTemplates.class, "status >= '1'", new String[]{}, null, "date_Created DESC", null);
         List<ModelTemplates> newCounter = ModelTemplates.listAll(ModelTemplates.class);
-        Log.i("Template count ", " " + templateList.size() + templateList.get(0).getStatus());
+//        Log.i("Template count ", " " + templateList.size() + templateList.get(0).getStatus());
         templateAdapter = new TemplateAdapter(context, templateList);
         lvTemplateList.setAdapter(templateAdapter);
         tvTemplateCount.setText(templateList.size() + " Total Record(s)");

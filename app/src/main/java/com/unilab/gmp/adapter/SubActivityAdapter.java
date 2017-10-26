@@ -40,15 +40,9 @@ public class SubActivityAdapter extends BaseAdapter {
             List<ModelReportSubActivities> mra = ModelReportSubActivities.find(ModelReportSubActivities.class, "reportid = ? AND subitemid = ?", report_id, mtsa.getSubItemID());
             if (mra.size() > 0) {
                 mtsa.setCheck(mra.get(0).isCheck());
-
                 Log.e("SubActivityAdapter", "ifSize:" + modelTemplateActivities.size());
             } else {
                 Log.e("SubActivityAdapter", "elseSize:" + modelTemplateActivities.size());
-//                if (modelTemplateActivities.size() > 0) {
-//                    chBox.setVisibility(View.GONE);
-//                } else {
-//                    chBox.setVisibility(View.VISIBLE);
-//                }
             }
         }
         Log.e("SubActivityAdapter", "size:" + modelTemplateActivities.size());
@@ -73,34 +67,28 @@ public class SubActivityAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View rowView, ViewGroup viewGroup) {
+    public View getView( int position, View rowView, ViewGroup viewGroup) {
         final Widgets widgets;
+        final int z = position;
         if (rowView == null) {
             widgets = new Widgets();
             rowView = inflater.inflate(R.layout.custom_listview_subactivities, null);
 
-        /*widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.row_background);
-        if (position%2==0)
-            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
-        else
-            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));*/
-
             widgets.name = (TextView) rowView.findViewById(R.id.tv_subactivity_name);
             widgets.cbSubactivity = (CheckBox) rowView.findViewById(R.id.cb_subactivity);
-
-            widgets.name.setText(modelTemplateActivities.get(position).getSubItemName());
-            widgets.cbSubactivity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    //Toast.makeText(context, "" + widgets.name.getText().toString(), Toast.LENGTH_SHORT).show();
-                    modelTemplateActivities.get(position).setCheck(b);
-                }
-            });
 
             rowView.setTag(widgets);
         } else {
             widgets = (Widgets) rowView.getTag();
         }
+
+        widgets.name.setText(modelTemplateActivities.get(position).getSubItemName());
+        widgets.cbSubactivity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                modelTemplateActivities.get(z).setCheck(b);
+            }
+        });
 
         if (modelTemplateActivities.get(position).isCheck()) {
             widgets.cbSubactivity.setChecked(true);
@@ -116,6 +104,9 @@ public class SubActivityAdapter extends BaseAdapter {
             mra.setSub_item_id(mta.getSubItemID());
             mra.setCheck(mta.isCheck());
             mra.setActivity_id(activity_id);
+
+            Log.e("SubActivity", "save is check : " + mta.isCheck());
+
             mra.save();
         }
     }
