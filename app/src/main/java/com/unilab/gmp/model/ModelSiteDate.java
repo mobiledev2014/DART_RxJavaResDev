@@ -13,8 +13,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ModelSiteDate extends SugarRecord {
-    @SerializedName("Date")
-    String date;
+    String inspection_date;
 
     String company_id;
 }

@@ -13,5 +13,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ModelSiteInspectors extends SugarRecord{
+
+    String company_id;
     String inspector;
 }

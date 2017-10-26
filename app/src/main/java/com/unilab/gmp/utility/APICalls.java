@@ -46,6 +46,8 @@ import com.unilab.gmp.model.ModelReportSubActivities;
 import com.unilab.gmp.model.ModelReviewerInfo;
 import com.unilab.gmp.model.ModelSiteAuditHistory;
 import com.unilab.gmp.model.ModelSiteDate;
+import com.unilab.gmp.model.ModelSiteInspectors;
+import com.unilab.gmp.model.ModelSiteMajorChanges;
 import com.unilab.gmp.model.ModelTemplateActivities;
 import com.unilab.gmp.model.ModelTemplateElements;
 import com.unilab.gmp.model.ModelTemplateQuestionDetails;
@@ -69,6 +71,7 @@ import com.unilab.gmp.model.TemplateModelScopeAudit;
 import com.unilab.gmp.model.TemplateModelScopeAuditCopy;
 import com.unilab.gmp.model.TemplateModelScopeAuditInterest;
 import com.unilab.gmp.model.TemplateModelSummaryRecommendation;
+import com.unilab.gmp.model.TemplateModelTranslator;
 import com.unilab.gmp.retrofit.ApiClient;
 import com.unilab.gmp.retrofit.ApiInterface;
 
@@ -436,21 +439,41 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                             modelSiteAuditHistory.setCompany_id(company_id);
                             modelSiteAuditHistory.setMajor_changes(mc.getMajor_changes());
                             modelSiteAuditHistory.save();
-                            Log.e("testing", " CompanySite:major" + mc.getMajor_changes() + " date : ");
+                            Log.e("APICalls", "CompanySite:company name : " + modelCompany.getCompany_name());
                             //+ modelSiteAuditHistory.getModelSiteDates().size());
-                            if (modelSiteAuditHistory.getModelSiteDates() != null) {
-                                for (ModelSiteDate msd : modelSiteAuditHistory.getModelSiteDates()) {
-                                    ModelSiteDate modelSiteDate = new ModelSiteDate();
-                                    modelSiteDate.setCompany_id(company_id);
-                                    modelSiteDate.setDate(msd.getDate());
-                                    modelSiteDate.save();
-                                    Log.e("testing", " CompanySite:date" + msd.getDate());
+                            if (mc.getMajor_changes() != null)
+                            {
+                                for (ModelSiteMajorChanges mmc : mc.getMajor_changes()) {
+                                    ModelSiteMajorChanges majorChanges = new ModelSiteMajorChanges();
+                                    majorChanges.setCompany_id(company_id);
+                                    majorChanges.setMajor_change(mmc.getMajor_change());
+                                    majorChanges.save();
+                                    Log.e("APICalls", " CompanySite:changes " + mmc.getMajor_change());
 
                                 }
                             }
+                            if (mc.getModelSiteDates() != null) {
+                                for (ModelSiteDate msd : mc.getModelSiteDates()) {
+                                    ModelSiteDate modelSiteDate = new ModelSiteDate();
+                                    modelSiteDate.setCompany_id(company_id);
+                                    modelSiteDate.setInspection_date(msd.getInspection_date());
+                                    modelSiteDate.save();
+                                    Log.e("APICalls", " CompanySite:date" + msd.getInspection_date());
+
+                                }
+                            }
+                            if (mc.getInspectors()!=null)
+                                for (ModelSiteInspectors msi: mc.getInspectors())
+                                {
+                                    ModelSiteInspectors modelSiteInspectors = new ModelSiteInspectors();
+                                    modelSiteInspectors.setInspector(msi.getInspector());
+                                    modelSiteInspectors.setCompany_id(company_id);
+                                    modelSiteInspectors.save();
+                                    Log.e("APICalls", " CompanySite:inspector" + msi.getInspector());
+                                }
                         }
                     }
-                    Log.e("testing", response.toString() + " CompanySite: " + modelCompanyInfo.getModelCompanies().
+                    Log.e("APICalls", response.toString() + " CompanySite: " + modelCompanyInfo.getModelCompanies().
                             get(x).getCompany_name());
 
                     isSupplierExisting(modelCompany);
@@ -735,8 +758,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                 reports.setReport_no(modelAuditReports.getReport_no());
                                 reports.setCompany_id(modelAuditReports.getCompany_id());
                                 reports.setOther_activities(modelAuditReports.getOther_activities());
-                                reports.setP_inspection_date_1(modelAuditReports.getP_inspection_date_1());
-                                reports.setP_inspection_date_2(modelAuditReports.getP_inspection_date_2());
+//                                reports.setP_inspection_date_1(modelAuditReports.getP_inspection_date_1());
+//                                reports.setP_inspection_date_2(modelAuditReports.getP_inspection_date_2());
                                 reports.setTemplate_id(modelAuditReports.getTemplate_id());
                                 reports.setAuditor_id(modelAuditReports.getAuditor_id());
                                 reports.setAudit_close_date(modelAuditReports.getAudit_close_date());
@@ -744,8 +767,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                 reports.setOther_issues_executive(modelAuditReports.getOther_issues_executive());
                                 reports.setAudited_areas(modelAuditReports.getAudited_areas());
                                 reports.setAreas_to_consider(modelAuditReports.getAreas_to_consider());
-                                reports.setDate_of_wrap(modelAuditReports.getDate_of_wrap());
-                                reports.setTranslator(modelAuditReports.getTranslator());
+//                                reports.setDate_of_wrap(modelAuditReports.getDate_of_wrap());
+//                                reports.setTranslator(modelAuditReports.getTranslator());
                                 reports.setReviewer_id(modelAuditReports.getReviewer_id());
                                 reports.setApprover_id(modelAuditReports.getApprover_id());
                                 reports.setStatus(modelAuditReports.getStatus());
@@ -782,8 +805,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                     }
                                 }
 
-                                Log.e("APICalls", response.toString() + " AuditReports: " + modelAuditReports.getQuestion().
-                                        get(0).getAnswer_details());
+                                Log.e("APICalls", response.toString() + " AuditReports: " + modelAuditReports.toString());
                                 isAuditReportExisting(reports);
 
                             }
@@ -802,15 +824,20 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             }
 
             private void saveListsOfAuditReport(String report_id) {
+                for (TemplateModelTranslator tmt : modelAuditReports.getTranslators()) {
+                    tmt.setReport_id(report_id);
+                    tmt.save();
+                    Log.e("APICalls", "translators : " + tmt.getTranslator());
+                }
                 for (ModelDateOfAudit mda : modelAuditReports.getDate_of_audit()) {
                     mda.setReport_id(report_id);
-                    mda.setDateOfAudit(mda.getDateOfAudit());
+//                    mda.setDateOfAudit(mda.getDateOfAudit());
                     mda.save();
                     Log.e("APICalls", "Audit dates : " + mda.getDateOfAudit());
                 }
                 for (TemplateModelAuditors mrca : modelAuditReports.getCo_auditor_id()) {
                     mrca.setReport_id(report_id);
-                    mrca.setAuditor_id(mrca.getAuditor_id());
+//                    mrca.setAuditor_id(mrca.getAuditor_id());
                     mrca.save();
                     Log.e("APICalls", "Auditors : " + mrca.getAuditor_id());
                 }
@@ -861,6 +888,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     mr.setBody(mr.getBody());
                     mr.setNumber(mr.getNumber());
                     mr.setValidity(mr.getValidity());
+                    mr.setIssue_date(mr.getIssue_date());
                     mr.save();
 
 
@@ -877,13 +905,13 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 }
 
                 //-
-                for (TemplateModelCompanyBackgroundName mmn : modelAuditReports.getInspector()) {
-                    mmn.setReport_id(report_id);
-                    mmn.setBgname(mmn.getBgname());
-                    mmn.save();
-
-                    Log.e("APICalls", "Company bgname : " + mmn.getBgname());
-                }
+//                for (TemplateModelCompanyBackgroundName mmn : modelAuditReports.getInspector()) {
+//                    mmn.setReport_id(report_id);
+//                    mmn.setBgname(mmn.getBgname());
+//                    mmn.save();
+//
+//                    Log.e("APICalls", "Company bgname : " + mmn.getBgname());
+//                }
 
                 //-
                 for (TemplateModelPersonelMetDuring mpmd : modelAuditReports.getPersonnel()) {
@@ -1376,14 +1404,14 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             String date = "";
             for (int count = 0; count < size; count++) {
                 if (report.get(count).getReport_id().equals(id)) {
-                    date = report.get(count).getP_inspection_date_1();
+                    date = report.get(count).getModified_date();
                     found = true;
                 }
             }
 
             if (found) {
                 Log.i("ARGULOOP", "UPDATE");
-                if (!date.equals(modelAuditReports.getP_inspection_date_1()))
+                if (!date.equals(modelAuditReports.getModified_date()))
                     updateAuditReport(modelAuditReports);
 //                    auditorsAdapter.notifyDataSetChanged();
             } else {
@@ -1417,8 +1445,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         auditReports.setReport_no(modelAuditReports.getReport_no());
         auditReports.setCompany_id(modelAuditReports.getCompany_id());
         auditReports.setOther_activities(modelAuditReports.getOther_activities());
-        auditReports.setP_inspection_date_1(modelAuditReports.getP_inspection_date_1());
-        auditReports.setP_inspection_date_2(modelAuditReports.getP_inspection_date_2());
+//        auditReports.setP_inspection_date_1(modelAuditReports.getP_inspection_date_1());
+//        auditReports.setP_inspection_date_2(modelAuditReports.getP_inspection_date_2());
         auditReports.setTemplate_id(modelAuditReports.getTemplate_id());
         auditReports.setAuditor_id(modelAuditReports.getAuditor_id());
         auditReports.setAudit_close_date(modelAuditReports.getAudit_close_date());
@@ -1426,8 +1454,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         auditReports.setOther_issues_executive(modelAuditReports.getOther_issues_executive());
         auditReports.setAudited_areas(modelAuditReports.getAudited_areas());
         auditReports.setAreas_to_consider(modelAuditReports.getAreas_to_consider());
-        auditReports.setDate_of_wrap(modelAuditReports.getDate_of_wrap());
-        auditReports.setTranslator(modelAuditReports.getTranslator());
+//        auditReports.setDate_of_wrap(modelAuditReports.getDate_of_wrap());
+//        auditReports.setTranslator(modelAuditReports.getTranslator());
         auditReports.setReviewer_id(modelAuditReports.getReviewer_id());
         auditReports.setApprover_id(modelAuditReports.getApprover_id());
         auditReports.setStatus(modelAuditReports.getStatus());
@@ -1569,14 +1597,11 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         if (!template.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
             changes++;
             template.setStatus("1");
-        } else if (modelTemplates.getStatus().equals("-2")) {
-
+        } else if (modelTemplates.getStatus().equals("1")) {
+            template.setStatus("2");
         } /*else if (modelTemplates.getStatus().equals("3")){
 
-        } */ else {
-            template.setStatus("2");
-        }
-
+        } */
 
         template.setDateUpdated(modelTemplates.getDateUpdated());
 

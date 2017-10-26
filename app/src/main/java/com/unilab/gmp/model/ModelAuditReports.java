@@ -3,6 +3,7 @@ package com.unilab.gmp.model;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -20,8 +21,8 @@ public class ModelAuditReports extends SugarRecord {
     String report_no;
     String company_id;
     String other_activities = "";
-    String p_inspection_date_1 = "";
-    String p_inspection_date_2 = "";
+//    String p_inspection_date_1 = "";
+//    String p_inspection_date_2 = "";
     String template_id;
     String auditor_id = "";
 
@@ -36,9 +37,9 @@ public class ModelAuditReports extends SugarRecord {
     String areas_to_consider;
 
     @SerializedName("wrap_up_date")
-    String date_of_wrap;
+    ArrayList<ModelAuditReportWrapUpDate> date_of_wrap;
 
-    String translator;
+    ArrayList<TemplateModelTranslator> translators;
     String create_date;
     String modified_date;
 
@@ -59,7 +60,7 @@ public class ModelAuditReports extends SugarRecord {
     @SerializedName("references")
     List<TemplateModelReference> referencess;
     List<TemplateModelCompanyBackgroundMajorChanges> inspection;
-    List<TemplateModelCompanyBackgroundName> inspector;
+//    List<TemplateModelCompanyBackgroundName> inspector;
     @SerializedName("personel")
     List<TemplateModelPersonelMetDuring> personnel;
     List<ModelReportActivities> activities;
@@ -79,8 +80,6 @@ public class ModelAuditReports extends SugarRecord {
                 ", report_no='" + report_no + '\'' +
                 ", company_id='" + company_id + '\'' +
                 ", other_activities='" + other_activities + '\'' +
-                ", p_inspection_date_1='" + p_inspection_date_1 + '\'' +
-                ", p_inspection_date_2='" + p_inspection_date_2 + '\'' +
                 ", template_id='" + template_id + '\'' +
                 ", auditor_id='" + auditor_id + '\'' +
                 ", audit_close_date='" + audit_close_date + '\'' +
@@ -88,22 +87,24 @@ public class ModelAuditReports extends SugarRecord {
                 ", other_issues_executive='" + other_issues_executive + '\'' +
                 ", audited_areas='" + audited_areas + '\'' +
                 ", areas_to_consider='" + areas_to_consider + '\'' +
-                ", date_of_wrap='" + date_of_wrap + '\'' +
-                ", translator='" + translator + '\'' +
-                ", reviewer_id='" + reviewer_id + '\'' +
-                ", approver_id='" + approver_id + '\'' +
+                ", date_of_wrap=" + date_of_wrap +
+                ", translators=" + translators +
+                ", create_date='" + create_date + '\'' +
+                ", modified_date='" + modified_date + '\'' +
                 ", status='" + status + '\'' +
                 ", version='" + version + '\'' +
                 ", head_lead='" + head_lead + '\'' +
+                ", reviewer_id='" + reviewer_id + '\'' +
+                ", approver_id='" + approver_id + '\'' +
                 ", isReviewerChecked=" + isReviewerChecked +
                 ", date_of_audit=" + date_of_audit +
                 ", co_auditor_id=" + co_auditor_id +
-//                ", scope=" + scope +
+                ", scope=" + scope +
                 ", disposition=" + disposition +
                 ", pre_audit_documents=" + pre_audit_documents +
                 ", referencess=" + referencess +
                 ", inspection=" + inspection +
-                ", inspector=" + inspector +
+//                ", inspector=" + inspector +
                 ", personnel=" + personnel +
                 ", activities=" + activities +
                 ", question=" + question +
@@ -116,7 +117,7 @@ public class ModelAuditReports extends SugarRecord {
                 '}';
     }
 
-//    List<ModelReportElementsRequiringRecommendation> elements_requiring_recommendation;
+    //    List<ModelReportElementsRequiringRecommendation> elements_requiring_recommendation;
 
 
 }

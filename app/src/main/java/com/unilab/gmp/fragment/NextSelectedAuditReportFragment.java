@@ -348,7 +348,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         etTemplateNextNotAuditedArea.setText(report.getAreas_to_consider());
         Log.i("DATE FORMAT", report.getDate_of_wrap() + " ");
         if (report.getDate_of_wrap() != null) {
-            etTemplateNextDateOfWrapUp.setText(DateTimeUtils.parseDateMonthToWord(report.getDate_of_wrap()));
+            etTemplateNextDateOfWrapUp.setText("");
         }
         if (report.getAudit_close_date() != null) {
             etTemplateNextSummaryRecommendationAuditCloseDate.setText
@@ -357,10 +357,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
         etTemplateNextSummaryRecommendationOtherIssuesAudit.setText(report.getOther_issues());
         etTemplateNextSummaryRecommendationOtherIssuesExecutive.setText(report.getOther_issues_executive());
         //if (report.getP_inspection_date_1() != null || report.getP_inspection_date_1() != "") {
-            etTemplateNextCompanyBackgroundDateFrom.setText(DateTimeUtils.parseDateMonthToWord(report.getP_inspection_date_1()));
+//            etTemplateNextCompanyBackgroundDateFrom.setText(DateTimeUtils.parseDateMonthToWord(report.getP_inspection_date_1()));
+        //
         //}
         //if (report.getP_inspection_date_2() != null || report.getP_inspection_date_2() != "") {
-            etTemplateNextCompanyBackgroundDateTo.setText(DateTimeUtils.parseDateMonthToWord(report.getP_inspection_date_2()));
+//            etTemplateNextCompanyBackgroundDateTo.setText(DateTimeUtils.parseDateMonthToWord(report.getP_inspection_date_2()));
         //}
         etTemplateNextActivityCarried.setText(report.getOther_activities());
 
@@ -899,8 +900,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         mar.setCompany_id(modelTemplates.getCompany_id());
         mar.setAudit_date_1(modelTemplates.getAudit_date_1());
         mar.setAudit_date_2(modelTemplates.getAudit_date_2());
-        mar.setP_inspection_date_1(DateTimeUtils.parseDateMonthToDigit(etTemplateNextCompanyBackgroundDateFrom.getText().toString()));
-        mar.setP_inspection_date_2(DateTimeUtils.parseDateMonthToDigit(etTemplateNextCompanyBackgroundDateTo.getText().toString()));
+//        mar.setP_inspection_date_1(DateTimeUtils.parseDateMonthToDigit(etTemplateNextCompanyBackgroundDateFrom.getText().toString()));
+//        mar.setP_inspection_date_2(DateTimeUtils.parseDateMonthToDigit(etTemplateNextCompanyBackgroundDateTo.getText().toString()));
         mar.setAuditor_id(auditorsModels.get(sTemplateNextAuditorLeadName.getSelectedItemPosition()).getAuditor_id());
         mar.setReviewer_id(reviewer_id);
         mar.setApprover_id(approver_id);
@@ -923,8 +924,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
         mar.setOther_issues(etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString());
         mar.setAudited_areas(etTemplateNextAuditedArea.getText().toString());
         mar.setAreas_to_consider(etTemplateNextNotAuditedArea.getText().toString());
-        mar.setDate_of_wrap(DateTimeUtils.parseDateMonthToDigit(etTemplateNextDateOfWrapUp.getText().toString()));
-        mar.setTranslator(adapterTranslator.save(mar.getReport_id()));
+//        mar.setDate_of_wrap(DateTimeUtils.parseDateMonthToDigit(etTemplateNextDateOfWrapUp.getText().toString()));
+//        mar.setTranslator(adapterTranslator.save(mar.getReport_id()));//translator
+        adapterTranslator.save(mar.getReport_id());//translator
 
 
         adapterScopeAudit.save(mar.getReport_id());
@@ -1350,7 +1352,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
         String references = "";
         List<TemplateModelReference> tmr = TemplateModelReference.find(TemplateModelReference.class, "reportid = ?", report.getReport_id());
         for (TemplateModelReference t : tmr) {
-            references += "{\"reference_name\":\"" + t.getCertification() + "\",\"issuer\":\"" + t.getBody() + "\",\"reference_no\":\"" + t.getNumber() + "\",\"validity\":\"" + t.getValidity() + "\"}";
+            references += "{\"reference_name\":\"" + t.getCertification() + "\",\"issuer\":\"" + t.getBody()
+                    + "\",\"reference_no\":\"" + t.getNumber() + "\",\"validity\":\"" + t.getValidity()
+                    + "\",\"issued\":\"" + t.getIssue_date() + "\"}";
             if (++counter != tmr.size()) {
                 references += ",";
             }
@@ -1407,7 +1411,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", report.getReport_id());
         for (ModelReportQuestion t : mrq) {
             //question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + t.getAnswer_id() + ",\"naoption_id\":\"" + t.getNaoption_id() + "\",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id()) + ",\"answer_details\":\"" + t.getAnswer_details() + "\"}";
-            question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + t.getAnswer_id()
+            question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":"  + (t.getAnswer_id().isEmpty() ? "0": t.getAnswer_id())
                     + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id())
                     + ",\"answer_details\":\"" + t.getAnswer_details() + "\",\"na_option\":\"" + t.getNaoption_id() + "\"}";
             if (++counter != mrq.size()) {
@@ -1467,12 +1471,23 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
         }
 
+        counter = 0;
+        String translators = ""; //"[{\"" + report.getAudit_date_1() + "\" ,\"" + report.getAudit_date_2() + "\"}]";
+        List<TemplateModelTranslator> translatorList = TemplateModelTranslator.find(TemplateModelTranslator.class, "reportid = ?", report.getReport_id());
+        for (TemplateModelTranslator t : translatorList) {
+            translators += "{\"translator\":\"" + t.getTranslator() + "\"}";
+            if (++counter != translatorList.size()) {
+                translators += ",";
+            }
+        }
+
+
 
         Log.e("company_id", report.getCompany_id());
         Log.e("other_activities", report.getOther_activities());
         Log.e("audit_date", auditdate);
-        Log.e("p_inspection_date_1", report.getP_inspection_date_1());
-        Log.e("p_inspection_date_2", report.getP_inspection_date_2());
+//        Log.e("p_inspection_date_1", report.getP_inspection_date_1());
+//        Log.e("p_inspection_date_2", report.getP_inspection_date_2());
         Log.e("template_id", report.getTemplate_id());
         Log.e("auditor_id", report.getAuditor_id());
         Log.e("closure_date", report.getAudit_close_date());
@@ -1480,8 +1495,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         Log.e("other_issues_executive", report.getOther_issues_executive());
         Log.e("audited_areas", report.getAudited_areas());
         Log.e("areas_to_consider", report.getAreas_to_consider());
-        Log.e("wrap_up_date", report.getDate_of_wrap());
-        Log.e("translator", report.getTranslator());
+//        Log.e("wrap_up_date", report.getDate_of_wrap());
+        Log.e("translator",  translators);
         Log.e("co_auditor_id", co_auditor_id);
         Log.e("reviewer_id", report.getReviewer_id());
         Log.e("approver_id", report.getApprover_id());
@@ -1517,17 +1532,15 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 report.getCompany_id(),
                 report.getOther_activities(),
                 "[" + auditdate + "]",
-                report.getP_inspection_date_1(),
-                report.getP_inspection_date_2(),
                 report.getTemplate_id(),
                 report.getAuditor_id(),
-                report.getAudit_close_date(),
                 report.getOther_issues(),
                 report.getOther_issues_executive(),
                 report.getAudited_areas(),
                 report.getAreas_to_consider(),
-                report.getDate_of_wrap(),
-                report.getTranslator(),
+                "[" + "]",
+//                report.getTranslator(),
+                "[" + translators+ "]",
                 "[" + co_auditor_id + "]",
                 report.getReviewer_id(),
                 report.getApprover_id(),
