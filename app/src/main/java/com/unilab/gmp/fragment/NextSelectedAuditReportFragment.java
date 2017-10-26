@@ -650,6 +650,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             etTemplateNextCompanyBackgroundHistory.setText(mc.get(0).getBackground());
         }
 
+        //adapter inspection date call and set
+
         /*progress dialog dismiss*/
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

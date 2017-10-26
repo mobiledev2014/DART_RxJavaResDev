@@ -598,6 +598,8 @@ public class NextSelectedTemplateFragment extends Fragment {
             etTemplateNextCompanyBackgroundHistory.setText(mc.get(0).getBackground());
         }
 
+        //adapter inspection date call and set
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
