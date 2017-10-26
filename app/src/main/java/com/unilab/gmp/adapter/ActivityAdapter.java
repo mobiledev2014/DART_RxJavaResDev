@@ -80,19 +80,16 @@ public class ActivityAdapter extends BaseAdapter {
         });
 
         for (ModelTemplateActivities mta : modelTemplateActivities) {
-//            if (mta.getModelTemplateSubActivities()==null)
-//                continue;
+
             subActivityAdapters.add(new SubActivityAdapter(context, ModelTemplateSubActivities.
                     find(ModelTemplateSubActivities.class, "templateid = ? AND activityid = ?",
                             mta.getTemplate_id(), mta.getActivityID()), report_id, mta.getActivityID()));
+
             List<ModelReportActivities> mra = ModelReportActivities.find(ModelReportActivities.class,
                     "reportid = ? AND activityid = ?", report_id, mta.getActivityID());
 
-            List<ModelTemplateSubActivities> counterList = ModelTemplateSubActivities.find
-                    (ModelTemplateSubActivities.class, "activityid = ?", mta.getActivityID());
-            Log.i("SUB-COUNT eto un", modelTemplateActivities.size() + " " + mta.getActivityName());
-
-            Log.i("SUB-COUNT ", subActivityAdapters.size() + "");
+//            List<ModelTemplateSubActivities> counterList = ModelTemplateSubActivities.find
+//                    (ModelTemplateSubActivities.class, "activityid = ?", mta.getActivityID());
 
             if (mra.size() > 0) {
                 mta.setCheck(mra.get(0).isCheck());

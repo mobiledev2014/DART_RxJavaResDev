@@ -67,22 +67,22 @@ public class SubActivityAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView( int position, View rowView, ViewGroup viewGroup) {
+    public View getView(int position, View rowView, ViewGroup viewGroup) {
         final Widgets widgets;
         final int z = position;
-        if (rowView == null) {
+//        if (rowView == null) {
             widgets = new Widgets();
             rowView = inflater.inflate(R.layout.custom_listview_subactivities, null);
 
             widgets.name = (TextView) rowView.findViewById(R.id.tv_subactivity_name);
             widgets.cbSubactivity = (CheckBox) rowView.findViewById(R.id.cb_subactivity);
 
-            rowView.setTag(widgets);
-        } else {
-            widgets = (Widgets) rowView.getTag();
-        }
+//            rowView.setTag(widgets);
+//        } else {
+//            widgets = (Widgets) rowView.getTag();
+//        }
 
-        widgets.name.setText(modelTemplateActivities.get(position).getSubItemName());
+        widgets.name.setText(modelTemplateActivities.get(z).getSubItemName());
         widgets.cbSubactivity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -90,7 +90,7 @@ public class SubActivityAdapter extends BaseAdapter {
             }
         });
 
-        if (modelTemplateActivities.get(position).isCheck()) {
+        if (modelTemplateActivities.get(z).isCheck()) {
             widgets.cbSubactivity.setChecked(true);
         }
 
@@ -104,9 +104,6 @@ public class SubActivityAdapter extends BaseAdapter {
             mra.setSub_item_id(mta.getSubItemID());
             mra.setCheck(mta.isCheck());
             mra.setActivity_id(activity_id);
-
-            Log.e("SubActivity", "save is check : " + mta.isCheck());
-
             mra.save();
         }
     }
