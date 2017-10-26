@@ -22,4 +22,5 @@ public class ReviewerModel extends SugarRecord {
     String create_date;
     String update_date;
     String email;
+    String status;
 }

@@ -22,4 +22,5 @@ public class ApproverModel extends SugarRecord {
     String create_date;
     String update_date;
     String email;
+    String status;
 }

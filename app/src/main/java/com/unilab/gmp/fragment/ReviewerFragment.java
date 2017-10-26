@@ -52,6 +52,7 @@ public class ReviewerFragment extends Fragment {
 
     ReviewerModel reviewerModel = new ReviewerModel();
     List<ReviewerModel> reviewerList;
+    List<ReviewerModel> reviewerListall;
     SharedPreferenceManager sharedPref;
 
     ReviewerAdapter reviewerAdapter;
@@ -71,7 +72,8 @@ public class ReviewerFragment extends Fragment {
         sharedPref = new SharedPreferenceManager(context);
 
         reviewerModel = new ReviewerModel();
-        reviewerList = ReviewerModel.listAll(ReviewerModel.class, "createdate DESC");
+        //reviewerListall = ReviewerModel.listAll(ReviewerModel.class, "createdate DESC");
+        reviewerList = ReviewerModel.find(ReviewerModel.class, "status = '1'");
         Log.d("SIZE", reviewerList.size() + "");
         reviewerAdapter = new ReviewerAdapter(context, reviewerList);
         lvReviewerList.setAdapter(reviewerAdapter);
