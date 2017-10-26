@@ -428,6 +428,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     modelCompany.setBackground(modelCompanyInfo.getModelCompanies().get(x).getBackground());
                     modelCompany.setCreate_date(modelCompanyInfo.getModelCompanies().get(x).getCreate_date());
                     modelCompany.setUpdate_date(modelCompanyInfo.getModelCompanies().get(x).getUpdate_date());
+                    modelCompany.setStatus(modelCompanyInfo.getModelCompanies().get(x).getStatus());
 
                     if (modelCompanyInfo.getModelCompanies().get(x).getAudit_history() != null) {
                         for (ModelSiteAuditHistory mc : modelCompanyInfo.getModelCompanies().get(x).getAudit_history()) {

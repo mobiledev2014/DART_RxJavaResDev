@@ -101,9 +101,9 @@ public class ReviewerFragment extends Fragment {
 
         if (!audName.equals("")) {
             reviewerList = ReviewerModel.findWithQuery(ReviewerModel.class, "SELECT * from REVIEWER_MODEL WHERE " +
-                    "firstname LIKE '%" + audName + "%' OR " +
-                    "middlename LIKE '%" + audName + "%' OR " +
-                    "lastname LIKE '%" + audName + "%'" +
+                    "(status = '1' AND firstname LIKE '%" + audName + "%') OR " +
+                    "(status = '1' AND middlename LIKE '%" + audName + "%') OR " +
+                    "(status = '1' AND lastname LIKE '%" + audName + "%') "  +
                     "ORDER BY createdate DESC");
             Log.e("AuditorsCount", reviewerList.size() + "");
             if (reviewerList.size() > 0) {
@@ -114,7 +114,7 @@ public class ReviewerFragment extends Fragment {
                 tvNoResult.setVisibility(View.VISIBLE);
             }
         } else {
-            reviewerList = ReviewerModel.listAll(ReviewerModel.class, "createdate DESC");
+            reviewerList = ReviewerModel.find(ReviewerModel.class, "status = '1'");
             setReviewerList();
             tvNoResult.setVisibility(View.GONE);
         }

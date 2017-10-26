@@ -73,7 +73,8 @@ public class SupplierFragment extends Fragment {
         sharedPref = new SharedPreferenceManager(context);
 
         supplierModel = new SupplierAndCompanyInformationModel();
-        supplierList = ModelCompany.listAll(ModelCompany.class, "createdate DESC");
+        //supplierList = ModelCompany.listAll(ModelCompany.class, "createdate DESC");
+        supplierList = ModelCompany.find(ModelCompany.class, "status = '1'");
         Log.d("SIZE", supplierList.size() + "");
 
         supplierAdapter = new SupplierAndCompanyInformationAdapter(context, supplierList);
@@ -102,7 +103,7 @@ public class SupplierFragment extends Fragment {
 
         if (!audName.equals("")) {
             supplierList = ModelCompany.findWithQuery(ModelCompany.class, "SELECT * from MODEL_COMPANY WHERE " +
-                    "companyname LIKE '%" + audName + "%'" +
+                    "(companyname LIKE '%" + audName + "%' AND " + "status = '1')" +
                     "ORDER BY createdate DESC");
             Log.e("AuditorsCount", supplierList.size() + "");
             if (supplierList.size() > 0) {
@@ -113,7 +114,7 @@ public class SupplierFragment extends Fragment {
                 tvNoResult.setVisibility(View.VISIBLE);
             }
         } else {
-            supplierList = ModelCompany.listAll(ModelCompany.class, "createdate DESC");
+            supplierList = ModelCompany.find(ModelCompany.class, "status = '1'");
             setSiteList();
             tvNoResult.setVisibility(View.GONE);
         }
