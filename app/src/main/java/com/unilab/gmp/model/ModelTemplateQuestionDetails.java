@@ -15,7 +15,7 @@ public class ModelTemplateQuestionDetails extends SugarRecord{
     String question_id;
     String question;
     String default_yes;
-    String required_remarks;
+    String required_remarks = "";
     String create_date;
     String update_date;
     String element_id;

@@ -791,7 +791,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
                         @Override
                         public void onFailure(Call<ModelAuditReports> call, Throwable t) {
-                            Log.e("testing", t.getMessage());
+                            Log.e("ModelAuditReports", t.getMessage());
 //                            Log.e("templatesdownloaded", "templatesdownloaded2 : " + ++templatesdownloaded2);
                         }
                     });
@@ -959,6 +959,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             @Override
             public void onFailure(Call<ModelAuditReportsList> call, Throwable throwable) {
 //                isdone2 = true;
+                Log.e("ModelAuditReportsList", throwable.getMessage());
             }
         });
 
