@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.activity.HomeActivity;
-import com.unilab.gmp.fragment.TemplateFragment;
+import com.unilab.gmp.fragment.HomeFragment;
 import com.unilab.gmp.model.ApproverModel;
 import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.ConfigModel;
@@ -200,7 +200,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fragmentManager.beginTransaction()
-                .replace(R.id.fl_content, new TemplateFragment()).addToBackStack(null).commit();
+                .replace(R.id.fl_content, new HomeFragment()).addToBackStack(null).commit();
     }
 
     public Date date(String date) {
@@ -237,10 +237,10 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                             cm.get(0).setReviewer(configModel.getReviewer());
                             apiReviewer();
                         }
-//                        if (date(cm.get(0).getSite()).after(date(configModel.getSite()))) {
-//                            cm.get(0).setSite(configModel.getSite());
-                        apiSupplier();
-//                        }
+                        if (date(cm.get(0).getSite()).after(date(configModel.getSite()))) {
+                            cm.get(0).setSite(configModel.getSite());
+                            apiSupplier();
+                        }
 //                        if (date(cm.get(0).getApprover()).after(date(configModel.getApprover()))) {
 //                            cm.get(0).setApprover(configModel.getApprover());
 //                        apiTemplateList();
@@ -322,6 +322,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                         approversModel.setCreate_date(modelApproverInfo.getApproverModels().get(x).getCreate_date());
                         approversModel.setUpdate_date(modelApproverInfo.getApproverModels().get(x).getUpdate_date());
                         approversModel.setEmail(modelApproverInfo.getApproverModels().get(x).getEmail());
+                        approversModel.setStatus(modelApproverInfo.getApproverModels().get(x).getStatus());
                         isAppoverExisting(approversModel);
                     }
             }
@@ -386,6 +387,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                             reviewersModel.setCreate_date(modelReviewerInfo.getModelReviewers().get(x).getCreate_date());
                             reviewersModel.setUpdate_date(modelReviewerInfo.getModelReviewers().get(x).getUpdate_date());
                             reviewersModel.setEmail(modelReviewerInfo.getModelReviewers().get(x).getEmail());
+                            reviewersModel.setStatus(modelReviewerInfo.getModelReviewers().get(x).getStatus());
                             isReviewerExisting(reviewersModel);
                         }
                 //Log.e("testing", response.toString() + " Reviewer: " + modelReviewerInfo.getModelReviewers().get(0).getFirstname());
@@ -1558,11 +1560,11 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         if (!template.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
             changes++;
             template.setStatus("1");
-        } else if (modelTemplates.getStatus().equals("-2")){
+        } else if (modelTemplates.getStatus().equals("-2")) {
 
         } /*else if (modelTemplates.getStatus().equals("3")){
 
-        } */else {
+        } */ else {
             template.setStatus("2");
         }
 

@@ -63,11 +63,18 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/ll_online_indicator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginRight="10dp"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:background="@drawable/online_indicator_field"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:visibility="invisible">
 
                     <ImageView
                         android:id="@+id/iv_indicator"

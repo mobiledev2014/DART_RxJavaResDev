@@ -72,7 +72,7 @@ public class ApproverFragment extends Fragment {
         sharedPref = new SharedPreferenceManager(context);
 
         approverModel = new ApproverModel();
-        approverList = ApproverModel.listAll(ApproverModel.class, "createdate DESC");
+        approverList = ApproverModel.find(ApproverModel.class, "status = '1'");
         Log.d("SIZE", approverList.size() + "");
         approverAdapter = new ApproverAdapter(context, approverList);
         lvApproverList.setAdapter(approverAdapter);

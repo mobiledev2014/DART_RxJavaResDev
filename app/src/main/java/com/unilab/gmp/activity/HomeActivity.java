@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.unilab.gmp.R;
@@ -74,6 +75,8 @@ public class HomeActivity extends AppCompatActivity {
     ImageView ivIndicator;
     @BindView(R.id.tv_indicator)
     TextView tvIndicator;
+    @BindView(R.id.ll_online_indicator)
+    LinearLayout llOnlineIndicator;
 
     CountDownTimer countDownTimer;
 
@@ -400,9 +403,16 @@ public class HomeActivity extends AppCompatActivity {
 
     @OnClick(R.id.iv_logo)
     public void onViewClicked() {
+        if (Variable.menu){
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fl_content, new HomeFragment()).addToBackStack(null).commit();
+        }
     }
 
     public void onlineIndicator(boolean ind) {
+        llOnlineIndicator.setVisibility(View.VISIBLE);
         if (ind) {
             tvIndicator.setText("ONLINE");
             tvIndicator.setTextColor(Color.parseColor("#2da82d"));
