@@ -70,7 +70,7 @@ public class TemplateFragment extends Fragment {
         sharedPref = new SharedPreferenceManager(context);
 
         //templateList = ModelTemplates.listAll(ModelTemplates.class, "date_Created DESC");
-        templateList = ModelTemplates.find(ModelTemplates.class, "status >= '1'", new String[]{}, null, "date_Created DESC", null);
+        templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2'", new String[]{}, null, "date_Created DESC", null);
         List<ModelTemplates> newCounter = ModelTemplates.listAll(ModelTemplates.class);
 //        Log.i("Template count ", " " + templateList.size() + templateList.get(0).getStatus());
         templateAdapter = new TemplateAdapter(context, templateList);
