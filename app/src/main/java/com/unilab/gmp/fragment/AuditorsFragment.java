@@ -100,9 +100,9 @@ public class AuditorsFragment extends Fragment {
 
         if (!audName.equals("")) {
             auditorsList = AuditorsModel.findWithQuery(AuditorsModel.class, "SELECT * from AUDITORS_MODEL WHERE " +
-                    "fname LIKE '%" + audName + "%' OR " +
-                    "mname LIKE '%" + audName + "%' OR " +
-                    "lname LIKE '%" + audName + "%' " +
+                    "(status = '1'f AND name LIKE '%" + audName + "%') OR " +
+                    "(status = '1' AND mname LIKE '%" + audName + "%') OR " +
+                    "(status = '1' AND lname LIKE '%" + audName + "%') " +
                     "ORDER BY createdate DESC");
             Log.e("AuditorsCount", auditorsList.size() + "");
             if (auditorsList.size() > 0) {
@@ -113,7 +113,7 @@ public class AuditorsFragment extends Fragment {
                 tvNoResult.setVisibility(View.VISIBLE);
             }
         } else {
-            auditorsList = AuditorsModel.listAll(AuditorsModel.class, "createdate DESC");
+            auditorsList = AuditorsModel.find(AuditorsModel.class, "status = '1'");
             setAuditorList();
             tvNoResult.setVisibility(View.GONE);
         }

@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 public class ModelReportQuestion extends SugarRecord {
     String question_id;
-    String answer_id;
+    String answer_id = "0";
     String naoption_id = "";
     String category_id = "";
     String answer_details;

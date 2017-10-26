@@ -21,6 +21,7 @@ public class TemplateModelReference extends SugarRecord {
     @SerializedName("reference_no")
     String number = "";
     String validity = "";
+    @SerializedName("issued")
     String issue_date = "";
 
     String report_id;

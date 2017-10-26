@@ -70,7 +70,8 @@ public class TemplateFragment extends Fragment {
         sharedPref = new SharedPreferenceManager(context);
 
         //templateList = ModelTemplates.listAll(ModelTemplates.class, "date_Created DESC");
-        templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2' ", new String[]{}, null, "date_Created DESC", null);
+        templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2' ",
+                new String[]{}, null, "date_Created DESC", "50");
         List<ModelTemplates> newCounter = ModelTemplates.listAll(ModelTemplates.class);
 //        Log.i("Template count ", " " + templateList.size() + templateList.get(0).getStatus());
         templateAdapter = new TemplateAdapter(context, templateList);
@@ -101,9 +102,10 @@ public class TemplateFragment extends Fragment {
 
         if (!audName.equals("")) {
             templateList = ModelTemplates.findWithQuery(ModelTemplates.class, "SELECT * from MODEL_TEMPLATES WHERE " +
-                    "product_Type LIKE '%" + audName + "%' OR " +
+                    "(product_Type LIKE '%" + audName + "%' OR " +
                     "template_Name LIKE '%" + audName + "%' OR " +
-                    "date_Updated LIKE '%" + audName + "%'" +
+                    "date_Updated LIKE '%" + audName + "%') AND " +
+                    "(status = '1' OR status = '2') " +
                     "ORDER BY date_Created DESC");
             Log.e("AuditorsCount", templateList.size() + "");
             if (templateList.size() > 0) {
@@ -114,7 +116,8 @@ public class TemplateFragment extends Fragment {
                 tvNoResult.setVisibility(View.VISIBLE);
             }
         } else {
-            templateList = ModelTemplates.listAll(ModelTemplates.class, "date_Created DESC");
+            templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2' ",
+                    new String[]{}, null, "date_Created DESC", "50");
             setTemplateList();
             tvNoResult.setVisibility(View.GONE);
         }

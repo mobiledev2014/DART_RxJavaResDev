@@ -100,9 +100,9 @@ public class ApproverFragment extends Fragment {
 
         if (!audName.equals("")) {
             approverList = ApproverModel.findWithQuery(ApproverModel.class, "SELECT * from APPROVER_MODEL WHERE " +
-                    "firstname LIKE '%" + audName + "%' OR " +
-                    "middlename LIKE '%" + audName + "%' OR " +
-                    "lastname LIKE '%" + audName + "%'" +
+                    "(status = '1' AND firstname LIKE '%" + audName + "%') OR " +
+                    "(status = '1' AND middlename LIKE '%" + audName + "%') OR " +
+                    "(status = '1' AND lastname LIKE '%" + audName + "%') "  +
                     "ORDER BY createdate DESC");
             Log.e("AuditorsCount", approverList.size() + "");
             if (approverList.size() > 0) {
@@ -113,7 +113,7 @@ public class ApproverFragment extends Fragment {
                 tvNoResult.setVisibility(View.VISIBLE);
             }
         } else {
-            approverList = ApproverModel.listAll(ApproverModel.class, "createdate DESC");
+            approverList = ApproverModel.find(ApproverModel.class, "status = '1'");
             setApproverList();
             tvNoResult.setVisibility(View.GONE);
         }
