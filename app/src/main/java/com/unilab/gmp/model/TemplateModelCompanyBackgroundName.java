@@ -14,8 +14,9 @@ import lombok.Setter;
 @Setter
 public class TemplateModelCompanyBackgroundName extends SugarRecord {
     String template_id;
-    @SerializedName("name")
+    @SerializedName("inspector")
     String bgname = "";
 
     String report_id;
+    String company_id;
 }

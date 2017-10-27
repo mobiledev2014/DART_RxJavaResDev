@@ -53,7 +53,7 @@ public interface ApiInterface {
             @Field("other_issues_executive") String other_issues_executive,
             @Field("audited_areas") String audited_areas,
             @Field("areas_to_consider") String areas_to_consider,
-            @Field("wrap_up_date") String wrap_up_date,
+            @Field("wrap_up_dates") String wrap_up_date,
             @Field("translator") String translator,
             @Field("co_auditor_id") String co_auditor_id,
             @Field("reviewer_id") String reviewer_id,

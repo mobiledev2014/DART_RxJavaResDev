@@ -18,4 +18,6 @@ public class TemplateModelCompanyBackgroundMajorChanges extends SugarRecord{
     String majorchanges = "";
 
     String report_id;
+
+    String company_id;
 }

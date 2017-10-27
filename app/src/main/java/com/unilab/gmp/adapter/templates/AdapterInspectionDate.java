@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 
 import com.unilab.gmp.R;
-import com.unilab.gmp.model.ModelDateOfAudit;
+import com.unilab.gmp.model.ModelSiteDate;
 import com.unilab.gmp.utility.DateTimeUtils;
 
 import java.util.Calendar;
@@ -20,25 +20,25 @@ import java.util.List;
 
 public class AdapterInspectionDate extends BaseAdapter {
     Context context;
-    List<ModelDateOfAudit> datesOfAudit;
+    List<ModelSiteDate> siteDates;
     LayoutInflater inflater;
 
     Calendar dateSelected = Calendar.getInstance();
 
-    public AdapterInspectionDate(Context context, List<ModelDateOfAudit> datesOfAudit) {
+    public AdapterInspectionDate(Context context, List<ModelSiteDate> siteDates) {
         this.context = context;
-        this.datesOfAudit = datesOfAudit;
+        this.siteDates = siteDates;
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return datesOfAudit.size();
+        return siteDates.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return datesOfAudit.get(i).getDateOfAudit();
+        return siteDates.get(i).getInspection_date();
     }
 
     @Override
@@ -46,13 +46,6 @@ public class AdapterInspectionDate extends BaseAdapter {
         return i;
     }
 
-    public void save(String report_id) {
-        ModelDateOfAudit.deleteAll(ModelDateOfAudit.class,"reportid = ?", report_id);
-        for (ModelDateOfAudit t : datesOfAudit) {
-            t.setReport_id(report_id);
-            t.save();
-        }
-    }
 
     public class Widgets
     {
@@ -66,8 +59,8 @@ public class AdapterInspectionDate extends BaseAdapter {
         rowView = inflater.inflate(R.layout.custom_listview_template_inspection_date, null);
         widgets.etInspectionDate = (EditText) rowView.findViewById(R.id.et_template_next_company_background_inspection_date);
 
-        if(!datesOfAudit.get(position).getDateOfAudit().isEmpty()){
-            widgets.etInspectionDate.setText(DateTimeUtils.parseDateMonthToWord(datesOfAudit.get(position).getDateOfAudit()));
+        if(!siteDates.get(position).getInspection_date().isEmpty()){
+            widgets.etInspectionDate.setText(DateTimeUtils.parseDateMonthToWord(siteDates.get(position).getInspection_date()));
         }
 
         return rowView;

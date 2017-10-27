@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.unilab.gmp.adapter.templates.AdapterCompanyBackgroundMajorChanges;
 import com.unilab.gmp.adapter.templates.AdapterCompanyBackgroundName;
 import com.unilab.gmp.adapter.templates.AdapterDistributionList;
 import com.unilab.gmp.adapter.templates.AdapterDistributionOthers;
+import com.unilab.gmp.adapter.templates.AdapterInspectionDate;
 import com.unilab.gmp.adapter.templates.AdapterPersonelMetDuring;
 import com.unilab.gmp.adapter.templates.AdapterPreAuditDoc;
 import com.unilab.gmp.adapter.templates.AdapterPresentDuringMeeting;
@@ -54,6 +56,7 @@ import com.unilab.gmp.model.ModelReportApprover;
 import com.unilab.gmp.model.ModelReportQuestion;
 import com.unilab.gmp.model.ModelReportReviewer;
 import com.unilab.gmp.model.ModelReportSubActivities;
+import com.unilab.gmp.model.ModelSiteDate;
 import com.unilab.gmp.model.ModelTemplateActivities;
 import com.unilab.gmp.model.ModelTemplates;
 import com.unilab.gmp.model.ReviewerModel;
@@ -80,6 +83,7 @@ import com.unilab.gmp.utility.StartDatePicker;
 import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -170,10 +174,6 @@ public class NextSelectedTemplateFragment extends Fragment {
     EditText etTemplateNextSummaryRecommendationOtherIssuesExecutive;
     @BindView(R.id.et_template_next_company_background_history)
     EditText etTemplateNextCompanyBackgroundHistory;
-    @BindView(R.id.et_template_next_company_background_date_from)
-    EditText etTemplateNextCompanyBackgroundDateFrom;
-    @BindView(R.id.et_template_next_company_background_date_to)
-    EditText etTemplateNextCompanyBackgroundDateTo;
     @BindView(R.id.lv_template_next_company_background_name)
     ExpandableHeightListView lvTemplateNextCompanyBackgroundName;
     @BindView(R.id.ll_template_next_company_background_name)
@@ -228,6 +228,8 @@ public class NextSelectedTemplateFragment extends Fragment {
     CheckBox cbTemplateNextReviewer;
     @BindView(R.id.btn_prev)
     Button btnPrev;
+    @BindView(R.id.lv_template_next_company_background_inspection_date)
+    ExpandableHeightListView lvTemplateNextCompanyBackgroundInspectionDate;
 
     Dialog dialogCancelTemplate;
     Dialog dialogSaveDraft;
@@ -289,7 +291,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (this.rootView != null) {
             ButterKnife.bind(this, this.rootView);
-            unbinder = ButterKnife.bind(this,this.rootView);
+            unbinder = ButterKnife.bind(this, this.rootView);
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -314,7 +316,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         templateFragment = new TemplateFragment();
         wrapupdate = "";
 
-        dateModified = (String) android.text.format.DateFormat.format("yyyy-MM-dd HH:mm:ss", new java.util.Date());
+        dateModified = (String) DateFormat.format("yyyy-MM-dd HH:mm:ss", new Date());
         Log.i("DATE DATE", dateModified.toString());
 
         modelTemplateActivities = find(ModelTemplateActivities.class, "templateid = ?", modelTemplates.getTemplateID());
@@ -532,7 +534,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(templateModelCompanyBackgroundNames, context);
         lvTemplateNextCompanyBackgroundName.setAdapter(adapterCompanyBackgroundName);
         lvTemplateNextCompanyBackgroundName.setExpanded(true);
-        //templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "templateid = ?", modelTemplates.getTemplateID()));
+        templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", modelTemplates.getCompany_id()));
         if (templateModelCompanyBackgroundNames.size() > 0) {
             adapterCompanyBackgroundName.notifyDataSetChanged();
         } else {
@@ -543,7 +545,8 @@ public class NextSelectedTemplateFragment extends Fragment {
         adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context);
         lvTemplateNextCompanyBackgroundMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
         lvTemplateNextCompanyBackgroundMajorChanges.setExpanded(true);
-        //templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "templateid = ?", modelTemplates.getTemplateID()));
+        templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges
+                .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", modelTemplates.getCompany_id()));
         if (templateModelCompanyBackgroundMajorChanges.size() > 0) {
             adapterCompanyBackgroundMajorChanges.notifyDataSetChanged();
         } else {
@@ -599,6 +602,11 @@ public class NextSelectedTemplateFragment extends Fragment {
         }
 
         //adapter inspection date call and set
+        List<ModelSiteDate> modelSiteDates = ModelSiteDate.find(ModelSiteDate.class,"companyid = ?", modelTemplates.getCompany_id());
+        AdapterInspectionDate adapterInspectionDate = new AdapterInspectionDate(context,modelSiteDates);
+        lvTemplateNextCompanyBackgroundInspectionDate.setAdapter(adapterInspectionDate);
+        lvTemplateNextCompanyBackgroundInspectionDate.setExpanded(true);
+
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -647,8 +655,8 @@ public class NextSelectedTemplateFragment extends Fragment {
             R.id.btn_template_next_company_background_major_changes_add, R.id.btn_template_next_company_background_major_changes_delete,
             R.id.btn_template_next_auditor_add, R.id.btn_template_next_auditor_delete,
             R.id.btn_template_next_translator_add, R.id.btn_template_next_translator_delete,
-            R.id.et_template_next_date_of_wrap_up, R.id.et_template_next_company_background_date_from,
-            R.id.et_template_next_company_background_date_to, R.id.btn_template_next_other_distribution_add,
+            R.id.et_template_next_date_of_wrap_up,
+            R.id.btn_template_next_other_distribution_add,
             R.id.btn_template_next_other_distribution_delete,
             R.id.et_template_next_summary_recommendation_audit_close_date, R.id.btn_prev})
     public void onViewClicked(View view) {
@@ -775,12 +783,12 @@ public class NextSelectedTemplateFragment extends Fragment {
             case R.id.et_template_next_date_of_wrap_up:
                 callDatePicker(etTemplateNextDateOfWrapUp);
                 break;
-            case R.id.et_template_next_company_background_date_from:
-                callDatePicker(etTemplateNextCompanyBackgroundDateFrom);
-                break;
-            case R.id.et_template_next_company_background_date_to:
-                callDatePicker(etTemplateNextCompanyBackgroundDateTo);
-                break;
+//            case R.id.et_template_next_company_background_date_from:
+//                callDatePicker(etTemplateNextCompanyBackgroundDateFrom);
+//                break;
+//            case R.id.et_template_next_company_background_date_to:
+//                callDatePicker(etTemplateNextCompanyBackgroundDateTo);
+//                break;
             case R.id.et_template_next_summary_recommendation_audit_close_date:
                 callDatePicker(etTemplateNextSummaryRecommendationAuditCloseDate);
                 break;
@@ -1065,60 +1073,54 @@ public class NextSelectedTemplateFragment extends Fragment {
         dialogCancelTemplate.show();
     }
 
-    public void set_error(EditText editText)
-    {
+    public void set_error(EditText editText) {
         editText.setError("This field is required");
     }
 
     public boolean validate() {
 
         boolean passed = true;
-        if (etTemplateNextAuditedArea.getText().toString().equals(""))
-        {
+        if (etTemplateNextAuditedArea.getText().toString().equals("")) {
             passed = false;
             set_error(etTemplateNextAuditedArea);
         }
-        if (etTemplateNextNotAuditedArea.getText().toString().equals(""))
-        {
+        if (etTemplateNextNotAuditedArea.getText().toString().equals("")) {
             passed = false;
             set_error(etTemplateNextNotAuditedArea);
         }
-        if (etTemplateNextDateOfWrapUp.getText().toString().equals(""))
-        {
+        if (etTemplateNextDateOfWrapUp.getText().toString().equals("")) {
             passed = false;
             set_error(etTemplateNextDateOfWrapUp);
         }
-        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().equals(""))
-        {
+        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().equals("")) {
             passed = false;
             set_error(etTemplateNextSummaryRecommendationOtherIssuesAudit);
         }
-        if (etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString().equals(""))
-        {
+        if (etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString().equals("")) {
             passed = false;
             set_error(etTemplateNextSummaryRecommendationOtherIssuesExecutive);
         }
 
 
-        if(!adapterScopeAudit.check()){
+        if (!adapterScopeAudit.check()) {
             passed = false;
         }
-        if(!adapterReference.check()){
+        if (!adapterReference.check()) {
             passed = false;
         }
-        if(!adapterPreAuditDoc.check()){
+        if (!adapterPreAuditDoc.check()) {
             passed = false;
         }
-        if(!adapterPresentDuringMeeting.check()){
+        if (!adapterPresentDuringMeeting.check()) {
             passed = false;
         }
-        if(!adapterPersonelMetDuring.check()){
+        if (!adapterPersonelMetDuring.check()) {
             passed = false;
         }
-        if(!adapterCompanyBackgroundMajorChanges.check()){
+        if (!adapterCompanyBackgroundMajorChanges.check()) {
             passed = false;
         }
-        if(!adapterTranslator.check()){
+        if (!adapterTranslator.check()) {
             passed = false;
         }
 
@@ -1234,7 +1236,8 @@ public class NextSelectedTemplateFragment extends Fragment {
         for (TemplateModelReference t : tmr) {
             references += "{\"reference_name\":\"" + t.getCertification() + "\",\"issuer\":\"" + t.getBody()
                     + "\",\"reference_no\":\"" + t.getNumber() + "\",\"validity\":\"" + t.getValidity()
-                    + "\",\"issued\":\"" + t.getIssue_date() + "\"}"; if (++counter != tmr.size()) {
+                    + "\",\"issued\":\"" + t.getIssue_date() + "\"}";
+            if (++counter != tmr.size()) {
                 references += ",";
             }
         }
@@ -1290,7 +1293,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", report.getReport_id());
         for (ModelReportQuestion t : mrq) {
             //question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + t.getAnswer_id() + ",\"naoption_id\":\"" + t.getNaoption_id() + "\",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id()) + ",\"answer_details\":\"" + t.getAnswer_details() + "\"}";
-            question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + (t.getAnswer_id().isEmpty() ? "0": t.getAnswer_id())
+            question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + (t.getAnswer_id().isEmpty() ? "0" : t.getAnswer_id())
                     + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id())
                     + ",\"answer_details\":\"" + t.getAnswer_details() + "\",\"na_option\":\"" + t.getNaoption_id() + "\"}";
             if (++counter != mrq.size()) {
@@ -1371,7 +1374,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 report.getAudited_areas(),
                 report.getAreas_to_consider(),
                 "[" + "]",
-                "[" + translators+ "]",
+                "[" + translators + "]",
                 "[" + co_auditor_id + "]",
                 report.getReviewer_id(),
                 report.getApprover_id(),

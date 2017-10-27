@@ -46,8 +46,6 @@ import com.unilab.gmp.model.ModelReportSubActivities;
 import com.unilab.gmp.model.ModelReviewerInfo;
 import com.unilab.gmp.model.ModelSiteAuditHistory;
 import com.unilab.gmp.model.ModelSiteDate;
-import com.unilab.gmp.model.ModelSiteInspectors;
-import com.unilab.gmp.model.ModelSiteMajorChanges;
 import com.unilab.gmp.model.ModelTemplateActivities;
 import com.unilab.gmp.model.ModelTemplateElements;
 import com.unilab.gmp.model.ModelTemplateQuestionDetails;
@@ -417,6 +415,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
                 ModelCompany.deleteAll(ModelCompany.class);
                 ModelSiteAuditHistory.deleteAll(ModelSiteAuditHistory.class);
+                TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class);
+                TemplateModelCompanyBackgroundName.deleteAll(TemplateModelCompanyBackgroundName.class);
                 ModelSiteDate.deleteAll(ModelSiteDate.class);
                 for (int x = 0; x < modelCompanyInfo.getModelCompanies().size(); x++) {
                     ModelCompany modelCompany = new ModelCompany();
@@ -437,18 +437,17 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                         for (ModelSiteAuditHistory mc : modelCompanyInfo.getModelCompanies().get(x).getAudit_history()) {
                             ModelSiteAuditHistory modelSiteAuditHistory = new ModelSiteAuditHistory();
                             modelSiteAuditHistory.setCompany_id(company_id);
-                            modelSiteAuditHistory.setMajor_changes(mc.getMajor_changes());
                             modelSiteAuditHistory.save();
                             Log.e("APICalls", "CompanySite:company name : " + modelCompany.getCompany_name());
                             //+ modelSiteAuditHistory.getModelSiteDates().size());
                             if (mc.getMajor_changes() != null)
                             {
-                                for (ModelSiteMajorChanges mmc : mc.getMajor_changes()) {
-                                    ModelSiteMajorChanges majorChanges = new ModelSiteMajorChanges();
+                                for (TemplateModelCompanyBackgroundMajorChanges mmc : mc.getMajor_changes()) {
+                                    TemplateModelCompanyBackgroundMajorChanges majorChanges = new TemplateModelCompanyBackgroundMajorChanges();
                                     majorChanges.setCompany_id(company_id);
-                                    majorChanges.setMajor_change(mmc.getMajor_change());
+                                    majorChanges.setMajorchanges(mmc.getMajorchanges());
                                     majorChanges.save();
-                                    Log.e("APICalls", " CompanySite:changes " + mmc.getMajor_change());
+                                    Log.e("APICalls", " CompanySite:changes " + mmc.getMajorchanges());
 
                                 }
                             }
@@ -463,13 +462,13 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                 }
                             }
                             if (mc.getInspectors()!=null)
-                                for (ModelSiteInspectors msi: mc.getInspectors())
+                                for (TemplateModelCompanyBackgroundName msi: mc.getInspectors())
                                 {
-                                    ModelSiteInspectors modelSiteInspectors = new ModelSiteInspectors();
-                                    modelSiteInspectors.setInspector(msi.getInspector());
+                                    TemplateModelCompanyBackgroundName modelSiteInspectors = new TemplateModelCompanyBackgroundName();
+                                    modelSiteInspectors.setBgname(msi.getBgname());
                                     modelSiteInspectors.setCompany_id(company_id);
                                     modelSiteInspectors.save();
-                                    Log.e("APICalls", " CompanySite:inspector" + msi.getInspector());
+                                    Log.e("APICalls", " CompanySite:inspector" + msi.getBgname());
                                 }
                         }
                     }
@@ -786,8 +785,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                         TemplateModelScopeAuditInterest.deleteAll(TemplateModelScopeAuditInterest.class, "reportid = ?", report_id);
                                         TemplateModelPreAuditDoc.deleteAll(TemplateModelPreAuditDoc.class, "reportid = ?", report_id);
                                         TemplateModelReference.deleteAll(TemplateModelReference.class, "reportid = ?", report_id);
-                                        TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
-                                        TemplateModelCompanyBackgroundName.deleteAll(TemplateModelCompanyBackgroundName.class, "reportid = ?", report_id);
+//                                        TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
+//                                        TemplateModelCompanyBackgroundName.deleteAll(TemplateModelCompanyBackgroundName.class, "reportid = ?", report_id);
                                         TemplateModelPersonelMetDuring.deleteAll(TemplateModelPersonelMetDuring.class, "reportid = ?", report_id);
                                         TemplateModelSummaryRecommendation.deleteAll(TemplateModelSummaryRecommendation.class, "reportid = ?", report_id);
                                         TemplateModelDistributionList.deleteAll(TemplateModelDistributionList.class, "reportid = ?", report_id);
@@ -896,13 +895,13 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 }
 
                 //-
-                for (TemplateModelCompanyBackgroundMajorChanges mmc : modelAuditReports.getInspection()) {
-                    mmc.setReport_id(report_id);
-                    mmc.setMajorchanges(mmc.getMajorchanges());
-                    mmc.save();
-
-                    Log.e("APICalls", "company major changes : " + mmc.getMajorchanges());
-                }
+//                for (TemplateModelCompanyBackgroundMajorChanges mmc : modelAuditReports.getInspection()) {
+//                    mmc.setReport_id(report_id);
+//                    mmc.setMajorchanges(mmc.getMajorchanges());
+//                    mmc.save();
+//
+//                    Log.e("APICalls", "company major changes : " + mmc.getMajorchanges());
+//                }
 
                 //-
 //                for (TemplateModelCompanyBackgroundName mmn : modelAuditReports.getInspector()) {
