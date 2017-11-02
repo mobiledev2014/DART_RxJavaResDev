@@ -86,11 +86,15 @@ public class AuditReportAdapter extends BaseAdapter {
             widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    /*if(getStatus == 5){
+                    * Utils.pdfIfExist(getAuditReportId, context)
+                    * } else {*/
                     //Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     fragmentManager.beginTransaction()
                             .replace(R.id.fl_content, new SelectedAuditReportFragment(modelAuditReports.get(z))).addToBackStack(null).commit();
+                    /*}*/
                 }
             });
 

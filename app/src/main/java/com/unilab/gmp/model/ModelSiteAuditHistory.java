@@ -16,10 +16,10 @@ import lombok.Setter;
 @Getter
 
 public class ModelSiteAuditHistory extends SugarRecord {
-    ArrayList<ModelSiteMajorChanges> major_changes;
+    ArrayList<TemplateModelCompanyBackgroundMajorChanges> major_changes;
     @SerializedName("audit_dates")
     ArrayList<ModelSiteDate> modelSiteDates;
-    ArrayList<ModelSiteInspectors> inspectors;
+    ArrayList<TemplateModelCompanyBackgroundName> inspectors;
 
     String company_id;
 }

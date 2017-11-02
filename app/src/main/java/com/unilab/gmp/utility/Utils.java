@@ -3,13 +3,22 @@ package com.unilab.gmp.utility;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -24,8 +33,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.unilab.gmp.R;
 import com.unilab.gmp.retrofit.ApiInterface;
 
+import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -39,6 +50,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Utils {
+    public static String pdfPath = Environment.getExternalStorageDirectory() + "/DART/";
+    public static Dialog dialogError;
 //
 //    public static void snack(View view, String text) {
 //        Snackbar.make(view, text, Snackbar.LENGTH_SHORT).show();
@@ -367,7 +380,6 @@ public class Utils {
     }
 
 
-
     public static String[] yearArray() {
         int startYear = 2050;
         String[] years = new String[152];
@@ -430,6 +442,71 @@ public class Utils {
     public static String dateStamp() {
         return new SimpleDateFormat("yyyy-MM-dd").format(Calendar
                 .getInstance().getTime());
+    }
+
+    public static void pdfIfExist(String id, Context context) {
+        File file = new File(pdfPath + "/" + id + ".pdf");
+        if (file.exists()) {
+            openPdf(context, id);
+        } else {
+            Log.i("File","Not exisiting");
+            if (isNetworkConnected(context)){
+                Toast.makeText(context, "Download file online", Toast.LENGTH_SHORT).show();
+                //after download openPdf
+            } else {
+                dialogError(context);
+            }
+        }
+    }
+
+    public static void openPdf(Context context, String id) {
+        File pdfFile = new File(pdfPath + id + ".pdf");
+        Uri path = Uri.fromFile(pdfFile);
+
+        // Setting the intent for pdf reader
+        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+        pdfIntent.setDataAndType(path, "application/pdf");
+        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        try {
+            context.startActivity(pdfIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, "Can't read pdf file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private static boolean isNetworkConnected(Context context) {
+        /*ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;*/
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public static void dialogError(Context context) {
+        dialogError = new Dialog(context);
+        dialogError.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialogError.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogError.setCancelable(false);
+        dialogError.setContentView(R.layout.dialog_error_login);
+        dialogError.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        String message = "No internet connection. Make sure Wi-Fi or cellular data is turned on, then try again.";
+
+        TextView tv_message = (TextView) dialogError.findViewById(R.id.tv_message);
+        Button ok = (Button) dialogError.findViewById(R.id.btn_ok);
+
+        tv_message.setText(message);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogError.dismiss();
+            }
+        });
+
+
+        dialogError.show();
     }
 }
 

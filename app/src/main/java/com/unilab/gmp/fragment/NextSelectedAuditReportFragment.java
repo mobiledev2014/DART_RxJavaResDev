@@ -35,6 +35,7 @@ import com.unilab.gmp.adapter.templates.AdapterCompanyBackgroundMajorChanges;
 import com.unilab.gmp.adapter.templates.AdapterCompanyBackgroundName;
 import com.unilab.gmp.adapter.templates.AdapterDistributionList;
 import com.unilab.gmp.adapter.templates.AdapterDistributionOthers;
+import com.unilab.gmp.adapter.templates.AdapterInspectionDate;
 import com.unilab.gmp.adapter.templates.AdapterPersonelMetDuring;
 import com.unilab.gmp.adapter.templates.AdapterPreAuditDoc;
 import com.unilab.gmp.adapter.templates.AdapterPresentDuringMeeting;
@@ -53,6 +54,7 @@ import com.unilab.gmp.model.ModelReportApprover;
 import com.unilab.gmp.model.ModelReportQuestion;
 import com.unilab.gmp.model.ModelReportReviewer;
 import com.unilab.gmp.model.ModelReportSubActivities;
+import com.unilab.gmp.model.ModelSiteDate;
 import com.unilab.gmp.model.ModelTemplateActivities;
 import com.unilab.gmp.model.ModelTemplates;
 import com.unilab.gmp.model.ReviewerModel;
@@ -176,10 +178,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
     EditText etTemplateNextSummaryRecommendationOtherIssuesExecutive;
     @BindView(R.id.et_template_next_company_background_history)
     EditText etTemplateNextCompanyBackgroundHistory;
-    @BindView(R.id.et_template_next_company_background_date_from)
-    EditText etTemplateNextCompanyBackgroundDateFrom;
-    @BindView(R.id.et_template_next_company_background_date_to)
-    EditText etTemplateNextCompanyBackgroundDateTo;
     @BindView(R.id.lv_template_next_company_background_name)
     ExpandableHeightListView lvTemplateNextCompanyBackgroundName;
     @BindView(R.id.ll_template_next_company_background_name)
@@ -236,6 +234,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
     Button btnPrev;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.lv_template_next_company_background_inspection_date)
+    ExpandableHeightListView lvTemplateNextCompanyBackgroundInspectionDate;
 
     Dialog dialogCancelTemplate;
     Dialog dialogSaveDraft;
@@ -584,7 +584,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(templateModelCompanyBackgroundNames, context);
         lvTemplateNextCompanyBackgroundName.setAdapter(adapterCompanyBackgroundName);
         lvTemplateNextCompanyBackgroundName.setExpanded(true);
-        templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "reportid = ?", report.getReport_id()));
+        templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", report.getCompany_id()));
         if (templateModelCompanyBackgroundNames.size() > 0) {
             adapterCompanyBackgroundName.notifyDataSetChanged();
         } else {
@@ -595,7 +595,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context);
         lvTemplateNextCompanyBackgroundMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
         lvTemplateNextCompanyBackgroundMajorChanges.setExpanded(true);
-        templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id()));
+        templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", report.getCompany_id()));
         if (templateModelCompanyBackgroundMajorChanges.size() > 0) {
             adapterCompanyBackgroundMajorChanges.notifyDataSetChanged();
         } else {
@@ -649,6 +649,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
         if (mc.size() > 0) {
             etTemplateNextCompanyBackgroundHistory.setText(mc.get(0).getBackground());
         }
+
+        //adapter inspection date call and set
+        List<ModelSiteDate> modelSiteDates = ModelSiteDate.find(ModelSiteDate.class,"companyid = ?", modelTemplates.getCompany_id());
+        AdapterInspectionDate adapterInspectionDate = new AdapterInspectionDate(context,modelSiteDates);
+        lvTemplateNextCompanyBackgroundInspectionDate.setAdapter(adapterInspectionDate);
+        lvTemplateNextCompanyBackgroundInspectionDate.setExpanded(true);
+
+
 
         /*progress dialog dismiss*/
         final Handler handler = new Handler();
@@ -706,9 +714,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             R.id.btn_template_next_company_background_major_changes_add, R.id.btn_template_next_company_background_major_changes_delete,
             R.id.btn_template_next_auditor_add, R.id.btn_template_next_auditor_delete,
             R.id.btn_template_next_translator_add, R.id.btn_template_next_translator_delete,
-            R.id.et_template_next_date_of_wrap_up, R.id.et_template_next_company_background_date_from,
+            R.id.et_template_next_date_of_wrap_up,
             R.id.btn_template_next_other_distribution_add, R.id.btn_template_next_other_distribution_delete,
-            R.id.et_template_next_company_background_date_to,
             R.id.et_template_next_summary_recommendation_audit_close_date, R.id.btn_prev})
     public void onViewClicked(View view) {
         Log.e("clicked", "button : " + view.getId());
@@ -854,12 +861,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
             case R.id.et_template_next_date_of_wrap_up:
                 callDatePicker(etTemplateNextDateOfWrapUp);
                 break;
-            case R.id.et_template_next_company_background_date_from:
-                callDatePicker(etTemplateNextCompanyBackgroundDateFrom);
-                break;
-            case R.id.et_template_next_company_background_date_to:
-                callDatePicker(etTemplateNextCompanyBackgroundDateTo);
-                break;
+//            case R.id.et_template_next_company_background_date_from:
+//                callDatePicker(etTemplateNextCompanyBackgroundDateFrom);
+//                break;
+//            case R.id.et_template_next_company_background_date_to:
+//                callDatePicker(etTemplateNextCompanyBackgroundDateTo);
+//                break;
             case R.id.et_template_next_summary_recommendation_audit_close_date:
                 callDatePicker(etTemplateNextSummaryRecommendationAuditCloseDate);
                 break;
@@ -1287,14 +1294,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
             Log.e("validate", "etTemplateNextSummaryRecommendationOtherIssuesExecutive");
             return false;
         }
-        if (etTemplateNextCompanyBackgroundDateFrom.getText().toString().length() <= 0) {
-            Log.e("validate", "etTemplateNextCompanyBackgroundDateFrom");
-            return false;
-        }
-        if (etTemplateNextCompanyBackgroundDateTo.getText().toString().length() <= 0) {
-            Log.e("validate", "etTemplateNextCompanyBackgroundDateTo");
-            return false;
-        }
+//        if (etTemplateNextCompanyBackgroundDateFrom.getText().toString().length() <= 0) {
+//            Log.e("validate", "etTemplateNextCompanyBackgroundDateFrom");
+//            return false;
+//        }
+//        if (etTemplateNextCompanyBackgroundDateTo.getText().toString().length() <= 0) {
+//            Log.e("validate", "etTemplateNextCompanyBackgroundDateTo");
+//            return false;
+//        }
 
         return true;
     }
