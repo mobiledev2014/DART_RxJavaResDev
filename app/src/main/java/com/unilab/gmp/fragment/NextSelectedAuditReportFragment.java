@@ -1282,10 +1282,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
             Log.e("validate", "etTemplateNextDateOfWrapUp");
             return false;
         }
-        if (etTemplateNextSummaryRecommendationAuditCloseDate.getText().toString().length() <= 0) {
-            Log.e("validate", "etTemplateNextSummaryRecommendationAuditCloseDate");
-            return false;
-        }
+//        if (etTemplateNextSummaryRecommendationAuditCloseDate.getText().toString().length() <= 0) {
+//            Log.e("validate", "etTemplateNextSummaryRecommendationAuditCloseDate");
+//            return false;
+//        }
         if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().length() <= 0) {
             Log.e("validate", "etTemplateNextSummaryRecommendationOtherIssuesAudit");
             return false;
