@@ -602,8 +602,8 @@ public class NextSelectedTemplateFragment extends Fragment {
         }
 
         //adapter inspection date call and set
-        List<ModelSiteDate> modelSiteDates = ModelSiteDate.find(ModelSiteDate.class,"companyid = ?", modelTemplates.getCompany_id());
-        AdapterInspectionDate adapterInspectionDate = new AdapterInspectionDate(context,modelSiteDates);
+        List<ModelSiteDate> modelSiteDates = ModelSiteDate.find(ModelSiteDate.class, "companyid = ?", modelTemplates.getCompany_id());
+        AdapterInspectionDate adapterInspectionDate = new AdapterInspectionDate(context, modelSiteDates);
         lvTemplateNextCompanyBackgroundInspectionDate.setAdapter(adapterInspectionDate);
         lvTemplateNextCompanyBackgroundInspectionDate.setExpanded(true);
 
@@ -870,6 +870,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         mar.setReviewer_id(reviewer_id);
         mar.setApprover_id(approver_id);
         mar.setReviewerChecked(modelTemplates.isReviewerChecked());
+        mar.setWrap_date(etTemplateNextDateOfWrapUp.getText().toString());
 
         adapterAuditors.save(report_id);
 
@@ -1290,7 +1291,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         counter = 0;
         String question = "";
-        List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", report.getReport_id());
+        List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND answerid > '0'", report.getReport_id());
         for (ModelReportQuestion t : mrq) {
             //question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + t.getAnswer_id() + ",\"naoption_id\":\"" + t.getNaoption_id() + "\",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id()) + ",\"answer_details\":\"" + t.getAnswer_details() + "\"}";
             question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + (t.getAnswer_id().isEmpty() ? "0" : t.getAnswer_id())
@@ -1358,6 +1359,40 @@ public class NextSelectedTemplateFragment extends Fragment {
                 translators += ",";
             }
         }
+
+        Log.e("company_id", report.getCompany_id());
+        Log.e("other_activities", report.getOther_activities());
+        Log.e("audit_date", auditdate);
+//        Log.e("p_inspection_date_1", report.getP_inspection_date_1());
+//        Log.e("p_inspection_date_2", report.getP_inspection_date_2());
+        Log.e("template_id", report.getTemplate_id());
+        Log.e("auditor_id", report.getAuditor_id());
+        Log.e("closure_date", report.getAudit_close_date());
+        Log.e("other_issues_audit", report.getOther_issues());
+        Log.e("other_issues_executive", report.getOther_issues_executive());
+        Log.e("audited_areas", report.getAudited_areas());
+        Log.e("areas_to_consider", report.getAreas_to_consider());
+        Log.e("wrap_up_date", report.getWrap_date());
+        Log.e("translator", translators);
+        Log.e("co_auditor_id", co_auditor_id);
+        Log.e("reviewer_id", report.getReviewer_id());
+        Log.e("approver_id", report.getApprover_id());
+
+        Log.e("scope", scope);
+        Log.e("disposition", disposition);
+        Log.e("pre_audit_documents", pre_audit_documents);
+        Log.e("references", references);
+        Log.e("inspection", inspection);
+        Log.e("inspector", inspector);
+        Log.e("personnel", personnel);
+        Log.e("activities", activities);
+        Log.e("question", question);
+        Log.e("recommendation", recommendation);
+        Log.e("distribution", distribution);
+        Log.e("present_during_meeting", present_during_meeting);
+        Log.e("other_distribution", otherdistribution);
+        Log.e("date_modified", dateModified);
+
         apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
         Call<ModelAuditReportReply> modelAuditReportReplyCall = apiInterface.sendAuditReports(
                 "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839",
@@ -1373,7 +1408,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 report.getOther_issues_executive(),
                 report.getAudited_areas(),
                 report.getAreas_to_consider(),
-                "[" + "]",
+                report.getWrap_date(),
                 "[" + translators + "]",
                 "[" + co_auditor_id + "]",
                 report.getReviewer_id(),

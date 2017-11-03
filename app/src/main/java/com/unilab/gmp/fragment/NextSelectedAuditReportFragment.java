@@ -912,6 +912,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         mar.setAuditor_id(auditorsModels.get(sTemplateNextAuditorLeadName.getSelectedItemPosition()).getAuditor_id());
         mar.setReviewer_id(reviewer_id);
         mar.setApprover_id(approver_id);
+        mar.setWrap_date(etTemplateNextDateOfWrapUp.getText().toString());
         mar.setReviewerChecked(modelTemplates.isReviewerChecked());
 
         adapterAuditors.save(mar.getReport_id());
@@ -1415,7 +1416,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         String question = "";
-        List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", report.getReport_id());
+        List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND answerid > '0'", report.getReport_id());
         for (ModelReportQuestion t : mrq) {
             //question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + t.getAnswer_id() + ",\"naoption_id\":\"" + t.getNaoption_id() + "\",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id()) + ",\"answer_details\":\"" + t.getAnswer_details() + "\"}";
             question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":"  + (t.getAnswer_id().isEmpty() ? "0": t.getAnswer_id())
@@ -1545,7 +1546,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 report.getOther_issues_executive(),
                 report.getAudited_areas(),
                 report.getAreas_to_consider(),
-                "[" + "]",
+                report.getWrap_date(),
 //                report.getTranslator(),
                 "[" + translators+ "]",
                 "[" + co_auditor_id + "]",

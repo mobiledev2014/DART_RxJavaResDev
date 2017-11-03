@@ -21,7 +21,7 @@ public class ModelAuditReports extends SugarRecord {
     String report_no;
     String company_id;
     String other_activities = "";
-//    String p_inspection_date_1 = "";
+    //    String p_inspection_date_1 = "";
 //    String p_inspection_date_2 = "";
     String template_id;
     String auditor_id = "";
@@ -49,6 +49,7 @@ public class ModelAuditReports extends SugarRecord {
     String reviewer_id;//waley
     String approver_id;//waley
     boolean isReviewerChecked;
+    String wrap_date = "";
 
     @SerializedName("audit_dates")
     List<ModelDateOfAudit> date_of_audit;
@@ -60,7 +61,7 @@ public class ModelAuditReports extends SugarRecord {
     @SerializedName("references")
     List<TemplateModelReference> referencess;
     List<TemplateModelCompanyBackgroundMajorChanges> inspection;
-//    List<TemplateModelCompanyBackgroundName> inspector;
+    //    List<TemplateModelCompanyBackgroundName> inspector;
     @SerializedName("personel")
     List<TemplateModelPersonelMetDuring> personnel;
     List<ModelReportActivities> activities;
