@@ -556,7 +556,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
                         @Override
                         public void onFailure(Call<ModelTemplates> call, Throwable t) {
-                            Log.e("testing", t.getMessage());
+//                            Log.e("testing", t.getMessage());
                             Log.e("templatesdownloaded", "templatesdownloaded : " + ++templatesdownloaded);
                         }
                     });

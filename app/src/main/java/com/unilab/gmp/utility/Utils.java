@@ -445,11 +445,16 @@ public class Utils {
     }
 
     public static void pdfIfExist(String id, Context context) {
-        File file = new File(pdfPath + "/" + id + ".pdf");
+        //File file = new File(pdfPath + "/" + id + ".pdf");
+//        File dirFile = new File(pdfPath);
+        File file = new File(pdfPath + "/sample.pdf");
+        Log.i("file location", file.toString() + "");
+//        dirFile.mkdir();
         if (file.exists()) {
-            openPdf(context, id);
+//            openPdf(context, id);
+            openPdf(context, "sample");
         } else {
-            Log.i("File","Not exisiting");
+            Log.i("File","Not existing");
             if (isNetworkConnected(context)){
                 Toast.makeText(context, "Download file online", Toast.LENGTH_SHORT).show();
                 //after download openPdf
