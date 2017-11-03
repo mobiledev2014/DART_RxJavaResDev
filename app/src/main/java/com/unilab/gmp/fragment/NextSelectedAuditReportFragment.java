@@ -1576,7 +1576,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             public void onResponse(Call<ModelAuditReportReply> call, Response<ModelAuditReportReply> response) {
                 modelAuditReportReply = response.body();
                 //Log.e("Result post", modelApproverInfo.getMessage());
-                Log.e("Result post", "hey ");
+                 Log.e("Result post", "hey " + modelAuditReportReply.toString());
                 try {
                     Log.e("ResultTry", modelAuditReportReply.getMessage() + "");
                     Log.e("ResultTry", modelAuditReportReply.getKey() + "");

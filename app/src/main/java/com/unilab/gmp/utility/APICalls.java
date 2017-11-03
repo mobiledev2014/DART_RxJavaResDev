@@ -172,7 +172,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
         while (!isdone || templatesdownloaded != numberoftemplates) ;
 
-      //  while (!isdone2 || templatesdownloaded2 != numberoftemplates2) ;
+        //  while (!isdone2 || templatesdownloaded2 != numberoftemplates2) ;
         Log.e("changes", "changes : " + changes);
 
         return result;
@@ -231,43 +231,46 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 if (cm.size() > 0) {
                     if (configModel != null) {
 
-                        if (date(cm.get(0).getApprover()).after(date(configModel.getApprover()))) {
+                        if (date(cm.get(0).getApprover()).before(date(configModel.getApprover()))) {
                             cm.get(0).setApprover(configModel.getApprover());
                             apiApprover();
                         }
-                        if (date(cm.get(0).getAuditor()).after(date(configModel.getAuditor()))) {
+                        if (date(cm.get(0).getAuditor()).before(date(configModel.getAuditor()))) {
                             cm.get(0).setAuditor(configModel.getAuditor());
                             apiAuditors();
                         }
-                        if (date(cm.get(0).getReviewer()).after(date(configModel.getReviewer()))) {
+                        if (date(cm.get(0).getReviewer()).before(date(configModel.getReviewer()))) {
                             cm.get(0).setReviewer(configModel.getReviewer());
                             apiReviewer();
                         }
-                        if (date(cm.get(0).getSite()).after(date(configModel.getSite()))) {
+                        Log.e("TEST", "DATE SITE : " + cm.get(0).getSite());
+                        Log.e("TEST", "DATE SITE 2 : " + configModel.getSite());
+
+                        if (date(cm.get(0).getSite()).before(date(configModel.getSite()))) {
                             cm.get(0).setSite(configModel.getSite());
                             apiSupplier();
                         }
-//                        if (date(cm.get(0).getApprover()).after(date(configModel.getApprover()))) {
+//                        if (date(cm.get(0).getApprover()).before(date(configModel.getApprover()))) {
 //                            cm.get(0).setApprover(configModel.getApprover());
 //                        apiTemplateList();
 //                        }
-                        if (date(cm.get(0).getCategory()).after(date(configModel.getCategory()))) {
+                        if (date(cm.get(0).getCategory()).before(date(configModel.getCategory()))) {
                             cm.get(0).setCategory(configModel.getCategory());
                             apiCategory();
                         }
-                        if (date(cm.get(0).getProduct()).after(date(configModel.getProduct()))) {
+                        if (date(cm.get(0).getProduct()).before(date(configModel.getProduct()))) {
                             cm.get(0).setProduct(configModel.getProduct());
                             apiProduct();
                         }
-                        if (date(cm.get(0).getType_audit()).after(date(configModel.getType_audit()))) {
+                        if (date(cm.get(0).getType_audit()).before(date(configModel.getType_audit()))) {
                             cm.get(0).setType_audit(configModel.getType_audit());
                             apiTypeAudit();
                         }
-                        if (date(cm.get(0).getDisposition()).after(date(configModel.getDisposition()))) {
+                        if (date(cm.get(0).getDisposition()).before(date(configModel.getDisposition()))) {
                             cm.get(0).setDisposition(configModel.getDisposition());
                             apiDisposition();
                         }
-                        if (date(cm.get(0).getDistribution()).after(date(configModel.getDistribution()))) {
+                        if (date(cm.get(0).getDistribution()).before(date(configModel.getDistribution()))) {
                             cm.get(0).setDistribution(configModel.getDistribution());
                             apiDistribution();
                         }
@@ -440,8 +443,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                             modelSiteAuditHistory.save();
                             Log.e("APICalls", "CompanySite:company name : " + modelCompany.getCompany_name());
                             //+ modelSiteAuditHistory.getModelSiteDates().size());
-                            if (mc.getMajor_changes() != null)
-                            {
+                            if (mc.getMajor_changes() != null) {
                                 for (TemplateModelCompanyBackgroundMajorChanges mmc : mc.getMajor_changes()) {
                                     TemplateModelCompanyBackgroundMajorChanges majorChanges = new TemplateModelCompanyBackgroundMajorChanges();
                                     majorChanges.setCompany_id(company_id);
@@ -461,9 +463,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
                                 }
                             }
-                            if (mc.getInspectors()!=null)
-                                for (TemplateModelCompanyBackgroundName msi: mc.getInspectors())
-                                {
+                            if (mc.getInspectors() != null)
+                                for (TemplateModelCompanyBackgroundName msi : mc.getInspectors()) {
                                     TemplateModelCompanyBackgroundName modelSiteInspectors = new TemplateModelCompanyBackgroundName();
                                     modelSiteInspectors.setBgname(msi.getBgname());
                                     modelSiteInspectors.setCompany_id(company_id);
@@ -735,7 +736,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     }
 
                     Log.i("API_AUDIT_REPORT", "START 1 :" + mar.toString() + "\n size : " + auditReportsList.size());
-                    final Call<ModelAuditReports> report = ApiClient.getApiClientAuditReport()
+                    Call<ModelAuditReports> report = ApiClient.getApiClientAuditReport()
                             .create(ApiInterface.class).getAuditReport(reportId + ".json");
 //                    final Call<ModelAuditReports> report = apiInterface.getAuditReport(reportId);
                     report.enqueue(new Callback<ModelAuditReports>() {
