@@ -15,7 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".15"
+            android:layout_weight="@integer/login_top"
             android:gravity="top|right">
 
             <LinearLayout
@@ -46,7 +46,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".4"
+            android:layout_weight="@integer/login_mid"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -77,16 +77,18 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight=".16"
+                    android:layout_weight=".32"
                     android:gravity="center"
                     android:focusableInTouchMode="true"
                     android:paddingLeft="55dp"
-                    android:paddingRight="55dp">
+                    android:paddingRight="55dp"
+                    android:orientation="vertical">
 
                     <EditText
                         android:id="@+id/et_username"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight=".5"
                         android:hint="Email"
                         android:singleLine="true"
                         android:paddingRight="10dp"
@@ -97,9 +99,11 @@
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
                         android:textSize="@dimen/login_text_size"
-                        android:textAlignment="center"/>
+                        android:textAlignment="center"
+                        android:imeOptions="actionNext"
+                        android:layout_marginBottom="10dp"/>
 
-                </LinearLayout>
+               <!-- </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -108,12 +112,13 @@
                     android:gravity="center"
                     android:focusableInTouchMode="true"
                     android:paddingLeft="55dp"
-                    android:paddingRight="55dp">
+                    android:paddingRight="55dp">-->
 
                     <EditText
                         android:id="@+id/et_password"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight=".5"
                         android:hint="Password"
                         android:singleLine="true"
                         android:paddingRight="10dp"
@@ -123,7 +128,7 @@
                         android:paddingBottom="15dp"
                         android:textSize="@dimen/login_text_size"
                         android:inputType="textPassword"
-                        android:textAlignment="center"/>
+                        android:textAlignment="center" />
 
                 </LinearLayout>
 
@@ -183,7 +188,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".45"></LinearLayout>
+            android:layout_weight="@integer/login_bot"></LinearLayout>
 
     </LinearLayout>
 

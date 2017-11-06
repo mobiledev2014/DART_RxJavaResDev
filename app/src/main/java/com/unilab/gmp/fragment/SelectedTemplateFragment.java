@@ -35,8 +35,10 @@ import com.unilab.gmp.model.ModelTemplateElements;
 import com.unilab.gmp.model.ModelTemplates;
 import com.unilab.gmp.utility.Variable;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -104,6 +106,8 @@ public class SelectedTemplateFragment extends Fragment {
     Calendar dateSelected = Calendar.getInstance();
     Calendar currentTime = Calendar.getInstance();
     int useDate;
+    String yearGmp = "";
+    String substr = "";
 
     View rootView;
 
@@ -183,6 +187,9 @@ public class SelectedTemplateFragment extends Fragment {
         month = currentTime.get(Calendar.MONTH);
         day = currentTime.get(Calendar.DAY_OF_MONTH);
 
+        getYearGmp();
+        tvTemplateGmpNum.setText("GMP-" + substr + "-000");
+
         tvTemplateProductType.setText(modelTemplates.getProductType());
         tvTemplateStandard.setText(modelTemplates.getTemplateName());
 
@@ -196,6 +203,13 @@ public class SelectedTemplateFragment extends Fragment {
 
         this.rootView = rootView;
         return rootView;
+    }
+
+    private void getYearGmp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        yearGmp = sdf.format(new Date());
+        substr = yearGmp.substring(2);
+        Log.i("Year GMP", substr);
     }
 
     /*@Override
@@ -439,18 +453,18 @@ public class SelectedTemplateFragment extends Fragment {
                 ModelAuditReports mar = new ModelAuditReports();
                 int size = ModelAuditReports.listAll(ModelAuditReports.class).size() + 1;
                 String zero = "";
-                if (size < 1000) {
+                /*if (size < 1000) {
+                    zero = "0";
+                }*/
+                if (size < 100) {
                     zero = "0";
                 }
-                if (size < 100) {
-                    zero = "00";
-                }
                 if (size < 10) {
-                    zero = "000";
+                    zero = "00";
                 }
                 String report_id = zero + size;
                 mar.setReport_id(report_id);
-                mar.setReport_no("GMP-00-" + zero + size);
+                mar.setReport_no("GMP-" + substr + "-" + zero + size);
                 mar.setTemplate_id(modelTemplates.getTemplateID());
                 mar.setCompany_id(modelTemplates.getCompany_id());
                 mar.setAudit_date_1(modelTemplates.getAudit_date_1());
@@ -501,8 +515,8 @@ public class SelectedTemplateFragment extends Fragment {
 //            pDialog.dismiss();
 //            return false;
 //        }
-        Log.e("validate","date of audit : "+dateOfAuditAdapter.getItem(0));
-        if (modelTemplates.getCompany_id().isEmpty()||dateOfAuditAdapter.getItem(0).equals("")) {
+        Log.e("validate", "date of audit : " + dateOfAuditAdapter.getItem(0));
+        if (modelTemplates.getCompany_id().isEmpty() || dateOfAuditAdapter.getItem(0).equals("")) {
 //            if (modelTemplates.getCompany_id().isEmpty() || modelTemplates.getAudit_date_1().isEmpty() ||
 //                    modelTemplates.getAudit_date_2().isEmpty())
             pDialog.dismiss();

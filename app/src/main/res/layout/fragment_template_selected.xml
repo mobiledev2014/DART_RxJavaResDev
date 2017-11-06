@@ -78,7 +78,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight=".5"
                                 android:gravity="center|left"
-                                android:text="GMP-17-0000"
+                                android:text="GMP-17-000"
                                 android:textSize="20sp" />
 
                         </LinearLayout><!--report number-->
@@ -110,7 +110,9 @@
                                 android:paddingLeft="10dp"
                                 android:paddingRight="10dp"
                                 android:singleLine="true"
-                                android:textSize="20sp" />
+                                android:textSize="20sp"
+                                android:layout_marginLeft="10dp"
+                                android:imeOptions="actionDone"/>
 
                         </LinearLayout><!--name of site-->
 
@@ -118,7 +120,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="3dp">
 
                             <TextView
                                 android:layout_width="0dp"
@@ -142,7 +145,8 @@
                                 android:paddingRight="10dp"
                                 android:singleLine="true"
                                 android:textSize="20sp"
-                                android:enabled="false"/>
+                                android:enabled="false"
+                                android:layout_marginLeft="10dp"/>
 
                         </LinearLayout><!--address 1-->
 
@@ -173,7 +177,8 @@
                                 android:textColor="#000"
                                 android:singleLine="true"
                                 android:textSize="20sp"
-                                android:enabled="false"/>
+                                android:enabled="false"
+                                android:layout_marginLeft="10dp"/>
 
                         </LinearLayout><!--address 2-->
 

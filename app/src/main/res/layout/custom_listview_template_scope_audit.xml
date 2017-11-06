@@ -29,7 +29,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Type of Audit"
+                    android:text="Type of Audit: "
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -68,7 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Remarks"
+                    android:text="Remarks: "
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -137,7 +137,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#fff"
-            android:divider="@android:color/transparent"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+            android:divider="@color/dividerColorSub"
+            android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
 
         <!--</LinearLayout>-->
 

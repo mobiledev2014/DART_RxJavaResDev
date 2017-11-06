@@ -13,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
@@ -165,7 +164,7 @@ public class AdapterScopeAudit extends BaseAdapter {
             public void onClick(View view) {
 
                 addScopeAuditTypeInterest(templateModelScopeAudit.get(z).getAdapterScope(), z);
-                Toast.makeText(context, "Product of interest add:" + templateModelScopeAuditInterests.size(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Product of interest add:" + templateModelScopeAuditInterests.size(), Toast.LENGTH_SHORT).show();
                 getView(z, null, viewGroup);
             }
         });
@@ -173,7 +172,7 @@ public class AdapterScopeAudit extends BaseAdapter {
         widgets.btnTemplateNextScopeAuditInterestDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Product of interest delete", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Product of interest delete", Toast.LENGTH_SHORT).show();
                 if (templateModelScopeAuditInterests.get(z).size() > 1) {
                     templateModelScopeAuditInterests.get(z).remove(templateModelScopeAuditInterests.get(z).size() - 1);
                     //templateModelScopeAudit.get(z).getAdapterScope().notifyDataSetChanged();

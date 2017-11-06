@@ -16,4 +16,8 @@
     <item type="integer" name="row_size_head">.08</item>
     <item type="integer" name="row_size_body">.86</item>
     <item type="integer" name="row_size_foot">.06</item>
+
+    <item type="integer" name="login_top">.15</item>
+    <item type="integer" name="login_mid">.5</item>
+    <item type="integer" name="login_bot">.35</item>
 </resources>

@@ -193,7 +193,8 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
 
                 if (this.action.equals(Glovar.LOGIN)) {
                     Log.i("ERROR", "invalid email");
-                    dialogLoginError("Invalid email address. Please make sure that your email address is correct.");
+                    //dialogLoginError("Invalid email address. Please make sure that your email address is correct.");
+                    dialogLoginError("Email and password do not match.");
                 } else {
                     //invalid credentials please re-login to continue
                     dialogPostError("Invalid credentials please re-login to continue.");
