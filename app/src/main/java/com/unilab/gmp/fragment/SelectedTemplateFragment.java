@@ -426,7 +426,7 @@ public class SelectedTemplateFragment extends Fragment {
             }, 700);
         } else {
             //Toast.makeText(context, "Answer all questions first.", Toast.LENGTH_SHORT).show();
-            dialogAnswerAll("Please answer all questions.");
+            dialogAnswerAll("Please select site and/or date of audit.");
         }
     }
 

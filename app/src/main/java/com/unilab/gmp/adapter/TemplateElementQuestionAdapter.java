@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -367,7 +368,7 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
 
         final EditText remarks = (EditText) dialogNo.findViewById(R.id.et_remarks);
         final Spinner category = (Spinner) dialogNo.findViewById(R.id.spn_category);
-        Button save = (Button) dialogNo.findViewById(R.id.btn_save);
+        final Button save = (Button) dialogNo.findViewById(R.id.btn_save);
         Button cancel = (Button) dialogNo.findViewById(R.id.btn_cancel);
 
         List<ModelCategory> categoryList = ModelCategory.listAll(ModelCategory.class);
@@ -399,6 +400,9 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(save.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+
                 strRemarks = remarks.getText().toString();
                 spnCategory = category.getSelectedItem().toString();
 

@@ -944,7 +944,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 //    }
 
     private void addReference() {
-        if (4 > templateModelReferences.size()) {
+        if (20 > templateModelReferences.size()) {
             TemplateModelReference t = new TemplateModelReference();
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelReferences.add(t);
@@ -953,7 +953,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     private void addPreAuditDoc() {
-        if (4 > templateModelPreAuditDocs.size()) {
+        if (20 > templateModelPreAuditDocs.size()) {
             TemplateModelPreAuditDoc t = new TemplateModelPreAuditDoc();
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelPreAuditDocs.add(t);
@@ -962,7 +962,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     private void addPresentDuringMeeting() {
-        if (4 > templateModelPresentDuringMeetings.size()) {
+        if (30 > templateModelPresentDuringMeetings.size()) {
             TemplateModelPresentDuringMeeting t = new TemplateModelPresentDuringMeeting();
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelPresentDuringMeetings.add(t);
@@ -971,7 +971,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     private void addPersonelMet() {
-        if (4 > templateModelPersonelMetDurings.size()) {
+        if (30 > templateModelPersonelMetDurings.size()) {
             TemplateModelPersonelMetDuring t = new TemplateModelPersonelMetDuring();
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelPersonelMetDurings.add(t);
@@ -980,6 +980,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     private void addDistribution() {
+        Log.i("distri count", templateModelDistributionLists.size() + "");
         if (4 > templateModelDistributionLists.size()) {
             TemplateModelDistributionList t = new TemplateModelDistributionList();
             t.setTemplate_id(modelTemplates.getTemplateID());

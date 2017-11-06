@@ -984,7 +984,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 //    }
 
     private void addReference() {
-        if (4 > templateModelReferences.size()) {
+        if (20 > templateModelReferences.size()) {
             TemplateModelReference t = new TemplateModelReference();
             templateModelReferences.add(t);
             adapterReference.notifyDataSetChanged();
@@ -992,7 +992,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     private void addPreAuditDoc() {
-        if (4 > templateModelPreAuditDocs.size()) {
+        if (20 > templateModelPreAuditDocs.size()) {
             TemplateModelPreAuditDoc t = new TemplateModelPreAuditDoc();
             templateModelPreAuditDocs.add(t);
             adapterPreAuditDoc.notifyDataSetChanged();
@@ -1000,7 +1000,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     private void addPresentDuringMeeting() {
-        if (4 > templateModelPresentDuringMeetings.size()) {
+        if (30 > templateModelPresentDuringMeetings.size()) {
             TemplateModelPresentDuringMeeting t = new TemplateModelPresentDuringMeeting();
             templateModelPresentDuringMeetings.add(t);
             adapterPresentDuringMeeting.notifyDataSetChanged();
@@ -1008,7 +1008,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     private void addPersonelMet() {
-        if (4 > templateModelPersonelMetDurings.size()) {
+        if (30 > templateModelPersonelMetDurings.size()) {
             TemplateModelPersonelMetDuring t = new TemplateModelPersonelMetDuring();
             templateModelPersonelMetDurings.add(t);
             adapterPersonelMetDuring.notifyDataSetChanged();
