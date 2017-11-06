@@ -23,6 +23,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
@@ -113,6 +114,7 @@ public class SelectedTemplateFragment extends Fragment {
 
     List<ModelDateOfAudit> modelDateOfAudits;
 
+    Dialog dialogDeleteDateOfAudit;
 //    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 //
 //        @Override
@@ -335,10 +337,7 @@ public class SelectedTemplateFragment extends Fragment {
 //                new DatePickerDialog(context, date, year, month, day).show();
 //                break;
             case R.id.btn_template_audit_date_delete:
-                if (modelDateOfAudits.size() > 1) {
-                    modelDateOfAudits.remove(modelDateOfAudits.size() - 1);
-                    dateOfAuditAdapter.notifyDataSetChanged();
-                }
+                deleteDateOfAudit();
                 break;
             case R.id.btn_template_audit_date_add:
                 addDateOfAudit();
@@ -355,6 +354,45 @@ public class SelectedTemplateFragment extends Fragment {
         }
     }
 
+    private void deleteDateOfAudit() {
+        if (modelDateOfAudits.size() > 1) {
+            dialogDeleteDateConfirmation("Are you sure you want to delete?");
+
+        }
+    }
+    public void dialogDeleteDateConfirmation(String mess) {
+        dialogDeleteDateOfAudit = new Dialog(context);
+        dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogDeleteDateOfAudit.setCancelable(false);
+        dialogDeleteDateOfAudit.setContentView(R.layout.dialog_exit_confirmation);
+        dialogDeleteDateOfAudit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        TextView msg = (TextView) dialogDeleteDateOfAudit.findViewById(R.id.tv_message);
+        Button yes = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_yes);
+        Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
+
+        msg.setText(mess);
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                modelDateOfAudits.remove(modelDateOfAudits.size() - 1);
+                dateOfAuditAdapter.notifyDataSetChanged();
+                dialogDeleteDateOfAudit.dismiss();
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogDeleteDateOfAudit.dismiss();
+            }
+        });
+
+
+        dialogDeleteDateOfAudit.show();
+    }
     private void analyzeInputs(ArrayList<ModelTemplateElements> modelTemplateElements) {
 //        List<ModelTemplateElements> modelTemplateElements = ModelTemplateElements.listAll(ModelTemplateElements.class);
 
@@ -608,11 +646,26 @@ public class SelectedTemplateFragment extends Fragment {
 
     private void addDateOfAudit() {
         if (dateOfAuditAdapter.getCount() < 3) {
-            ModelDateOfAudit doa = new ModelDateOfAudit();
-            doa.setDateOfAudit("");
+            if (dateOfAuditAdapter.getCount()>0)
+            {
+                if (dateOfAuditAdapter.getItem(0).equals(""))
+                    Toast.makeText(context, "Please select date.", Toast.LENGTH_SHORT).show();
+                else {
+                    ModelDateOfAudit doa = new ModelDateOfAudit();
+                    doa.setDateOfAudit("");
 //            doa.setTemplate_id(modelTemplates.getTemplateID());
-            modelDateOfAudits.add(doa);
-            dateOfAuditAdapter.notifyDataSetChanged();
+                    modelDateOfAudits.add(doa);
+                    dateOfAuditAdapter.notifyDataSetChanged();
+                }
+            }
+            else {
+                ModelDateOfAudit doa = new ModelDateOfAudit();
+                doa.setDateOfAudit("");
+//            doa.setTemplate_id(modelTemplates.getTemplateID());
+                modelDateOfAudits.add(doa);
+                dateOfAuditAdapter.notifyDataSetChanged();
+            }
+
         }
     }
 }

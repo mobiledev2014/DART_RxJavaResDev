@@ -229,7 +229,7 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
         widgets.btnNc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Not covered button clicked!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Not covered button clicked!", Toast.LENGTH_SHORT).show();
                 widgets.btnYes.setBackgroundResource(R.drawable.yes_button);
                 widgets.btnNo.setBackgroundResource(R.drawable.yes_button);
                 widgets.btnNa.setBackgroundResource(R.drawable.yes_button);

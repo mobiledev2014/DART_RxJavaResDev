@@ -1,18 +1,25 @@
 package com.unilab.gmp.adapter.templates;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
@@ -43,6 +50,7 @@ public class AdapterScopeAudit extends BaseAdapter {
     ArrayAdapter<String> adapter;
     List<String> idList;
     boolean isCheck = true;
+    Dialog dialogDeleteDateOfAudit;
 
     public AdapterScopeAudit(List<TemplateModelScopeAudit> templateModelScopeAudit, Context context
             , String company_id, NextSelectedTemplateFragment nextSelectedTemplateFragment,
@@ -174,9 +182,7 @@ public class AdapterScopeAudit extends BaseAdapter {
             public void onClick(View view) {
                 //Toast.makeText(context, "Product of interest delete", Toast.LENGTH_SHORT).show();
                 if (templateModelScopeAuditInterests.get(z).size() > 1) {
-                    templateModelScopeAuditInterests.get(z).remove(templateModelScopeAuditInterests.get(z).size() - 1);
-                    //templateModelScopeAudit.get(z).getAdapterScope().notifyDataSetChanged();
-                    notifyDataSetChanged();
+                    dialogDeleteDateConfirmation("Are you sure you want to delete?",z);
                 }
             }
         });
@@ -188,6 +194,40 @@ public class AdapterScopeAudit extends BaseAdapter {
             }
         }
         return rowView;
+    }
+    public void dialogDeleteDateConfirmation(String mess, final int z) {
+        dialogDeleteDateOfAudit = new Dialog(context);
+        dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogDeleteDateOfAudit.setCancelable(false);
+        dialogDeleteDateOfAudit.setContentView(R.layout.dialog_exit_confirmation);
+        dialogDeleteDateOfAudit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        TextView msg = (TextView) dialogDeleteDateOfAudit.findViewById(R.id.tv_message);
+        Button yes = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_yes);
+        Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
+
+        msg.setText(mess);
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                templateModelScopeAuditInterests.get(z).remove(templateModelScopeAuditInterests.get(z).size() - 1);
+                //templateModelScopeAudit.get(z).getAdapterScope().notifyDataSetChanged();
+                notifyDataSetChanged();
+                dialogDeleteDateOfAudit.dismiss();
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogDeleteDateOfAudit.dismiss();
+            }
+        });
+
+
+        dialogDeleteDateOfAudit.show();
     }
 
     public boolean check() {

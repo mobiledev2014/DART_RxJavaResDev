@@ -56,7 +56,7 @@ public class AdapterPreAuditDoc extends BaseAdapter {
 
             widgets.preaudit = (EditText) rowView.findViewById(R.id.et_template_next_pre_audit_doc);
 
-            widgets.preaudit.setText(templateModelPreAuditDocs.get(i).getPreaudit());
+            widgets.preaudit.setText(templateModelPreAuditDocs.get(z).getPreaudit());
             widgets.preaudit.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -78,7 +78,7 @@ public class AdapterPreAuditDoc extends BaseAdapter {
             widgets = (Widgets) rowView.getTag();
         }
         if (!isCheck) {
-            if (templateModelPreAuditDocs.get(i).getPreaudit().isEmpty()) {
+            if (templateModelPreAuditDocs.get(z).getPreaudit().isEmpty()) {
                 widgets.preaudit.setError("This field is required");
             }
         }
