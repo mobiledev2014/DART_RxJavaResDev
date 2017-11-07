@@ -24,9 +24,11 @@ public class AdapterCompanyBackgroundMajorChanges extends BaseAdapter {
     LayoutInflater inflater;
     Context context;
     boolean isCheck = true;
+    int disable = 0;
 
-    public AdapterCompanyBackgroundMajorChanges(List<TemplateModelCompanyBackgroundMajorChanges> templateModelCompanyBackgroundMajorChanges, Context context) {
+    public AdapterCompanyBackgroundMajorChanges(List<TemplateModelCompanyBackgroundMajorChanges> templateModelCompanyBackgroundMajorChanges, Context context, int disable) {
         this.templateModelCompanyBackgroundMajorChanges = templateModelCompanyBackgroundMajorChanges;
+        this.disable = disable;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -51,28 +53,28 @@ public class AdapterCompanyBackgroundMajorChanges extends BaseAdapter {
         final int z = i;
         final Widgets widgets;
 //        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_template_company_background_major_changes, null);
+        widgets = new Widgets();
+        rowView = inflater.inflate(R.layout.custom_listview_template_company_background_major_changes, null);
 
-            widgets.majorchanges = (EditText) rowView.findViewById(R.id.et_template_next_company_background_major_changes);
+        widgets.majorchanges = (EditText) rowView.findViewById(R.id.et_template_next_company_background_major_changes);
 
-            widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(i).getMajorchanges());
-            widgets.majorchanges.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(i).getMajorchanges());
+        widgets.majorchanges.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                }
+            }
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    templateModelCompanyBackgroundMajorChanges.get(z).setMajorchanges(widgets.majorchanges.getText().toString());
-                }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                templateModelCompanyBackgroundMajorChanges.get(z).setMajorchanges(widgets.majorchanges.getText().toString());
+            }
 
-                @Override
-                public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
-                }
-            });
+            }
+        });
 //            rowView.setTag(widgets);
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
@@ -82,6 +84,11 @@ public class AdapterCompanyBackgroundMajorChanges extends BaseAdapter {
                 widgets.majorchanges.setError("This field is required");
             }
         }
+
+        if (disable > i) {
+            widgets.majorchanges.setEnabled(false);
+        }
+
         return rowView;
     }
 

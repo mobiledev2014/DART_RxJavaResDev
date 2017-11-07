@@ -579,6 +579,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         templateModelCompanyBackgroundNames = new ArrayList<>();
         templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", report.getCompany_id()));
         adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(templateModelCompanyBackgroundNames, context, templateModelCompanyBackgroundNames.size());
+        templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "reportid = ?", report.getReport_id()));
         lvTemplateNextCompanyBackgroundName.setAdapter(adapterCompanyBackgroundName);
         lvTemplateNextCompanyBackgroundName.setExpanded(true);
         if (templateModelCompanyBackgroundNames.size() > 0) {
@@ -588,10 +589,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
         // ---
         templateModelCompanyBackgroundMajorChanges = new ArrayList<>();
-        adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context);
+        templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", report.getCompany_id()));
+        adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context,templateModelCompanyBackgroundMajorChanges.size());
+        templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id()));
         lvTemplateNextCompanyBackgroundMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
         lvTemplateNextCompanyBackgroundMajorChanges.setExpanded(true);
-        templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", report.getCompany_id()));
         if (templateModelCompanyBackgroundMajorChanges.size() > 0) {
             adapterCompanyBackgroundMajorChanges.notifyDataSetChanged();
         } else {
