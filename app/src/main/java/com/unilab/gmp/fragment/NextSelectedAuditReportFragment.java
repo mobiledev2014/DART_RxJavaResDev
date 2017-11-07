@@ -292,8 +292,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
     SharedPreferenceManager sharedPref;
     String reviewer_id = "", approver_id = "";
 
-    String dateModified;
-
     ModelAuditReportReply modelAuditReportReply;
     SelectedAuditReportFragment selectedAuditReportFragment;
     View rootView;
@@ -331,9 +329,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
         templateFragment = new TemplateFragment();
         auditReportFragment = new AuditReportFragment();
         tvTitle.setText("AUDIT REPORT");
-
-        dateModified = (String) android.text.format.DateFormat.format("yyyy-MM-dd HH:mm:ss", new java.util.Date());
-        Log.i("DATE DATE", dateModified.toString());
 
         year = currentTime.get(Calendar.YEAR);
         month = currentTime.get(Calendar.MONTH);
@@ -581,10 +576,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
         // ---
         templateModelCompanyBackgroundNames = new ArrayList<>();
-        adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(templateModelCompanyBackgroundNames, context);
+        templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", report.getCompany_id()));
+        adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(templateModelCompanyBackgroundNames, context,templateModelCompanyBackgroundNames.size());
         lvTemplateNextCompanyBackgroundName.setAdapter(adapterCompanyBackgroundName);
         lvTemplateNextCompanyBackgroundName.setExpanded(true);
-        templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", report.getCompany_id()));
         if (templateModelCompanyBackgroundNames.size() > 0) {
             adapterCompanyBackgroundName.notifyDataSetChanged();
         } else {
@@ -1522,7 +1517,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
         Log.e("distribution", distribution);
         Log.e("present_during_meeting", present_during_meeting);
         Log.e("other_distribution", otherdistribution);
-        Log.e("date_modified", dateModified);
 
         String id = "", no = "", version = "0";
         if (!report.getReport_no().contains("GMP-00-")) {
@@ -1564,8 +1558,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 "[" + recommendation + "]",
                 "[" + distribution + "]",
                 "[" + present_during_meeting + "]",
-                "2017-09-11 03:00:00",//"create_date",
-                dateModified,//"2017-09-11 03:00:00",//"modified_date",
                 report.getStatus(),//"status",
                 version,//"version"
                 "[" + otherdistribution + "]",

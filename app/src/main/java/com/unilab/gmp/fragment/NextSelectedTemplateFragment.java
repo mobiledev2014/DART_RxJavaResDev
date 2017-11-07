@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,7 +82,6 @@ import com.unilab.gmp.utility.StartDatePicker;
 import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -274,7 +272,6 @@ public class NextSelectedTemplateFragment extends Fragment {
     String wrapupdate = "";
     ApiInterface apiInterface;
     ModelAuditReports report;
-    String dateModified;
 
     SharedPreferenceManager sharedPref;
     String reviewer_id = "", approver_id = "";
@@ -315,9 +312,6 @@ public class NextSelectedTemplateFragment extends Fragment {
         Variable.onAudit = false;
         templateFragment = new TemplateFragment();
         wrapupdate = "";
-
-        dateModified = (String) DateFormat.format("yyyy-MM-dd HH:mm:ss", new Date());
-        Log.i("DATE DATE", dateModified.toString());
 
         modelTemplateActivities = find(ModelTemplateActivities.class, "templateid = ?", modelTemplates.getTemplateID());
         activityAdapter = new ActivityAdapter(context, modelTemplateActivities, "");
@@ -531,10 +525,10 @@ public class NextSelectedTemplateFragment extends Fragment {
         }
         // ---
         templateModelCompanyBackgroundNames = new ArrayList<>();
-        adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(templateModelCompanyBackgroundNames, context);
+        templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", modelTemplates.getCompany_id()));
+        adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(templateModelCompanyBackgroundNames, context, templateModelCompanyBackgroundNames.size());
         lvTemplateNextCompanyBackgroundName.setAdapter(adapterCompanyBackgroundName);
         lvTemplateNextCompanyBackgroundName.setExpanded(true);
-        templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", modelTemplates.getCompany_id()));
         if (templateModelCompanyBackgroundNames.size() > 0) {
             adapterCompanyBackgroundName.notifyDataSetChanged();
         } else {
@@ -871,6 +865,8 @@ public class NextSelectedTemplateFragment extends Fragment {
         mar.setApprover_id(approver_id);
         mar.setReviewerChecked(modelTemplates.isReviewerChecked());
         mar.setWrap_date(etTemplateNextDateOfWrapUp.getText().toString());
+
+        mar.setHead_lead(cbTemplateNextReviewer.isChecked() ? "1" : "0");
 
         adapterAuditors.save(report_id);
 
@@ -1361,38 +1357,40 @@ public class NextSelectedTemplateFragment extends Fragment {
             }
         }
 
-        Log.e("company_id", report.getCompany_id());
-        Log.e("other_activities", report.getOther_activities());
-        Log.e("audit_date", auditdate);
-//        Log.e("p_inspection_date_1", report.getP_inspection_date_1());
-//        Log.e("p_inspection_date_2", report.getP_inspection_date_2());
-        Log.e("template_id", report.getTemplate_id());
-        Log.e("auditor_id", report.getAuditor_id());
-        Log.e("closure_date", report.getAudit_close_date());
-        Log.e("other_issues_audit", report.getOther_issues());
-        Log.e("other_issues_executive", report.getOther_issues_executive());
-        Log.e("audited_areas", report.getAudited_areas());
-        Log.e("areas_to_consider", report.getAreas_to_consider());
-        Log.e("wrap_up_date", report.getWrap_date());
-        Log.e("translator", translators);
-        Log.e("co_auditor_id", co_auditor_id);
-        Log.e("reviewer_id", report.getReviewer_id());
-        Log.e("approver_id", report.getApprover_id());
-
-        Log.e("scope", scope);
-        Log.e("disposition", disposition);
-        Log.e("pre_audit_documents", pre_audit_documents);
-        Log.e("references", references);
-        Log.e("inspection", inspection);
-        Log.e("inspector", inspector);
-        Log.e("personnel", personnel);
-        Log.e("activities", activities);
-        Log.e("question", question);
-        Log.e("recommendation", recommendation);
-        Log.e("distribution", distribution);
-        Log.e("present_during_meeting", present_during_meeting);
-        Log.e("other_distribution", otherdistribution);
-        Log.e("date_modified", dateModified);
+        Log.e("Bulk Edit", "token:35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839\n" +
+                "cmdEvent:postInput\n" +
+                "report_id:\n" +
+                "report_no:\n" +
+                "company_id:" + report.getCompany_id() + "\n" +
+                "other_activities:" + report.getOther_activities() + "\n" +
+                "audit_date:[" + auditdate + "]\n" +
+                "template_id:" + report.getTemplate_id() + "\n" +
+                "auditor_id:" + report.getAuditor_id() + "\n" +
+                "other_issues_audit:" + report.getOther_issues() + "\n" +
+                "other_issues_executive:" + report.getOther_issues_executive() + "\n" +
+                "audited_areas:" + report.getAudited_areas() + "\n" +
+                "areas_to_consider:" + report.getAreas_to_consider() + "\n" +
+                "wrap_up_date:" + report.getWrap_date() + "\n" +
+                "translator:[" + translators + "]\n" +
+                "co_auditor_id:[" + co_auditor_id + "]\n" +
+                "reviewer_id:" + report.getReviewer_id() + "\n" +
+                "approver_id:" + report.getApprover_id() + "\n" +
+                "scope:[" + scope + "]\n" +
+                "disposition:[" + disposition + "]\n" +
+                "pre_audit_documents:[" + pre_audit_documents + "]\n" +
+                "references:[" + references + "]\n" +
+                "inspection:[" + inspection + "]\n" +
+                "inspector:[" + inspector + "]\n" +
+                "personnel:[" + personnel + "]\n" +
+                "activities:[" + activities + "]\n" +
+                "question:[" + question + "]\n" +
+                "recommendation:[" + recommendation + "]\n" +
+                "distribution:[" + distribution + "]\n" +
+                "present_during_meeting:[" + present_during_meeting + "]\n" +
+                "status:0\n" +
+                "version:0\n" +
+                "other_distribution:[" + otherdistribution + "]\n" +
+                "head_lead:" + report.getHead_lead() + "");
 
         apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
         Call<ModelAuditReportReply> modelAuditReportReplyCall = apiInterface.sendAuditReports(
@@ -1426,12 +1424,10 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "[" + recommendation + "]",
                 "[" + distribution + "]",
                 "[" + present_during_meeting + "]",
-                "2017-09-11 03:00:00",//"create_date",
-                dateModified,//"2017-09-11 03:00:00",//"modified_date",
                 "0",//"status",
                 "0",//"version"
                 "[" + otherdistribution + "]",
-                "1"
+                report.getHead_lead()
         );
         modelAuditReportReplyCall.enqueue(new Callback<ModelAuditReportReply>() {
             @Override

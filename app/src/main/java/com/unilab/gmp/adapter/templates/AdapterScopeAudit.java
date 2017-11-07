@@ -98,7 +98,7 @@ public class AdapterScopeAudit extends BaseAdapter {
     public View getView(int i, View rowView, final ViewGroup viewGroup) {
         final Widgets widgets;
         final int z = i;
-        if (rowView == null) {
+//        if (rowView == null) {
             widgets = new Widgets();
             rowView = inflater.inflate(R.layout.custom_listview_template_scope_audit, null);
             widgets.spnTypeAudit = (Spinner) rowView.findViewById(R.id.s_template_next_next_scope_audit);
@@ -111,9 +111,9 @@ public class AdapterScopeAudit extends BaseAdapter {
             widgets.spnTypeAudit.setAdapter(adapter);
 
 
-        } else {
-            widgets = (Widgets) rowView.getTag();
-        }
+//        } else {
+//            widgets = (Widgets) rowView.getTag();
+//        }
 
         if (templateModelScopeAuditInterests.size() < templateModelScopeAudit.size()) {
             templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());

@@ -49,7 +49,7 @@ public class AdapterDistributionOthers extends BaseAdapter {
     public View getView(int i, View rowView, ViewGroup viewGroup) {
         final int z = i;
         final Widgets widgets;
-        if (rowView == null) {
+//        if (rowView == null) {
             widgets = new Widgets();
             rowView = inflater.inflate(R.layout.custom_listview_template_other_distribution, null);
 
@@ -75,10 +75,10 @@ public class AdapterDistributionOthers extends BaseAdapter {
 
                 }
             });
-            rowView.setTag(widgets);
-        } else {
-            widgets = (Widgets) rowView.getTag();
-        }
+//            rowView.setTag(widgets);
+//        } else {
+//            widgets = (Widgets) rowView.getTag();
+//        }
         return rowView;
     }
 

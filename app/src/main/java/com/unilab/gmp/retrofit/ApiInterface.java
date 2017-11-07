@@ -70,8 +70,6 @@ public interface ApiInterface {
             @Field("recommendation") String recommendation,
             @Field("distribution") String distribution,
             @Field("present_during_meeting") String present_during_meeting,
-            @Field("create_date") String create_date,
-            @Field("modified_date") String modified_date,
             @Field("status") String status,
             @Field("version") String version,
             @Field("other_distribution") String other_distribution,

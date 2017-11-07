@@ -50,7 +50,7 @@ public class AdapterPersonelMetDuring extends BaseAdapter {
     public View getView(int i, View rowView, ViewGroup viewGroup) {
         final int z = i;
         final Widgets widgets;
-        if (rowView == null) {
+//        if (rowView == null) {
             widgets = new Widgets();
             rowView = inflater.inflate(R.layout.custom_listview_template_personel_met_during, null);
 
@@ -94,10 +94,10 @@ public class AdapterPersonelMetDuring extends BaseAdapter {
                 }
             });
 
-            rowView.setTag(widgets);
-        } else {
-            widgets = (Widgets) rowView.getTag();
-        }
+//            rowView.setTag(widgets);
+//        } else {
+//            widgets = (Widgets) rowView.getTag();
+//        }
 
         if (!isCheck) {
             if (templateModelPersonelMetDurings.get(i).getName().isEmpty()) {

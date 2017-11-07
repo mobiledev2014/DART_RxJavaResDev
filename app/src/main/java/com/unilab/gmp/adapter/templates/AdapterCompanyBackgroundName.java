@@ -22,8 +22,10 @@ public class AdapterCompanyBackgroundName extends BaseAdapter {
     List<TemplateModelCompanyBackgroundName> templateModelCompanyBackgroundNames;
     LayoutInflater inflater;
     Context context;
+    int disable = 0;
 
-    public AdapterCompanyBackgroundName(List<TemplateModelCompanyBackgroundName> templateModelCompanyBackgroundNames, Context context) {
+    public AdapterCompanyBackgroundName(List<TemplateModelCompanyBackgroundName> templateModelCompanyBackgroundNames, Context context, int disable) {
+        this.disable = disable;
         this.templateModelCompanyBackgroundNames = templateModelCompanyBackgroundNames;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -47,33 +49,37 @@ public class AdapterCompanyBackgroundName extends BaseAdapter {
     @Override
     public View getView(int i, View rowView, ViewGroup viewGroup) {
         final int z = i;
-        final Widgets widgets;
-        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_template_company_background_name, null);
+        Widgets widgets;
+//        if (rowView == null) {
+        widgets = new Widgets();
+        rowView = inflater.inflate(R.layout.custom_listview_template_company_background_name, null);
 
-            widgets.bgname = (EditText) rowView.findViewById(R.id.et_template_next_company_background_name);
+        widgets.bgname = (EditText) rowView.findViewById(R.id.et_template_next_company_background_name);
 
-            widgets.bgname.setText(templateModelCompanyBackgroundNames.get(i).getBgname());
-            widgets.bgname.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        widgets.bgname.setText(templateModelCompanyBackgroundNames.get(i).getBgname());
+        widgets.bgname.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                }
+            }
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    templateModelCompanyBackgroundNames.get(z).setBgname(widgets.bgname.getText().toString());
-                }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                templateModelCompanyBackgroundNames.get(z).setBgname(charSequence.toString());
+            }
 
-                @Override
-                public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
-                }
-            });
-            rowView.setTag(widgets);
-        } else {
-            widgets = (Widgets) rowView.getTag();
+            }
+        });
+//            rowView.setTag(widgets);
+//        } else {
+//            widgets = (Widgets) rowView.getTag();
+//        }
+
+        if (disable > i) {
+            widgets.bgname.setEnabled(false);
         }
         return rowView;
     }

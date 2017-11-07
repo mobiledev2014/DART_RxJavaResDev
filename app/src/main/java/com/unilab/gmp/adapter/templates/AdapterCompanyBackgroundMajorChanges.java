@@ -50,7 +50,7 @@ public class AdapterCompanyBackgroundMajorChanges extends BaseAdapter {
     public View getView(int i, View rowView, ViewGroup viewGroup) {
         final int z = i;
         final Widgets widgets;
-        if (rowView == null) {
+//        if (rowView == null) {
             widgets = new Widgets();
             rowView = inflater.inflate(R.layout.custom_listview_template_company_background_major_changes, null);
 
@@ -73,10 +73,10 @@ public class AdapterCompanyBackgroundMajorChanges extends BaseAdapter {
 
                 }
             });
-            rowView.setTag(widgets);
-        } else {
-            widgets = (Widgets) rowView.getTag();
-        }
+//            rowView.setTag(widgets);
+//        } else {
+//            widgets = (Widgets) rowView.getTag();
+//        }
         if (!isCheck) {
             if (templateModelCompanyBackgroundMajorChanges.get(i).getMajorchanges().isEmpty()) {
                 widgets.majorchanges.setError("This field is required");
