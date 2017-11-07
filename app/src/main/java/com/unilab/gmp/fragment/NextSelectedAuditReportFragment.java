@@ -341,10 +341,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         etTemplateNextAuditedArea.setText(report.getAudited_areas());
         etTemplateNextNotAuditedArea.setText(report.getAreas_to_consider());
-        Log.i("DATE FORMAT", report.getDate_of_wrap() + " ");
-        if (report.getDate_of_wrap() != null) {
-            etTemplateNextDateOfWrapUp.setText("");
-        }
+        etTemplateNextDateOfWrapUp.setText(report.getWrap_date());
+//        Log.i("DATE FORMAT", report.getDate_of_wrap() + " ");
+//        if (report.getDate_of_wrap() != null) {
+//            etTemplateNextDateOfWrapUp.setText("");
+//        }
         if (report.getAudit_close_date() != null) {
             etTemplateNextSummaryRecommendationAuditCloseDate.setText
                     (DateTimeUtils.parseDateMonthToWord(report.getAudit_close_date()));
