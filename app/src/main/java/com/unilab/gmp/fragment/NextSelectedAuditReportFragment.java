@@ -578,7 +578,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         // ---
         templateModelCompanyBackgroundNames = new ArrayList<>();
         templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", report.getCompany_id()));
-        adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(templateModelCompanyBackgroundNames, context,templateModelCompanyBackgroundNames.size());
+        adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(templateModelCompanyBackgroundNames, context, templateModelCompanyBackgroundNames.size());
         lvTemplateNextCompanyBackgroundName.setAdapter(adapterCompanyBackgroundName);
         lvTemplateNextCompanyBackgroundName.setExpanded(true);
         if (templateModelCompanyBackgroundNames.size() > 0) {
@@ -647,8 +647,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
 
         //adapter inspection date call and set
-        List<ModelSiteDate> modelSiteDates = ModelSiteDate.find(ModelSiteDate.class,"companyid = ?", modelTemplates.getCompany_id());
-        AdapterInspectionDate adapterInspectionDate = new AdapterInspectionDate(context,modelSiteDates);
+        List<ModelSiteDate> modelSiteDates = ModelSiteDate.find(ModelSiteDate.class, "companyid = ?", modelTemplates.getCompany_id());
+        AdapterInspectionDate adapterInspectionDate = new AdapterInspectionDate(context, modelSiteDates);
         lvTemplateNextCompanyBackgroundInspectionDate.setAdapter(adapterInspectionDate);
         lvTemplateNextCompanyBackgroundInspectionDate.setExpanded(true);
 
@@ -1415,7 +1415,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND answerid > '0'", report.getReport_id());
         for (ModelReportQuestion t : mrq) {
             //question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + t.getAnswer_id() + ",\"naoption_id\":\"" + t.getNaoption_id() + "\",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id()) + ",\"answer_details\":\"" + t.getAnswer_details() + "\"}";
-            question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":"  + (t.getAnswer_id().isEmpty() ? "0": t.getAnswer_id())
+            question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + (t.getAnswer_id().isEmpty() ? "0" : t.getAnswer_id())
                     + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id())
                     + ",\"answer_details\":\"" + t.getAnswer_details() + "\",\"na_option\":\"" + t.getNaoption_id() + "\"}";
             if (++counter != mrq.size()) {
@@ -1485,46 +1485,47 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
         }
 
-
-
-        Log.e("company_id", report.getCompany_id());
-        Log.e("other_activities", report.getOther_activities());
-        Log.e("audit_date", auditdate);
-//        Log.e("p_inspection_date_1", report.getP_inspection_date_1());
-//        Log.e("p_inspection_date_2", report.getP_inspection_date_2());
-        Log.e("template_id", report.getTemplate_id());
-        Log.e("auditor_id", report.getAuditor_id());
-        Log.e("closure_date", report.getAudit_close_date());
-        Log.e("other_issues_audit", report.getOther_issues());
-        Log.e("other_issues_executive", report.getOther_issues_executive());
-        Log.e("audited_areas", report.getAudited_areas());
-        Log.e("areas_to_consider", report.getAreas_to_consider());
-//        Log.e("wrap_up_date", report.getDate_of_wrap());
-        Log.e("translator",  translators);
-        Log.e("co_auditor_id", co_auditor_id);
-        Log.e("reviewer_id", report.getReviewer_id());
-        Log.e("approver_id", report.getApprover_id());
-
-        Log.e("scope", scope);
-        Log.e("disposition", disposition);
-        Log.e("pre_audit_documents", pre_audit_documents);
-        Log.e("references", references);
-        Log.e("inspection", inspection);
-        Log.e("inspector", inspector);
-        Log.e("personnel", personnel);
-        Log.e("activities", activities);
-        Log.e("question", question);
-        Log.e("recommendation", recommendation);
-        Log.e("distribution", distribution);
-        Log.e("present_during_meeting", present_during_meeting);
-        Log.e("other_distribution", otherdistribution);
-
         String id = "", no = "", version = "0";
         if (!report.getReport_no().contains("GMP-00-")) {
             id = report.getReport_id();
             no = report.getReport_no();
             version = Integer.parseInt(report.getVersion()) + 1 + "";
         }
+
+        Log.e("Bulk Edit", "token:35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839\n" +
+                "cmdEvent:postInput\n" +
+                "report_id:" + id + "\n" +
+                "report_no:" + no + "\n" +
+                "company_id:" + report.getCompany_id() + "\n" +
+                "other_activities:" + report.getOther_activities() + "\n" +
+                "audit_date:[" + auditdate + "]\n" +
+                "template_id:" + report.getTemplate_id() + "\n" +
+                "auditor_id:" + report.getAuditor_id() + "\n" +
+                "other_issues_audit:" + report.getOther_issues() + "\n" +
+                "other_issues_executive:" + report.getOther_issues_executive() + "\n" +
+                "audited_areas:" + report.getAudited_areas() + "\n" +
+                "areas_to_consider:" + report.getAreas_to_consider() + "\n" +
+                "wrap_up_date:" + report.getWrap_date() + "\n" +
+                "translator:[" + translators + "]\n" +
+                "co_auditor_id:[" + co_auditor_id + "]\n" +
+                "reviewer_id:" + report.getReviewer_id() + "\n" +
+                "approver_id:" + report.getApprover_id() + "\n" +
+                "scope:[" + scope + "]\n" +
+                "disposition:[" + disposition + "]\n" +
+                "pre_audit_documents:[" + pre_audit_documents + "]\n" +
+                "references:[" + references + "]\n" +
+                "inspection:[" + inspection + "]\n" +
+                "inspector:[" + inspector + "]\n" +
+                "personnel:[" + personnel + "]\n" +
+                "activities:[" + activities + "]\n" +
+                "question:[" + question + "]\n" +
+                "recommendation:[" + recommendation + "]\n" +
+                "distribution:[" + distribution + "]\n" +
+                "present_during_meeting:[" + present_during_meeting + "]\n" +
+                "status:" + report.getStatus() + "\n" +
+                "version:" + version + "\n" +
+                "other_distribution:[" + otherdistribution + "]\n" +
+                "head_lead:" + report.getHead_lead() + "");
 
         apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
         Call<ModelAuditReportReply> modelAuditReportReplyCall = apiInterface.sendAuditReports(
@@ -1542,8 +1543,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 report.getAudited_areas(),
                 report.getAreas_to_consider(),
                 report.getWrap_date(),
-//                report.getTranslator(),
-                "[" + translators+ "]",
+                "[" + translators + "]",
                 "[" + co_auditor_id + "]",
                 report.getReviewer_id(),
                 report.getApprover_id(),
@@ -1562,7 +1562,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 report.getStatus(),//"status",
                 version,//"version"
                 "[" + otherdistribution + "]",
-                "1"
+                report.getHead_lead()
         );
 
         modelAuditReportReplyCall.enqueue(new Callback<ModelAuditReportReply>() {
@@ -1570,7 +1570,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             public void onResponse(Call<ModelAuditReportReply> call, Response<ModelAuditReportReply> response) {
                 modelAuditReportReply = response.body();
                 //Log.e("Result post", modelApproverInfo.getMessage());
-                 Log.e("Result post", "hey " + modelAuditReportReply.toString());
+                Log.e("Result post", "hey " + modelAuditReportReply.toString());
                 try {
                     Log.e("ResultTry", modelAuditReportReply.getMessage() + "");
                     Log.e("ResultTry", modelAuditReportReply.getKey() + "");
