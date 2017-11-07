@@ -91,8 +91,8 @@ public class AuditorsFragment extends Fragment {
     @OnClick(R.id.iv_search)
     public void onViewClicked() {
         searchAuditor();
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(etSearchAuditor.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(ivSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
     public void searchAuditor() {
@@ -100,7 +100,7 @@ public class AuditorsFragment extends Fragment {
 
         if (!audName.equals("")) {
             auditorsList = AuditorsModel.findWithQuery(AuditorsModel.class, "SELECT * from AUDITORS_MODEL WHERE " +
-                    "(status = '1'f AND name LIKE '%" + audName + "%') OR " +
+                    "(status = '1' AND name LIKE '%" + audName + "%') OR " +
                     "(status = '1' AND mname LIKE '%" + audName + "%') OR " +
                     "(status = '1' AND lname LIKE '%" + audName + "%') " +
                     "ORDER BY createdate DESC");

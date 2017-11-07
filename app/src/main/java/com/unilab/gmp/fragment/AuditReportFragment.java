@@ -87,8 +87,8 @@ public class AuditReportFragment extends Fragment {
     @OnClick(R.id.iv_search)
     public void onViewClicked() {
         searchTemplate();
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(etSearchTemplate.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(ivSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
     public void searchTemplate() {

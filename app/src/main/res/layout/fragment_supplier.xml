@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/supplier_title"
+                android:text="SUPPLIER"
                 android:textColor="#4594cd"
                 android:textSize="@dimen/sub_title_size"
                 android:textStyle="bold" />
@@ -95,7 +95,7 @@
                         android:layout_marginRight="3dp"
                         android:textSize="@dimen/login_text_size"
                         android:singleLine="true"
-                        android:hint="Enter site's name"
+                        android:hint="Enter supplier's name"
                         android:background="@android:color/transparent"/>
 
                 </LinearLayout>

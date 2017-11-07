@@ -92,7 +92,7 @@ public class ApproverFragment extends Fragment {
     public void onViewClicked() {
         searchApprover();
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(etSearchApprover.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(ivSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
     public void searchApprover() {

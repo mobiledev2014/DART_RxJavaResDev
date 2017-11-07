@@ -94,8 +94,8 @@ public class SupplierFragment extends Fragment {
     @OnClick(R.id.iv_search_site)
     public void onViewClicked() {
         searchSite();
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(etSearchSite.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(ivSearchSite.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
     public void searchSite() {

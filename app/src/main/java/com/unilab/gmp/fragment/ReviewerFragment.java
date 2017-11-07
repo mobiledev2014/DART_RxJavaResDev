@@ -93,7 +93,7 @@ public class ReviewerFragment extends Fragment {
     public void onViewClicked() {
         searchReviewer();
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(etSearchReviewer.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(ivSearchReviewer.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
     public void searchReviewer() {

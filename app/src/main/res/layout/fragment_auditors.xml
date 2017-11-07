@@ -23,7 +23,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="AUDITORS"
+                android:text="AUDITOR"
                 android:gravity="center"
                 android:textSize="@dimen/sub_title_size"
                 android:textStyle="bold"
