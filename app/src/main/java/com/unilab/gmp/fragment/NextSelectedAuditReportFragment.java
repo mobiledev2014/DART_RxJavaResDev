@@ -1424,7 +1424,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
         counter = 0;
         String recommendation = "";
-        List<TemplateModelSummaryRecommendation> tmsr = TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelSummaryRecommendation> tmsr = TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "reportid = ? AND elementid > 0", report.getReport_id());
         for (TemplateModelSummaryRecommendation t : tmsr) {
             recommendation += "{\"element_id\":" + t.getElement_id() + ",\"recommendation\":\"" + t.getRemarks() + "\"}";
             if (++counter != tmsr.size()) {

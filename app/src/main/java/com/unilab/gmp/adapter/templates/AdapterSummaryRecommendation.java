@@ -90,6 +90,14 @@ public class AdapterSummaryRecommendation extends BaseAdapter {
                     templateModelSummaryRecommendations.get(z).setElement(widgets.element.getSelectedItem().toString());
                     templateModelSummaryRecommendations.get(z).setSelected(i);
                     templateModelSummaryRecommendations.get(z).setElement_id(mte.get(i).getElement_id());
+
+                    if(i > 0){
+                        widgets.remarks.setEnabled(true);
+                    } else {
+                        widgets.remarks.setEnabled(false);
+                        widgets.remarks.setText("");
+                    }
+
                 }
 
                 @Override
@@ -119,6 +127,10 @@ public class AdapterSummaryRecommendation extends BaseAdapter {
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
 //        }
+
+        if(widgets.element.getSelectedItemPosition() == 0){
+            widgets.remarks.setEnabled(false);
+        }
         return rowView;
     }
 
