@@ -39,8 +39,8 @@ public class AdapterScopeAuditInterest extends BaseAdapter {
         this.templateModelScopeAuditInterests = templateModelScopeAuditInterests;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        modelProducts = ModelProduct.find(ModelProduct.class, "companyid = ?", company_id);
-        modelDispositions = ModelDisposition.listAll(ModelDisposition.class);
+        modelProducts = ModelProduct.find(ModelProduct.class, "companyid = ? AND status > 0", company_id);
+        modelDispositions = ModelDisposition.find(ModelDisposition.class,"status > 0");
 
         List<String> dispotList = new ArrayList<>();
         idDispotList = new ArrayList<>();

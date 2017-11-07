@@ -15,4 +15,5 @@ public class ModelTypeAudit extends SugarRecord{
     String scope_name;
     String create_date;
     String update_date;
+    String status;
 }

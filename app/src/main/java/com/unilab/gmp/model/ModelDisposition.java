@@ -16,4 +16,5 @@ public class ModelDisposition extends SugarRecord {
     String create_date;
     String update_date;
     String report_id;
+    String status;
 }

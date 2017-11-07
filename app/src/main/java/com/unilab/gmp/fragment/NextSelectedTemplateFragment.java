@@ -536,11 +536,11 @@ public class NextSelectedTemplateFragment extends Fragment {
         }
         // ---
         templateModelCompanyBackgroundMajorChanges = new ArrayList<>();
-        adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context);
-        lvTemplateNextCompanyBackgroundMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
-        lvTemplateNextCompanyBackgroundMajorChanges.setExpanded(true);
         templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges
                 .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", modelTemplates.getCompany_id()));
+        adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context, templateModelCompanyBackgroundMajorChanges.size());
+        lvTemplateNextCompanyBackgroundMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
+        lvTemplateNextCompanyBackgroundMajorChanges.setExpanded(true);
         if (templateModelCompanyBackgroundMajorChanges.size() > 0) {
             adapterCompanyBackgroundMajorChanges.notifyDataSetChanged();
         } else {

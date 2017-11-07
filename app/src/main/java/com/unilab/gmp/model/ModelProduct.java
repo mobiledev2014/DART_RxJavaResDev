@@ -17,4 +17,5 @@ public class ModelProduct extends SugarRecord{
     String type;
     String create_date;
     String update_date;
+    String status;
 }

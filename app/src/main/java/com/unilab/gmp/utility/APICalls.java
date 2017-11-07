@@ -618,6 +618,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     product.setProduct_name(modelProductInfo.getModelProducts().get(x).getProduct_name());
                     product.setCreate_date(modelProductInfo.getModelProducts().get(x).getCreate_date());
                     product.setUpdate_date(modelProductInfo.getModelProducts().get(x).getUpdate_date());
+                    product.setStatus(modelProductInfo.getModelProducts().get(x).getStatus());
                     isProductExisting(product);
                 }
 
@@ -644,6 +645,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     typeAuditModel.setScope_name(modelTypeAuditInfo.getModelTypeAudits().get(x).getScope_name());
                     typeAuditModel.setCreate_date(modelTypeAuditInfo.getModelTypeAudits().get(x).getCreate_date());
                     typeAuditModel.setUpdate_date(modelTypeAuditInfo.getModelTypeAudits().get(x).getUpdate_date());
+                    typeAuditModel.setStatus(modelTypeAuditInfo.getModelTypeAudits().get(x).getStatus());
                     isTypeAuditExisting(typeAuditModel);
                 }
 
@@ -671,6 +673,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     modelDisposition.setDisposition_name(modelDispositionInfo.getDisposition().get(x).getDisposition_name());
                     modelDisposition.setCreate_date(modelDispositionInfo.getDisposition().get(x).getCreate_date());
                     modelDisposition.setUpdate_date(modelDispositionInfo.getDisposition().get(x).getUpdate_date());
+                    modelDisposition.setStatus(modelDispositionInfo.getDisposition().get(x).getStatus());
                     isDispositionExisting(modelDisposition);
                 }
 

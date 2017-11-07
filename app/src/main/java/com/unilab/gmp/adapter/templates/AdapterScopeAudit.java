@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
@@ -58,8 +57,8 @@ public class AdapterScopeAudit extends BaseAdapter {
         this.templateModelScopeAudit = templateModelScopeAudit;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        scopeAudits = ModelTypeAudit.listAll(ModelTypeAudit.class);
-        dispositions = ModelDisposition.listAll(ModelDisposition.class);
+        scopeAudits = ModelTypeAudit.find(ModelTypeAudit.class, "status > 0");
+        dispositions = ModelDisposition.find(ModelDisposition.class, "status > 0");
         this.companyId = company_id;
         this.nextSelectedTemplateFragment = nextSelectedTemplateFragment;
         Log.e("AdapterScope", getCount() + " count");
@@ -99,16 +98,16 @@ public class AdapterScopeAudit extends BaseAdapter {
         final Widgets widgets;
         final int z = i;
 //        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_template_scope_audit, null);
-            widgets.spnTypeAudit = (Spinner) rowView.findViewById(R.id.s_template_next_next_scope_audit);
-            widgets.remarks = (EditText) rowView.findViewById(R.id.et_template_next_scope_audit_remarks);
-            widgets.disposition = (Spinner) rowView.findViewById(R.id.s_template_next_summary_recommendation_disposition);
-            widgets.btnTemplateNextScopeAuditInterestAdd = (Button) rowView.findViewById(R.id.btn_template_next_scope_audit_interest_add);
-            widgets.btnTemplateNextScopeAuditInterestDelete = (Button) rowView.findViewById(R.id.btn_template_next_scope_audit_interest_delete);
-            widgets.lvTemplateNextScopeAuditInterest = (ExpandableHeightListView) rowView.findViewById(R.id.lv_template_next_scope_audit_interest);
-            rowView.setTag(widgets);
-            widgets.spnTypeAudit.setAdapter(adapter);
+        widgets = new Widgets();
+        rowView = inflater.inflate(R.layout.custom_listview_template_scope_audit, null);
+        widgets.spnTypeAudit = (Spinner) rowView.findViewById(R.id.s_template_next_next_scope_audit);
+        widgets.remarks = (EditText) rowView.findViewById(R.id.et_template_next_scope_audit_remarks);
+        widgets.disposition = (Spinner) rowView.findViewById(R.id.s_template_next_summary_recommendation_disposition);
+        widgets.btnTemplateNextScopeAuditInterestAdd = (Button) rowView.findViewById(R.id.btn_template_next_scope_audit_interest_add);
+        widgets.btnTemplateNextScopeAuditInterestDelete = (Button) rowView.findViewById(R.id.btn_template_next_scope_audit_interest_delete);
+        widgets.lvTemplateNextScopeAuditInterest = (ExpandableHeightListView) rowView.findViewById(R.id.lv_template_next_scope_audit_interest);
+        rowView.setTag(widgets);
+        widgets.spnTypeAudit.setAdapter(adapter);
 
 
 //        } else {
@@ -182,7 +181,7 @@ public class AdapterScopeAudit extends BaseAdapter {
             public void onClick(View view) {
                 //Toast.makeText(context, "Product of interest delete", Toast.LENGTH_SHORT).show();
                 if (templateModelScopeAuditInterests.get(z).size() > 1) {
-                    dialogDeleteDateConfirmation("Are you sure you want to delete?",z);
+                    dialogDeleteDateConfirmation("Are you sure you want to delete?", z);
                 }
             }
         });
@@ -195,6 +194,7 @@ public class AdapterScopeAudit extends BaseAdapter {
         }
         return rowView;
     }
+
     public void dialogDeleteDateConfirmation(String mess, final int z) {
         dialogDeleteDateOfAudit = new Dialog(context);
         dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
