@@ -977,7 +977,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
     private void addDistribution() {
         Log.i("distri count", templateModelDistributionLists.size() + "");
-        if (4 > templateModelDistributionLists.size()) {
+        if (10 > templateModelDistributionLists.size()) {
             TemplateModelDistributionList t = new TemplateModelDistributionList();
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelDistributionLists.add(t);
@@ -986,7 +986,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     private void addDistributionOthers() {
-        if (4 > templateModelDistributionOthers.size()) {
+        if (10 > templateModelDistributionOthers.size()) {
             TemplateModelDistributionOthers t = new TemplateModelDistributionOthers();
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelDistributionOthers.add(t);

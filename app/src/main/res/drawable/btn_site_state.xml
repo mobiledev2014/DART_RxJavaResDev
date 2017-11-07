@@ -3,9 +3,9 @@
     <!-- NOTE: order is important (the first matching state(s) is what is rendered) -->
     <item
         android:state_enabled="false"
-        android:drawable="@drawable/btn_template" />
+        android:drawable="@drawable/btn_supplier" />
     <item
         android:state_pressed="true"
         android:state_enabled="true"
-        android:drawable="@drawable/btn_template_pressed" />
+        android:drawable="@drawable/btn_supplier_pressed" />
 </selector>
