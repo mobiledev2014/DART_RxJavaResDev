@@ -38,7 +38,7 @@ public class AdapterSummaryRecommendation extends BaseAdapter {
 
         ModelTemplateElements mte2 = new ModelTemplateElements();
         mte2.setElement_id("0");
-        mte2.setElement_name("Select Element");
+        mte2.setElement_name("None");
         mte.add(0, mte2);
     }
 

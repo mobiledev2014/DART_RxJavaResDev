@@ -122,8 +122,8 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
         Button done = (Button) dialogViewSupplier.findViewById(R.id.btn_done);
 
         name.setText("Name: " + Name);
-        address.setText("Designation: " + Address);
-        background.setText("Company: " + Background);
+        address.setText("Address: " + Address);
+        background.setText(Background);
 
         productLists = ModelProduct.find(ModelProduct.class, "companyid = ?", id);
         supplierAndCompanyProductViewAdapter = new SupplierAndCompanyProductViewAdapter(context, productLists);
