@@ -20,7 +20,11 @@ public class DateTimeUtils {
     private final String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
     public static String parseDateMonthToWord(String date) {
+
         String formattedDate = "";
+        if (date.equals(""))
+            return formattedDate;
+
         SimpleDateFormat dt = new SimpleDateFormat(dateFormat);
         Date dateToFormat = null;
         try {

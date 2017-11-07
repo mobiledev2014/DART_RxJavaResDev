@@ -864,7 +864,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         mar.setReviewer_id(reviewer_id);
         mar.setApprover_id(approver_id);
         mar.setReviewerChecked(modelTemplates.isReviewerChecked());
-        mar.setWrap_date(etTemplateNextDateOfWrapUp.getText().toString());
+        mar.setWrap_date(DateTimeUtils.parseDateMonthToDigit(etTemplateNextDateOfWrapUp.getText().toString()));
 
         mar.setHead_lead(cbTemplateNextReviewer.isChecked() ? "1" : "0");
 
@@ -1407,7 +1407,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 report.getOther_issues_executive(),
                 report.getAudited_areas(),
                 report.getAreas_to_consider(),
-                report.getWrap_date(),
+                report. getWrap_date(),
                 "[" + translators + "]",
                 "[" + co_auditor_id + "]",
                 report.getReviewer_id(),

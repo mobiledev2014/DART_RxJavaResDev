@@ -341,11 +341,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         etTemplateNextAuditedArea.setText(report.getAudited_areas());
         etTemplateNextNotAuditedArea.setText(report.getAreas_to_consider());
-        etTemplateNextDateOfWrapUp.setText(report.getWrap_date());
+//        etTemplateNextDateOfWrapUp.setText(DateTimeUtils.parseDateMonthToWord(report.getWrap_date()));
 //        Log.i("DATE FORMAT", report.getDate_of_wrap() + " ");
-//        if (report.getDate_of_wrap() != null) {
-//            etTemplateNextDateOfWrapUp.setText("");
-//        }
+        if (report.getWrap_date() != null) {
+            etTemplateNextDateOfWrapUp.setText(DateTimeUtils.parseDateMonthToWord(report.getWrap_date()));
+        }
         if (report.getAudit_close_date() != null) {
             etTemplateNextSummaryRecommendationAuditCloseDate.setText
                     (DateTimeUtils.parseDateMonthToWord(report.getAudit_close_date()));
@@ -734,7 +734,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 break;
             case R.id.btn_save_draft:
                 dialogSaveDraft("Are you sure you want to save as draft?");
-                //save();
+                //saveReport();
                 break;
             case R.id.btn_submit:
                 dialogSubmit("Are you sure you want to submit?");
@@ -884,14 +884,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         if (validate()) {
             if (isNetworkConnected()) {
-                save();
+                saveReport();
                 sharedPref = new SharedPreferenceManager(context);
                 String email = sharedPref.getStringData("EMAIL");
                 String password = sharedPref.getStringData("PASSWORD");
                 Log.i("ERROR", "POSTASYNC 2");
                 new PostAsync(context, loginDialog, email, password, Glovar.POST_AUDIT, NextSelectedAuditReportFragment.this, null).execute();
             } else {
-                //dialog if save as draft or self destruct
+                //dialog if saveReport as draft or self destruct
                 dialogSaveDraft("No internet connection. Would you like to save as draft?");
             }
         } else {
@@ -899,7 +899,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
     }
 
-    private void save() {
+    private void saveReport() {
         ModelAuditReports mar = ModelAuditReports.find(ModelAuditReports.class, "reportid = ?", report.getReport_id()).get(0);
 
         mar.setCompany_id(modelTemplates.getCompany_id());
@@ -910,7 +910,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         mar.setAuditor_id(auditorsModels.get(sTemplateNextAuditorLeadName.getSelectedItemPosition()).getAuditor_id());
         mar.setReviewer_id(reviewer_id);
         mar.setApprover_id(approver_id);
-        mar.setWrap_date(etTemplateNextDateOfWrapUp.getText().toString());
+        mar.setWrap_date(DateTimeUtils.parseDateMonthToDigit(etTemplateNextDateOfWrapUp.getText().toString()));
         mar.setReviewerChecked(modelTemplates.isReviewerChecked());
 
         adapterAuditors.save(mar.getReport_id());
@@ -931,7 +931,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         mar.setAudited_areas(etTemplateNextAuditedArea.getText().toString());
         mar.setAreas_to_consider(etTemplateNextNotAuditedArea.getText().toString());
 //        mar.setDate_of_wrap(DateTimeUtils.parseDateMonthToDigit(etTemplateNextDateOfWrapUp.getText().toString()));
-//        mar.setTranslator(adapterTranslator.save(mar.getReport_id()));//translator
+//        mar.setTranslator(adapterTranslator.saveReport(mar.getReport_id()));//translator
         adapterTranslator.save(mar.getReport_id());//translator
 
 
@@ -953,7 +953,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         mar.setOther_activities(etTemplateNextActivityCarried.getText().toString());
         mar.setOther_issues_executive(etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString());
 
-        // adapterScope.save(report_id);//w
+        // adapterScope.saveReport(report_id);//w
         adapterPresentDuringMeeting.save(mar.getReport_id());//w
         adapterDistributionList.save(mar.getReport_id());//w
         adapterDistributionOthers.save(mar.getReport_id());
@@ -1119,8 +1119,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //save as draft
-                save();
+                //saveReport as draft
+                saveReport();
                 dialogSaveDraft.dismiss();
                 dialogSucSaveDraft("Successfully saved as draft");
             }

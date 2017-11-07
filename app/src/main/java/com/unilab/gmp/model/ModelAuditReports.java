@@ -36,7 +36,6 @@ public class ModelAuditReports extends SugarRecord {
     String audited_areas;
     String areas_to_consider;
 
-    @SerializedName("wrap_up_date")
     ArrayList<ModelAuditReportWrapUpDate> date_of_wrap;
 
     ArrayList<TemplateModelTranslator> translators;
@@ -49,6 +48,7 @@ public class ModelAuditReports extends SugarRecord {
     String reviewer_id;//waley
     String approver_id;//waley
     boolean isReviewerChecked;
+    @SerializedName("wrap_up_date")
     String wrap_date = "";
 
     @SerializedName("audit_dates")
@@ -88,7 +88,7 @@ public class ModelAuditReports extends SugarRecord {
                 ", other_issues_executive='" + other_issues_executive + '\'' +
                 ", audited_areas='" + audited_areas + '\'' +
                 ", areas_to_consider='" + areas_to_consider + '\'' +
-                ", date_of_wrap=" + date_of_wrap +
+//                ", date_of_wrap=" + date_of_wrap +
                 ", translators=" + translators +
                 ", create_date='" + create_date + '\'' +
                 ", modified_date='" + modified_date + '\'' +
