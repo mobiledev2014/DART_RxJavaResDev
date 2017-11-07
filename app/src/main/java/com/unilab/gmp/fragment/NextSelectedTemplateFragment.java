@@ -351,7 +351,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         //--- Lead Auditor setting end
 
         //--- Reviewer setting start
-        reviewerModels = ReviewerModel.listAll(ReviewerModel.class);
+        reviewerModels = ReviewerModel.find(ReviewerModel.class,"status > 0");
         List<String> reviewerList = new ArrayList<>();
         Log.i("REVIEWER", "SIZE : " + reviewerModels.size());
         for (int x = 0; x < reviewerModels.size(); x++) {
@@ -389,7 +389,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         //--- Reviewer setting end
         //
         // --- Approver setting start
-        approverModels = ApproverModel.listAll(ApproverModel.class);
+        approverModels = ApproverModel.find(ApproverModel.class,"status > 0");
         List<String> approverList = new ArrayList<>();
         for (int x = 0; x < approverModels.size(); x++) {
             approverList.add(approverModels.get(x).getFirstname() + " " + approverModels.get(x).getMiddlename()
