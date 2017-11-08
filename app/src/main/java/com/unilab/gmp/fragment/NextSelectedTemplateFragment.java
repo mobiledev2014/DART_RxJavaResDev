@@ -278,6 +278,8 @@ public class NextSelectedTemplateFragment extends Fragment {
     SelectedTemplateFragment selectedTemplateFragment;
     View rootView;
 
+    Dialog dialogDeleteDateOfAudit;
+    int distributionDelete = 0,translatorDelete = 1;
 
     public NextSelectedTemplateFragment(ModelTemplates modelTemplates, TemplateElementAdapter templateElementAdapter, SelectedTemplateFragment selectedTemplateFragment) {
         this.modelTemplates = modelTemplates;
@@ -716,8 +718,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_distribution_delete:
                 if (templateModelDistributionLists.size() > 1) {
-                    templateModelDistributionLists.remove(templateModelDistributionLists.size() - 1);
-                    adapterDistributionList.notifyDataSetChanged();
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?",distributionDelete);
                 }
                 break;
             case R.id.btn_template_next_other_distribution_add:
@@ -770,8 +771,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_translator_delete:
                 if (templateModelTranslators.size() > 1) {
-                    templateModelTranslators.remove(templateModelTranslators.size() - 1);
-                    adapterTranslator.notifyDataSetChanged();
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?",translatorDelete);
                 }
                 break;
             case R.id.et_template_next_date_of_wrap_up:
@@ -1663,6 +1663,48 @@ public class NextSelectedTemplateFragment extends Fragment {
         });
 
         dialogSubmitFailed.show();
+    }
+
+
+    public void dialogDeleteFromListConfirmation(String mess, final int list) {
+        dialogDeleteDateOfAudit = new Dialog(context);
+        dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogDeleteDateOfAudit.setCancelable(false);
+        dialogDeleteDateOfAudit.setContentView(R.layout.dialog_exit_confirmation);
+        dialogDeleteDateOfAudit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        TextView msg = (TextView) dialogDeleteDateOfAudit.findViewById(R.id.tv_message);
+        Button yes = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_yes);
+        Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
+
+        msg.setText(mess);
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (list == distributionDelete){
+                templateModelDistributionLists.remove(templateModelDistributionLists.size() - 1);
+                adapterDistributionList.notifyDataSetChanged();
+            }
+                if (list == translatorDelete)
+                {
+                    templateModelTranslators.remove(templateModelTranslators.size() - 1);
+                    adapterTranslator.notifyDataSetChanged();
+                }
+                dialogDeleteDateOfAudit.dismiss();
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogDeleteDateOfAudit.dismiss();
+            }
+        });
+
+
+        dialogDeleteDateOfAudit.show();
     }
 
 }

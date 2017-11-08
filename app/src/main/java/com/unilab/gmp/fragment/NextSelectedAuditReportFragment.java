@@ -295,6 +295,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
     ModelAuditReportReply modelAuditReportReply;
     SelectedAuditReportFragment selectedAuditReportFragment;
     View rootView;
+    Dialog dialogDeleteDateOfAudit;
+    int distributionDelete = 0,translatorDelete = 1;
 
     public NextSelectedAuditReportFragment(ModelTemplates modelTemplates, ModelAuditReports report,
                                            TemplateElementAdapter templateElementAdapter, SelectedAuditReportFragment selectedAuditReportFragment) {
@@ -798,8 +800,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 break;
             case R.id.btn_template_next_distribution_delete:
                 if (templateModelDistributionLists.size() > 1) {
-                    templateModelDistributionLists.remove(templateModelDistributionLists.size() - 1);
-                    adapterDistributionList.notifyDataSetChanged();
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?",distributionDelete);
                 }
                 break;
             case R.id.btn_template_next_other_distribution_add:
@@ -852,8 +853,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 break;
             case R.id.btn_template_next_translator_delete:
                 if (templateModelTranslators.size() > 1) {
-                    templateModelTranslators.remove(templateModelTranslators.size() - 1);
-                    adapterTranslator.notifyDataSetChanged();
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?",translatorDelete);
                 }
                 break;
             case R.id.et_template_next_date_of_wrap_up:
@@ -1214,18 +1214,66 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         dialogSubmitFailed.show();
     }
+    public void set_error(EditText editText) {
+        editText.setError("This field is required");
+    }
 
     public boolean validate() {
+
+
+        boolean passed = true;
+        if (etTemplateNextAuditedArea.getText().toString().equals("")) {
+            passed = false;
+            set_error(etTemplateNextAuditedArea);
+        }
+        if (etTemplateNextNotAuditedArea.getText().toString().equals("")) {
+            passed = false;
+            set_error(etTemplateNextNotAuditedArea);
+        }
+        if (etTemplateNextDateOfWrapUp.getText().toString().equals("")) {
+            passed = false;
+            set_error(etTemplateNextDateOfWrapUp);
+        }
+        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().equals("")) {
+            passed = false;
+            set_error(etTemplateNextSummaryRecommendationOtherIssuesAudit);
+        }
+        if (etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString().equals("")) {
+            passed = false;
+            set_error(etTemplateNextSummaryRecommendationOtherIssuesExecutive);
+        }
+
+
+        if (!adapterScopeAudit.check()) {
+            passed = false;
+        }
+        if (!adapterReference.check()) {
+            passed = false;
+        }
+        if (!adapterPreAuditDoc.check()) {
+            passed = false;
+        }
+        if (!adapterPresentDuringMeeting.check()) {
+            passed = false;
+        }
+        if (!adapterPersonelMetDuring.check()) {
+            passed = false;
+        }
+        if (!adapterCompanyBackgroundMajorChanges.check()) {
+            passed = false;
+        }
+        if (!adapterTranslator.check()) {
+            passed = false;
+        }
+
+        if (!passed)
+            return passed;
+
         if (templateModelScopeAudits.get(0).getScope_name().isEmpty() || templateModelScopeAudits.get(0).getScope_detail().isEmpty()) {
+//            templateModelScopeAudits.get(0).getEtremarks().setError("Field Required!");
             Log.e("validate", "templateModelScopeAudits");
             return false;
         }
-//        if (templateModelScopeAuditInterests.size() > 0) {
-//            if (templateModelScopeAuditInterests.get(0).getProduct_name().isEmpty()) {
-//                Log.e("validate", "templateModelScopeAuditInterests");
-//                return false;
-//            }
-//        }
         if (templateModelReferences.get(0).getCertification().isEmpty() || templateModelReferences.get(0).getBody().isEmpty() ||
                 templateModelReferences.get(0).getNumber().isEmpty() || templateModelReferences.get(0).getValidity().isEmpty()) {
             Log.e("validate", "templateModelReferences");
@@ -1269,40 +1317,95 @@ public class NextSelectedAuditReportFragment extends Fragment {
             return false;
         }
 
-        if (etTemplateNextAuditedArea.getText().toString().length() <= 0) {
-            Log.e("validate", "etTemplateNextAuditedArea");
-            return false;
-        }
-        if (etTemplateNextNotAuditedArea.getText().toString().length() <= 0) {
-            Log.e("validate", "etTemplateNextNotAuditedArea");
-            return false;
-        }
-        if (etTemplateNextDateOfWrapUp.getText().toString().length() <= 0) {
-            Log.e("validate", "etTemplateNextDateOfWrapUp");
-            return false;
-        }
-//        if (etTemplateNextSummaryRecommendationAuditCloseDate.getText().toString().length() <= 0) {
-//            Log.e("validate", "etTemplateNextSummaryRecommendationAuditCloseDate");
-//            return false;
-//        }
-        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().length() <= 0) {
-            Log.e("validate", "etTemplateNextSummaryRecommendationOtherIssuesAudit");
-            return false;
-        }
-        if (etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString().length() <= 0) {
-            Log.e("validate", "etTemplateNextSummaryRecommendationOtherIssuesExecutive");
-            return false;
-        }
-//        if (etTemplateNextCompanyBackgroundDateFrom.getText().toString().length() <= 0) {
-//            Log.e("validate", "etTemplateNextCompanyBackgroundDateFrom");
-//            return false;
-//        }
-//        if (etTemplateNextCompanyBackgroundDateTo.getText().toString().length() <= 0) {
-//            Log.e("validate", "etTemplateNextCompanyBackgroundDateTo");
-//            return false;
-//        }
-
         return true;
+//        if (templateModelScopeAudits.get(0).getScope_name().isEmpty() || templateModelScopeAudits.get(0).getScope_detail().isEmpty()) {
+//            Log.e("validate", "templateModelScopeAudits");
+//            return false;
+//        }
+////        if (templateModelScopeAuditInterests.size() > 0) {
+////            if (templateModelScopeAuditInterests.get(0).getProduct_name().isEmpty()) {
+////                Log.e("validate", "templateModelScopeAuditInterests");
+////                return false;
+////            }
+////        }
+//        if (templateModelReferences.get(0).getCertification().isEmpty() || templateModelReferences.get(0).getBody().isEmpty() ||
+//                templateModelReferences.get(0).getNumber().isEmpty() || templateModelReferences.get(0).getValidity().isEmpty()) {
+//            Log.e("validate", "templateModelReferences");
+//            return false;
+//        }
+//        if (templateModelPreAuditDocs.get(0).getPreaudit().isEmpty()) {
+//            Log.e("validate", "templateModelPreAuditDocs");
+//            return false;
+//        }
+//        if (templateModelPresentDuringMeetings.get(0).getName().isEmpty() || templateModelPresentDuringMeetings.get(0).getPosition().isEmpty()) {
+//            Log.e("validate", "templateModelPresentDuringMeetings");
+//            return false;
+//        }
+//        if (templateModelPersonelMetDurings.get(0).getName().isEmpty() || templateModelPersonelMetDurings.get(0).getPosition().isEmpty()) {
+//            Log.e("validate", "templateModelPersonelMetDurings");
+//            return false;
+//        }
+//        if (templateModelDistributionLists.get(0).getDistribution().isEmpty()) {
+//            Log.e("validate", "templateModelDistributionLists");
+//            return false;
+//        }
+//        if (templateModelSummaryRecommendations.get(0).getElement().isEmpty()) {
+//            Log.e("validate", "templateModelSummaryRecommendations");
+//            return false;
+//        }
+//        if (templateModelCompanyBackgroundNames.get(0).getBgname().isEmpty()) {
+//            Log.e("validate", "templateModelCompanyBackgroundNames");
+//            return false;
+//        }
+//        if (templateModelCompanyBackgroundMajorChanges.get(0).getMajorchanges().isEmpty()) {
+//            Log.e("validate", "templateModelCompanyBackgroundMajorChanges");
+//            return false;
+//        }
+//        if (templateModelAuditorses.get(0).getName().isEmpty() || templateModelAuditorses.get(0).getPosition().isEmpty() ||
+//                templateModelAuditorses.get(0).getDepartment().isEmpty()) {
+//            Log.e("validate", "templateModelAuditorses");
+//            return false;
+//        }
+//        if (templateModelTranslators.get(0).getTranslator().isEmpty()) {
+//            Log.e("validate", "templateModelTranslators");
+//            return false;
+//        }
+//
+//        if (etTemplateNextAuditedArea.getText().toString().length() <= 0) {
+//            Log.e("validate", "etTemplateNextAuditedArea");
+//            return false;
+//        }
+//        if (etTemplateNextNotAuditedArea.getText().toString().length() <= 0) {
+//            Log.e("validate", "etTemplateNextNotAuditedArea");
+//            return false;
+//        }
+//        if (etTemplateNextDateOfWrapUp.getText().toString().length() <= 0) {
+//            Log.e("validate", "etTemplateNextDateOfWrapUp");
+//            return false;
+//        }
+////        if (etTemplateNextSummaryRecommendationAuditCloseDate.getText().toString().length() <= 0) {
+////            Log.e("validate", "etTemplateNextSummaryRecommendationAuditCloseDate");
+////            return false;
+////        }
+//        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().length() <= 0) {
+//            Log.e("validate", "etTemplateNextSummaryRecommendationOtherIssuesAudit");
+//            return false;
+//        }
+//        if (etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString().length() <= 0) {
+//            Log.e("validate", "etTemplateNextSummaryRecommendationOtherIssuesExecutive");
+//            return false;
+//        }
+////        if (etTemplateNextCompanyBackgroundDateFrom.getText().toString().length() <= 0) {
+////            Log.e("validate", "etTemplateNextCompanyBackgroundDateFrom");
+////            return false;
+////        }
+////        if (etTemplateNextCompanyBackgroundDateTo.getText().toString().length() <= 0) {
+////            Log.e("validate", "etTemplateNextCompanyBackgroundDateTo");
+////            return false;
+////        }
+//
+//        return true;
+
     }
 
     public boolean postData() {
@@ -1690,6 +1793,48 @@ public class NextSelectedAuditReportFragment extends Fragment {
             t.setReport_id(report_id);
             t.save();
         }
+    }
+
+
+    public void dialogDeleteFromListConfirmation(String mess, final int list) {
+        dialogDeleteDateOfAudit = new Dialog(context);
+        dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogDeleteDateOfAudit.setCancelable(false);
+        dialogDeleteDateOfAudit.setContentView(R.layout.dialog_exit_confirmation);
+        dialogDeleteDateOfAudit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        TextView msg = (TextView) dialogDeleteDateOfAudit.findViewById(R.id.tv_message);
+        Button yes = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_yes);
+        Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
+
+        msg.setText(mess);
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (list == distributionDelete){
+                    templateModelDistributionLists.remove(templateModelDistributionLists.size() - 1);
+                    adapterDistributionList.notifyDataSetChanged();
+                }
+                if (list == translatorDelete)
+                {
+                    templateModelTranslators.remove(templateModelTranslators.size() - 1);
+                    adapterTranslator.notifyDataSetChanged();
+                }
+                dialogDeleteDateOfAudit.dismiss();
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogDeleteDateOfAudit.dismiss();
+            }
+        });
+
+
+        dialogDeleteDateOfAudit.show();
     }
 
 }

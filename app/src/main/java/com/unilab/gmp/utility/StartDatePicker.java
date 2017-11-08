@@ -40,6 +40,8 @@ public class StartDatePicker extends DialogFragment implements DatePickerDialog.
         // Do something with the date chosen by the user
         date = year + "-" + (month+1) + "-" + day;
         editText.setText(DateTimeUtils.parseDateMonthToWord(date));
+
+        editText.setError(null);
 //        editText.setText(DateTimeUtils.DateTimeStamp());
 //        try {
 //            editText.setText(DateTimeUtils.parseDateMonthToWord(date));
