@@ -50,31 +50,32 @@ public class AdapterDistributionOthers extends BaseAdapter {
         final int z = i;
         final Widgets widgets;
 //        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_template_other_distribution, null);
+        widgets = new Widgets();
+        rowView = inflater.inflate(R.layout.custom_listview_template_other_distribution, null);
 
-            List<ModelDistribution> distributionList = ModelDistribution.listAll(ModelDistribution.class);
+        List<ModelDistribution> distributionList = ModelDistribution.listAll(ModelDistribution.class);
 
-            widgets.distributionOther = (EditText) rowView.findViewById(R.id.et_template_next_distribution_other);
+        widgets.distributionOther = (EditText) rowView.findViewById(R.id.et_template_next_distribution_other);
+        if (distributionList.size() > 0) {
             widgets.distributionOther.setText(distributionList.get(z).getDistribution_name());
+        }
+        widgets.distributionOther.setText(templateModelDistributionOthers.get(i).getDistribution_other());
+        widgets.distributionOther.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            widgets.distributionOther.setText(templateModelDistributionOthers.get(i).getDistribution_other());
-            widgets.distributionOther.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
-                }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                templateModelDistributionOthers.get(z).setDistribution_other(widgets.distributionOther.getText().toString());
+            }
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    templateModelDistributionOthers.get(z).setDistribution_other(widgets.distributionOther.getText().toString());
-                }
+            @Override
+            public void afterTextChanged(Editable editable) {
 
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
+            }
+        });
 //            rowView.setTag(widgets);
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
