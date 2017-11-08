@@ -61,6 +61,8 @@ import com.unilab.gmp.model.TemplateModelCompanyBackgroundMajorChanges;
 import com.unilab.gmp.model.TemplateModelCompanyBackgroundName;
 import com.unilab.gmp.model.TemplateModelDistributionList;
 import com.unilab.gmp.model.TemplateModelDistributionOthers;
+import com.unilab.gmp.model.TemplateModelOtherIssuesAudit;
+import com.unilab.gmp.model.TemplateModelOtherIssuesExecutive;
 import com.unilab.gmp.model.TemplateModelPersonelMetDuring;
 import com.unilab.gmp.model.TemplateModelPreAuditDoc;
 import com.unilab.gmp.model.TemplateModelPresentDuringMeeting;
@@ -799,7 +801,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                 reports.setOther_issues_executive(modelAuditReports.getOther_issues_executive());
                                 reports.setAudited_areas(modelAuditReports.getAudited_areas());
                                 reports.setAreas_to_consider(modelAuditReports.getAreas_to_consider());
-//                                reports.setDate_of_wrap(modelAuditReports.getDate_of_wrap());
+                                reports.setWrap_date(modelAuditReports.getWrap_date());
 //                                reports.setTranslator(modelAuditReports.getTranslator());
                                 reports.setReviewer_id(modelAuditReports.getReviewer_id());
                                 reports.setApprover_id(modelAuditReports.getApprover_id());
@@ -828,6 +830,9 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                         ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", report_id);
                                         ModelReportActivities.deleteAll(ModelReportActivities.class, "reportid = ?", report_id);
                                         ModelReportSubActivities.deleteAll(ModelReportSubActivities.class, "reportid = ?", report_id);
+                                        TemplateModelOtherIssuesAudit.deleteAll(TemplateModelOtherIssuesAudit.class, "reportid = ?", report_id);
+                                        TemplateModelOtherIssuesExecutive.deleteAll(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report_id);
+
 
                                         saveListsOfAuditReport(report_id);
 
@@ -856,6 +861,20 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             }
 
             private void saveListsOfAuditReport(String report_id) {
+
+
+                for (TemplateModelOtherIssuesAudit tmt : modelAuditReports.getOther_issues()) {
+                    tmt.setReport_id(report_id);
+                    tmt.save();
+                    Log.e("APICalls", "issuesAudit : " + tmt.getOther_issues_audit());
+                }
+
+                for (TemplateModelOtherIssuesExecutive tmt : modelAuditReports.getOther_issues_executive()) {
+                    tmt.setReport_id(report_id);
+                    tmt.save();
+                    Log.e("APICalls", "issuesExecutive : " + tmt.getOther_issues_executive());
+                }
+
                 for (TemplateModelTranslator tmt : modelAuditReports.getTranslators()) {
                     tmt.setReport_id(report_id);
                     tmt.save();
