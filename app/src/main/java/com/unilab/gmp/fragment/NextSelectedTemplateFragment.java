@@ -1446,6 +1446,25 @@ public class NextSelectedTemplateFragment extends Fragment {
                 translators += ",";
             }
         }
+        counter = 0;
+        String issue = "";
+        List<TemplateModelOtherIssuesAudit> issueList = TemplateModelOtherIssuesAudit.find(TemplateModelOtherIssuesAudit.class, "reportid = ?", report.getReport_id());
+        for (TemplateModelOtherIssuesAudit t : issueList) {
+            issue += "{\"" + t.getOther_issues_audit() + "\"}";
+            if (++counter != issueList.size()) {
+                translators += ",";
+            }
+        }
+
+        counter = 0;
+        String issuex = "";
+        List<TemplateModelOtherIssuesExecutive> issuexList = TemplateModelOtherIssuesExecutive.find(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
+        for (TemplateModelOtherIssuesExecutive t : issuexList) {
+            issue += "{\"" + t.getOther_issues_executive() + "\"}";
+            if (++counter != issuexList.size()) {
+                translators += ",";
+            }
+        }
 
         Log.e("Bulk Edit", "token:35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839\n" +
                 "cmdEvent:postInput\n" +
@@ -1456,8 +1475,8 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "audit_date:[" + auditdate + "]\n" +
                 "template_id:" + report.getTemplate_id() + "\n" +
                 "auditor_id:" + report.getAuditor_id() + "\n" +
-                "other_issues_audit:" + report.getOther_issues() + "\n" +
-                "other_issues_executive:" + report.getOther_issues_executive() + "\n" +
+                "other_issues_audit:[" + issue + "]\n" +
+                "other_issues_executive:[" + issuex + "]\n" +
                 "audited_areas:" + report.getAudited_areas() + "\n" +
                 "areas_to_consider:" + report.getAreas_to_consider() + "\n" +
                 "wrap_up_date:" + report.getWrap_date() + "\n" +
@@ -1493,8 +1512,8 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "[" + auditdate + "]",
                 report.getTemplate_id(),
                 report.getAuditor_id(),
-                "[" + auditdate + "]",//issues audit
-                "[" + auditdate + "]",//executive
+                "[" + issue + "]",
+                "[" + issuex + "]",
                 report.getAudited_areas(),
                 report.getAreas_to_consider(),
                 report.getWrap_date(),
@@ -1638,6 +1657,18 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         List<ModelDateOfAudit> mdoa = ModelDateOfAudit.find(ModelDateOfAudit.class, "reportid = ?", report.getReport_id());
         for (ModelDateOfAudit t : mdoa) {
+            t.setReport_id(report_id);
+            t.save();
+        }
+
+        List<TemplateModelOtherIssuesAudit> issue = TemplateModelOtherIssuesAudit.find(TemplateModelOtherIssuesAudit.class, "reportid = ?", report.getReport_id());
+        for (TemplateModelOtherIssuesAudit t : issue) {
+            t.setReport_id(report_id);
+            t.save();
+        }
+
+        List<TemplateModelOtherIssuesExecutive> issuex = TemplateModelOtherIssuesExecutive.find(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
+        for (TemplateModelOtherIssuesExecutive t : issuex) {
             t.setReport_id(report_id);
             t.save();
         }

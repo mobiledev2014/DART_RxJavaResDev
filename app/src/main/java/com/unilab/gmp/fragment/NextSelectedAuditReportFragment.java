@@ -52,8 +52,6 @@ import com.unilab.gmp.model.ModelAuditReportReply;
 import com.unilab.gmp.model.ModelAuditReports;
 import com.unilab.gmp.model.ModelCompany;
 import com.unilab.gmp.model.ModelDateOfAudit;
-import com.unilab.gmp.model.TemplateModelOtherIssuesAudit;
-import com.unilab.gmp.model.TemplateModelOtherIssuesExecutive;
 import com.unilab.gmp.model.ModelReportActivities;
 import com.unilab.gmp.model.ModelReportApprover;
 import com.unilab.gmp.model.ModelReportQuestion;
@@ -68,6 +66,8 @@ import com.unilab.gmp.model.TemplateModelCompanyBackgroundMajorChanges;
 import com.unilab.gmp.model.TemplateModelCompanyBackgroundName;
 import com.unilab.gmp.model.TemplateModelDistributionList;
 import com.unilab.gmp.model.TemplateModelDistributionOthers;
+import com.unilab.gmp.model.TemplateModelOtherIssuesAudit;
+import com.unilab.gmp.model.TemplateModelOtherIssuesExecutive;
 import com.unilab.gmp.model.TemplateModelPersonelMetDuring;
 import com.unilab.gmp.model.TemplateModelPreAuditDoc;
 import com.unilab.gmp.model.TemplateModelPresentDuringMeeting;
@@ -1010,6 +1010,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         adapterPersonelMetDuring.save(mar.getReport_id());
         activityAdapter.save(mar.getReport_id());
         templateElementAdapter.save(mar.getReport_id());
+        adapterOthersIssueAudit.save(mar.getReport_id());
+        adapterOthersIssueExecutive.save(mar.getReport_id());
 
         ModelDateOfAudit.deleteAll(ModelDateOfAudit.class, "reportid = ?", mar.getReport_id());
         for (ModelDateOfAudit t : modelTemplates.getModelDateOfAudits()) {
@@ -1032,13 +1034,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     private void addOtherIssuesAudit() {
-        if (4> templateModelOtherIssuesAudits.size()) {
+        if (4 > templateModelOtherIssuesAudits.size()) {
             TemplateModelOtherIssuesAudit t = new TemplateModelOtherIssuesAudit();
             t.setOther_issues_audit("");
             templateModelOtherIssuesAudits.add(t);
             adapterOthersIssueAudit.notifyDataSetChanged();
         }
     }
+
     private void addOtherIssuesExecutive() {
         if (4 > templateModelOtherIssuesExecutives.size()) {
             TemplateModelOtherIssuesExecutive t = new TemplateModelOtherIssuesExecutive();
@@ -1047,6 +1050,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             adapterOthersIssueExecutive.notifyDataSetChanged();
         }
     }
+
     private void addScopeAuditType() {
         if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
             TemplateModelScopeAudit t = new TemplateModelScopeAudit();
@@ -1674,6 +1678,27 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
         }
 
+        counter = 0;
+        String issue = "";
+        List<TemplateModelOtherIssuesAudit> issueList = TemplateModelOtherIssuesAudit.find(TemplateModelOtherIssuesAudit.class, "reportid = ?", report.getReport_id());
+        for (TemplateModelOtherIssuesAudit t : issueList) {
+            issue += "{\"" + t.getOther_issues_audit() + "\"}";
+            if (++counter != issueList.size()) {
+                translators += ",";
+            }
+        }
+
+        counter = 0;
+        String issuex = "";
+        List<TemplateModelOtherIssuesExecutive> issuexList = TemplateModelOtherIssuesExecutive.find(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
+        for (TemplateModelOtherIssuesExecutive t : issuexList) {
+            issue += "{\"" + t.getOther_issues_executive() + "\"}";
+            if (++counter != issuexList.size()) {
+                translators += ",";
+            }
+        }
+
+
         String id = "", no = "", version = "0";
         if (!report.getReport_no().contains("GMP-00-")) {
             id = report.getReport_id();
@@ -1690,8 +1715,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 "audit_date:[" + auditdate + "]\n" +
                 "template_id:" + report.getTemplate_id() + "\n" +
                 "auditor_id:" + report.getAuditor_id() + "\n" +
-                "other_issues_audit:" + report.getOther_issues() + "\n" +
-                "other_issues_executive:" + report.getOther_issues_executive() + "\n" +
+                "other_issues_audit:[" + issue + "]\n" +
+                "other_issues_executive:[" + issuex + "]\n" +
                 "audited_areas:" + report.getAudited_areas() + "\n" +
                 "areas_to_consider:" + report.getAreas_to_consider() + "\n" +
                 "wrap_up_date:" + report.getWrap_date() + "\n" +
@@ -1727,8 +1752,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 "[" + auditdate + "]",
                 report.getTemplate_id(),
                 report.getAuditor_id(),
-                "[" + auditdate + "]",//issues audit
-                "[" + auditdate + "]",//executive
+                "[" + issue + "]",
+                "[" + issuex + "]",
                 report.getAudited_areas(),
                 report.getAreas_to_consider(),
                 report.getWrap_date(),
@@ -1878,6 +1903,18 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         List<ModelDateOfAudit> mdoa = ModelDateOfAudit.find(ModelDateOfAudit.class, "reportid = ?", report.getReport_id());
         for (ModelDateOfAudit t : mdoa) {
+            t.setReport_id(report_id);
+            t.save();
+        }
+
+        List<TemplateModelOtherIssuesAudit> issue = TemplateModelOtherIssuesAudit.find(TemplateModelOtherIssuesAudit.class, "reportid = ?", report.getReport_id());
+        for (TemplateModelOtherIssuesAudit t : issue) {
+            t.setReport_id(report_id);
+            t.save();
+        }
+
+        List<TemplateModelOtherIssuesExecutive> issuex = TemplateModelOtherIssuesExecutive.find(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
+        for (TemplateModelOtherIssuesExecutive t : issuex) {
             t.setReport_id(report_id);
             t.save();
         }
