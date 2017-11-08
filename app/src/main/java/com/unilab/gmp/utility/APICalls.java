@@ -669,11 +669,11 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     typeAuditModel.setCreate_date(modelTypeAuditInfo.getModelTypeAudits().get(x).getCreate_date());
                     typeAuditModel.setUpdate_date(modelTypeAuditInfo.getModelTypeAudits().get(x).getUpdate_date());
                     typeAuditModel.setStatus(modelTypeAuditInfo.getModelTypeAudits().get(x).getStatus());
+                    Log.e("testing", response.toString() + " Company: " + typeAuditModel.getScope_name());
                     isTypeAuditExisting(typeAuditModel);
                 }
 
-                Log.e("testing", response.toString() + " Company: " + modelTypeAuditInfo.getModelTypeAudits().
-                        get(0).getScope_name());
+
             }
 
             @Override
@@ -697,11 +697,11 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     modelDisposition.setCreate_date(modelDispositionInfo.getDisposition().get(x).getCreate_date());
                     modelDisposition.setUpdate_date(modelDispositionInfo.getDisposition().get(x).getUpdate_date());
                     modelDisposition.setStatus(modelDispositionInfo.getDisposition().get(x).getStatus());
+                    Log.e("testing", response.toString() + " Company: " + modelDisposition.getDisposition_name());
                     isDispositionExisting(modelDisposition);
                 }
 
-                Log.e("testing", response.toString() + " Company: " + modelDispositionInfo.getDisposition().
-                        get(0).getDisposition_name());
+
             }
 
             @Override
@@ -727,10 +727,10 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     modelDistribution.setDistribution_name(modelDistributionInfo.getModelDistributions().get(x).getDistribution_name());
                     modelDistribution.setCreate_date(modelDistributionInfo.getModelDistributions().get(x).getCreate_date());
                     modelDistribution.setUpdate_date(modelDistributionInfo.getModelDistributions().get(x).getUpdate_date());
+                    Log.e("testing", response.toString() + " distribution report: " +modelDistribution.getDistribution_name());
                     isDistributionExisting(modelDistribution);
                 }
-                Log.e("testing", response.toString() + " distribution report: " + modelDistributionInfo.getModelDistributions().
-                        get(0).getDistribution_name());
+
             }
 
             @Override
