@@ -192,10 +192,16 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         }
 
         if (manualSync) {
+            Log.i("New_Template", changes + "");
+            /*if (changes > 0){
+                HomeActivity.tvSyncNotifCount.setText(changes + "");
+                HomeActivity.tvSyncNotifCount.setVisibility(View.VISIBLE);
+            }*/
             dialogSyncSuccess("Data has been successfully synced.");
             //homeActivity.initializeHome();
         } else {
             Intent intent = new Intent(context, HomeActivity.class);
+            intent.putExtra("NEWTEMPLATE", changes + "");
             context.startActivity(intent);
             ((Activity) context).finish();
             Log.e("DATA", "FORCE SYNC");
@@ -211,7 +217,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
     public Date date(String date) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (date==null)
+        if (date == null)
             return null;
         try {
             return df.parse(date);
@@ -232,21 +238,21 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
                 if (cm.size() > 0) {
                     if (configModel != null) {
-                        if (configModel.getApprover()!=null) {
+                        if (configModel.getApprover() != null) {
                             if (date(cm.get(0).getApprover()).before(date(configModel.getApprover()))) {
                                 cm.get(0).setApprover(configModel.getApprover());
                                 apiApprover();
                             }
                         }
 
-                        if (configModel.getAuditor()!=null) {
+                        if (configModel.getAuditor() != null) {
                             if (date(cm.get(0).getAuditor()).before(date(configModel.getAuditor()))) {
                                 cm.get(0).setAuditor(configModel.getAuditor());
                                 apiAuditors();
                             }
                         }
 
-                        if (configModel.getReviewer()!=null) {
+                        if (configModel.getReviewer() != null) {
                             if (date(cm.get(0).getReviewer()).before(date(configModel.getReviewer()))) {
                                 cm.get(0).setReviewer(configModel.getReviewer());
                                 apiReviewer();
@@ -255,7 +261,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                         Log.e("TEST", "DATE SITE : " + cm.get(0).getSite());
                         Log.e("TEST", "DATE SITE 2 : " + configModel.getSite());
 
-                        if (configModel.getSite()!=null) {
+                        if (configModel.getSite() != null) {
                             if (date(cm.get(0).getSite()).before(date(configModel.getSite()))) {
                                 cm.get(0).setSite(configModel.getSite());
                                 apiSupplier();
@@ -265,32 +271,32 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 //                            cm.get(0).setApprover(configModel.getApprover());
 //                        apiTemplateList();
 //                        }
-                        if (configModel.getCategory()!=null) {
+                        if (configModel.getCategory() != null) {
                             if (date(cm.get(0).getCategory()).before(date(configModel.getCategory()))) {
                                 cm.get(0).setCategory(configModel.getCategory());
                                 apiCategory();
                             }
                         }
 
-                        if (configModel.getProduct()!=null) {
+                        if (configModel.getProduct() != null) {
                             if (date(cm.get(0).getProduct()).before(date(configModel.getProduct()))) {
                                 cm.get(0).setProduct(configModel.getProduct());
                                 apiProduct();
                             }
                         }
-                        if (configModel.getType_audit()!=null) {
+                        if (configModel.getType_audit() != null) {
                             if (date(cm.get(0).getType_audit()).before(date(configModel.getType_audit()))) {
                                 cm.get(0).setType_audit(configModel.getType_audit());
                                 apiTypeAudit();
                             }
                         }
-                        if (configModel.getDisposition()!=null) {
+                        if (configModel.getDisposition() != null) {
                             if (date(cm.get(0).getDisposition()).before(date(configModel.getDisposition()))) {
                                 cm.get(0).setDisposition(configModel.getDisposition());
                                 apiDisposition();
                             }
                         }
-                        if (configModel.getDistribution()!=null) {
+                        if (configModel.getDistribution() != null) {
                             if (date(cm.get(0).getDistribution()).before(date(configModel.getDistribution()))) {
                                 cm.get(0).setDistribution(configModel.getDistribution());
                                 apiDistribution();
@@ -727,7 +733,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     modelDistribution.setDistribution_name(modelDistributionInfo.getModelDistributions().get(x).getDistribution_name());
                     modelDistribution.setCreate_date(modelDistributionInfo.getModelDistributions().get(x).getCreate_date());
                     modelDistribution.setUpdate_date(modelDistributionInfo.getModelDistributions().get(x).getUpdate_date());
-                    Log.e("testing", response.toString() + " distribution report: " +modelDistribution.getDistribution_name());
+                    Log.e("testing", response.toString() + " distribution report: " + modelDistribution.getDistribution_name());
                     isDistributionExisting(modelDistribution);
                 }
 
@@ -1622,7 +1628,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         template.setTemplateName(modelTemplates.getTemplateName());
 
         if (!template.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
-            changes++;
+            if (modelTemplates.getStatus().equals("1"))
+                changes++;
             template.setStatus("1");
         } else if (modelTemplates.getStatus().equals("1")) {
             template.setStatus("2");
@@ -1660,14 +1667,16 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 Log.i("ARGULOOP", "SAVE");
                 modelTemplates.save();
                 templateList.add(modelTemplates);
-                changes++;
+                if (modelTemplates.getStatus().equals("1"))
+                    changes++;
             }
 
         } else {
             Log.i("ARGU", "SAVE - SIZE 0");
             modelTemplates.save();
             templateList.add(modelTemplates);
-            changes++;
+            if (modelTemplates.getStatus().equals("1"))
+                changes++;
         }
     }
 

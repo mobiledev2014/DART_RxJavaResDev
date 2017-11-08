@@ -77,6 +77,8 @@ public class HomeActivity extends AppCompatActivity {
     TextView tvIndicator;
     @BindView(R.id.ll_online_indicator)
     LinearLayout llOnlineIndicator;
+    @BindView(R.id.tv_sync_notif_count)
+    TextView tvSyncNotifCount;
 
     CountDownTimer countDownTimer;
 
@@ -98,6 +100,15 @@ public class HomeActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         templateFragment = new TemplateFragment();
 
+        String newTemplates = getIntent().getStringExtra("NEWTEMPLATE");
+
+        if (!newTemplates.equals("")) {
+            if (Integer.parseInt(newTemplates) > 0) {
+                tvSyncNotifCount.setText(Integer.parseInt(getIntent().getStringExtra("NEWTEMPLATE")) + "");
+                tvSyncNotifCount.setVisibility(View.VISIBLE);
+            }
+        }
+
         if (savedInstanceState == null) {
             buttonSelector("template");
             selected = "template";
@@ -106,6 +117,8 @@ public class HomeActivity extends AppCompatActivity {
         initializeHome();
 
         checkConnectionStatus();
+
+        //tvSyncNotifCount = (TextView) findViewById(R.id.tv_sync_notif_count);
     }
 
     private void checkConnectionStatus() {
@@ -403,7 +416,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @OnClick(R.id.iv_logo)
     public void onViewClicked() {
-        if (Variable.menu){
+        if (Variable.menu) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fragmentManager.beginTransaction()

@@ -1,19 +1,14 @@
 package com.unilab.gmp.utility;
 
+import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
+
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
 
 public class DownloadFile extends AsyncTask<String,Void,Void>{
     private Context context;
@@ -69,4 +64,9 @@ public class DownloadFile extends AsyncTask<String,Void,Void>{
         }
         return null;
     }
-}   
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        Utils.openPdf(context, "");
+    }
+}
