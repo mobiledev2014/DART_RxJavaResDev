@@ -368,15 +368,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
             etTemplateNextSummaryRecommendationAuditCloseDate.setText
                     (DateTimeUtils.parseDateMonthToWord(report.getAudit_close_date()));
         }
-        etTemplateNextSummaryRecommendationOtherIssuesAudit.setText(report.getOther_issues());
-        etTemplateNextSummaryRecommendationOtherIssuesExecutive.setText(report.getOther_issues_executive());
-        //if (report.getP_inspection_date_1() != null || report.getP_inspection_date_1() != "") {
-//            etTemplateNextCompanyBackgroundDateFrom.setText(DateTimeUtils.parseDateMonthToWord(report.getP_inspection_date_1()));
-        //
-        //}
-        //if (report.getP_inspection_date_2() != null || report.getP_inspection_date_2() != "") {
-//            etTemplateNextCompanyBackgroundDateTo.setText(DateTimeUtils.parseDateMonthToWord(report.getP_inspection_date_2()));
-        //}
+//        etTemplateNextSummaryRecommendationOtherIssuesAudit.setText(report.getOther_issues());
+//        etTemplateNextSummaryRecommendationOtherIssuesExecutive.setText(report.getOther_issues_executive());
+
         etTemplateNextActivityCarried.setText(report.getOther_activities());
 
         //--- Lead Auditor setting start
@@ -943,7 +937,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         mar.setAudit_close_date(DateTimeUtils.parseDateMonthToDigit(
                 etTemplateNextSummaryRecommendationAuditCloseDate.getText().toString()));
-        mar.setOther_issues(etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString());
+//        mar.setOther_issues(etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString());
         mar.setAudited_areas(etTemplateNextAuditedArea.getText().toString());
         mar.setAreas_to_consider(etTemplateNextNotAuditedArea.getText().toString());
 //        mar.setDate_of_wrap(DateTimeUtils.parseDateMonthToDigit(etTemplateNextDateOfWrapUp.getText().toString()));
@@ -967,7 +961,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
 
         mar.setOther_activities(etTemplateNextActivityCarried.getText().toString());
-        mar.setOther_issues_executive(etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString());
+//        mar.setOther_issues_executive(etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString());
 
         // adapterScope.saveReport(report_id);//w
         adapterPresentDuringMeeting.save(mar.getReport_id());//w
@@ -1250,14 +1244,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
             passed = false;
             set_error(etTemplateNextDateOfWrapUp);
         }
-        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().equals("")) {
-            passed = false;
-            set_error(etTemplateNextSummaryRecommendationOtherIssuesAudit);
-        }
-        if (etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString().equals("")) {
-            passed = false;
-            set_error(etTemplateNextSummaryRecommendationOtherIssuesExecutive);
-        }
+//        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().equals("")) {
+//            passed = false;
+//            set_error(etTemplateNextSummaryRecommendationOtherIssuesAudit);
+//        }
+//        if (etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString().equals("")) {
+//            passed = false;
+//            set_error(etTemplateNextSummaryRecommendationOtherIssuesExecutive);
+//        }
 
 
         if (!adapterScopeAudit.check()) {

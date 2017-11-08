@@ -87,7 +87,7 @@ public class AuditReportAdapter extends BaseAdapter {
         widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (modelAuditReports.get(i).getStatus().equals("1")) {
+                if (modelAuditReports.get(i).getStatus().equals("5")) {
                     Utils.pdfIfExist(modelAuditReports.get(i).getReport_id(), context);
                 } else {
                     //Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();

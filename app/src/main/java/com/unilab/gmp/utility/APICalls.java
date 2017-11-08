@@ -211,6 +211,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
     public Date date(String date) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (date==null)
+            return null;
         try {
             return df.parse(date);
         } catch (ParseException e) {
@@ -230,49 +232,69 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
                 if (cm.size() > 0) {
                     if (configModel != null) {
+                        if (configModel.getApprover()!=null) {
+                            if (date(cm.get(0).getApprover()).before(date(configModel.getApprover()))) {
+                                cm.get(0).setApprover(configModel.getApprover());
+                                apiApprover();
+                            }
+                        }
 
-                        if (date(cm.get(0).getApprover()).before(date(configModel.getApprover()))) {
-                            cm.get(0).setApprover(configModel.getApprover());
-                            apiApprover();
+                        if (configModel.getAuditor()!=null) {
+                            if (date(cm.get(0).getAuditor()).before(date(configModel.getAuditor()))) {
+                                cm.get(0).setAuditor(configModel.getAuditor());
+                                apiAuditors();
+                            }
                         }
-                        if (date(cm.get(0).getAuditor()).before(date(configModel.getAuditor()))) {
-                            cm.get(0).setAuditor(configModel.getAuditor());
-                            apiAuditors();
-                        }
-                        if (date(cm.get(0).getReviewer()).before(date(configModel.getReviewer()))) {
-                            cm.get(0).setReviewer(configModel.getReviewer());
-                            apiReviewer();
+
+                        if (configModel.getReviewer()!=null) {
+                            if (date(cm.get(0).getReviewer()).before(date(configModel.getReviewer()))) {
+                                cm.get(0).setReviewer(configModel.getReviewer());
+                                apiReviewer();
+                            }
                         }
                         Log.e("TEST", "DATE SITE : " + cm.get(0).getSite());
                         Log.e("TEST", "DATE SITE 2 : " + configModel.getSite());
 
-                        if (date(cm.get(0).getSite()).before(date(configModel.getSite()))) {
-                            cm.get(0).setSite(configModel.getSite());
-                            apiSupplier();
+                        if (configModel.getSite()!=null) {
+                            if (date(cm.get(0).getSite()).before(date(configModel.getSite()))) {
+                                cm.get(0).setSite(configModel.getSite());
+                                apiSupplier();
+                            }
                         }
 //                        if (date(cm.get(0).getApprover()).before(date(configModel.getApprover()))) {
 //                            cm.get(0).setApprover(configModel.getApprover());
 //                        apiTemplateList();
 //                        }
-                        if (date(cm.get(0).getCategory()).before(date(configModel.getCategory()))) {
-                            cm.get(0).setCategory(configModel.getCategory());
-                            apiCategory();
+                        if (configModel.getCategory()!=null) {
+                            if (date(cm.get(0).getCategory()).before(date(configModel.getCategory()))) {
+                                cm.get(0).setCategory(configModel.getCategory());
+                                apiCategory();
+                            }
                         }
-                        if (date(cm.get(0).getProduct()).before(date(configModel.getProduct()))) {
-                            cm.get(0).setProduct(configModel.getProduct());
-                            apiProduct();
+
+                        if (configModel.getProduct()!=null) {
+                            if (date(cm.get(0).getProduct()).before(date(configModel.getProduct()))) {
+                                cm.get(0).setProduct(configModel.getProduct());
+                                apiProduct();
+                            }
                         }
-                        if (date(cm.get(0).getType_audit()).before(date(configModel.getType_audit()))) {
-                            cm.get(0).setType_audit(configModel.getType_audit());
-                            apiTypeAudit();
+                        if (configModel.getType_audit()!=null) {
+                            if (date(cm.get(0).getType_audit()).before(date(configModel.getType_audit()))) {
+                                cm.get(0).setType_audit(configModel.getType_audit());
+                                apiTypeAudit();
+                            }
                         }
-                        if (date(cm.get(0).getDisposition()).before(date(configModel.getDisposition()))) {
-                            cm.get(0).setDisposition(configModel.getDisposition());
-                            apiDisposition();
+                        if (configModel.getDisposition()!=null) {
+                            if (date(cm.get(0).getDisposition()).before(date(configModel.getDisposition()))) {
+                                cm.get(0).setDisposition(configModel.getDisposition());
+                                apiDisposition();
+                            }
                         }
-                        if (date(cm.get(0).getDistribution()).before(date(configModel.getDistribution()))) {
-                            cm.get(0).setDistribution(configModel.getDistribution());
-                            apiDistribution();
+                        if (configModel.getDistribution()!=null) {
+                            if (date(cm.get(0).getDistribution()).before(date(configModel.getDistribution()))) {
+                                cm.get(0).setDistribution(configModel.getDistribution());
+                                apiDistribution();
+                            }
                         }
 
 

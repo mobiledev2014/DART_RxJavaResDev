@@ -908,7 +908,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         mar.setAudit_close_date(DateTimeUtils.parseDateMonthToDigit(
                 etTemplateNextSummaryRecommendationAuditCloseDate.getText().toString()));
-        mar.setOther_issues(etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString());
+//        mar.setOther_issues(etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString());
         mar.setAudited_areas(etTemplateNextAuditedArea.getText().toString());
         mar.setAreas_to_consider(etTemplateNextNotAuditedArea.getText().toString());
 //        mar.setDate_of_wrap(DateTimeUtils.parseDateMonthToDigit(etTemplateNextDateOfWrapUp.getText().toString()));
@@ -925,7 +925,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         templateElementAdapter.save(report_id);
 
         mar.setOther_activities(etTemplateNextActivityCarried.getText().toString());
-        mar.setOther_issues_executive(etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString());
+//        mar.setOther_issues_executive(etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString());
 
         // adapterScope.save(report_id);//w
         adapterPresentDuringMeeting.save(report_id);//w
@@ -1110,14 +1110,14 @@ public class NextSelectedTemplateFragment extends Fragment {
             passed = false;
             set_error(etTemplateNextDateOfWrapUp);
         }
-        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().equals("")) {
-            passed = false;
-            set_error(etTemplateNextSummaryRecommendationOtherIssuesAudit);
-        }
-        if (etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString().equals("")) {
-            passed = false;
-            set_error(etTemplateNextSummaryRecommendationOtherIssuesExecutive);
-        }
+//        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().equals("")) {
+//            passed = false;
+//            set_error(etTemplateNextSummaryRecommendationOtherIssuesAudit);
+//        }
+//        if (etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString().equals("")) {
+//            passed = false;
+//            set_error(etTemplateNextSummaryRecommendationOtherIssuesExecutive);
+//        }
 
 
         if (!adapterScopeAudit.check()) {

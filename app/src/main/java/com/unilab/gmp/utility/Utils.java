@@ -50,7 +50,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Utils {
-    public static String pdfPath = Environment.getExternalStorageDirectory() + "/DART/";
+    public static String pdfPath = System.getenv("EXTERNAL_STORAGE") + "/DART/AuditReports/";
     public static Dialog dialogError;
 //
 //    public static void snack(View view, String text) {
@@ -445,20 +445,25 @@ public class Utils {
     }
 
     public static void pdfIfExist(String id, Context context) {
-        //File file = new File(pdfPath + "/" + id + ".pdf");
-//        File dirFile = new File(pdfPath);
-        File file = new File(pdfPath + "/sample.pdf");
+        File file = new File(pdfPath + "/" + id + ".pdf");
+//        File file = new File(pdfPath + "/351.pdf");
+        File dirFile = new File(pdfPath);
         Log.i("file location", file.toString() + "");
-//        dirFile.mkdir();
+        dirFile.mkdir();
         if (file.exists()) {
-//            openPdf(context, id);
-            openPdf(context, "sample");
+            openPdf(context, id);
+//            openPdf(context, "351");
         } else {
             Log.i("File","Not existing");
             if (isNetworkConnected(context)){
-                Toast.makeText(context, "Download file online", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Downloading file online", Toast.LENGTH_SHORT).show();
+
+                DownloadFile downloadFile= new DownloadFile();
+                downloadFile.execute("http://sams.ecomqa.com/json/export/approved/351/Audit_Report.pdf");
+
                 //after download openPdf
             } else {
+                //not connected
                 dialogError(context);
             }
         }
