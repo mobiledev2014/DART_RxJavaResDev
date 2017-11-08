@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelDistribution;
 import com.unilab.gmp.model.TemplateModelDistributionOthers;
+import com.unilab.gmp.model.TemplateModelOtherIssuesAudit;
 
 import java.util.List;
 
@@ -22,22 +23,22 @@ import java.util.List;
 public class AdapterOthersIssueAudit extends BaseAdapter {
     LayoutInflater inflater;
     Context context;
-    List<TemplateModelDistributionOthers> templateModelDistributionOthers;
+    List<TemplateModelOtherIssuesAudit> templateModelOtherIssuesAudits;
 
-    public AdapterOthersIssueAudit(List<TemplateModelDistributionOthers> templateModelDistributionOthers, Context context) {
-        this.templateModelDistributionOthers = templateModelDistributionOthers;
+    public AdapterOthersIssueAudit(List<TemplateModelOtherIssuesAudit> templateModelOtherIssuesAudits, Context context) {
+        this.templateModelOtherIssuesAudits = templateModelOtherIssuesAudits;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return templateModelDistributionOthers.size();
+        return templateModelOtherIssuesAudits.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return templateModelDistributionOthers.get(i);
+        return templateModelOtherIssuesAudits.get(i);
     }
 
     @Override
@@ -58,7 +59,7 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
             widgets.otherIssueAudit = (EditText) rowView.findViewById(R.id.et_template_next_other_issue_audit);
 
             widgets.otherIssueAudit.setText(distributionList.get(z).getDistribution_name());
-            widgets.otherIssueAudit.setText(templateModelDistributionOthers.get(i).getDistribution_other());
+            widgets.otherIssueAudit.setText(templateModelOtherIssuesAudits.get(i).getOther_issues_audit());
             widgets.otherIssueAudit.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -67,7 +68,7 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    templateModelDistributionOthers.get(z).setDistribution_other(widgets.otherIssueAudit.getText().toString());
+                    templateModelOtherIssuesAudits.get(z).setOther_issues_audit(widgets.otherIssueAudit.getText().toString());
                 }
 
                 @Override
@@ -84,7 +85,7 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
 
     public void save(String report_id) {
         TemplateModelDistributionOthers.deleteAll(TemplateModelDistributionOthers.class, "reportid = ?", report_id);
-        for (TemplateModelDistributionOthers t : templateModelDistributionOthers) {
+        for (TemplateModelOtherIssuesAudit t : templateModelOtherIssuesAudits) {
             t.setReport_id(report_id);
             t.save();
         }

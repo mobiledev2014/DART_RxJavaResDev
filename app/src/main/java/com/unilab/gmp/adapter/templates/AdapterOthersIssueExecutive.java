@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelDistribution;
 import com.unilab.gmp.model.TemplateModelDistributionOthers;
+import com.unilab.gmp.model.TemplateModelOtherIssuesExecutive;
 
 import java.util.List;
 
@@ -22,22 +23,22 @@ import java.util.List;
 public class AdapterOthersIssueExecutive extends BaseAdapter {
     LayoutInflater inflater;
     Context context;
-    List<TemplateModelDistributionOthers> templateModelDistributionOthers;
+    List<TemplateModelOtherIssuesExecutive> templateModelOtherIssuesExecutives;
 
-    public AdapterOthersIssueExecutive(List<TemplateModelDistributionOthers> templateModelDistributionOthers, Context context) {
-        this.templateModelDistributionOthers = templateModelDistributionOthers;
+    public AdapterOthersIssueExecutive(List<TemplateModelOtherIssuesExecutive> templateModelOtherIssuesExecutives, Context context) {
+        this.templateModelOtherIssuesExecutives = templateModelOtherIssuesExecutives;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return templateModelDistributionOthers.size();
+        return templateModelOtherIssuesExecutives.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return templateModelDistributionOthers.get(i);
+        return templateModelOtherIssuesExecutives.get(i);
     }
 
     @Override
@@ -58,7 +59,7 @@ public class AdapterOthersIssueExecutive extends BaseAdapter {
             widgets.otherIssueExecutive = (EditText) rowView.findViewById(R.id.et_template_next_other_issue_executive);
 
             widgets.otherIssueExecutive.setText(distributionList.get(z).getDistribution_name());
-            widgets.otherIssueExecutive.setText(templateModelDistributionOthers.get(i).getDistribution_other());
+            widgets.otherIssueExecutive.setText(templateModelOtherIssuesExecutives.get(i).getOther_issues_executive());
             widgets.otherIssueExecutive.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -67,7 +68,7 @@ public class AdapterOthersIssueExecutive extends BaseAdapter {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    templateModelDistributionOthers.get(z).setDistribution_other(widgets.otherIssueExecutive.getText().toString());
+                    templateModelOtherIssuesExecutives.get(z).setOther_issues_executive(widgets.otherIssueExecutive.getText().toString());
                 }
 
                 @Override
@@ -84,7 +85,7 @@ public class AdapterOthersIssueExecutive extends BaseAdapter {
 
     public void save(String report_id) {
         TemplateModelDistributionOthers.deleteAll(TemplateModelDistributionOthers.class, "reportid = ?", report_id);
-        for (TemplateModelDistributionOthers t : templateModelDistributionOthers) {
+        for (TemplateModelOtherIssuesExecutive t : templateModelOtherIssuesExecutives) {
             t.setReport_id(report_id);
             t.save();
         }

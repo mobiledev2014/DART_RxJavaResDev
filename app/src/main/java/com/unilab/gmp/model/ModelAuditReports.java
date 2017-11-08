@@ -30,9 +30,9 @@ public class ModelAuditReports extends SugarRecord {
     String audit_close_date;
 
     @SerializedName("other_issues_audit")
-    String other_issues;
+    List<TemplateModelOtherIssuesAudit> other_issues;
 
-    String other_issues_executive;
+    List<TemplateModelOtherIssuesExecutive> other_issues_executive;
     String audited_areas;
     String areas_to_consider;
 

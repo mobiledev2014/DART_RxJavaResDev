@@ -641,10 +641,11 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     product.setCreate_date(modelProductInfo.getModelProducts().get(x).getCreate_date());
                     product.setUpdate_date(modelProductInfo.getModelProducts().get(x).getUpdate_date());
                     product.setStatus(modelProductInfo.getModelProducts().get(x).getStatus());
+
+                    Log.e("testing", response.toString() + " Product: " + product.getProduct_name());
                     isProductExisting(product);
                 }
 
-                Log.e("testing", response.toString() + " Product: " + modelProductInfo.getModelProducts().get(0).getProduct_name());
             }
 
             @Override

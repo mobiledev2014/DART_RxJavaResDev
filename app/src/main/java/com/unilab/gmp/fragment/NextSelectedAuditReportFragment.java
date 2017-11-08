@@ -36,6 +36,8 @@ import com.unilab.gmp.adapter.templates.AdapterCompanyBackgroundName;
 import com.unilab.gmp.adapter.templates.AdapterDistributionList;
 import com.unilab.gmp.adapter.templates.AdapterDistributionOthers;
 import com.unilab.gmp.adapter.templates.AdapterInspectionDate;
+import com.unilab.gmp.adapter.templates.AdapterOthersIssueAudit;
+import com.unilab.gmp.adapter.templates.AdapterOthersIssueExecutive;
 import com.unilab.gmp.adapter.templates.AdapterPersonelMetDuring;
 import com.unilab.gmp.adapter.templates.AdapterPreAuditDoc;
 import com.unilab.gmp.adapter.templates.AdapterPresentDuringMeeting;
@@ -49,6 +51,8 @@ import com.unilab.gmp.model.ModelAuditReportReply;
 import com.unilab.gmp.model.ModelAuditReports;
 import com.unilab.gmp.model.ModelCompany;
 import com.unilab.gmp.model.ModelDateOfAudit;
+import com.unilab.gmp.model.TemplateModelOtherIssuesAudit;
+import com.unilab.gmp.model.TemplateModelOtherIssuesExecutive;
 import com.unilab.gmp.model.ModelReportActivities;
 import com.unilab.gmp.model.ModelReportApprover;
 import com.unilab.gmp.model.ModelReportQuestion;
@@ -279,6 +283,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
     List<TemplateModelCompanyBackgroundMajorChanges> templateModelCompanyBackgroundMajorChanges;
     List<TemplateModelAuditors> templateModelAuditorses;
     List<TemplateModelTranslator> templateModelTranslators;
+    List<TemplateModelOtherIssuesAudit> templateModelOtherIssuesAudits;
+    List<TemplateModelOtherIssuesExecutive> templateModelOtherIssuesExecutives;
 
     AdapterScopeAudit adapterScopeAudit;
     //    AdapterScopeAuditInterest adapterScope;
@@ -293,6 +299,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
     AdapterCompanyBackgroundMajorChanges adapterCompanyBackgroundMajorChanges;
     AdapterAuditors adapterAuditors;
     AdapterTranslator adapterTranslator;
+    AdapterOthersIssueAudit adapterOthersIssueAudit;
+    AdapterOthersIssueExecutive adapterOthersIssueExecutive;
 
     List<AuditorsModel> auditorsModels;
     List<ReviewerModel> reviewerModels;
@@ -312,7 +320,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     SelectedAuditReportFragment selectedAuditReportFragment;
     View rootView;
     Dialog dialogDeleteDateOfAudit;
-    int distributionDelete = 0,translatorDelete = 1;
+    int distributionDelete = 0, translatorDelete = 1;
 
     public NextSelectedAuditReportFragment(ModelTemplates modelTemplates, ModelAuditReports report,
                                            TemplateElementAdapter templateElementAdapter, SelectedAuditReportFragment selectedAuditReportFragment) {
@@ -494,6 +502,31 @@ public class NextSelectedAuditReportFragment extends Fragment {
             addScopeAuditType();
         }
 
+        // --- Other issues Audit
+        templateModelOtherIssuesAudits = TemplateModelOtherIssuesAudit.find(
+                TemplateModelOtherIssuesAudit.class, "reportid = ?", report.getReport_id());
+        adapterOthersIssueAudit = new AdapterOthersIssueAudit(templateModelOtherIssuesAudits, context);
+        lvTemplateNextSummaryRecommendationOtherIssuesAudit.setAdapter(adapterOthersIssueAudit);
+        lvTemplateNextSummaryRecommendationOtherIssuesAudit.setExpanded(true);
+//        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
+        if (templateModelOtherIssuesAudits.size() > 0) {
+            adapterOthersIssueAudit.notifyDataSetChanged();
+        } else {
+            addOtherIssuesAudit();
+        }
+        // --- Other issues Executive
+        templateModelOtherIssuesExecutives = TemplateModelOtherIssuesExecutive.find(
+                TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
+        adapterOthersIssueExecutive = new AdapterOthersIssueExecutive(templateModelOtherIssuesExecutives, context);
+        lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setAdapter(adapterOthersIssueExecutive);
+        lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setExpanded(true);
+//        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
+        if (templateModelOtherIssuesExecutives.size() > 0) {
+            adapterOthersIssueExecutive.notifyDataSetChanged();
+        } else {
+            addOtherIssuesExecutive();
+        }
+
         // --- Audit Scope Interest
         /*templateModelScopeAuditInterests = new ArrayList<>();
         adapterScope = new AdapterScopeAuditInterest(templateModelScopeAuditInterests, context, modelTemplates.getCompany_id());
@@ -602,7 +635,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         // ---
         templateModelCompanyBackgroundMajorChanges = new ArrayList<>();
         templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", report.getCompany_id()));
-        adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context,templateModelCompanyBackgroundMajorChanges.size());
+        adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context, templateModelCompanyBackgroundMajorChanges.size());
         templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id()));
         lvTemplateNextCompanyBackgroundMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
         lvTemplateNextCompanyBackgroundMajorChanges.setExpanded(true);
@@ -726,17 +759,22 @@ public class NextSelectedAuditReportFragment extends Fragment {
             R.id.btn_template_next_translator_add, R.id.btn_template_next_translator_delete,
             R.id.et_template_next_date_of_wrap_up,
             R.id.btn_template_next_other_distribution_add, R.id.btn_template_next_other_distribution_delete,
-            R.id.et_template_next_summary_recommendation_audit_close_date, R.id.btn_prev})
+            R.id.et_template_next_summary_recommendation_audit_close_date, R.id.btn_prev,
+            R.id.btn_template_next_summary_recommendation_other_issues_audit_add,
+            R.id.btn_template_next_summary_recommendation_other_issues_audit_delete,
+            R.id.btn_template_next_summary_recommendation_other_issues_executive_add,
+            R.id.btn_template_next_summary_recommendation_other_issues_executive_delete,
+    })
     public void onViewClicked(View view) {
         Log.e("clicked", "button : " + view.getId());
         FragmentManager fragmentManager = getFragmentManager();
         switch (view.getId()) {
+
             case R.id.btn_prev:
                 /*FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.replace(R.id.fl_content, selectedAuditReportFragment, "TemplateSelect");
                 ft.commit();*/
-
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 fragmentManager.beginTransaction()
                         .replace(R.id.fl_content, selectedAuditReportFragment).addToBackStack(null).commit();
@@ -750,6 +788,24 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 break;
             case R.id.btn_submit:
                 dialogSubmit("Are you sure you want to submit?");
+                break;
+            case R.id.btn_template_next_summary_recommendation_other_issues_audit_add:
+                addOtherIssuesAudit();
+                break;
+            case R.id.btn_template_next_summary_recommendation_other_issues_audit_delete:
+                if (templateModelOtherIssuesAudits.size() > 1) {
+                    templateModelOtherIssuesAudits.remove(templateModelOtherIssuesAudits.size() - 1);
+                    adapterOthersIssueAudit.notifyDataSetChanged();
+                }
+                break;
+            case R.id.btn_template_next_summary_recommendation_other_issues_executive_add:
+                addOtherIssuesExecutive();
+                break;
+            case R.id.btn_template_next_summary_recommendation_other_issues_executive_delete:
+                if (templateModelOtherIssuesExecutives.size() > 1) {
+                    templateModelOtherIssuesExecutives.remove(templateModelOtherIssuesExecutives.size() - 1);
+                    adapterOthersIssueExecutive.notifyDataSetChanged();
+                }
                 break;
             case R.id.btn_template_next_scope_audit_add:
                 addScopeAuditType();
@@ -810,7 +866,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 break;
             case R.id.btn_template_next_distribution_delete:
                 if (templateModelDistributionLists.size() > 1) {
-                    dialogDeleteFromListConfirmation("Are you sure you want to delete?",distributionDelete);
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", distributionDelete);
                 }
                 break;
             case R.id.btn_template_next_other_distribution_add:
@@ -863,7 +919,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 break;
             case R.id.btn_template_next_translator_delete:
                 if (templateModelTranslators.size() > 1) {
-                    dialogDeleteFromListConfirmation("Are you sure you want to delete?",translatorDelete);
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", translatorDelete);
                 }
                 break;
             case R.id.et_template_next_date_of_wrap_up:
@@ -974,6 +1030,22 @@ public class NextSelectedAuditReportFragment extends Fragment {
         report = mar;
     }
 
+    private void addOtherIssuesAudit() {
+        if (adapterOthersIssueAudit.getCount() > templateModelOtherIssuesAudits.size()) {
+            TemplateModelOtherIssuesAudit t = new TemplateModelOtherIssuesAudit();
+            t.setOther_issues_audit("");
+            templateModelOtherIssuesAudits.add(t);
+            adapterOthersIssueAudit.notifyDataSetChanged();
+        }
+    }
+    private void addOtherIssuesExecutive() {
+        if (adapterOthersIssueExecutive.getCount() > templateModelOtherIssuesExecutives.size()) {
+            TemplateModelOtherIssuesExecutive t = new TemplateModelOtherIssuesExecutive();
+            t.setOther_issues_executive("");
+            templateModelOtherIssuesExecutives.add(t);
+            adapterOthersIssueExecutive.notifyDataSetChanged();
+        }
+    }
     private void addScopeAuditType() {
         if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
             TemplateModelScopeAudit t = new TemplateModelScopeAudit();
@@ -1224,6 +1296,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         dialogSubmitFailed.show();
     }
+
     public void set_error(EditText editText) {
         editText.setError("This field is required");
     }
@@ -1653,8 +1726,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 "[" + auditdate + "]",
                 report.getTemplate_id(),
                 report.getAuditor_id(),
-                report.getOther_issues(),
-                report.getOther_issues_executive(),
+                "[" + auditdate + "]",//issues audit
+                "[" + auditdate + "]",//executive
                 report.getAudited_areas(),
                 report.getAreas_to_consider(),
                 report.getWrap_date(),
@@ -1823,12 +1896,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (list == distributionDelete){
+                if (list == distributionDelete) {
                     templateModelDistributionLists.remove(templateModelDistributionLists.size() - 1);
                     adapterDistributionList.notifyDataSetChanged();
                 }
-                if (list == translatorDelete)
-                {
+                if (list == translatorDelete) {
                     templateModelTranslators.remove(templateModelTranslators.size() - 1);
                     adapterTranslator.notifyDataSetChanged();
                 }

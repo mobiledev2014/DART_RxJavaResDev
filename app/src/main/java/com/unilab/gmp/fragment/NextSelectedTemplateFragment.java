@@ -1423,8 +1423,8 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "[" + auditdate + "]",
                 report.getTemplate_id(),
                 report.getAuditor_id(),
-                report.getOther_issues(),
-                report.getOther_issues_executive(),
+                "[" + auditdate + "]",//issues audit
+                "[" + auditdate + "]",//executive
                 report.getAudited_areas(),
                 report.getAreas_to_consider(),
                 report.getWrap_date(),
