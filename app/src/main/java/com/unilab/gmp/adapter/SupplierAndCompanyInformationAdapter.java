@@ -16,8 +16,14 @@ import android.widget.TextView;
 
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
+import com.unilab.gmp.adapter.templates.AdapterCompanyBackgroundMajorChanges;
+import com.unilab.gmp.adapter.templates.AdapterCompanyBackgroundName;
+import com.unilab.gmp.adapter.templates.AdapterInspectionDate;
 import com.unilab.gmp.model.ModelCompany;
 import com.unilab.gmp.model.ModelProduct;
+import com.unilab.gmp.model.ModelSiteDate;
+import com.unilab.gmp.model.TemplateModelCompanyBackgroundMajorChanges;
+import com.unilab.gmp.model.TemplateModelCompanyBackgroundName;
 
 import java.util.List;
 
@@ -32,7 +38,14 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
     Dialog dialogViewSupplier;
 
     List<ModelProduct> productLists;
+    List<ModelSiteDate> previousDateList;
+    List<TemplateModelCompanyBackgroundName> inspectorList;
+    List<TemplateModelCompanyBackgroundMajorChanges> majorChangesList;
+
     SupplierAndCompanyProductViewAdapter supplierAndCompanyProductViewAdapter;
+    AdapterInspectionDate adapterInspectionDate;
+    AdapterCompanyBackgroundName adapterCompanyBackgroundName;
+    AdapterCompanyBackgroundMajorChanges adapterCompanyBackgroundMajorChanges;
 
     public SupplierAndCompanyInformationAdapter(Context context, List<ModelCompany> supplierModels) {
         this.supplierModels = supplierModels;
@@ -101,12 +114,6 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
         return rowView;
     }
 
-    public class Widgets {
-        TextView name_of_site, address;// date_modified;
-        LinearLayout rowBackground;
-        Button viewInfo;
-    }
-
     public void dialogViewSupplier(String id, String Name, String Address, String Background) {
         dialogViewSupplier = new Dialog(context);
         dialogViewSupplier.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -119,6 +126,9 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
         TextView address = (TextView) dialogViewSupplier.findViewById(R.id.tv_address);
         TextView background = (TextView) dialogViewSupplier.findViewById(R.id.tv_background);
         ExpandableHeightListView products = (ExpandableHeightListView) dialogViewSupplier.findViewById(R.id.lv_products);
+        ExpandableHeightListView lvPreviousDate = (ExpandableHeightListView) dialogViewSupplier.findViewById(R.id.lv_previous_date);
+        ExpandableHeightListView lvInspector = (ExpandableHeightListView) dialogViewSupplier.findViewById(R.id.lv_inspector);
+        ExpandableHeightListView lvMajorChanges = (ExpandableHeightListView) dialogViewSupplier.findViewById(R.id.lv_major_changes);
         Button done = (Button) dialogViewSupplier.findViewById(R.id.btn_done);
 
         name.setText("Name: " + Name);
@@ -126,9 +136,25 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
         background.setText(Background);
 
         productLists = ModelProduct.find(ModelProduct.class, "companyid = ?", id);
+        previousDateList = ModelSiteDate.find(ModelSiteDate.class, "companyid = ?", id);
+        inspectorList = TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", id);
+        majorChangesList = TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", id);
+
         supplierAndCompanyProductViewAdapter = new SupplierAndCompanyProductViewAdapter(context, productLists);
         products.setAdapter(supplierAndCompanyProductViewAdapter);
         products.setExpanded(true);
+
+        adapterInspectionDate = new AdapterInspectionDate(context, previousDateList);
+        lvPreviousDate.setAdapter(adapterInspectionDate);
+        lvPreviousDate.setExpanded(true);
+
+        adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(inspectorList, context, 100);
+        lvInspector.setAdapter(adapterCompanyBackgroundName);
+        lvInspector.setExpanded(true);
+
+        adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(majorChangesList, context, 100);
+        lvMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
+        lvMajorChanges.setExpanded(true);
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,5 +164,11 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
         });
 
         dialogViewSupplier.show();
+    }
+
+    public class Widgets {
+        TextView name_of_site, address;// date_modified;
+        LinearLayout rowBackground;
+        Button viewInfo;
     }
 }
