@@ -32,7 +32,7 @@
                     android:adjustViewBounds="true"
                     android:padding="3dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/logo_dart_header" />
+                    android:src="@drawable/btn_logo" />
 
             </LinearLayout>
 

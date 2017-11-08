@@ -1014,7 +1014,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     private void addDistribution() {
-        if (4 > templateModelDistributionLists.size()) {
+        if (10 > templateModelDistributionLists.size()) {
             TemplateModelDistributionList t = new TemplateModelDistributionList();
             templateModelDistributionLists.add(t);
             adapterDistributionList.notifyDataSetChanged();
@@ -1022,7 +1022,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     private void addDistributionOthers() {
-        if (4 > templateModelDistributionOthers.size()) {
+        if (10 > templateModelDistributionOthers.size()) {
             TemplateModelDistributionOthers t = new TemplateModelDistributionOthers();
             t.setTemplate_id(report.getTemplate_id());
             templateModelDistributionOthers.add(t);

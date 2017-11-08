@@ -11,7 +11,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingBottom="30dp"
-        android:paddingTop="20dp">
+        android:paddingTop="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +45,7 @@
                         android:id="@+id/iv_template"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/btn_template"
+                        android:src="@drawable/btn_template_state"
                         android:paddingLeft="10dp"/>
 
                 </LinearLayout>
@@ -87,7 +90,7 @@
                         android:id="@+id/iv_report"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/btn_report"
+                        android:src="@drawable/btn_report_state"
                         android:paddingRight="10dp"/>
 
                 </LinearLayout>
@@ -142,7 +145,7 @@
                         android:id="@+id/iv_supplier"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/btn_supplier" />
+                        android:src="@drawable/btn_site_state" />
 
                 </LinearLayout>
 
@@ -186,7 +189,7 @@
                         android:id="@+id/iv_auditor"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/btn_auditor" />
+                        android:src="@drawable/btn_auditor_state" />
 
                 </LinearLayout>
 
@@ -239,7 +242,7 @@
                         android:id="@+id/iv_reviewer"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/btn_reviewer" />
+                        android:src="@drawable/btn_reviewer_state" />
 
                 </LinearLayout>
 
@@ -283,7 +286,7 @@
                         android:id="@+id/iv_approver"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/btn_approver" />
+                        android:src="@drawable/btn_approver_state" />
 
                 </LinearLayout>
 
