@@ -82,6 +82,8 @@ public class HomeActivity extends AppCompatActivity {
 
     CountDownTimer countDownTimer;
 
+    String newTemplates = "";
+
     public HomeActivity() {
 
     }
@@ -100,7 +102,7 @@ public class HomeActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         templateFragment = new TemplateFragment();
 
-        String newTemplates = getIntent().getStringExtra("NEWTEMPLATE");
+        newTemplates = getIntent().getStringExtra("NEWTEMPLATE");
 
         if (!newTemplates.equals("")) {
             if (Integer.parseInt(newTemplates) > 0) {
@@ -195,7 +197,17 @@ public class HomeActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         switch (view.getId()) {
             case R.id.iv_sync:
-                dialogSyncConfirmation("Are you sure you want to sync data?");
+                Log.i("newTemplates", newTemplates);
+
+                if (!newTemplates.equals("") && !newTemplates.equals("0")) {
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fl_content, templateFragment).addToBackStack(null).commit();
+                    newTemplates = "";
+                    tvSyncNotifCount.setText("");
+                } else {
+                    dialogSyncConfirmation("Are you sure you want to sync data?");
+                }
                 break;
             case R.id.iv_logout:
                 dialogCloseConfirmation("Are you sure you want to log out?");
