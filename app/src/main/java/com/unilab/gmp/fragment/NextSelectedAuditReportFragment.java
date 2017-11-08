@@ -1032,7 +1032,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     private void addOtherIssuesAudit() {
-        if (adapterOthersIssueAudit.getCount() > templateModelOtherIssuesAudits.size()) {
+        if (4> templateModelOtherIssuesAudits.size()) {
             TemplateModelOtherIssuesAudit t = new TemplateModelOtherIssuesAudit();
             t.setOther_issues_audit("");
             templateModelOtherIssuesAudits.add(t);
@@ -1040,7 +1040,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
     }
     private void addOtherIssuesExecutive() {
-        if (adapterOthersIssueExecutive.getCount() > templateModelOtherIssuesExecutives.size()) {
+        if (4 > templateModelOtherIssuesExecutives.size()) {
             TemplateModelOtherIssuesExecutive t = new TemplateModelOtherIssuesExecutive();
             t.setOther_issues_executive("");
             templateModelOtherIssuesExecutives.add(t);
