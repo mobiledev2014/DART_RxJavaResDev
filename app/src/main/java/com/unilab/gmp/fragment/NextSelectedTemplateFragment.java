@@ -288,6 +288,10 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         if (this.rootView != null) {
             ButterKnife.bind(this, this.rootView);
             unbinder = ButterKnife.bind(this, this.rootView);

@@ -86,7 +86,11 @@ public class AdapterCompanyBackgroundName extends BaseAdapter {
 
     public void save(String report_id) {
         TemplateModelCompanyBackgroundName.deleteAll(TemplateModelCompanyBackgroundName.class, "reportid = ?", report_id);
+        int i = 0;
         for (TemplateModelCompanyBackgroundName t : templateModelCompanyBackgroundNames) {
+            if (i++ < disable) {
+                continue;
+            }
             t.setReport_id(report_id);
             t.save();
         }

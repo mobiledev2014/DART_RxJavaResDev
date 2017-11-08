@@ -42,7 +42,7 @@
         <activity
             android:name=".activity.HomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
     <!--android:configChanges="keyboardHidden|orientation|screenLayout"-->

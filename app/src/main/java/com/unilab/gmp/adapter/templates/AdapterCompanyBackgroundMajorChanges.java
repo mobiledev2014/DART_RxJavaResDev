@@ -110,7 +110,11 @@ public class AdapterCompanyBackgroundMajorChanges extends BaseAdapter {
 
     public void save(String report_id) {
         TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
+       int i = 0;
         for (TemplateModelCompanyBackgroundMajorChanges t : templateModelCompanyBackgroundMajorChanges) {
+            if(i++ < disable){
+                continue;
+            }
             t.setReport_id(report_id);
             t.save();
         }
