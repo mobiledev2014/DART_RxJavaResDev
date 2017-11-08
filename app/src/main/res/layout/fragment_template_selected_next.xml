@@ -130,7 +130,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone"><!--visible-->
+                            android:visibility="visible"><!--visible-->
 
                             <TableLayout
                                 android:layout_width="match_parent"
@@ -263,7 +263,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone"><!--visible-->
+                            android:visibility="visible"><!--visible-->
 
                             <TableLayout
                                 android:layout_width="match_parent"
@@ -394,7 +394,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone"><!--visible-->
+                            android:visibility="visible"><!--visible-->
 
                             <TableLayout
                                 android:layout_width="match_parent"
@@ -499,7 +499,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone"><!--visible-->
+                            android:visibility="visible"><!--visible-->
 
                             <TableLayout
                                 android:layout_width="match_parent"
