@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
@@ -37,6 +38,8 @@ import com.unilab.gmp.adapter.templates.AdapterCompanyBackgroundName;
 import com.unilab.gmp.adapter.templates.AdapterDistributionList;
 import com.unilab.gmp.adapter.templates.AdapterDistributionOthers;
 import com.unilab.gmp.adapter.templates.AdapterInspectionDate;
+import com.unilab.gmp.adapter.templates.AdapterOthersIssueAudit;
+import com.unilab.gmp.adapter.templates.AdapterOthersIssueExecutive;
 import com.unilab.gmp.adapter.templates.AdapterPersonelMetDuring;
 import com.unilab.gmp.adapter.templates.AdapterPreAuditDoc;
 import com.unilab.gmp.adapter.templates.AdapterPresentDuringMeeting;
@@ -64,6 +67,8 @@ import com.unilab.gmp.model.TemplateModelCompanyBackgroundMajorChanges;
 import com.unilab.gmp.model.TemplateModelCompanyBackgroundName;
 import com.unilab.gmp.model.TemplateModelDistributionList;
 import com.unilab.gmp.model.TemplateModelDistributionOthers;
+import com.unilab.gmp.model.TemplateModelOtherIssuesAudit;
+import com.unilab.gmp.model.TemplateModelOtherIssuesExecutive;
 import com.unilab.gmp.model.TemplateModelPersonelMetDuring;
 import com.unilab.gmp.model.TemplateModelPreAuditDoc;
 import com.unilab.gmp.model.TemplateModelPresentDuringMeeting;
@@ -268,6 +273,9 @@ public class NextSelectedTemplateFragment extends Fragment {
     List<TemplateModelCompanyBackgroundMajorChanges> templateModelCompanyBackgroundMajorChanges;
     List<TemplateModelAuditors> templateModelAuditorses;
     List<TemplateModelTranslator> templateModelTranslators;
+    List<TemplateModelOtherIssuesAudit> templateModelOtherIssuesAudits;
+    List<TemplateModelOtherIssuesExecutive> templateModelOtherIssuesExecutives;
+
     //AdapterScopeAuditInterest adapterScope;
     AdapterReference adapterReference;
     AdapterPreAuditDoc adapterPreAuditDoc;
@@ -280,6 +288,8 @@ public class NextSelectedTemplateFragment extends Fragment {
     AdapterCompanyBackgroundMajorChanges adapterCompanyBackgroundMajorChanges;
     AdapterAuditors adapterAuditors;
     AdapterTranslator adapterTranslator;
+    AdapterOthersIssueAudit adapterOthersIssueAudit;
+    AdapterOthersIssueExecutive adapterOthersIssueExecutive;
 
     List<AuditorsModel> auditorsModels;
     List<ReviewerModel> reviewerModels;
@@ -451,6 +461,28 @@ public class NextSelectedTemplateFragment extends Fragment {
             addScopeAuditType();
         }
 
+        // --- Other issues Audit
+        templateModelOtherIssuesAudits = new ArrayList<>();
+        adapterOthersIssueAudit = new AdapterOthersIssueAudit(templateModelOtherIssuesAudits, context);
+        lvTemplateNextSummaryRecommendationOtherIssuesAudit.setAdapter(adapterOthersIssueAudit);
+        lvTemplateNextSummaryRecommendationOtherIssuesAudit.setExpanded(true);
+//        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
+        if (templateModelOtherIssuesAudits.size() > 0) {
+            adapterOthersIssueAudit.notifyDataSetChanged();
+        } else {
+            addOtherIssuesAudit();
+        }
+        // --- Other issues Executive
+        templateModelOtherIssuesExecutives = new ArrayList<>();
+        adapterOthersIssueExecutive = new AdapterOthersIssueExecutive(templateModelOtherIssuesExecutives, context);
+        lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setAdapter(adapterOthersIssueExecutive);
+        lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setExpanded(true);
+//        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
+        if (templateModelOtherIssuesExecutives.size() > 0) {
+            adapterOthersIssueExecutive.notifyDataSetChanged();
+        } else {
+            addOtherIssuesExecutive();
+        }
         // --- Audit Scope Interest
 //        templateModelScopeAuditInterests = new ArrayList<>();
 //        adapterScope = new AdapterScopeAuditInterest(templateModelScopeAuditInterests, context, modelTemplates.getCompany_id());
@@ -674,7 +706,11 @@ public class NextSelectedTemplateFragment extends Fragment {
             R.id.et_template_next_date_of_wrap_up,
             R.id.btn_template_next_other_distribution_add,
             R.id.btn_template_next_other_distribution_delete,
-            R.id.et_template_next_summary_recommendation_audit_close_date, R.id.btn_prev})
+            R.id.et_template_next_summary_recommendation_audit_close_date, R.id.btn_prev,
+            R.id.btn_template_next_summary_recommendation_other_issues_audit_add,
+            R.id.btn_template_next_summary_recommendation_other_issues_audit_delete,
+            R.id.btn_template_next_summary_recommendation_other_issues_executive_add,
+            R.id.btn_template_next_summary_recommendation_other_issues_executive_delete})
     public void onViewClicked(View view) {
         Log.e("clicked", "button : " + view.getId());
         switch (view.getId()) {
@@ -687,6 +723,24 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_submit:
                 dialogSubmit("Are you sure you want to submit?");
+                break;
+            case R.id.btn_template_next_summary_recommendation_other_issues_audit_add:
+                addOtherIssuesAudit();
+                break;
+            case R.id.btn_template_next_summary_recommendation_other_issues_audit_delete:
+                if (templateModelOtherIssuesAudits.size() > 1) {
+                    templateModelOtherIssuesAudits.remove(templateModelOtherIssuesAudits.size() - 1);
+                    adapterOthersIssueAudit.notifyDataSetChanged();
+                }
+                break;
+            case R.id.btn_template_next_summary_recommendation_other_issues_executive_add:
+                addOtherIssuesExecutive();
+                break;
+            case R.id.btn_template_next_summary_recommendation_other_issues_executive_delete:
+                if (templateModelOtherIssuesExecutives.size() > 1) {
+                    templateModelOtherIssuesExecutives.remove(templateModelOtherIssuesExecutives.size() - 1);
+                    adapterOthersIssueExecutive.notifyDataSetChanged();
+                }
                 break;
             case R.id.btn_template_next_scope_audit_add:
                 addScopeAuditType();
@@ -938,6 +992,22 @@ public class NextSelectedTemplateFragment extends Fragment {
         report = mar;
     }
 
+    private void addOtherIssuesAudit() {
+        if (4 > templateModelOtherIssuesAudits.size()) {
+            TemplateModelOtherIssuesAudit t = new TemplateModelOtherIssuesAudit();
+            t.setOther_issues_audit("");
+            templateModelOtherIssuesAudits.add(t);
+            adapterOthersIssueAudit.notifyDataSetChanged();
+        }
+    }
+    private void addOtherIssuesExecutive() {
+        if (4 > templateModelOtherIssuesExecutives.size()) {
+            TemplateModelOtherIssuesExecutive t = new TemplateModelOtherIssuesExecutive();
+            t.setOther_issues_executive("");
+            templateModelOtherIssuesExecutives.add(t);
+            adapterOthersIssueExecutive.notifyDataSetChanged();
+        }
+    }
     private void addScopeAuditType() {
         //if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
         if (10 > templateModelScopeAudits.size()) {

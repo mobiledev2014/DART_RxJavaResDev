@@ -53,12 +53,11 @@ public class AdapterOthersIssueExecutive extends BaseAdapter {
 //        if (rowView == null) {
             widgets = new Widgets();
             rowView = inflater.inflate(R.layout.custom_listview_template_other_issue_executive, null);
-
-            List<ModelDistribution> distributionList = ModelDistribution.listAll(ModelDistribution.class);
+//
+//            List<ModelDistribution> distributionList = ModelDistribution.listAll(ModelDistribution.class);
 
             widgets.otherIssueExecutive = (EditText) rowView.findViewById(R.id.et_template_next_other_issue_executive);
 
-            widgets.otherIssueExecutive.setText(distributionList.get(z).getDistribution_name());
             widgets.otherIssueExecutive.setText(templateModelOtherIssuesExecutives.get(i).getOther_issues_executive());
             widgets.otherIssueExecutive.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -84,7 +83,7 @@ public class AdapterOthersIssueExecutive extends BaseAdapter {
     }
 
     public void save(String report_id) {
-        TemplateModelDistributionOthers.deleteAll(TemplateModelDistributionOthers.class, "reportid = ?", report_id);
+        TemplateModelOtherIssuesExecutive.deleteAll(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report_id);
         for (TemplateModelOtherIssuesExecutive t : templateModelOtherIssuesExecutives) {
             t.setReport_id(report_id);
             t.save();

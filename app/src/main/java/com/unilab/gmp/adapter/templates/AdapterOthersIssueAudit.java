@@ -54,11 +54,9 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
             widgets = new Widgets();
             rowView = inflater.inflate(R.layout.custom_listview_template_other_issue_audit, null);
 
-            List<ModelDistribution> distributionList = ModelDistribution.listAll(ModelDistribution.class);
 
             widgets.otherIssueAudit = (EditText) rowView.findViewById(R.id.et_template_next_other_issue_audit);
 
-            widgets.otherIssueAudit.setText(distributionList.get(z).getDistribution_name());
             widgets.otherIssueAudit.setText(templateModelOtherIssuesAudits.get(i).getOther_issues_audit());
             widgets.otherIssueAudit.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -84,7 +82,7 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
     }
 
     public void save(String report_id) {
-        TemplateModelDistributionOthers.deleteAll(TemplateModelDistributionOthers.class, "reportid = ?", report_id);
+        TemplateModelOtherIssuesAudit.deleteAll(TemplateModelOtherIssuesAudit.class, "reportid = ?", report_id);
         for (TemplateModelOtherIssuesAudit t : templateModelOtherIssuesAudits) {
             t.setReport_id(report_id);
             t.save();
