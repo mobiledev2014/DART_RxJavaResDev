@@ -892,7 +892,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         if (validate()) {
             if (isNetworkConnected()) {
-                save();
+                saveReport();
 
                 String email = sharedPref.getStringData("EMAIL");
                 String password = sharedPref.getStringData("PASSWORD");
@@ -911,7 +911,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         }
     }
 
-    private void save() {
+    private void saveReport() {
         ModelAuditReports mar = new ModelAuditReports();
         int size = ModelAuditReports.listAll(ModelAuditReports.class).size() + 1;
         String zero = "";
@@ -1691,7 +1691,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //save as draft
-                save();
+                saveReport();
                 dialogSaveDraft.dismiss();
                 dialogSucSaveDraft("Successfully saved as draft");
             }
