@@ -58,11 +58,11 @@ public class SupplierAndCompanyProductViewAdapter extends BaseAdapter {
             else
                 widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
 
-            widgets.type = (TextView) rowview.findViewById(R.id.tv_dialog_type);
+            //widgets.type = (TextView) rowview.findViewById(R.id.tv_dialog_type);
             widgets.name = (TextView) rowview.findViewById(R.id.tv_dialog_name);
 
             final ModelProduct product = productList.get(position);
-            widgets.type.setText(product.getType());
+            //widgets.type.setText(product.getType());
             widgets.name.setText(product.getProduct_name());
             rowview.setTag(widgets);
 //        } else {

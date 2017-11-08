@@ -166,10 +166,10 @@ public class NextSelectedTemplateFragment extends Fragment {
     ExpandableHeightListView lvTemplateNextSummaryRecommendation;
     @BindView(R.id.et_template_next_summary_recommendation_audit_close_date)
     EditText etTemplateNextSummaryRecommendationAuditCloseDate;
-    @BindView(R.id.et_template_next_summary_recommendation_other_issues_audit)
+    /*@BindView(R.id.et_template_next_summary_recommendation_other_issues_audit)
     EditText etTemplateNextSummaryRecommendationOtherIssuesAudit;
     @BindView(R.id.et_template_next_summary_recommendation_other_issues_executive)
-    EditText etTemplateNextSummaryRecommendationOtherIssuesExecutive;
+    EditText etTemplateNextSummaryRecommendationOtherIssuesExecutive;*/
     @BindView(R.id.et_template_next_company_background_history)
     EditText etTemplateNextCompanyBackgroundHistory;
     @BindView(R.id.lv_template_next_company_background_name)
@@ -228,6 +228,22 @@ public class NextSelectedTemplateFragment extends Fragment {
     Button btnPrev;
     @BindView(R.id.lv_template_next_company_background_inspection_date)
     ExpandableHeightListView lvTemplateNextCompanyBackgroundInspectionDate;
+    @BindView(R.id.lv_template_next_summary_recommendation_other_issues_audit)
+    ExpandableHeightListView lvTemplateNextSummaryRecommendationOtherIssuesAudit;
+    @BindView(R.id.ll_template_next_summary_recommendation_other_issues_audit)
+    LinearLayout llTemplateNextSummaryRecommendationOtherIssuesAudit;
+    @BindView(R.id.btn_template_next_summary_recommendation_other_issues_audit_add)
+    Button btnTemplateNextSummaryRecommendationOtherIssuesAuditAdd;
+    @BindView(R.id.btn_template_next_summary_recommendation_other_issues_audit_delete)
+    Button btnTemplateNextSummaryRecommendationOtherIssuesAuditDelete;
+    @BindView(R.id.lv_template_next_summary_recommendation_other_issues_executive)
+    ExpandableHeightListView lvTemplateNextSummaryRecommendationOtherIssuesExecutive;
+    @BindView(R.id.ll_template_next_summary_recommendation_other_issues_executive)
+    LinearLayout llTemplateNextSummaryRecommendationOtherIssuesExecutive;
+    @BindView(R.id.btn_template_next_summary_recommendation_other_issues_executive_add)
+    Button btnTemplateNextSummaryRecommendationOtherIssuesExecutiveAdd;
+    @BindView(R.id.btn_template_next_summary_recommendation_other_issues_executive_delete)
+    Button btnTemplateNextSummaryRecommendationOtherIssuesExecutiveDelete;
 
     Dialog dialogCancelTemplate;
     Dialog dialogSaveDraft;
@@ -279,7 +295,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     View rootView;
 
     Dialog dialogDeleteDateOfAudit;
-    int distributionDelete = 0,translatorDelete = 1;
+    int distributionDelete = 0, translatorDelete = 1;
 
     public NextSelectedTemplateFragment(ModelTemplates modelTemplates, TemplateElementAdapter templateElementAdapter, SelectedTemplateFragment selectedTemplateFragment) {
         this.modelTemplates = modelTemplates;
@@ -357,7 +373,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         //--- Lead Auditor setting end
 
         //--- Reviewer setting start
-        reviewerModels = ReviewerModel.find(ReviewerModel.class,"status > 0");
+        reviewerModels = ReviewerModel.find(ReviewerModel.class, "status > 0");
         List<String> reviewerList = new ArrayList<>();
         Log.i("REVIEWER", "SIZE : " + reviewerModels.size());
         for (int x = 0; x < reviewerModels.size(); x++) {
@@ -395,7 +411,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         //--- Reviewer setting end
         //
         // --- Approver setting start
-        approverModels = ApproverModel.find(ApproverModel.class,"status > 0");
+        approverModels = ApproverModel.find(ApproverModel.class, "status > 0");
         List<String> approverList = new ArrayList<>();
         for (int x = 0; x < approverModels.size(); x++) {
             approverList.add(approverModels.get(x).getFirstname() + " " + approverModels.get(x).getMiddlename()
@@ -722,7 +738,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_distribution_delete:
                 if (templateModelDistributionLists.size() > 1) {
-                    dialogDeleteFromListConfirmation("Are you sure you want to delete?",distributionDelete);
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", distributionDelete);
                 }
                 break;
             case R.id.btn_template_next_other_distribution_add:
@@ -775,7 +791,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_translator_delete:
                 if (templateModelTranslators.size() > 1) {
-                    dialogDeleteFromListConfirmation("Are you sure you want to delete?",translatorDelete);
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", translatorDelete);
                 }
                 break;
             case R.id.et_template_next_date_of_wrap_up:
@@ -1411,7 +1427,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 report.getOther_issues_executive(),
                 report.getAudited_areas(),
                 report.getAreas_to_consider(),
-                report. getWrap_date(),
+                report.getWrap_date(),
                 "[" + translators + "]",
                 "[" + co_auditor_id + "]",
                 report.getReviewer_id(),
@@ -1687,12 +1703,11 @@ public class NextSelectedTemplateFragment extends Fragment {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (list == distributionDelete){
-                templateModelDistributionLists.remove(templateModelDistributionLists.size() - 1);
-                adapterDistributionList.notifyDataSetChanged();
-            }
-                if (list == translatorDelete)
-                {
+                if (list == distributionDelete) {
+                    templateModelDistributionLists.remove(templateModelDistributionLists.size() - 1);
+                    adapterDistributionList.notifyDataSetChanged();
+                }
+                if (list == translatorDelete) {
                     templateModelTranslators.remove(templateModelTranslators.size() - 1);
                     adapterTranslator.notifyDataSetChanged();
                 }

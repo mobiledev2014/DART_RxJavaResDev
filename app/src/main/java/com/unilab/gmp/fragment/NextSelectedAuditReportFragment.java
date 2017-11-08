@@ -172,10 +172,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
     ExpandableHeightListView lvTemplateNextSummaryRecommendation;
     @BindView(R.id.et_template_next_summary_recommendation_audit_close_date)
     EditText etTemplateNextSummaryRecommendationAuditCloseDate;
-    @BindView(R.id.et_template_next_summary_recommendation_other_issues_audit)
+    /*@BindView(R.id.et_template_next_summary_recommendation_other_issues_audit)
     EditText etTemplateNextSummaryRecommendationOtherIssuesAudit;
     @BindView(R.id.et_template_next_summary_recommendation_other_issues_executive)
-    EditText etTemplateNextSummaryRecommendationOtherIssuesExecutive;
+    EditText etTemplateNextSummaryRecommendationOtherIssuesExecutive;*/
     @BindView(R.id.et_template_next_company_background_history)
     EditText etTemplateNextCompanyBackgroundHistory;
     @BindView(R.id.lv_template_next_company_background_name)
@@ -236,6 +236,22 @@ public class NextSelectedAuditReportFragment extends Fragment {
     TextView tvTitle;
     @BindView(R.id.lv_template_next_company_background_inspection_date)
     ExpandableHeightListView lvTemplateNextCompanyBackgroundInspectionDate;
+    @BindView(R.id.lv_template_next_summary_recommendation_other_issues_audit)
+    ExpandableHeightListView lvTemplateNextSummaryRecommendationOtherIssuesAudit;
+    @BindView(R.id.ll_template_next_summary_recommendation_other_issues_audit)
+    LinearLayout llTemplateNextSummaryRecommendationOtherIssuesAudit;
+    @BindView(R.id.btn_template_next_summary_recommendation_other_issues_audit_add)
+    Button btnTemplateNextSummaryRecommendationOtherIssuesAuditAdd;
+    @BindView(R.id.btn_template_next_summary_recommendation_other_issues_audit_delete)
+    Button btnTemplateNextSummaryRecommendationOtherIssuesAuditDelete;
+    @BindView(R.id.lv_template_next_summary_recommendation_other_issues_executive)
+    ExpandableHeightListView lvTemplateNextSummaryRecommendationOtherIssuesExecutive;
+    @BindView(R.id.ll_template_next_summary_recommendation_other_issues_executive)
+    LinearLayout llTemplateNextSummaryRecommendationOtherIssuesExecutive;
+    @BindView(R.id.btn_template_next_summary_recommendation_other_issues_executive_add)
+    Button btnTemplateNextSummaryRecommendationOtherIssuesExecutiveAdd;
+    @BindView(R.id.btn_template_next_summary_recommendation_other_issues_executive_delete)
+    Button btnTemplateNextSummaryRecommendationOtherIssuesExecutiveDelete;
 
     Dialog dialogCancelTemplate;
     Dialog dialogSaveDraft;
