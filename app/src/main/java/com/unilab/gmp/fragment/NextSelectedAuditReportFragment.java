@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
@@ -1716,7 +1717,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 "head_lead:" + report.getHead_lead() + "");
 
         apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
-        Call<ModelAuditReportReply> modelAuditReportReplyCall = apiInterface.sendAuditReports(
+        final Call<ModelAuditReportReply> modelAuditReportReplyCall = apiInterface.sendAuditReports(
                 "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839",
                 "postInput",
                 id,//report_id
@@ -1757,21 +1758,25 @@ public class NextSelectedAuditReportFragment extends Fragment {
             @Override
             public void onResponse(Call<ModelAuditReportReply> call, Response<ModelAuditReportReply> response) {
                 modelAuditReportReply = response.body();
-                //Log.e("Result post", modelApproverInfo.getMessage());
-                Log.e("Result post", "hey " + modelAuditReportReply.toString());
-                try {
-                    Log.e("ResultTry", modelAuditReportReply.getMessage() + "");
-                    Log.e("ResultTry", modelAuditReportReply.getKey() + "");
-                    Log.e("ResultTry", modelAuditReportReply.getReport_id() + "");
-                    Log.e("ResultTry2", modelAuditReportReply.toString() + "");
-                } catch (Exception e) {
-                    Log.e("ResultCatch", e.toString() + "");
+                if (modelAuditReportReply.getStatus().equals("failed")) {
+                    Toast.makeText(context, modelAuditReportReply.getMessage(), Toast.LENGTH_SHORT);
+                } else {
+                    //Log.e("Result post", modelApproverInfo.getMessage());
+                    Log.e("Result post", "hey " + modelAuditReportReply.toString());
+                    try {
+                        Log.e("ResultTry", modelAuditReportReply.getMessage() + "");
+                        Log.e("ResultTry", modelAuditReportReply.getKey() + "");
+                        Log.e("ResultTry", modelAuditReportReply.getReport_id() + "");
+                        Log.e("ResultTry2", modelAuditReportReply.toString() + "");
+                    } catch (Exception e) {
+                        Log.e("ResultCatch", e.toString() + "");
+                    }
+                    updateDate(modelAuditReportReply.getReport_id());
+                    report.setReport_id(modelAuditReportReply.getReport_id());
+                    report.setReport_no(modelAuditReportReply.getReport_no());
+                    report.setStatus(modelAuditReportReply.getStatus());
+                    report.save();
                 }
-                updateDate(modelAuditReportReply.getReport_id());
-                report.setReport_id(modelAuditReportReply.getReport_id());
-                report.setReport_no(modelAuditReportReply.getReport_no());
-                report.setStatus(modelAuditReportReply.getStatus());
-                report.save();
             }
 
             @Override
