@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.unilab.gmp.R;
+import com.unilab.gmp.activity.HomeActivity;
 import com.unilab.gmp.utility.Variable;
 
 import butterknife.BindView;
@@ -77,6 +78,7 @@ public class HomeFragment extends Fragment {
         FragmentManager fragmentManager = getFragmentManager();
         switch (view.getId()) {
             case R.id.iv_template:
+                HomeActivity.tvSyncNotifCount.setText("");
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 fragmentManager.beginTransaction()
                         .replace(R.id.fl_content, templateFragment).addToBackStack(null).commit();

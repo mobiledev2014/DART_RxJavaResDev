@@ -1025,11 +1025,15 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     for (ModelReportActivities mra : modelAuditReports.getActivities()) {
                         mra.setReport_id(report_id);
                         mra.setActivity_id(mra.getActivity_id());
+                        if (mra.getSub_activities().size() < 1)
+                            mra.setCheck(true);
                         mra.save();
                         for (ModelReportSubActivities mrsa : mra.getSub_activities()) {
                             mrsa.setReport_id(report_id);
                             mrsa.setActivity_id(mra.getActivity_id());
+                            mrsa.setCheck(true);
                             mrsa.save();
+                            Log.e("APICalls", "Report sub activities : " + mrsa.toString());
                         }
                         Log.e("APICalls", "Report activities : " + mra.toString());
                     }

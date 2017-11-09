@@ -56,7 +56,7 @@ public class AdapterDistributionOthers extends BaseAdapter {
         List<ModelDistribution> distributionList = ModelDistribution.listAll(ModelDistribution.class);
 
         widgets.distributionOther = (EditText) rowView.findViewById(R.id.et_template_next_distribution_other);
-        if (distributionList.size() > 0) {
+        if (distributionList.size() > i) {
             widgets.distributionOther.setText(distributionList.get(z).getDistribution_name());
         }
         widgets.distributionOther.setText(templateModelDistributionOthers.get(i).getDistribution_other());

@@ -77,8 +77,8 @@ public class HomeActivity extends AppCompatActivity {
     TextView tvIndicator;
     @BindView(R.id.ll_online_indicator)
     LinearLayout llOnlineIndicator;
-    @BindView(R.id.tv_sync_notif_count)
-    TextView tvSyncNotifCount;
+    //@BindView(R.id.tv_sync_notif_count)
+    public static TextView tvSyncNotifCount;
 
     CountDownTimer countDownTimer;
 
@@ -94,6 +94,8 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         context = this;
         ButterKnife.bind(this);
+
+        tvSyncNotifCount = (TextView) findViewById(R.id.tv_sync_notif_count);
 
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading please wait...");
@@ -119,8 +121,6 @@ public class HomeActivity extends AppCompatActivity {
         initializeHome();
 
         checkConnectionStatus();
-
-        //tvSyncNotifCount = (TextView) findViewById(R.id.tv_sync_notif_count);
     }
 
     private void checkConnectionStatus() {

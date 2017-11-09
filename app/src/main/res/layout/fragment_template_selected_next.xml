@@ -159,35 +159,6 @@
 
                             </TableLayout> <!--scope of audit-->
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight=".3"
-                                android:gravity="center|end"
-                                android:orientation="horizontal">
-
-                                <Button
-                                    android:id="@+id/btn_template_next_scope_audit_add"
-                                    android:layout_width="110dp"
-                                    android:layout_height="40dp"
-                                    android:layout_margin="3dp"
-                                    android:background="@drawable/template_button_two"
-                                    android:text="Add"
-                                    android:textColor="#fff"
-                                    android:textSize="18sp" />
-
-                                <Button
-                                    android:id="@+id/btn_template_next_scope_audit_delete"
-                                    android:layout_width="110dp"
-                                    android:layout_height="40dp"
-                                    android:layout_margin="3dp"
-                                    android:background="@drawable/template_button_two"
-                                    android:text="Delete"
-                                    android:textColor="#fff"
-                                    android:textSize="18sp" />
-
-                            </LinearLayout><!--buttons-->
-
                             <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
                                 android:id="@+id/lv_template_next_scope_audit"
                                 android:layout_width="match_parent"
@@ -198,17 +169,66 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_weight=".3"
+                                android:gravity="center|end"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/btn_template_next_scope_audit_add"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="45dp"
+                                    android:layout_margin="3dp"
+                                    android:background="@drawable/template_button_two"
+                                    android:paddingLeft="15dp"
+                                    android:paddingRight="15dp"
+                                    android:text="Add TYPE OF AUDIT"
+                                    android:textColor="#fff"
+                                    android:textSize="18sp" />
+
+                                <Button
+                                    android:id="@+id/btn_template_next_scope_audit_delete"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="45dp"
+                                    android:layout_margin="3dp"
+                                    android:background="@drawable/template_button_two"
+                                    android:paddingLeft="15dp"
+                                    android:paddingRight="15dp"
+                                    android:text="Delete"
+                                    android:textColor="#fff"
+                                    android:textSize="18sp" />
+
+                            </LinearLayout><!--buttons-->
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:layout_marginBottom="10dp"
                                 android:gravity="center"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".5"
-                                    android:text="Audited Areas: "
-                                    android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:layout_weight=".5">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center|left"
+                                        android:text="* "
+                                        android:textColor="#de0000"
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:text="Audited Areas: "
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
 
                                 <EditText
                                     android:id="@+id/et_template_next_audited_area"
@@ -233,13 +253,29 @@
                                 android:gravity="center"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".5"
-                                    android:text="Not Audited Areas: "
-                                    android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:layout_weight=".5">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center|left"
+                                        android:text="* "
+                                        android:textColor="#de0000"
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:text="Not Audited Areas: "
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
 
                                 <EditText
                                     android:id="@+id/et_template_next_not_audited_area"
@@ -292,6 +328,13 @@
 
                             </TableLayout> <!--reference-->
 
+                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                android:id="@+id/lv_template_next_reference"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:divider="@color/dividerColor"
+                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -321,13 +364,6 @@
 
                             </LinearLayout><!--buttons-->
 
-                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
-                                android:id="@+id/lv_template_next_reference"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -335,33 +371,50 @@
                                 android:gravity="center|top"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".5"
-                                    android:gravity="center|left"
-                                    android:text="Pre-audit Documents: "
-                                    android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:gravity="center|left">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center|left"
+                                        android:text="* "
+                                        android:textColor="#de0000"
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:gravity="center|left"
+                                        android:text="Pre-audit Documents: "
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".5"
-                                    android:gravity="center|top"
                                     android:orientation="horizontal">
 
                                     <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
                                         android:id="@+id/lv_template_next_pre_audit_doc"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_weight=".7"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                        android:layout_weight=".7"
+                                        android:gravity="center|top"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        android:layout_gravity="bottom"
                                         android:layout_weight=".3"
-                                        android:gravity="center"
                                         android:orientation="horizontal">
 
                                         <Button
@@ -430,13 +483,29 @@
                                 android:gravity="center"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".5"
-                                    android:text="Date of Wrap-up/Close-out Meeting: "
-                                    android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:layout_weight=".5">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center|left"
+                                        android:text="* "
+                                        android:textColor="#de0000"
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:text="Date of Wrap-up/Close-out Meeting: "
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
 
                                 <EditText
                                     android:id="@+id/et_template_next_date_of_wrap_up"
@@ -456,6 +525,14 @@
                                     android:textSize="20sp" />
 
                             </LinearLayout><!--date of wrap up-->
+
+
+                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                android:id="@+id/lv_template_next_present_during_meeting"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:divider="@color/dividerColor"
+                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -485,13 +562,6 @@
                                     android:textSize="18sp" />
 
                             </LinearLayout>
-
-                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
-                                android:id="@+id/lv_template_next_present_during_meeting"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
 
                         </LinearLayout><!--present during close out meeting-->
 
@@ -528,6 +598,13 @@
 
                             </TableLayout> <!--present during inspection-->
 
+                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                android:id="@+id/lv_template_next_personnel_inspection"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:divider="@color/dividerColor"
+                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -557,20 +634,13 @@
 
                             </LinearLayout><!--buttons-->
 
-                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
-                                android:id="@+id/lv_template_next_personnel_inspection"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
-
                         </LinearLayout><!--personnel during inspection-->
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="visible">
+                            android:visibility="visible"><!--visible-->
 
                             <TableLayout
                                 android:layout_width="match_parent"
@@ -605,20 +675,35 @@
                                 android:layout_marginBottom="10dp"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".5"
-                                    android:gravity="top|left"
-                                    android:text="Distribution List: "
-                                    android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:layout_weight=".5">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center|left"
+                                        android:text="* "
+                                        android:textColor="#de0000"
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:gravity="top|left"
+                                        android:text="Distribution List: "
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".5"
-                                    android:gravity="center|top"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
@@ -626,6 +711,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight=".7"
+                                        android:gravity="center|top"
                                         android:orientation="vertical">
 
                                         <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
@@ -639,8 +725,8 @@
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        android:layout_gravity="bottom"
                                         android:layout_weight=".3"
-                                        android:gravity="center|top"
                                         android:orientation="horizontal">
 
                                         <Button
@@ -687,7 +773,6 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".5"
-                                    android:gravity="center|top"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
@@ -695,6 +780,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight=".7"
+                                        android:gravity="center|top"
                                         android:orientation="vertical">
 
                                         <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
@@ -707,8 +793,8 @@
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        android:layout_gravity="bottom"
                                         android:layout_weight=".3"
-                                        android:gravity="center"
                                         android:orientation="horizontal"
                                         android:visibility="visible">
 
@@ -742,7 +828,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="visible">
+                            android:visibility="visible"><!--visible-->
 
                             <TableLayout
                                 android:layout_width="match_parent"
@@ -770,6 +856,13 @@
                                 </TableRow>
 
                             </TableLayout>
+
+                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                android:id="@+id/lv_template_next_summary_recommendation"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:divider="@color/dividerColor"
+                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -800,13 +893,6 @@
 
                             </LinearLayout><!--buttons-->
 
-                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
-                                android:id="@+id/lv_template_next_summary_recommendation"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -827,19 +913,34 @@
                                         android:gravity="center"
                                         android:orientation="horizontal">
 
-                                        <TextView
+                                        <LinearLayout
                                             android:layout_width="0dp"
                                             android:layout_height="wrap_content"
-                                            android:layout_weight=".5"
-                                            android:text="Other Issues (For Audit Report) : "
-                                            android:textSize="20sp"
-                                            android:textStyle="bold" />
+                                            android:layout_weight=".5">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="match_parent"
+                                                android:gravity="center|left"
+                                                android:text="* "
+                                                android:textColor="#de0000"
+                                                android:textSize="20sp"
+                                                android:textStyle="bold" />
+
+                                            <TextView
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight=".5"
+                                                android:text="Other Issues (For Audit Report) : "
+                                                android:textSize="20sp"
+                                                android:textStyle="bold" />
+
+                                        </LinearLayout>
 
                                         <LinearLayout
                                             android:layout_width="0dp"
                                             android:layout_height="wrap_content"
                                             android:layout_weight=".5"
-                                            android:gravity="center|top"
                                             android:orientation="horizontal">
 
                                             <LinearLayout
@@ -847,6 +948,7 @@
                                                 android:layout_width="0dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_weight=".7"
+                                                android:gravity="center|top"
                                                 android:orientation="vertical">
 
                                                 <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
@@ -859,8 +961,8 @@
                                             <LinearLayout
                                                 android:layout_width="0dp"
                                                 android:layout_height="wrap_content"
+                                                android:layout_gravity="bottom"
                                                 android:layout_weight=".3"
-                                                android:gravity="center"
                                                 android:orientation="horizontal"
                                                 android:visibility="visible">
 
@@ -903,19 +1005,34 @@
                                         android:gravity="center"
                                         android:orientation="horizontal">
 
-                                        <TextView
+                                        <LinearLayout
                                             android:layout_width="0dp"
                                             android:layout_height="wrap_content"
-                                            android:layout_weight=".5"
-                                            android:text="Other Issues (For Executive Summary Report) : "
-                                            android:textSize="20sp"
-                                            android:textStyle="bold" />
+                                            android:layout_weight=".5">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="match_parent"
+                                                android:gravity="center|left"
+                                                android:text="* "
+                                                android:textColor="#de0000"
+                                                android:textSize="20sp"
+                                                android:textStyle="bold" />
+
+                                            <TextView
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight=".5"
+                                                android:text="Other Issues (For Executive Summary Report) : "
+                                                android:textSize="20sp"
+                                                android:textStyle="bold" />
+
+                                        </LinearLayout>
 
                                         <LinearLayout
                                             android:layout_width="0dp"
                                             android:layout_height="wrap_content"
                                             android:layout_weight=".5"
-                                            android:gravity="center|top"
                                             android:orientation="horizontal">
 
                                             <LinearLayout
@@ -923,6 +1040,7 @@
                                                 android:layout_width="0dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_weight=".7"
+                                                android:gravity="center|top"
                                                 android:orientation="vertical">
 
                                                 <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
@@ -935,8 +1053,8 @@
                                             <LinearLayout
                                                 android:layout_width="0dp"
                                                 android:layout_height="wrap_content"
+                                                android:layout_gravity="bottom"
                                                 android:layout_weight=".3"
-                                                android:gravity="center"
                                                 android:orientation="horizontal"
                                                 android:visibility="visible">
 
@@ -1178,7 +1296,6 @@
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight=".5"
-                                        android:gravity="center|top"
                                         android:orientation="horizontal">
 
                                         <LinearLayout
@@ -1186,6 +1303,7 @@
                                             android:layout_width="0dp"
                                             android:layout_height="wrap_content"
                                             android:layout_weight=".7"
+                                            android:gravity="center|top"
                                             android:orientation="vertical">
 
                                             <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
@@ -1198,8 +1316,8 @@
                                         <LinearLayout
                                             android:layout_width="0dp"
                                             android:layout_height="wrap_content"
+                                            android:layout_gravity="bottom"
                                             android:layout_weight=".3"
-                                            android:gravity="center"
                                             android:orientation="horizontal">
 
                                             <Button
@@ -1235,20 +1353,35 @@
                                 android:gravity="center|top"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".5"
-                                    android:gravity="center|left"
-                                    android:text="Major change(s) since the previous inspection: "
-                                    android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:layout_weight=".5">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center|left"
+                                        android:text="* "
+                                        android:textColor="#de0000"
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:gravity="center|left"
+                                        android:text="Major change(s) since the previous inspection: "
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".5"
-                                    android:gravity="center|top"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
@@ -1256,6 +1389,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight=".7"
+                                        android:gravity="center|top"
                                         android:orientation="vertical">
 
                                         <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
@@ -1268,8 +1402,8 @@
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        android:layout_gravity="bottom"
                                         android:layout_weight=".3"
-                                        android:gravity="center"
                                         android:orientation="horizontal">
 
                                         <Button
@@ -1338,13 +1472,29 @@
                                 android:gravity="center|top"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".5"
-                                    android:text="Name of Lead Auditor: "
-                                    android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:layout_weight=".5">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center|left"
+                                        android:text="* "
+                                        android:textColor="#de0000"
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:text="Name of Lead Auditor: "
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -1425,6 +1575,13 @@
 
                             </LinearLayout><!--auditor lead department-->
 
+                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                android:id="@+id/lv_template_next_auditors"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:divider="@color/dividerColor"
+                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1453,13 +1610,6 @@
                                     android:textSize="18sp" />
 
                             </LinearLayout><!--buttons-->
-
-                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
-                                android:id="@+id/lv_template_next_auditors"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
 
                         </LinearLayout><!--auditors-->
 
@@ -1526,13 +1676,29 @@
                                 android:gravity="center|top"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".5"
-                                    android:text="Name of Reviewer: "
-                                    android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:layout_weight=".5">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center|left"
+                                        android:text="* "
+                                        android:textColor="#de0000"
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:text="Name of Reviewer: "
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -1655,13 +1821,29 @@
                                 android:gravity="center|top"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".5"
-                                    android:text="Name of Approver: "
-                                    android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:layout_weight=".5">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center|left"
+                                        android:text="* "
+                                        android:textColor="#de0000"
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:text="Name of Approver: "
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="0dp"
@@ -1784,20 +1966,35 @@
                                 android:gravity="center|top"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".5"
-                                    android:gravity="center|left"
-                                    android:text="Name of Translator: "
-                                    android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:layout_weight=".5">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center|left"
+                                        android:text="* "
+                                        android:textColor="#de0000"
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:gravity="center|left"
+                                        android:text="Name of Translator: "
+                                        android:textSize="20sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".5"
-                                    android:gravity="center|top"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
@@ -1805,6 +2002,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight=".7"
+                                        android:gravity="center|top"
                                         android:orientation="vertical">
 
                                         <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
@@ -1818,7 +2016,7 @@
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight=".3"
-                                        android:gravity="center"
+                                        android:layout_gravity="bottom"
                                         android:orientation="horizontal">
 
                                         <Button
@@ -1860,49 +2058,85 @@
                 android:layout_weight=".05"
                 android:gravity="center|end">
 
-                <Button
-                    android:id="@+id/btn_cancel"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/cancel_button"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:text="Cancel"
-                    android:textColor="#fff" />
+                    android:layout_weight=".4"
+                    android:gravity="center|left"
+                    android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btn_prev"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/draft_button"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:text="Back"
-                    android:textColor="#fff" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="3dp"
+                        android:gravity="center"
+                        android:text="*"
+                        android:textColor="#de0000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/btn_save_draft"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/draft_button"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:text="Save as Draft"
-                    android:textColor="#fff" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Required fields."
+                        android:textSize="18sp" />
 
-                <Button
-                    android:id="@+id/btn_submit"
-                    android:layout_width="wrap_content"
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/submit_button"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:text="Submit"
-                    android:textColor="#fff" />
+                    android:layout_weight=".6"
+                    android:gravity="center|end"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/cancel_button"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="Cancel"
+                        android:textColor="#fff" />
+
+                    <Button
+                        android:id="@+id/btn_prev"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/draft_button"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="Back"
+                        android:textColor="#fff" />
+
+                    <Button
+                        android:id="@+id/btn_save_draft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/draft_button"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="Save as Draft"
+                        android:textColor="#fff" />
+
+                    <Button
+                        android:id="@+id/btn_submit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/submit_button"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="Next"
+                        android:textColor="#fff" />
+
+                </LinearLayout>
 
             </LinearLayout><!--footer buttons-->
 

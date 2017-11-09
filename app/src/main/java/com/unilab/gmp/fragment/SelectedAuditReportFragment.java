@@ -235,6 +235,9 @@ public class SelectedAuditReportFragment extends Fragment {
     }
 
     private void setText() {
+        Log.i("R E P O R T - N O", modelAuditReports.getReport_no());
+        tvTemplateGmpNum.setText(modelAuditReports.getReport_no());
+
         List<ModelCompany> list = ModelCompany.find(ModelCompany.class, "companyid = ?", modelAuditReports.getCompany_id());
         if (list.size() > 0) {
             Log.e("setText", "111");

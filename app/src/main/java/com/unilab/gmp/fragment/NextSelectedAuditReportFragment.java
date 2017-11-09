@@ -1127,6 +1127,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         if (10 > templateModelDistributionOthers.size()) {
             TemplateModelDistributionOthers t = new TemplateModelDistributionOthers();
             t.setTemplate_id(report.getTemplate_id());
+            t.setDistribution_other("");
             templateModelDistributionOthers.add(t);
             adapterDistributionOthers.notifyDataSetChanged();
         } else
