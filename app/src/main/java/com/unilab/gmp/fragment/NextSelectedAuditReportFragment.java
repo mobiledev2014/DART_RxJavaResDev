@@ -1692,7 +1692,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         for (TemplateModelOtherIssuesAudit t : issueList) {
             issue += "{\"" + t.getOther_issues_audit() + "\"}";
             if (++counter != issueList.size()) {
-                translators += ",";
+                issue += ",";
             }
         }
 
@@ -1702,7 +1702,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         for (TemplateModelOtherIssuesExecutive t : issuexList) {
             issuex += "{\"" + t.getOther_issues_executive() + "\"}";
             if (++counter != issuexList.size()) {
-                translators += ",";
+                issuex += ",";
             }
         }
 

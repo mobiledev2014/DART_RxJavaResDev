@@ -114,6 +114,5 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
 
     public class Widgets {
         EditText otherIssueAudit;
-
     }
 }

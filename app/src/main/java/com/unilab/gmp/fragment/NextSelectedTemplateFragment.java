@@ -26,7 +26,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
@@ -1000,6 +999,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             adapterOthersIssueAudit.notifyDataSetChanged();
         }
     }
+
     private void addOtherIssuesExecutive() {
         if (4 > templateModelOtherIssuesExecutives.size()) {
             TemplateModelOtherIssuesExecutive t = new TemplateModelOtherIssuesExecutive();
@@ -1008,6 +1008,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             adapterOthersIssueExecutive.notifyDataSetChanged();
         }
     }
+
     private void addScopeAuditType() {
         //if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
         if (10 > templateModelScopeAudits.size()) {
@@ -1460,7 +1461,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         for (TemplateModelOtherIssuesAudit t : issueList) {
             issue += "{\"" + t.getOther_issues_audit() + "\"}";
             if (++counter != issueList.size()) {
-                translators += ",";
+                issue += ",";
             }
         }
 
@@ -1470,7 +1471,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         for (TemplateModelOtherIssuesExecutive t : issuexList) {
             issuex += "{\"" + t.getOther_issues_executive() + "\"}";
             if (++counter != issuexList.size()) {
-                translators += ",";
+                issuex += ",";
             }
         }
 
