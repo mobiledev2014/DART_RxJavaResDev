@@ -3,6 +3,7 @@ package com.unilab.gmp.adapter.templates;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelDistribution;
+import com.unilab.gmp.model.TemplateModelCompanyBackgroundMajorChanges;
 import com.unilab.gmp.model.TemplateModelDistributionOthers;
 import com.unilab.gmp.model.TemplateModelOtherIssuesExecutive;
 
@@ -24,6 +26,7 @@ public class AdapterOthersIssueExecutive extends BaseAdapter {
     LayoutInflater inflater;
     Context context;
     List<TemplateModelOtherIssuesExecutive> templateModelOtherIssuesExecutives;
+    boolean isCheck = true;
 
     public AdapterOthersIssueExecutive(List<TemplateModelOtherIssuesExecutive> templateModelOtherIssuesExecutives, Context context) {
         this.templateModelOtherIssuesExecutives = templateModelOtherIssuesExecutives;
@@ -79,7 +82,28 @@ public class AdapterOthersIssueExecutive extends BaseAdapter {
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
 //        }
+        if (!isCheck) {
+            if (templateModelOtherIssuesExecutives.get(i).getOther_issues_executive().isEmpty()) {
+                widgets.otherIssueExecutive.setError("This field is required");
+            }
+        }
         return rowView;
+    }
+
+    public boolean check() {
+        isCheck = true;
+        Log.e("getWidgets", "getWidgets1");
+        for (TemplateModelOtherIssuesExecutive tmsa : templateModelOtherIssuesExecutives) {
+            Log.e("getWidgets", "getWidgets2");
+            if (tmsa.getOther_issues_executive().isEmpty()) {
+                isCheck = false;
+                break;
+            }
+        }
+        if (!isCheck) {
+            notifyDataSetChanged();
+        }
+        return isCheck;
     }
 
     public void save(String report_id) {

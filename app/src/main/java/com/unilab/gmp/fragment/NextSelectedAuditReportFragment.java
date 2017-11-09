@@ -1353,8 +1353,16 @@ public class NextSelectedAuditReportFragment extends Fragment {
         if (!adapterTranslator.check()) {
             passed = false;
         }
+        if (!adapterOthersIssueAudit.check()) {
+            passed = false;
+        }
+        if (!adapterOthersIssueExecutive.check()) {
+            passed = false;
+        }
 
         if (!passed)
+            return passed;
+        if (passed)
             return passed;
 
         if (templateModelScopeAudits.get(0).getScope_name().isEmpty() || templateModelScopeAudits.get(0).getScope_detail().isEmpty()) {
@@ -1692,7 +1700,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         String issuex = "";
         List<TemplateModelOtherIssuesExecutive> issuexList = TemplateModelOtherIssuesExecutive.find(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
         for (TemplateModelOtherIssuesExecutive t : issuexList) {
-            issue += "{\"" + t.getOther_issues_executive() + "\"}";
+            issuex += "{\"" + t.getOther_issues_executive() + "\"}";
             if (++counter != issuexList.size()) {
                 translators += ",";
             }

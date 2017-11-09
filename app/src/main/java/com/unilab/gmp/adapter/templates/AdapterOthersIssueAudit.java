@@ -3,6 +3,7 @@ package com.unilab.gmp.adapter.templates;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelDistribution;
 import com.unilab.gmp.model.TemplateModelDistributionOthers;
 import com.unilab.gmp.model.TemplateModelOtherIssuesAudit;
+import com.unilab.gmp.model.TemplateModelOtherIssuesExecutive;
 
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
     LayoutInflater inflater;
     Context context;
     List<TemplateModelOtherIssuesAudit> templateModelOtherIssuesAudits;
+    boolean isCheck = true;
 
     public AdapterOthersIssueAudit(List<TemplateModelOtherIssuesAudit> templateModelOtherIssuesAudits, Context context) {
         this.templateModelOtherIssuesAudits = templateModelOtherIssuesAudits;
@@ -78,9 +81,29 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
 //        }
+        if (!isCheck) {
+            if (templateModelOtherIssuesAudits.get(i).getOther_issues_audit().isEmpty()) {
+                widgets.otherIssueAudit.setError("This field is required");
+            }
+        }
         return rowView;
     }
 
+    public boolean check() {
+        isCheck = true;
+        Log.e("getWidgets", "getWidgets1");
+        for (TemplateModelOtherIssuesAudit tmsa : templateModelOtherIssuesAudits) {
+            Log.e("getWidgets", "getWidgets2");
+            if (tmsa.getOther_issues_audit().isEmpty()) {
+                isCheck = false;
+                break;
+            }
+        }
+        if (!isCheck) {
+            notifyDataSetChanged();
+        }
+        return isCheck;
+    }
     public void save(String report_id) {
         TemplateModelOtherIssuesAudit.deleteAll(TemplateModelOtherIssuesAudit.class, "reportid = ?", report_id);
         for (TemplateModelOtherIssuesAudit t : templateModelOtherIssuesAudits) {

@@ -1211,8 +1211,16 @@ public class NextSelectedTemplateFragment extends Fragment {
         if (!adapterTranslator.check()) {
             passed = false;
         }
+        if (!adapterOthersIssueAudit.check()) {
+            passed = false;
+        }
+        if (!adapterOthersIssueExecutive.check()) {
+            passed = false;
+        }
 
         if (!passed)
+            return passed;
+        if (passed)
             return passed;
 
         if (templateModelScopeAudits.get(0).getScope_name().isEmpty() || templateModelScopeAudits.get(0).getScope_detail().isEmpty()) {
