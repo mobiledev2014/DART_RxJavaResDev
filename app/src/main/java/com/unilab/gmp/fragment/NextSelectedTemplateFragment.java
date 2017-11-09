@@ -1468,7 +1468,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         String issuex = "";
         List<TemplateModelOtherIssuesExecutive> issuexList = TemplateModelOtherIssuesExecutive.find(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
         for (TemplateModelOtherIssuesExecutive t : issuexList) {
-            issue += "{\"" + t.getOther_issues_executive() + "\"}";
+            issuex += "{\"" + t.getOther_issues_executive() + "\"}";
             if (++counter != issuexList.size()) {
                 translators += ",";
             }

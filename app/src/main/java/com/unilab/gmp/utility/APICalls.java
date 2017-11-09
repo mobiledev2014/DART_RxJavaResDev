@@ -1462,7 +1462,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             }
 
             if (found) {
-                Log.i("ARGULOOP", "UPDATE");
+                Log.i("ARGULOOP", "UPDATE : "+ date);
                 if (!date.equals(modelAuditReports.getModified_date()))
                     updateAuditReport(modelAuditReports);
 //                    auditorsAdapter.notifyDataSetChanged();
