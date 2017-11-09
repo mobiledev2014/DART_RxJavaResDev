@@ -321,7 +321,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
     SelectedAuditReportFragment selectedAuditReportFragment;
     View rootView;
     Dialog dialogDeleteDateOfAudit;
-    int distributionDelete = 0, translatorDelete = 1,preAuditDocDelete = 2;
+    int simpleMessageDialog = -2,distributionDelete = 0, translatorDelete = 1,preAuditDocDelete = 2 , distributionOthersDelete = 3;
+    boolean dialogDeleteIsShowing = false;
 
     public NextSelectedAuditReportFragment(ModelTemplates modelTemplates, ModelAuditReports report,
                                            TemplateElementAdapter templateElementAdapter, SelectedAuditReportFragment selectedAuditReportFragment) {
@@ -851,6 +852,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
                     templateModelPresentDuringMeetings.remove(templateModelPresentDuringMeetings.size() - 1);
                     adapterPresentDuringMeeting.notifyDataSetChanged();
                 }
+                else
+                {
+                    templateModelPresentDuringMeetings.get(0).setName("");
+                    templateModelPresentDuringMeetings.get(0).setPosition("");
+                    adapterPresentDuringMeeting.notifyDataSetChanged();
+                }
                 break;
             case R.id.btn_template_next_personnel_inspection_add:
                 addPersonelMet();
@@ -874,7 +881,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 break;
             case R.id.btn_template_next_other_distribution_delete:
                 if (templateModelDistributionOthers.size() > 1) {
-                    templateModelDistributionOthers.remove(templateModelDistributionOthers.size() - 1);
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", distributionOthersDelete);
+                }
+                else
+                {
+                    templateModelDistributionOthers.get(0).setDistribution_other("");
                     adapterDistributionOthers.notifyDataSetChanged();
                 }
                 break;
@@ -1072,7 +1083,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             TemplateModelReference t = new TemplateModelReference();
             templateModelReferences.add(t);
             adapterReference.notifyDataSetChanged();
-        }
+        } else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 20",-1);
     }
 
     private void addPreAuditDoc() {
@@ -1080,7 +1092,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             TemplateModelPreAuditDoc t = new TemplateModelPreAuditDoc();
             templateModelPreAuditDocs.add(t);
             adapterPreAuditDoc.notifyDataSetChanged();
-        }
+        } else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 20",-1);
     }
 
     private void addPresentDuringMeeting() {
@@ -1088,7 +1101,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             TemplateModelPresentDuringMeeting t = new TemplateModelPresentDuringMeeting();
             templateModelPresentDuringMeetings.add(t);
             adapterPresentDuringMeeting.notifyDataSetChanged();
-        }
+        } else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 30",-1);
     }
 
     private void addPersonelMet() {
@@ -1096,7 +1110,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             TemplateModelPersonelMetDuring t = new TemplateModelPersonelMetDuring();
             templateModelPersonelMetDurings.add(t);
             adapterPersonelMetDuring.notifyDataSetChanged();
-        }
+        } else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 30",-1);
     }
 
     private void addDistribution() {
@@ -1104,7 +1119,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             TemplateModelDistributionList t = new TemplateModelDistributionList();
             templateModelDistributionLists.add(t);
             adapterDistributionList.notifyDataSetChanged();
-        }
+        } else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",-1);
     }
 
     private void addDistributionOthers() {
@@ -1113,7 +1129,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             t.setTemplate_id(report.getTemplate_id());
             templateModelDistributionOthers.add(t);
             adapterDistributionOthers.notifyDataSetChanged();
-        }
+        } else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",-1);
     }
 
     private void addRecommendation() {
@@ -1929,6 +1946,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
 
     public void dialogDeleteFromListConfirmation(String mess, final int list) {
+        if (!dialogDeleteIsShowing){
         dialogDeleteDateOfAudit = new Dialog(context);
         dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -1959,6 +1977,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
                     templateModelPreAuditDocs.remove(templateModelPreAuditDocs.size() - 1);
                     adapterPreAuditDoc.notifyDataSetChanged();
                 }
+
+                if (list == distributionOthersDelete)
+                {
+                    templateModelDistributionOthers.remove(templateModelDistributionOthers.size() - 1);
+                    adapterDistributionOthers.notifyDataSetChanged();
+                }
+
+                dialogDeleteIsShowing = false;
                 dialogDeleteDateOfAudit.dismiss();
             }
         });
@@ -1966,12 +1992,16 @@ public class NextSelectedAuditReportFragment extends Fragment {
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialogDeleteIsShowing = false;
                 dialogDeleteDateOfAudit.dismiss();
             }
         });
 
 
+            dialogDeleteIsShowing = true;
         dialogDeleteDateOfAudit.show();
+        }
+
     }
 
 }

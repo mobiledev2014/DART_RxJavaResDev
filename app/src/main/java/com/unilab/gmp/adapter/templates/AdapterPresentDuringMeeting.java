@@ -127,6 +127,8 @@ public class AdapterPresentDuringMeeting extends BaseAdapter {
     public void save(String report_id){
         TemplateModelPresentDuringMeeting.deleteAll(TemplateModelPresentDuringMeeting.class,"reportid = ?", report_id);
         for (TemplateModelPresentDuringMeeting t : templateModelPresentDuringMeetings) {
+            if (t.getName().isEmpty()&&t.getPosition().isEmpty())
+                continue;
             t.setReport_id(report_id);
             t.save();
         }

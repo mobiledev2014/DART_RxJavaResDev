@@ -304,7 +304,8 @@ public class NextSelectedTemplateFragment extends Fragment {
     View rootView;
 
     Dialog dialogDeleteDateOfAudit;
-    int distributionDelete = 0, translatorDelete = 1,preAuditDocDelete = 2;
+    boolean dialogDeleteIsShowing = false;
+    int simpleMessageDialog = -2,distributionDelete = 0, translatorDelete = 1,preAuditDocDelete = 2 , distributionOthersDelete = 3;
 
     public NextSelectedTemplateFragment(ModelTemplates modelTemplates, TemplateElementAdapter templateElementAdapter, SelectedTemplateFragment selectedTemplateFragment) {
         this.modelTemplates = modelTemplates;
@@ -775,6 +776,12 @@ public class NextSelectedTemplateFragment extends Fragment {
                     templateModelPresentDuringMeetings.remove(templateModelPresentDuringMeetings.size() - 1);
                     adapterPresentDuringMeeting.notifyDataSetChanged();
                 }
+                else
+                {
+                    templateModelPresentDuringMeetings.get(0).setName("");
+                    templateModelPresentDuringMeetings.get(0).setPosition("");
+                    adapterPresentDuringMeeting.notifyDataSetChanged();
+                }
                 break;
             case R.id.btn_template_next_personnel_inspection_add:
                 addPersonelMet();
@@ -798,7 +805,11 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_other_distribution_delete:
                 if (templateModelDistributionOthers.size() > 1) {
-                    templateModelDistributionOthers.remove(templateModelDistributionOthers.size() - 1);
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", distributionOthersDelete);
+                }
+                else
+                {
+                    templateModelDistributionOthers.get(0).setDistribution_other("");
                     adapterDistributionOthers.notifyDataSetChanged();
                 }
                 break;
@@ -1020,6 +1031,8 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelScopeAudits.add(t);
             adapterScopeAudit.notifyDataSetChanged();
         }
+        else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",-1);
     }
 
 //    private void addScopeAuditTypeInterest() {
@@ -1037,7 +1050,8 @@ public class NextSelectedTemplateFragment extends Fragment {
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelReferences.add(t);
             adapterReference.notifyDataSetChanged();
-        }
+        } else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 20",-1);
     }
 
     private void addPreAuditDoc() {
@@ -1046,7 +1060,8 @@ public class NextSelectedTemplateFragment extends Fragment {
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelPreAuditDocs.add(t);
             adapterPreAuditDoc.notifyDataSetChanged();
-        }
+        } else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 20",-1);
     }
 
     private void addPresentDuringMeeting() {
@@ -1056,6 +1071,8 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelPresentDuringMeetings.add(t);
             adapterPresentDuringMeeting.notifyDataSetChanged();
         }
+        else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 30",-1);
     }
 
     private void addPersonelMet() {
@@ -1064,7 +1081,8 @@ public class NextSelectedTemplateFragment extends Fragment {
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelPersonelMetDurings.add(t);
             adapterPersonelMetDuring.notifyDataSetChanged();
-        }
+        }else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 30",-1);
     }
 
     private void addDistribution() {
@@ -1074,7 +1092,8 @@ public class NextSelectedTemplateFragment extends Fragment {
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelDistributionLists.add(t);
             adapterDistributionList.notifyDataSetChanged();
-        }
+        }else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",-1);
     }
 
     private void addDistributionOthers() {
@@ -1083,7 +1102,8 @@ public class NextSelectedTemplateFragment extends Fragment {
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelDistributionOthers.add(t);
             adapterDistributionOthers.notifyDataSetChanged();
-        }
+        }else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",-1);
     }
 
     private void addRecommendation() {
@@ -1798,49 +1818,58 @@ public class NextSelectedTemplateFragment extends Fragment {
 
 
     public void dialogDeleteFromListConfirmation(String mess, final int list) {
-        dialogDeleteDateOfAudit = new Dialog(context);
-        dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogDeleteDateOfAudit.setCancelable(false);
-        dialogDeleteDateOfAudit.setContentView(R.layout.dialog_exit_confirmation);
-        dialogDeleteDateOfAudit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if (!dialogDeleteIsShowing) {
+            dialogDeleteDateOfAudit = new Dialog(context);
+            dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogDeleteDateOfAudit.setCancelable(false);
+            dialogDeleteDateOfAudit.setContentView(R.layout.dialog_exit_confirmation);
+            dialogDeleteDateOfAudit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        TextView msg = (TextView) dialogDeleteDateOfAudit.findViewById(R.id.tv_message);
-        Button yes = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_yes);
-        Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
+            TextView msg = (TextView) dialogDeleteDateOfAudit.findViewById(R.id.tv_message);
+            Button yes = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_yes);
+            Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
 
-        msg.setText(mess);
+            msg.setText(mess);
 
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (list == distributionDelete) {
-                    templateModelDistributionLists.remove(templateModelDistributionLists.size() - 1);
-                    adapterDistributionList.notifyDataSetChanged();
+            yes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (list == distributionDelete) {
+                        templateModelDistributionLists.remove(templateModelDistributionLists.size() - 1);
+                        adapterDistributionList.notifyDataSetChanged();
+                    }
+                    if (list == translatorDelete) {
+                        templateModelTranslators.remove(templateModelTranslators.size() - 1);
+                        adapterTranslator.notifyDataSetChanged();
+                    }
+
+                    if (list == preAuditDocDelete) {
+                        templateModelPreAuditDocs.remove(templateModelPreAuditDocs.size() - 1);
+                        adapterPreAuditDoc.notifyDataSetChanged();
+                    }
+
+                    if (list == distributionOthersDelete)
+                    {
+                        templateModelDistributionOthers.remove(templateModelDistributionOthers.size() - 1);
+                        adapterDistributionOthers.notifyDataSetChanged();
+                    }
+                    dialogDeleteIsShowing = false;
+                    dialogDeleteDateOfAudit.dismiss();
                 }
-                if (list == translatorDelete) {
-                    templateModelTranslators.remove(templateModelTranslators.size() - 1);
-                    adapterTranslator.notifyDataSetChanged();
+            });
+
+            no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogDeleteIsShowing = false;
+                    dialogDeleteDateOfAudit.dismiss();
                 }
+            });
 
-                if (list == preAuditDocDelete)
-                {
-                    templateModelPreAuditDocs.remove(templateModelPreAuditDocs.size() - 1);
-                    adapterPreAuditDoc.notifyDataSetChanged();
-                }
-                dialogDeleteDateOfAudit.dismiss();
-            }
-        });
-
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogDeleteDateOfAudit.dismiss();
-            }
-        });
-
-
-        dialogDeleteDateOfAudit.show();
+            dialogDeleteIsShowing = true;
+            dialogDeleteDateOfAudit.show();
+        }
     }
 
 }
