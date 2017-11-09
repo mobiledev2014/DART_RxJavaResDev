@@ -40,7 +40,7 @@ public class ModelAuditReports extends SugarRecord {
 
     ArrayList<TemplateModelTranslator> translators;
     String create_date;
-    String modified_date;
+    String modified_date = "";
 
     String status = "0";
     String version = "0";
