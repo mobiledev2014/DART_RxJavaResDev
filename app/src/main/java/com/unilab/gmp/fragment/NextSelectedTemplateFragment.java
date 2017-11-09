@@ -986,6 +986,8 @@ public class NextSelectedTemplateFragment extends Fragment {
         adapterDistributionOthers.save(report_id);
 
         adapterSummaryRecommendation.save(report_id);//(y)
+        adapterOthersIssueAudit.save(report_id);
+        adapterOthersIssueExecutive.save(report_id);
 
         mar.save();
         report = mar;
