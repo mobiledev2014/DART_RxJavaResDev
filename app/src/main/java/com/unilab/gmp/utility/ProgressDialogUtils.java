@@ -17,8 +17,8 @@ public class ProgressDialogUtils {
             if (mProgressDialog == null) {
                 mProgressDialog = new ProgressDialog(context);
 //                mProgressDialog = ProgressDialog.show(context, title, msg);
-                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                mProgressDialog.setProgress(progress);
+//                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//                mProgressDialog.setProgress(progress);
                 mProgressDialog.setMessage(msg);
                 mProgressDialog.setCancelable(isCancelable);
                 mProgressDialog.show();

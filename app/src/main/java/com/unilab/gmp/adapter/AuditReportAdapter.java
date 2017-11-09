@@ -1,6 +1,7 @@
 package com.unilab.gmp.adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -13,9 +14,11 @@ import android.widget.TextView;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.fragment.SelectedAuditReportFragment;
+import com.unilab.gmp.fragment.SelectedTemplateFragment;
 import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.ModelAuditReports;
 import com.unilab.gmp.model.ModelCompany;
+import com.unilab.gmp.utility.ProgressDialogUtils;
 import com.unilab.gmp.utility.Utils;
 
 import java.util.List;
@@ -91,11 +94,22 @@ public class AuditReportAdapter extends BaseAdapter {
                     Utils.pdfIfExist(modelAuditReports.get(i).getReport_id(), context);
                 } else {
                     //Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
-                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fl_content, new SelectedAuditReportFragment(modelAuditReports.get(z))).addToBackStack(null).commit();
-                }
+                    ProgressDialogUtils.showSimpleProgressDialog(context,50,"Loading . . .",false);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            fragmentManager.beginTransaction()
+                                    .replace(R.id.fl_content, new SelectedAuditReportFragment(modelAuditReports.get(z))).addToBackStack(null).commit();
+                            //Toast.makeText(context, "Use this template", Toast.LENGTH_SHORT).show();
+
+                            ProgressDialogUtils.removeSimpleProgressDialog();
+                        }
+                    }, 700);
+                    }
             }
         });
 

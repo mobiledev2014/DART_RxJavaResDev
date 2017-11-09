@@ -104,6 +104,8 @@ public class AdapterPreAuditDoc extends BaseAdapter {
     public void save(String report_id) {
         TemplateModelPreAuditDoc.deleteAll(TemplateModelPreAuditDoc.class, "reportid = ?", report_id);
         for (TemplateModelPreAuditDoc t : templateModelPreAuditDocs) {
+            if (t.getPreaudit().isEmpty())
+                continue;
             t.setReport_id(report_id);
             t.save();
         }

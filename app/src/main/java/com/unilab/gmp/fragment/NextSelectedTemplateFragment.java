@@ -304,7 +304,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     View rootView;
 
     Dialog dialogDeleteDateOfAudit;
-    int distributionDelete = 0, translatorDelete = 1;
+    int distributionDelete = 0, translatorDelete = 1,preAuditDocDelete = 2;
 
     public NextSelectedTemplateFragment(ModelTemplates modelTemplates, TemplateElementAdapter templateElementAdapter, SelectedTemplateFragment selectedTemplateFragment) {
         this.modelTemplates = modelTemplates;
@@ -764,8 +764,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_pre_audit_doc_delete:
                 if (templateModelPreAuditDocs.size() > 1) {
-                    templateModelPreAuditDocs.remove(templateModelPreAuditDocs.size() - 1);
-                    adapterPreAuditDoc.notifyDataSetChanged();
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", preAuditDocDelete);
                 }
                 break;
             case R.id.btn_template_next_present_close_up_add:
@@ -1822,6 +1821,12 @@ public class NextSelectedTemplateFragment extends Fragment {
                 if (list == translatorDelete) {
                     templateModelTranslators.remove(templateModelTranslators.size() - 1);
                     adapterTranslator.notifyDataSetChanged();
+                }
+
+                if (list == preAuditDocDelete)
+                {
+                    templateModelPreAuditDocs.remove(templateModelPreAuditDocs.size() - 1);
+                    adapterPreAuditDoc.notifyDataSetChanged();
                 }
                 dialogDeleteDateOfAudit.dismiss();
             }

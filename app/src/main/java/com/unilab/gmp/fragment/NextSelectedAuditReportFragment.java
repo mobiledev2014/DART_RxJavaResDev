@@ -321,7 +321,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     SelectedAuditReportFragment selectedAuditReportFragment;
     View rootView;
     Dialog dialogDeleteDateOfAudit;
-    int distributionDelete = 0, translatorDelete = 1;
+    int distributionDelete = 0, translatorDelete = 1,preAuditDocDelete = 2;
 
     public NextSelectedAuditReportFragment(ModelTemplates modelTemplates, ModelAuditReports report,
                                            TemplateElementAdapter templateElementAdapter, SelectedAuditReportFragment selectedAuditReportFragment) {
@@ -840,8 +840,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 break;
             case R.id.btn_template_next_pre_audit_doc_delete:
                 if (templateModelPreAuditDocs.size() > 1) {
-                    templateModelPreAuditDocs.remove(templateModelPreAuditDocs.size() - 1);
-                    adapterPreAuditDoc.notifyDataSetChanged();
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", preAuditDocDelete);
                 }
                 break;
             case R.id.btn_template_next_present_close_up_add:
@@ -1953,6 +1952,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 if (list == translatorDelete) {
                     templateModelTranslators.remove(templateModelTranslators.size() - 1);
                     adapterTranslator.notifyDataSetChanged();
+                }
+
+                if (list == preAuditDocDelete)
+                {
+                    templateModelPreAuditDocs.remove(templateModelPreAuditDocs.size() - 1);
+                    adapterPreAuditDoc.notifyDataSetChanged();
                 }
                 dialogDeleteDateOfAudit.dismiss();
             }

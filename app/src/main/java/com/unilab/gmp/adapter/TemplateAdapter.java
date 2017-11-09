@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.unilab.gmp.R;
 import com.unilab.gmp.fragment.SelectedTemplateFragment;
 import com.unilab.gmp.model.ModelTemplates;
+import com.unilab.gmp.utility.ProgressDialogUtils;
 
 import java.util.List;
 
@@ -85,13 +87,22 @@ public class TemplateAdapter extends BaseAdapter {
             widgets.useTemplate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fl_content, new SelectedTemplateFragment(template)).addToBackStack(null).commit();
-                    //Toast.makeText(context, "Use this template", Toast.LENGTH_SHORT).show();
-                    template.setStatus("2");
-                    template.save();
+                    ProgressDialogUtils.showSimpleProgressDialog(context,50,"Loading . . .",false);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            fragmentManager.beginTransaction()
+                                    .replace(R.id.fl_content, new SelectedTemplateFragment(template)).addToBackStack(null).commit();
+                            //Toast.makeText(context, "Use this template", Toast.LENGTH_SHORT).show();
+                            template.setStatus("2");
+                            template.save();
+                            ProgressDialogUtils.removeSimpleProgressDialog();
+                        }
+                    }, 700);
                 }
             });
 
