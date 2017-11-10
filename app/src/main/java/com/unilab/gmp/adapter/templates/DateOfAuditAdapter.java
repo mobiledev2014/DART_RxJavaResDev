@@ -51,6 +51,8 @@ public class DateOfAuditAdapter extends BaseAdapter {
     public void save(String report_id) {
         ModelDateOfAudit.deleteAll(ModelDateOfAudit.class,"reportid = ?", report_id);
         for (ModelDateOfAudit t : datesOfAudit) {
+            if (t.getDateOfAudit().isEmpty())
+                continue;
             t.setReport_id(report_id);
             t.save();
         }

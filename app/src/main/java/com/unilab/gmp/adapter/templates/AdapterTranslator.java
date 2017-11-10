@@ -107,6 +107,8 @@ public class AdapterTranslator extends BaseAdapter {
         TemplateModelTranslator.deleteAll(TemplateModelTranslator.class, "reportid = ?", report_id);
         int counter = 1;
         for (TemplateModelTranslator t : templateModelTranslators) {
+            if (t.getTranslator().isEmpty())
+                continue;
             t.setReport_id(report_id);
             t.save();
             translator += t.getTranslator();

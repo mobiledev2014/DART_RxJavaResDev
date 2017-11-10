@@ -109,6 +109,8 @@ public class AdapterOthersIssueExecutive extends BaseAdapter {
     public void save(String report_id) {
         TemplateModelOtherIssuesExecutive.deleteAll(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report_id);
         for (TemplateModelOtherIssuesExecutive t : templateModelOtherIssuesExecutives) {
+            if (t.getOther_issues_executive().isEmpty())
+                continue;
             t.setReport_id(report_id);
             t.save();
         }

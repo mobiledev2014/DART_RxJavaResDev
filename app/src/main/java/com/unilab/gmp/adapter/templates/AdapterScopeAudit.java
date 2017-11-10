@@ -50,10 +50,11 @@ public class AdapterScopeAudit extends BaseAdapter {
     List<String> idList;
     boolean isCheck = true;
     Dialog dialogDeleteDateOfAudit;
+    Button btn_add;
 
     public AdapterScopeAudit(List<TemplateModelScopeAudit> templateModelScopeAudit, Context context
             , String company_id, NextSelectedTemplateFragment nextSelectedTemplateFragment,
-                             NextSelectedAuditReportFragment nextSelectedAuditReportFragment) {
+                             NextSelectedAuditReportFragment nextSelectedAuditReportFragment, Button btn_add) {
         this.templateModelScopeAudit = templateModelScopeAudit;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -63,6 +64,7 @@ public class AdapterScopeAudit extends BaseAdapter {
         this.nextSelectedTemplateFragment = nextSelectedTemplateFragment;
         Log.e("AdapterScope", getCount() + " count");
         templateModelScopeAuditInterests = new ArrayList<>();
+        this.btn_add = btn_add;
 
         List<String> list = new ArrayList<>();
         idList = new ArrayList<>();
@@ -192,6 +194,13 @@ public class AdapterScopeAudit extends BaseAdapter {
                 widgets.remarks.setError("This field is required");
             }
         }
+//        widgets.remarks.requestFocus();
+//        btn_add.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                widgets.remarks.requestFocus();
+//            }
+//        });
         return rowView;
     }
 
@@ -254,6 +263,8 @@ public class AdapterScopeAudit extends BaseAdapter {
         TemplateModelScopeAudit.deleteAll(TemplateModelScopeAudit.class, "reportid = ?", report_id);
         TemplateModelScopeAuditInterest.deleteAll(TemplateModelScopeAuditInterest.class, "reportid = ?", report_id);
         for (TemplateModelScopeAudit tmsa : templateModelScopeAudit) {
+            if (tmsa.getScope_detail().isEmpty())
+                continue;
             tmsa.setReport_id(report_id);
             tmsa.save();
             tmsa.getAdapterScope().save(report_id, tmsa.getId());

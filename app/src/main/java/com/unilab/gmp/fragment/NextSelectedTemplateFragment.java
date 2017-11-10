@@ -305,7 +305,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
     Dialog dialogDeleteDateOfAudit;
     boolean dialogDeleteIsShowing = false;
-    int simpleMessageDialog = -2,distributionDelete = 0, translatorDelete = 1,preAuditDocDelete = 2 , distributionOthersDelete = 3;
+    int simpleMessageDialog = -1,distributionDelete = 0, translatorDelete = 1,preAuditDocDelete = 2 , distributionOthersDelete = 3;
 
     public NextSelectedTemplateFragment(ModelTemplates modelTemplates, TemplateElementAdapter templateElementAdapter, SelectedTemplateFragment selectedTemplateFragment) {
         this.modelTemplates = modelTemplates;
@@ -451,7 +451,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         // --- Audit Scope
         templateModelScopeAudits = new ArrayList<>();
-        adapterScopeAudit = new AdapterScopeAudit(templateModelScopeAudits, context, modelTemplates.getCompany_id(), this, null);
+        adapterScopeAudit = new AdapterScopeAudit(templateModelScopeAudits, context, modelTemplates.getCompany_id(), this, null,btnTemplateNextScopeAuditAdd);
         lvTemplateNextScopeAudit.setAdapter(adapterScopeAudit);
         lvTemplateNextScopeAudit.setExpanded(true);
         //templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ?", modelTemplates.getTemplateID()));
@@ -790,7 +790,13 @@ public class NextSelectedTemplateFragment extends Fragment {
                 if (templateModelPersonelMetDurings.size() > 1) {
                     templateModelPersonelMetDurings.remove(templateModelPersonelMetDurings.size() - 1);
                     adapterPersonelMetDuring.notifyDataSetChanged();
+                } else
+                {
+                    templateModelPersonelMetDurings.get(0).setName("");
+                    templateModelPersonelMetDurings.get(0).setPosition("");
+                    adapterPersonelMetDuring.notifyDataSetChanged();
                 }
+
                 break;
             case R.id.btn_template_next_distribution_add:
                 addDistribution();
@@ -855,6 +861,11 @@ public class NextSelectedTemplateFragment extends Fragment {
             case R.id.btn_template_next_translator_delete:
                 if (templateModelTranslators.size() > 1) {
                     dialogDeleteFromListConfirmation("Are you sure you want to delete?", translatorDelete);
+                }
+                else
+                {
+                    templateModelTranslators.get(0).setTranslator("");
+                    adapterTranslator.notifyDataSetChanged();
                 }
                 break;
             case R.id.et_template_next_date_of_wrap_up:
@@ -1032,7 +1043,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             adapterScopeAudit.notifyDataSetChanged();
         }
         else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",simpleMessageDialog);
     }
 
 //    private void addScopeAuditTypeInterest() {
@@ -1051,7 +1062,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelReferences.add(t);
             adapterReference.notifyDataSetChanged();
         } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 20",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 20",simpleMessageDialog);
     }
 
     private void addPreAuditDoc() {
@@ -1061,7 +1072,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelPreAuditDocs.add(t);
             adapterPreAuditDoc.notifyDataSetChanged();
         } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 20",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 20",simpleMessageDialog);
     }
 
     private void addPresentDuringMeeting() {
@@ -1072,7 +1083,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             adapterPresentDuringMeeting.notifyDataSetChanged();
         }
         else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 30",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 30",simpleMessageDialog);
     }
 
     private void addPersonelMet() {
@@ -1082,7 +1093,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelPersonelMetDurings.add(t);
             adapterPersonelMetDuring.notifyDataSetChanged();
         }else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 30",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 30",simpleMessageDialog);
     }
 
     private void addDistribution() {
@@ -1093,7 +1104,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelDistributionLists.add(t);
             adapterDistributionList.notifyDataSetChanged();
         }else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",simpleMessageDialog);
     }
 
     private void addDistributionOthers() {
@@ -1103,7 +1114,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelDistributionOthers.add(t);
             adapterDistributionOthers.notifyDataSetChanged();
         }else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",simpleMessageDialog);
     }
 
     private void addRecommendation() {
@@ -1831,6 +1842,12 @@ public class NextSelectedTemplateFragment extends Fragment {
             Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
 
             msg.setText(mess);
+
+            if (list==simpleMessageDialog)
+            {
+                yes.setVisibility(View.GONE);
+                no.setText("Close");
+            }
 
             yes.setOnClickListener(new View.OnClickListener() {
                 @Override

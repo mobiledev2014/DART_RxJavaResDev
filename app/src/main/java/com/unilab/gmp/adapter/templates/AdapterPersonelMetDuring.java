@@ -127,6 +127,8 @@ public class AdapterPersonelMetDuring extends BaseAdapter {
     public void save(String report_id) {
         TemplateModelPersonelMetDuring.deleteAll(TemplateModelPersonelMetDuring.class, "reportid = ?", report_id);
         for (TemplateModelPersonelMetDuring t : templateModelPersonelMetDurings) {
+            if (t.getName().isEmpty()&&t.getPosition().isEmpty())
+                continue;
             t.setReport_id(report_id);
             t.save();
         }

@@ -173,6 +173,14 @@ public class AdapterReference extends BaseAdapter {
     public void save(String report_id) {
         TemplateModelReference.deleteAll(TemplateModelReference.class, "reportid = ?", report_id);
         for (TemplateModelReference t : templateModelReferences) {
+            if (
+                    t.getIssue_date().isEmpty()&&
+                    t.getNumber().isEmpty()&&
+                    t.getBody().isEmpty()&&
+                    t.getCertification().isEmpty()&&
+                    t.getValidity().isEmpty()
+                    )
+                continue;
             t.setReport_id(report_id);
             t.save();
         }

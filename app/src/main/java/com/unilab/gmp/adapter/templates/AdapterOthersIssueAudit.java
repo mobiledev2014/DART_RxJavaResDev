@@ -107,6 +107,8 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
     public void save(String report_id) {
         TemplateModelOtherIssuesAudit.deleteAll(TemplateModelOtherIssuesAudit.class, "reportid = ?", report_id);
         for (TemplateModelOtherIssuesAudit t : templateModelOtherIssuesAudits) {
+            if (t.getOther_issues_audit().isEmpty())
+                continue;
             t.setReport_id(report_id);
             t.save();
         }

@@ -321,7 +321,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     SelectedAuditReportFragment selectedAuditReportFragment;
     View rootView;
     Dialog dialogDeleteDateOfAudit;
-    int simpleMessageDialog = -2,distributionDelete = 0, translatorDelete = 1,preAuditDocDelete = 2 , distributionOthersDelete = 3;
+    int simpleMessageDialog = -1,distributionDelete = 0, translatorDelete = 1,preAuditDocDelete = 2 , distributionOthersDelete = 3;
     boolean dialogDeleteIsShowing = false;
 
     public NextSelectedAuditReportFragment(ModelTemplates modelTemplates, ModelAuditReports report,
@@ -494,7 +494,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         // --- Audit Scope
         templateModelScopeAudits = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
-        adapterScopeAudit = new AdapterScopeAudit(templateModelScopeAudits, context, modelTemplates.getCompany_id(), null, this);
+        adapterScopeAudit = new AdapterScopeAudit(templateModelScopeAudits, context, modelTemplates.getCompany_id(), null, this,btnTemplateNextScopeAuditAdd);
         lvTemplateNextScopeAudit.setAdapter(adapterScopeAudit);
         lvTemplateNextScopeAudit.setExpanded(true);
 //        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
@@ -932,6 +932,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 if (templateModelTranslators.size() > 1) {
                     dialogDeleteFromListConfirmation("Are you sure you want to delete?", translatorDelete);
                 }
+                else
+                {
+                    templateModelTranslators.get(0).setTranslator("");
+                    adapterTranslator.notifyDataSetChanged();
+                }
                 break;
             case R.id.et_template_next_date_of_wrap_up:
                 callDatePicker(etTemplateNextDateOfWrapUp);
@@ -1084,7 +1089,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             templateModelReferences.add(t);
             adapterReference.notifyDataSetChanged();
         } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 20",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 20",simpleMessageDialog);
     }
 
     private void addPreAuditDoc() {
@@ -1093,7 +1098,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             templateModelPreAuditDocs.add(t);
             adapterPreAuditDoc.notifyDataSetChanged();
         } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 20",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 20",simpleMessageDialog);
     }
 
     private void addPresentDuringMeeting() {
@@ -1102,7 +1107,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             templateModelPresentDuringMeetings.add(t);
             adapterPresentDuringMeeting.notifyDataSetChanged();
         } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 30",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 30",simpleMessageDialog);
     }
 
     private void addPersonelMet() {
@@ -1111,7 +1116,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             templateModelPersonelMetDurings.add(t);
             adapterPersonelMetDuring.notifyDataSetChanged();
         } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 30",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 30",simpleMessageDialog);
     }
 
     private void addDistribution() {
@@ -1120,7 +1125,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             templateModelDistributionLists.add(t);
             adapterDistributionList.notifyDataSetChanged();
         } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",simpleMessageDialog);
     }
 
     private void addDistributionOthers() {
@@ -1131,7 +1136,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             templateModelDistributionOthers.add(t);
             adapterDistributionOthers.notifyDataSetChanged();
         } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",-1);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",simpleMessageDialog);
     }
 
     private void addRecommendation() {
@@ -1960,7 +1965,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
         Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
 
         msg.setText(mess);
-
+        if (list==simpleMessageDialog)
+        {
+            yes.setVisibility(View.GONE);
+            no.setText("Close");
+        }
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

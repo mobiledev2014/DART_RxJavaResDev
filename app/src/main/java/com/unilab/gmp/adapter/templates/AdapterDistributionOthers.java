@@ -86,6 +86,8 @@ public class AdapterDistributionOthers extends BaseAdapter {
     public void save(String report_id) {
         TemplateModelDistributionOthers.deleteAll(TemplateModelDistributionOthers.class, "reportid = ?", report_id);
         for (TemplateModelDistributionOthers t : templateModelDistributionOthers) {
+            if (t.getDistribution_other().isEmpty())
+                continue;
             t.setReport_id(report_id);
             t.save();
         }

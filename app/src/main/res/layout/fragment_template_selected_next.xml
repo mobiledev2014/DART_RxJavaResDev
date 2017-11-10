@@ -1318,7 +1318,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="bottom"
                                             android:layout_weight=".3"
-                                            android:orientation="horizontal">
+                                            android:orientation="horizontal"
+                                            android:visibility="gone">
 
                                             <Button
                                                 android:id="@+id/btn_template_next_company_background_inspector_name_add"

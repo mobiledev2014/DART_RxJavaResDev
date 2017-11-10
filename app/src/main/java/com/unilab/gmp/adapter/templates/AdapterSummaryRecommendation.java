@@ -141,6 +141,8 @@ public class AdapterSummaryRecommendation extends BaseAdapter {
     public void save(String report_id) {
         TemplateModelSummaryRecommendation.deleteAll(TemplateModelSummaryRecommendation.class, "reportid = ?", report_id);
         for (TemplateModelSummaryRecommendation t : templateModelSummaryRecommendations) {
+            if (t.getElement().equalsIgnoreCase("none"))
+                continue;
             t.setReport_id(report_id);
             t.save();
         }
