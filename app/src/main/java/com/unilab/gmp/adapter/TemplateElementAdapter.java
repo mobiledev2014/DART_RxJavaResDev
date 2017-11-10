@@ -1,9 +1,11 @@
 package com.unilab.gmp.adapter;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,19 +37,21 @@ public class TemplateElementAdapter extends BaseAdapter {
     Context context;
     ArrayList<TemplateElementQuestionAdapter> templateElementQuestionAdapters;
     Dialog dialogElementNa;
+    String productType;
     boolean pick;
     int size = 0;
     private List<ModelTemplateElements> questionModel;
 
-    public TemplateElementAdapter(Context context, List<ModelTemplateElements> questionModel, String report_id) {
+    public TemplateElementAdapter(Context context, List<ModelTemplateElements> questionModel, String report_id, String product_type) {
         this.questionModel = questionModel;
         this.context = context;
+        this.productType = product_type;
         this.notifyDataSetChanged();
         templateElementQuestionAdapters = new ArrayList<>();
         for (ModelTemplateElements mte : questionModel) {
             mte.setModelTemplateQuestionDetails(ModelTemplateQuestionDetails.find(ModelTemplateQuestionDetails.class,
                     "elementid = ? ", mte.getElement_id()));
-            TemplateElementQuestionAdapter questionList = new TemplateElementQuestionAdapter(context, mte.getModelTemplateQuestionDetails(), report_id);
+            TemplateElementQuestionAdapter questionList = new TemplateElementQuestionAdapter(context, mte.getModelTemplateQuestionDetails(), report_id, productType);
             templateElementQuestionAdapters.add(questionList);
             size++;
         }
@@ -110,7 +114,7 @@ public class TemplateElementAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         final Widgets widgets = new Widgets();
         final View rowView;
         final int z = position;
@@ -156,7 +160,7 @@ public class TemplateElementAdapter extends BaseAdapter {
 //            }
 //        });
 
-        if(!templateElementQuestionAdapters.get(position).isChecked().isEmpty()){
+        if (!templateElementQuestionAdapters.get(position).isChecked().isEmpty()) {
             widgets.cbElementNa.setText(templateElementQuestionAdapters.get(position).isChecked());
             widgets.cbElementNa.setChecked(true);
         }
@@ -164,12 +168,30 @@ public class TemplateElementAdapter extends BaseAdapter {
         widgets.cbElementNa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final Handler handler = new Handler();
+                final ProgressDialog dialog = new ProgressDialog(context);
+                dialog.setMessage("Loading..");
+                dialog.setCancelable(false);
+                dialog.show();
+
                 if (widgets.cbElementNa.isChecked()) {
-                    dialogElementNa(widgets.cbElementNa, z);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.dismiss();
+                            dialogElementNa(widgets.cbElementNa, z, dialog);
+                        }
+                    }, 700);
                 } else {
-                    templateElementQuestionAdapters.get(z).setAnswer("", "");
-                    templateElementQuestionAdapters.get(z).notifyDataSetChanged();
-                    widgets.cbElementNa.setText("N/A");
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.dismiss();
+                            templateElementQuestionAdapters.get(z).setAnswer("", "");
+                            templateElementQuestionAdapters.get(z).notifyDataSetChanged();
+                            widgets.cbElementNa.setText("N/A");
+                        }
+                    }, 700);
                 }
             }
         });
@@ -198,7 +220,8 @@ public class TemplateElementAdapter extends BaseAdapter {
         return valid;
     }
 
-    public void dialogElementNa(final CheckBox pick, final int z) {
+    public void dialogElementNa(final CheckBox pick, final int z, final Dialog dialog) {
+        final Handler handler = new Handler();
         dialogElementNa = new Dialog(context);
         dialogElementNa.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialogElementNa.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -208,15 +231,24 @@ public class TemplateElementAdapter extends BaseAdapter {
 
         Button na = (Button) dialogElementNa.findViewById(R.id.btn_element_na);
         Button nc = (Button) dialogElementNa.findViewById(R.id.btn_element_nc);
+        TextView cancel = (TextView) dialogElementNa.findViewById(R.id.tv_cancel);
 
         na.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(context, "Not applicable", Toast.LENGTH_SHORT).show();
+                dialog.show();
                 templateElementQuestionAdapters.get(z).setAnswer("3", "Not applicable");
                 templateElementQuestionAdapters.get(z).notifyDataSetChanged();
                 pick.setText("Not applicable");
                 dialogElementNa.dismiss();
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                    }
+                }, 2500);
             }
         });
 
@@ -231,6 +263,13 @@ public class TemplateElementAdapter extends BaseAdapter {
             }
         });
 
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pick.setChecked(false);
+                dialogElementNa.dismiss();
+            }
+        });
 
         dialogElementNa.show();
     }

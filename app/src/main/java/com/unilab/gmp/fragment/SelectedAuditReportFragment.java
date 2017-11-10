@@ -278,7 +278,7 @@ public class SelectedAuditReportFragment extends Fragment {
 //        }
         //questionModel = tableDirectory.getDirectory();
         templateElementAdapter = new TemplateElementAdapter(context, modelTemplates.getModelTemplateElements()
-                , modelAuditReports.getReport_id());
+                , modelAuditReports.getReport_id(), modelTemplates.getProductType());
         lvTemplateElement.setAdapter(templateElementAdapter);
         lvTemplateElement.setExpanded(true);
 

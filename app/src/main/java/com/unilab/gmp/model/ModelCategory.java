@@ -15,4 +15,5 @@ public class ModelCategory extends SugarRecord{
     String category_name;
     String create_date;
     String update_date;
+    String status;
 }

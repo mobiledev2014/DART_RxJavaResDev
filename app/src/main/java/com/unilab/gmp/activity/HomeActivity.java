@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -434,6 +435,9 @@ public class HomeActivity extends AppCompatActivity {
             fragmentManager.beginTransaction()
                     .replace(R.id.fl_content, new HomeFragment()).addToBackStack(null).commit();
         }
+
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(ivLogo.getWindowToken(), 0);
     }
 
     public void onlineIndicator(boolean ind) {

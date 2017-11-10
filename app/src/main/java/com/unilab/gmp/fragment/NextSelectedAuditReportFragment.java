@@ -356,7 +356,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         Variable.onAudit = true;
         templateFragment = new TemplateFragment();
         auditReportFragment = new AuditReportFragment();
-        tvTitle.setText("AUDIT REPORT");
+        tvTitle.setText("REPORT");
 
         year = currentTime.get(Calendar.YEAR);
         month = currentTime.get(Calendar.MONTH);

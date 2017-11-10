@@ -41,13 +41,16 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
     String strRemarks = "";
     String spnCategory = "";
     String report_id;
+    String productType;
     boolean checked, edited;
 
-    public TemplateElementQuestionAdapter(Context context, List<ModelTemplateQuestionDetails> questionList, String report_id) {
+    public TemplateElementQuestionAdapter(Context context, List<ModelTemplateQuestionDetails> questionList,
+                                          String report_id, String product_type) {
         this.report_id = report_id;
         this.questionList = questionList;
         this.context = context;
         this.notifyDataSetChanged();
+        this.productType = product_type;
 //        l = ModelTemplateQuestionDetails.find(ModelTemplateQuestionDetails.class, "templateid = ? AND elementid = ?", questionList.get(0).getTemplate_id(), questionList.get(0).getElement_id());
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -371,7 +374,8 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
         final Button save = (Button) dialogNo.findViewById(R.id.btn_save);
         Button cancel = (Button) dialogNo.findViewById(R.id.btn_cancel);
 
-        List<ModelCategory> categoryList = ModelCategory.listAll(ModelCategory.class);
+        //List<ModelCategory> categoryList = ModelCategory.listAll(ModelCategory.class);
+        List<ModelCategory> categoryList = ModelCategory.find(ModelCategory.class, "status > 0");
         List<String> list = new ArrayList<>();
         final List<String> listid = new ArrayList<>();
         Log.d("SIZE", categoryList.size() + "");

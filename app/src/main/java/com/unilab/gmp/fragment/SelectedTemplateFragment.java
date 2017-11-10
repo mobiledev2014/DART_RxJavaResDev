@@ -279,7 +279,7 @@ public class SelectedTemplateFragment extends Fragment {
 //            modelTemplates.getModelTemplateElements().add(modelTemplateElement);
 //        }
         //questionModel = tableDirectory.getDirectory();
-        templateElementAdapter = new TemplateElementAdapter(context, modelTemplates.getModelTemplateElements(), "");
+        templateElementAdapter = new TemplateElementAdapter(context, modelTemplates.getModelTemplateElements(), "", modelTemplates.getProductType());
         lvTemplateElement.setAdapter(templateElementAdapter);
         lvTemplateElement.setExpanded(true);
 

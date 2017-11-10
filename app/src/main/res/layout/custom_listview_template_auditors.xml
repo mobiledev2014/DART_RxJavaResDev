@@ -84,6 +84,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:singleLine="true"
+                android:textColor="@color/disabled_color"
                 android:textSize="20sp" />
 
         </LinearLayout><!--auditor co position-->
@@ -111,6 +112,7 @@
                 android:layout_weight=".5"
                 android:background="@drawable/template_field"
                 android:enabled="false"
+                android:textColor="@color/disabled_color"
                 android:gravity="center|left"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"

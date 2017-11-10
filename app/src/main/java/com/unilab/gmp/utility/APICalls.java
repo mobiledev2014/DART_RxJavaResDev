@@ -617,6 +617,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     modelCategory.setCategory_name(modelCategoryInfo.getModelCategories().get(x).getCategory_name());
                     modelCategory.setCreate_date(modelCategoryInfo.getModelCategories().get(x).getCreate_date());
                     modelCategory.setUpdate_date(modelCategoryInfo.getModelCategories().get(x).getUpdate_date());
+                    modelCategory.setStatus(modelCategoryInfo.getModelCategories().get(x).getStatus());
                     isCategoryExisting(modelCategory);
                 }
 
@@ -1002,6 +1003,10 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 //-
                 for (TemplateModelDistributionOthers mdl : modelAuditReports.getOther_distribution()) {
                     mdl.setReport_id(report_id);
+                    if (mdl.getDistribution_other().equals("null"))
+                    {
+                        mdl.setDistribution_other("");
+                    }
                     mdl.setDistribution_other(mdl.getDistribution_other());
                     mdl.save();
                     Log.e("APICalls", "Distri others : " + mdl.toString());

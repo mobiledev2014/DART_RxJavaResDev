@@ -9,4 +9,5 @@
     <color name="dividerColor">#7c7777</color>
     <color name="dividerColorSub">#a6a4a4</color>
     <color name="checkbox_color">#3360ac</color>
+    <color name="disabled_color">#a9a9a9</color>
 </resources>

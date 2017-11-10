@@ -20,6 +20,7 @@
             android:paddingRight="10dp"
             android:singleLine="true"
             android:enabled="false"
+            android:textColor="@color/disabled_color"
             android:textSize="20sp" />
 
     </LinearLayout>
