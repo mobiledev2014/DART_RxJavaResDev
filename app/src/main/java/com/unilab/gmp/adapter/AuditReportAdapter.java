@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.fragment.SelectedAuditReportFragment;
-import com.unilab.gmp.fragment.SelectedTemplateFragment;
 import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.ModelAuditReports;
 import com.unilab.gmp.model.ModelCompany;
@@ -90,6 +90,8 @@ public class AuditReportAdapter extends BaseAdapter {
         widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("STATUS-CLICKED!!!!", modelAuditReports.get(i).getStatus());
+
                 if (modelAuditReports.get(i).getStatus().equals("5")) {
                     Utils.pdfIfExist(modelAuditReports.get(i).getReport_id(), context);
                 } else {

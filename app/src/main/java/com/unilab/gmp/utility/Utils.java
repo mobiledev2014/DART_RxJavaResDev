@@ -14,7 +14,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -52,6 +51,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Utils {
     public static String pdfPath = System.getenv("EXTERNAL_STORAGE") + "/DART/AuditReports/";
     public static Dialog dialogError;
+    public static Dialog dialogSelectPdf;
 //
 //    public static void snack(View view, String text) {
 //        Snackbar.make(view, text, Snackbar.LENGTH_SHORT).show();
@@ -445,21 +445,34 @@ public class Utils {
     }
 
     public static void pdfIfExist(String id, Context context) {
-        File file = new File(pdfPath + "/" + id + ".pdf");
-//        File file = new File(pdfPath + "/351.pdf");
-        File dirFile = new File(pdfPath);
-        Log.i("file location", file.toString() + "");
-        dirFile.mkdir();
-        if (file.exists()) {
-            openPdf(context, id);
-//            openPdf(context, "351");
-        } else {
-            Log.i("File","Not existing");
-            if (isNetworkConnected(context)){
-                Toast.makeText(context, "Downloading file online", Toast.LENGTH_SHORT).show();
 
-                DownloadFile downloadFile= new DownloadFile();
-                downloadFile.execute("http://sams.ecomqa.com/json/export/approved/351/Audit_Report.pdf");
+        File file_Annexure = new File(pdfPath + "/" + id + "_Annexure.pdf");
+        File file_Audit_Report = new File(pdfPath + "/" + id + "_Audit_Report.pdf");
+        File file_Executive_Report = new File(pdfPath + "/" + id + "_Executive_Report.pdf");
+        File dirFile = new File(pdfPath);
+
+        Log.i("file location", file_Annexure.toString() + "");
+        dirFile.mkdir();
+        if (file_Annexure.exists() && file_Audit_Report.exists() && file_Executive_Report.exists()) {
+            dialogSelectPdf(id, context);
+            //openPdf(context, id);
+        } else {
+            Log.i("File", "Not existing");
+            if (isNetworkConnected(context)) {
+                //Toast.makeText(context, "Downloading file online", Toast.LENGTH_SHORT).show();
+
+                String annexure = "Annexure";
+                String audit_report = "Audit_Report";
+                String executive_report = "Executive_Report";
+
+                DownloadFile downloadFileAnnexure = new DownloadFile(context, id, annexure);
+                downloadFileAnnexure.execute("http://sams.ecomqa.com/json/export/approved/" + id + "/Annexure.pdf");
+
+                DownloadFile downloadFileAudit_Report = new DownloadFile(context, id, audit_report);
+                downloadFileAudit_Report.execute("http://sams.ecomqa.com/json/export/approved/" + id + "/Audit_Report.pdf");
+
+                DownloadFile downloadFileExecutive_Report = new DownloadFile(context, id, executive_report);
+                downloadFileExecutive_Report.execute("http://sams.ecomqa.com/json/export/approved/" + id + "/Executive_Report.pdf");
 
                 //after download openPdf
             } else {
@@ -515,31 +528,54 @@ public class Utils {
             }
         });
 
-
         dialogError.show();
     }
-}
 
-// Hide softinput keyboard on touch outside
-//@Override
-//public boolean dispatchTouchEvent(MotionEvent event) {
-//    View view = getCurrentFocus();
-//    boolean ret = super.dispatchTouchEvent(event);
-//
-//    if (view instanceof EditText) {
-//        View w = getCurrentFocus();
-//        int scrcoords[] = new int[2];
-//        w.getLocationOnScreen(scrcoords);
-//        float x = event.getRawX() + w.getLeft() - scrcoords[0];
-//        float y = event.getRawY() + w.getTop() - scrcoords[1];
-//
-//        if (event.getAction() == MotionEvent.ACTION_UP
-//                && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w
-//                .getBottom())) {
-//            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//            imm.hideSoftInputFromWindow(getWindow().getCurrentFocus()
-//                    .getWindowToken(), 0);
-//        }
-//    }
-//    return ret;
-//}
+    public static void dialogSelectPdf(final String id, final Context context) {
+        dialogSelectPdf = new Dialog(context);
+        dialogSelectPdf.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialogSelectPdf.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogSelectPdf.setCancelable(false);
+        dialogSelectPdf.setContentView(R.layout.dialog_pdf_picker);
+        dialogSelectPdf.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        Button audit = (Button) dialogSelectPdf.findViewById(R.id.btn_audit_report);
+        Button executive = (Button) dialogSelectPdf.findViewById(R.id.btn_executive_summary);
+        Button annexure = (Button) dialogSelectPdf.findViewById(R.id.btn_annexure);
+        Button cancel = (Button) dialogSelectPdf.findViewById(R.id.btn_cancel);
+
+        audit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.openPdf(context, id + "_Audit_Report");
+                //dialogSelectPdf.dismiss();
+            }
+        });
+
+        executive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.openPdf(context, id + "_Executive_Report");
+                //dialogSelectPdf.dismiss();
+            }
+        });
+
+        annexure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.openPdf(context, id + "_Annexure");
+                //dialogSelectPdf.dismiss();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSelectPdf.dismiss();
+            }
+        });
+
+
+        dialogSelectPdf.show();
+    }
+}

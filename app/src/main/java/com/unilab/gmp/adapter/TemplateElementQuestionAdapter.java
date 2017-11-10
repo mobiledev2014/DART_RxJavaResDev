@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +59,8 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void setAnswer(String answer, String option) {
+    public void setAnswer(String answer, String option, final Dialog dialog) {
+        final Handler handler = new Handler();
         for (ModelTemplateQuestionDetails mtqd : questionList) {
             mtqd.setAnswer_id(answer);
             mtqd.setNaoption_id(option);
@@ -67,6 +69,13 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
         }
         checked = answer.length() > 0;
         edited = true;
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+            }
+        }, 2500);
     }
 
     public String isChecked() {

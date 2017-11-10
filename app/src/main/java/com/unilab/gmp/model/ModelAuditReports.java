@@ -77,26 +77,26 @@ public class ModelAuditReports extends SugarRecord {
     @Override
     public String toString() {
         return "ModelAuditReports{" +
-                "report_id='" + report_id + '\'' +
-                ", report_no='" + report_no + '\'' +
-                ", company_id='" + company_id + '\'' +
-                ", other_activities='" + other_activities + '\'' +
-                ", template_id='" + template_id + '\'' +
-                ", auditor_id='" + auditor_id + '\'' +
-                ", audit_close_date='" + audit_close_date + '\'' +
-                ", other_issues='" + other_issues + '\'' +
-                ", other_issues_executive='" + other_issues_executive + '\'' +
-                ", audited_areas='" + audited_areas + '\'' +
-                ", areas_to_consider='" + areas_to_consider + '\'' +
+                "report_id='" + report_id + '\n' +
+                ", report_no='" + report_no + '\n' +
+                ", company_id='" + company_id + '\n' +
+                ", other_activities='" + other_activities + '\n' +
+                ", template_id='" + template_id + '\n' +
+                ", auditor_id='" + auditor_id + '\n' +
+                ", audit_close_date='" + audit_close_date + '\n' +
+                ", other_issues='" + other_issues + '\n' +
+                ", other_issues_executive='" + other_issues_executive + '\n' +
+                ", audited_areas='" + audited_areas + '\n' +
+                ", areas_to_consider='" + areas_to_consider + '\n' +
 //                ", date_of_wrap=" + date_of_wrap +
                 ", translators=" + translators +
-                ", create_date='" + create_date + '\'' +
-                ", modified_date='" + modified_date + '\'' +
-                ", status='" + status + '\'' +
-                ", version='" + version + '\'' +
-                ", head_lead='" + head_lead + '\'' +
-                ", reviewer_id='" + reviewer_id + '\'' +
-                ", approver_id='" + approver_id + '\'' +
+                ", create_date='" + create_date + '\n' +
+                ", modified_date='" + modified_date + '\n' +
+                ", status='" + status + '\n' +
+                ", version='" + version + '\n' +
+                ", head_lead='" + head_lead + '\n' +
+                ", reviewer_id='" + reviewer_id + '\n' +
+                ", approver_id='" + approver_id + '\n' +
                 ", isReviewerChecked=" + isReviewerChecked +
                 ", date_of_audit=" + date_of_audit +
                 ", co_auditor_id=" + co_auditor_id +
@@ -113,8 +113,8 @@ public class ModelAuditReports extends SugarRecord {
                 ", distribution=" + distribution +
                 ", present_during_meeting=" + present_during_meeting +
                 ", other_distribution=" + other_distribution +
-                ", audit_date_1='" + audit_date_1 + '\'' +
-                ", audit_date_2='" + audit_date_2 + '\'' +
+                ", audit_date_1='" + audit_date_1 + '\n' +
+                ", audit_date_2='" + audit_date_2 + '\n' +
                 '}';
     }
 

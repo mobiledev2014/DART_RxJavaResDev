@@ -813,6 +813,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 for (ModelAuditReportDetails mar : modelAuditReportsList.getAudit_report_list()) {
                     String reportId = mar.getReport_id();
                     String modifiedDate = mar.getModified_date();
+                    final String status = mar.getStatus();
 
                     List<ModelAuditReports> auditReportsList = ModelAuditReports.find(
                             ModelAuditReports.class, "reportid = ? AND modifieddate = ?", reportId, modifiedDate);
@@ -857,7 +858,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 //                                reports.setTranslator(modelAuditReports.getTranslator());
                                 reports.setReviewer_id(modelAuditReports.getReviewer_id());
                                 reports.setApprover_id(modelAuditReports.getApprover_id());
-                                reports.setStatus(modelAuditReports.getStatus());
+                                Log.i("STATUS-!!!!", status);
+                                reports.setStatus(status);
                                 reports.setVersion(version);
                                 reports.setHead_lead(modelAuditReports.getHead_lead());
                                 reports.setModified_date(modified_date);

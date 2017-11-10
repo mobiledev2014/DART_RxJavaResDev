@@ -186,8 +186,8 @@ public class TemplateElementAdapter extends BaseAdapter {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            dialog.dismiss();
-                            templateElementQuestionAdapters.get(z).setAnswer("", "");
+                            //dialog.dismiss();
+                            templateElementQuestionAdapters.get(z).setAnswer("", "", dialog);
                             templateElementQuestionAdapters.get(z).notifyDataSetChanged();
                             widgets.cbElementNa.setText("N/A");
                         }
@@ -238,15 +238,14 @@ public class TemplateElementAdapter extends BaseAdapter {
             public void onClick(View view) {
                 //Toast.makeText(context, "Not applicable", Toast.LENGTH_SHORT).show();
                 dialog.show();
-                templateElementQuestionAdapters.get(z).setAnswer("3", "Not applicable");
-                templateElementQuestionAdapters.get(z).notifyDataSetChanged();
-                pick.setText("Not applicable");
                 dialogElementNa.dismiss();
 
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        dialog.dismiss();
+                        templateElementQuestionAdapters.get(z).setAnswer("3", "Not applicable", dialog);
+                        templateElementQuestionAdapters.get(z).notifyDataSetChanged();
+                        pick.setText("Not applicable");
                     }
                 }, 2500);
             }
@@ -255,11 +254,17 @@ public class TemplateElementAdapter extends BaseAdapter {
         nc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(context, "Not covered", Toast.LENGTH_SHORT).show();
-                templateElementQuestionAdapters.get(z).setAnswer("4", "Not covered");
-                templateElementQuestionAdapters.get(z).notifyDataSetChanged();
-                pick.setText("Not covered");
+                dialog.show();
                 dialogElementNa.dismiss();
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        templateElementQuestionAdapters.get(z).setAnswer("4", "Not covered", dialog);
+                        templateElementQuestionAdapters.get(z).notifyDataSetChanged();
+                        pick.setText("Not covered");
+                    }
+                }, 2500);
             }
         });
 
