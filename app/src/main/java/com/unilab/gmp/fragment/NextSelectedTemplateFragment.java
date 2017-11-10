@@ -305,7 +305,10 @@ public class NextSelectedTemplateFragment extends Fragment {
 
     Dialog dialogDeleteDateOfAudit;
     boolean dialogDeleteIsShowing = false;
-    int simpleMessageDialog = -1,distributionDelete = 0, translatorDelete = 1,preAuditDocDelete = 2 , distributionOthersDelete = 3;
+    int simpleMessageDialog = -1,distributionDelete = 0, translatorDelete = 1,
+    preAuditDocDelete = 2 , distributionOthersDelete = 3, typeOfAuditDelete = 4,
+            personnelMetDelete = 5, elementsRequiringDelete = 6, otherIssuesAuditDelete = 7
+            , otherIssuesExecutiveDelete = 8, auditorDelete = 9, reviewerDelete = 10;
 
     public NextSelectedTemplateFragment(ModelTemplates modelTemplates, TemplateElementAdapter templateElementAdapter, SelectedTemplateFragment selectedTemplateFragment) {
         this.modelTemplates = modelTemplates;
@@ -729,7 +732,11 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_summary_recommendation_other_issues_audit_delete:
                 if (templateModelOtherIssuesAudits.size() > 1) {
-                    templateModelOtherIssuesAudits.remove(templateModelOtherIssuesAudits.size() - 1);
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", otherIssuesAuditDelete);
+                }
+                else
+                {
+                    templateModelOtherIssuesAudits.get(0).setOther_issues_audit("");
                     adapterOthersIssueAudit.notifyDataSetChanged();
                 }
                 break;
@@ -738,7 +745,11 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_summary_recommendation_other_issues_executive_delete:
                 if (templateModelOtherIssuesExecutives.size() > 1) {
-                    templateModelOtherIssuesExecutives.remove(templateModelOtherIssuesExecutives.size() - 1);
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", otherIssuesExecutiveDelete);
+                }
+                else
+                {
+                    templateModelOtherIssuesExecutives.get(0).setOther_issues_executive("");
                     adapterOthersIssueExecutive.notifyDataSetChanged();
                 }
                 break;
@@ -747,8 +758,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_scope_audit_delete:
                 if (templateModelScopeAudits.size() > 1) {
-                    templateModelScopeAudits.remove(templateModelScopeAudits.size() - 1);
-                    adapterScopeAudit.notifyDataSetChanged();
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", typeOfAuditDelete);
                 }
                 break;
             case R.id.btn_template_next_reference_add:
@@ -788,8 +798,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_personnel_inspection_delete:
                 if (templateModelPersonelMetDurings.size() > 1) {
-                    templateModelPersonelMetDurings.remove(templateModelPersonelMetDurings.size() - 1);
-                    adapterPersonelMetDuring.notifyDataSetChanged();
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", personnelMetDelete);
                 } else
                 {
                     templateModelPersonelMetDurings.get(0).setName("");
@@ -824,8 +833,8 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_summary_recommendation_delete:
                 if (templateModelSummaryRecommendations.size() > 1) {
-                    templateModelSummaryRecommendations.remove(templateModelSummaryRecommendations.size() - 1);
-                    adapterSummaryRecommendation.notifyDataSetChanged();
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", elementsRequiringDelete);
+
                 }
                 break;
             case R.id.btn_template_next_company_background_inspector_name_add:
@@ -851,8 +860,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_auditor_delete:
                 if (templateModelAuditorses.size() > 1) {
-                    templateModelAuditorses.remove(templateModelAuditorses.size() - 1);
-                    adapterAuditors.notifyDataSetChanged();
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", auditorDelete);
                 }
                 break;
             case R.id.btn_template_next_translator_add:
@@ -1015,26 +1023,30 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     private void addOtherIssuesAudit() {
-        if (4 > templateModelOtherIssuesAudits.size()) {
+        if (20 > templateModelOtherIssuesAudits.size()) {
             TemplateModelOtherIssuesAudit t = new TemplateModelOtherIssuesAudit();
             t.setOther_issues_audit("");
             templateModelOtherIssuesAudits.add(t);
             adapterOthersIssueAudit.notifyDataSetChanged();
-        }
+        }else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 20" ,simpleMessageDialog);
+
+
     }
 
     private void addOtherIssuesExecutive() {
-        if (4 > templateModelOtherIssuesExecutives.size()) {
+        if (20 > templateModelOtherIssuesExecutives.size()) {
             TemplateModelOtherIssuesExecutive t = new TemplateModelOtherIssuesExecutive();
             t.setOther_issues_executive("");
             templateModelOtherIssuesExecutives.add(t);
             adapterOthersIssueExecutive.notifyDataSetChanged();
-        }
+        }else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 20" ,simpleMessageDialog);
     }
 
     private void addScopeAuditType() {
         //if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
-        if (10 > templateModelScopeAudits.size()) {
+        if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
             Log.i("SIZE LOG", adapterScopeAudit.getTypeAuditSize() + " > " + templateModelScopeAudits.size());
             TemplateModelScopeAudit t = new TemplateModelScopeAudit();
             t.setScope_detail("");
@@ -1043,7 +1055,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             adapterScopeAudit.notifyDataSetChanged();
         }
         else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 10",simpleMessageDialog);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of " + adapterScopeAudit.getTypeAuditSize(),simpleMessageDialog);
     }
 
 //    private void addScopeAuditTypeInterest() {
@@ -1124,9 +1136,12 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelSummaryRecommendations.add(t);
             adapterSummaryRecommendation.notifyDataSetChanged();
         }
+        else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of " + adapterSummaryRecommendation.getRSize(),simpleMessageDialog);
+
     }
 
-    private void addBackgroundName() {
+    private void addBackgroundName() {//disabled
         if (4 > templateModelCompanyBackgroundNames.size()) {
             TemplateModelCompanyBackgroundName t = new TemplateModelCompanyBackgroundName();
             t.setTemplate_id(modelTemplates.getTemplateID());
@@ -1136,12 +1151,14 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     private void addMajorChanges() {
-        if (4 > templateModelCompanyBackgroundMajorChanges.size()) {
+        if (20 > templateModelCompanyBackgroundMajorChanges.size()) {
             TemplateModelCompanyBackgroundMajorChanges t = new TemplateModelCompanyBackgroundMajorChanges();
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelCompanyBackgroundMajorChanges.add(t);
             adapterCompanyBackgroundMajorChanges.notifyDataSetChanged();
-        }
+        }else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 20" ,simpleMessageDialog);
+
     }
 
     private void addAuditors() {
@@ -1151,15 +1168,20 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelAuditorses.add(t);
             adapterAuditors.notifyDataSetChanged();
         }
+        else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of "
+                    + adapterAuditors.getAuditorSize(),simpleMessageDialog);
     }
 
     private void addTranslator() {
-        if (4 > templateModelTranslators.size()) {
+        if (10 > templateModelTranslators.size()) {
             TemplateModelTranslator t = new TemplateModelTranslator();
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelTranslators.add(t);
             adapterTranslator.notifyDataSetChanged();
-        }
+        }else
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 10" ,simpleMessageDialog);
+
     }
 
     public void dialogCancelTemplate() {
@@ -1871,6 +1893,42 @@ public class NextSelectedTemplateFragment extends Fragment {
                         templateModelDistributionOthers.remove(templateModelDistributionOthers.size() - 1);
                         adapterDistributionOthers.notifyDataSetChanged();
                     }
+
+                    if (list == typeOfAuditDelete)
+                    {
+                        templateModelScopeAudits.remove(templateModelScopeAudits.size() - 1);
+                        adapterScopeAudit.notifyDataSetChanged();
+                    }
+
+                    if (list == personnelMetDelete)
+                    {
+                        templateModelPersonelMetDurings.remove(templateModelPersonelMetDurings.size() - 1);
+                        adapterPersonelMetDuring.notifyDataSetChanged();
+                    }
+
+                    if (list == elementsRequiringDelete)
+                    {
+                        templateModelSummaryRecommendations.remove(templateModelSummaryRecommendations.size() - 1);
+                        adapterSummaryRecommendation.notifyDataSetChanged();
+                    }
+
+                    if (list == otherIssuesExecutiveDelete)
+                    {
+                        templateModelOtherIssuesExecutives.remove(templateModelOtherIssuesExecutives.size() - 1);
+                        adapterOthersIssueExecutive.notifyDataSetChanged();
+                    }
+
+                    if (list == otherIssuesAuditDelete)
+                    {
+                        templateModelOtherIssuesAudits.remove(templateModelOtherIssuesAudits.size() - 1);
+                        adapterOthersIssueAudit.notifyDataSetChanged();
+                    }
+                    if (list == auditorDelete)
+                    {
+                        templateModelAuditorses.remove(templateModelAuditorses.size() - 1);
+                        adapterAuditors.notifyDataSetChanged();
+                    }
+
                     dialogDeleteIsShowing = false;
                     dialogDeleteDateOfAudit.dismiss();
                 }

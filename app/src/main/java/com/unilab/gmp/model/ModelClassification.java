@@ -1,5 +1,9 @@
 package com.unilab.gmp.model;
 
+import com.orm.SugarRecord;
+
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,9 +12,25 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class ModelClassification {
+public class ModelClassification extends SugarRecord{
     String classification_id;
     String classification_name;
     String create_date;
     String update_date;
+    String status;
+
+    List<ModelClassificationCategory> category;
+
+    @Override
+    public String toString() {
+        return "ModelClassification{" +
+                "classification_id='" + classification_id + '\'' +
+                ", classification_name='" + classification_name + '\'' +
+                ", create_date='" + create_date + '\'' +
+                ", update_date='" + update_date + '\'' +
+                ", status='" + status + '\'' +
+                ", category=" + category +
+                '}';
+    }
+
 }

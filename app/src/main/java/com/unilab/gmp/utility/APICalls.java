@@ -30,6 +30,9 @@ import com.unilab.gmp.model.ModelAuditReportsList;
 import com.unilab.gmp.model.ModelAuditorInfo;
 import com.unilab.gmp.model.ModelCategory;
 import com.unilab.gmp.model.ModelCategoryInfo;
+import com.unilab.gmp.model.ModelClassification;
+import com.unilab.gmp.model.ModelClassificationCategory;
+import com.unilab.gmp.model.ModelClassificationInfo;
 import com.unilab.gmp.model.ModelCompany;
 import com.unilab.gmp.model.ModelCompanyInfo;
 import com.unilab.gmp.model.ModelDateOfAudit;
@@ -117,6 +120,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
     ModelDispositionInfo modelDispositionInfo;
     ModelDistributionInfo modelDistributionInfo;
     ModelAuditReports modelAuditReports;
+    ModelClassificationInfo modelClassificationInfo;
     ModelReport modelReport;
 
     Dialog dialogSyncSuccess;
@@ -304,6 +308,12 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                 apiDistribution();
                             }
                         }
+                        if (configModel.getClassification() != null) {
+                            if (date(cm.get(0).getClassification()).before(date(configModel.getClassification()))) {
+                                cm.get(0).setDistribution(configModel.getClassification());
+                                apiClassification();
+                            }
+                        }
 
 
                         apiTemplateList();
@@ -324,6 +334,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     apiTypeAudit();
                     apiDisposition();
                     apiDistribution();
+                    apiClassification();
 
                     apiTemplateList();
                     apiAuditReports();
@@ -706,7 +717,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     modelDisposition.setCreate_date(modelDispositionInfo.getDisposition().get(x).getCreate_date());
                     modelDisposition.setUpdate_date(modelDispositionInfo.getDisposition().get(x).getUpdate_date());
                     modelDisposition.setStatus(modelDispositionInfo.getDisposition().get(x).getStatus());
-                    Log.e("testing", response.toString() + " Company: " + modelDisposition.getDisposition_name());
+                    Log.e("testing", response.toString() + " Disposition: " + modelDisposition.getDisposition_name());
                     isDispositionExisting(modelDisposition);
                 }
 
@@ -719,6 +730,45 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             }
         });
     }
+
+    public void apiClassification() {
+        Call<ModelClassificationInfo> modelClassificationInfoCall = apiInterface.getClassifications();
+        modelClassificationInfoCall.enqueue(new Callback<ModelClassificationInfo>() {
+            @Override
+            public void onResponse(Call<ModelClassificationInfo> call, Response<ModelClassificationInfo> response) {
+                modelClassificationInfo = response.body();
+                ModelClassification.deleteAll(ModelClassification.class);
+                for (int x = 0; x < modelClassificationInfo.getModelClassifications().size(); x++) {
+                    ModelClassification modelClassification = new ModelClassification();
+                    modelClassification.setClassification_id(modelClassificationInfo.getModelClassifications().get(x).getClassification_id());
+                    modelClassification.setClassification_name(modelClassificationInfo.getModelClassifications().get(x).getClassification_name());
+                    modelClassification.setCreate_date(modelClassificationInfo.getModelClassifications().get(x).getCreate_date());
+                    modelClassification.setUpdate_date(modelClassificationInfo.getModelClassifications().get(x).getUpdate_date());
+                    modelClassification.setStatus(modelClassificationInfo.getModelClassifications().get(x).getStatus());
+                    modelClassification.save();
+                    Log.e("testing", response.toString() + " Classification: " + modelClassification.toString());
+                    if (modelClassificationInfo.getModelClassifications().get(x).getCategory()!=null)
+                    {
+                        for (ModelClassificationCategory mcc:modelClassificationInfo.getModelClassifications().get(x).getCategory())
+                        {
+                            Log.e("testing", "ClassificationCategory: " + mcc.getCategory_id());
+                            mcc.setClassification_id(modelClassification.getClassification_id());
+                            mcc.setClassification_name(modelClassification.getClassification_name());
+                            mcc.setCategory_id(mcc.getCategory_id());
+                            mcc.save();
+                        }
+                    }
+//                    isDispositionExisting(modelClassification);
+                }
+            }
+            @Override
+            public void onFailure(Call<ModelClassificationInfo> call, Throwable t) {
+                Log.e("testing", t.getMessage());
+            }
+        });
+    }
+
+
 
 
     //Distribution
@@ -736,6 +786,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     modelDistribution.setDistribution_name(modelDistributionInfo.getModelDistributions().get(x).getDistribution_name());
                     modelDistribution.setCreate_date(modelDistributionInfo.getModelDistributions().get(x).getCreate_date());
                     modelDistribution.setUpdate_date(modelDistributionInfo.getModelDistributions().get(x).getUpdate_date());
+                    modelDistribution.setStatus(modelDistributionInfo.getModelDistributions().get(x).getStatus());
                     Log.e("testing", response.toString() + " distribution report: " + modelDistribution.getDistribution_name());
                     isDistributionExisting(modelDistribution);
                 }
@@ -1608,12 +1659,13 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
     public void updateDistribution(ModelDistribution modelDistribution) {
         String rowId = modelDistribution.getDistribution_id();
         Log.i("ARGU", "CHECKER " + rowId);
-        ModelDistribution disposition = (ModelDistribution.find(ModelDistribution.class, "distributionid = ?", String.valueOf(rowId))).get(0);
-        disposition.setDistribution_id(modelDistribution.getDistribution_id());
-        disposition.setDistribution_name(modelDistribution.getDistribution_name());
-        disposition.setCreate_date(modelDistribution.getCreate_date());
-        disposition.setUpdate_date(modelDistribution.getUpdate_date());
-        disposition.save();
+        ModelDistribution modelDistribution1 = (ModelDistribution.find(ModelDistribution.class, "distributionid = ?", String.valueOf(rowId))).get(0);
+        modelDistribution1.setDistribution_id(modelDistribution.getDistribution_id());
+        modelDistribution1.setDistribution_name(modelDistribution.getDistribution_name());
+        modelDistribution1.setCreate_date(modelDistribution.getCreate_date());
+        modelDistribution1.setUpdate_date(modelDistribution.getUpdate_date());
+        modelDistribution1.setStatus(modelDistribution.getStatus());
+        modelDistribution1.save();
     }
 
     //ModelDateOfAudit

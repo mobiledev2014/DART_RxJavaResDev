@@ -51,7 +51,7 @@ public class AdapterScopeAudit extends BaseAdapter {
     boolean isCheck = true;
     Dialog dialogDeleteDateOfAudit;
     Button btn_add;
-
+    int simpleMessageDialog = -1, delete = 1;
     public AdapterScopeAudit(List<TemplateModelScopeAudit> templateModelScopeAudit, Context context
             , String company_id, NextSelectedTemplateFragment nextSelectedTemplateFragment,
                              NextSelectedAuditReportFragment nextSelectedAuditReportFragment, Button btn_add) {
@@ -183,7 +183,7 @@ public class AdapterScopeAudit extends BaseAdapter {
             public void onClick(View view) {
                 //Toast.makeText(context, "Product of interest delete", Toast.LENGTH_SHORT).show();
                 if (templateModelScopeAuditInterests.get(z).size() > 1) {
-                    dialogDeleteDateConfirmation("Are you sure you want to delete?", z);
+                    dialogDeleteDateConfirmation("Are you sure you want to delete?", z, delete);
                 }
             }
         });
@@ -204,7 +204,7 @@ public class AdapterScopeAudit extends BaseAdapter {
         return rowView;
     }
 
-    public void dialogDeleteDateConfirmation(String mess, final int z) {
+    public void dialogDeleteDateConfirmation(String mess, final int z,int action) {
         dialogDeleteDateOfAudit = new Dialog(context);
         dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -217,7 +217,11 @@ public class AdapterScopeAudit extends BaseAdapter {
         Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
 
         msg.setText(mess);
-
+        if (action==simpleMessageDialog)
+        {
+            yes.setVisibility(View.GONE);
+            no.setText("Close");
+        }
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -280,6 +284,11 @@ public class AdapterScopeAudit extends BaseAdapter {
             templateModelScopeAuditInterests.get(pos).add(t);
             // adapterScope.notifyDataSetChanged();
             notifyDataSetChanged();
+        }
+        else
+        {
+            dialogDeleteDateConfirmation("You've reached the maximum number of "
+                    + adapterScopeAuditInterest.getTypeAuditSize(), 0, simpleMessageDialog);
         }
     }
 

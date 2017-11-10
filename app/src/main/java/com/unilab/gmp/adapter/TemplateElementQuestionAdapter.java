@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelCategory;
+import com.unilab.gmp.model.ModelClassification;
+import com.unilab.gmp.model.ModelClassificationCategory;
 import com.unilab.gmp.model.ModelReportQuestion;
 import com.unilab.gmp.model.ModelTemplateQuestionDetails;
 
@@ -374,6 +376,23 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
         final Button save = (Button) dialogNo.findViewById(R.id.btn_save);
         Button cancel = (Button) dialogNo.findViewById(R.id.btn_cancel);
 
+
+
+        Log.d("TemplateElementQA", productType + "");
+//        List<ModelClassification> modelClassificationList = ModelClassification.find(ModelClassification.class, "classificationname like '%"+ productType +"%'");
+        List<ModelClassificationCategory> modelClassificationCategoryList = ModelClassificationCategory.find(ModelClassificationCategory.class, "classificationname like '%"+ productType +"%'");
+
+        Log.d("TemplateElementQA", modelClassificationCategoryList.toString() + " size :" + modelClassificationCategoryList.size());
+        List<String> categoryId = new ArrayList<>();
+        if (modelClassificationCategoryList.size()>0){
+            for (ModelClassificationCategory mcc: modelClassificationCategoryList)
+            {
+                categoryId.add(mcc.getCategory_id());
+                Log.d("TemplateElementQA", mcc.getCategory_id() + "");
+            }
+        }
+
+        Log.d("TemplateElementQA", categoryId.size() + "");
         //List<ModelCategory> categoryList = ModelCategory.listAll(ModelCategory.class);
         List<ModelCategory> categoryList = ModelCategory.find(ModelCategory.class, "status > 0");
         List<String> list = new ArrayList<>();
@@ -382,11 +401,14 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
         int x = categoryList.size();
         int selected = 0;
         for (int count = 0; count < x; count++) {
-            list.add(categoryList.get(count).getCategory_name());
-            listid.add(categoryList.get(count).getCategory_id());
-            //if (mrq.size() > 0) {
-            if (questionList.get(z).getCategory_id().equals(listid.get(count))) {
-                selected = count;
+            if (categoryId.indexOf(categoryList.get(count).getCategory_id())!=-1)
+            {
+                list.add(categoryList.get(count).getCategory_name());
+                listid.add(categoryList.get(count).getCategory_id());
+                //if (mrq.size() > 0) {
+                if (questionList.get(z).getCategory_id().equals(listid.get(count))) {
+                    selected = count;
+                }
             }
             //}
         }

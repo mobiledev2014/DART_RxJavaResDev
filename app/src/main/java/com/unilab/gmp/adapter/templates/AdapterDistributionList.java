@@ -33,7 +33,7 @@ public class AdapterDistributionList extends BaseAdapter {
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        distributionList = ModelDistribution.listAll(ModelDistribution.class);
+        distributionList = ModelDistribution.find(ModelDistribution.class,"status > 0");
         List<String> distriList = new ArrayList<>();
         distriIdList = new ArrayList<>();
         int d = distributionList.size();

@@ -16,4 +16,5 @@ public class ModelDistribution extends SugarRecord {
     String distribution_name;
     String create_date;
     String update_date;
+    String status;
 }
