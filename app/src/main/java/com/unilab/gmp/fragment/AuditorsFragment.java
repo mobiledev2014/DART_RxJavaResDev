@@ -100,7 +100,7 @@ public class AuditorsFragment extends Fragment {
 
         if (!audName.equals("")) {
             auditorsList = AuditorsModel.findWithQuery(AuditorsModel.class, "SELECT * from AUDITORS_MODEL WHERE " +
-                    "(status = '1' AND name LIKE '%" + audName + "%') OR " +
+                    "(status = '1' AND fname LIKE '%" + audName + "%') OR " +
                     "(status = '1' AND mname LIKE '%" + audName + "%') OR " +
                     "(status = '1' AND lname LIKE '%" + audName + "%') " +
                     "ORDER BY createdate DESC");
