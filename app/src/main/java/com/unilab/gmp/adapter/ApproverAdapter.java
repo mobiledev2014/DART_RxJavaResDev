@@ -65,7 +65,7 @@ public class ApproverAdapter extends BaseAdapter {
                 widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
 
             widgets.name = (TextView) rowView.findViewById(R.id.tv_approver_name);
-            widgets.designation = (TextView) rowView.findViewById(R.id.tv_approver_designation);
+            widgets.date_modified = (TextView) rowView.findViewById(R.id.tv_date_modified);
             widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
 
             approverModel = approverModels.get(position);
@@ -79,7 +79,7 @@ public class ApproverAdapter extends BaseAdapter {
 
             widgets.name.setText(firstname + " " + middlename + " " +
                     lastname);
-            widgets.designation.setText(designation);
+            widgets.date_modified.setText(approverModel.getUpdate_date());
 
             widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -97,7 +97,7 @@ public class ApproverAdapter extends BaseAdapter {
     }
 
     public class Widgets {
-        TextView name, designation;
+        TextView name, date_modified;
         LinearLayout rowBackground;
         Button viewInfo;
     }

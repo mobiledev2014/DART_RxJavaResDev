@@ -66,7 +66,7 @@ public class AuditorsAdapter extends BaseAdapter {
                 widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
 
             widgets.name = (TextView) rowView.findViewById(R.id.tv_auditors_name);
-            widgets.designation = (TextView) rowView.findViewById(R.id.tv_auditors_designation);
+            widgets.date_modified = (TextView) rowView.findViewById(R.id.tv_date_modified);
             widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
             //widgets.llRow = (LinearLayout) rowView.findViewById(R.id.ll_row);
 
@@ -81,7 +81,7 @@ public class AuditorsAdapter extends BaseAdapter {
 
             widgets.name.setText(fname + " " + mname + " " + lname);
 
-            widgets.designation.setText(designation);
+            widgets.date_modified.setText(auditorsModel.getUpdate_date());
             //widgets.action.setText(auditorsModel.getAuditor_id());
 
             widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +104,7 @@ public class AuditorsAdapter extends BaseAdapter {
     }
 
     public class Widgets {
-        TextView name, designation;
+        TextView name, date_modified;
         LinearLayout rowBackground;
         Button viewInfo;
         //LinearLayout llRow;

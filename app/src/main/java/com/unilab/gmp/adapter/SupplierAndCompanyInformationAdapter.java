@@ -81,7 +81,7 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
         else
             widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
 
-        widgets.address = (TextView) rowView.findViewById(R.id.tv_supplier_address);
+        widgets.date_modified = (TextView) rowView.findViewById(R.id.tv_date_modified);
         widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
         widgets.name_of_site = (TextView) rowView.findViewById(R.id.tv_supplier_name_site);
 
@@ -92,7 +92,9 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
         final String company_name = supplierModel.getCompany_name();
         final String company_id = supplierModel.getCompany_id();
         final String background = supplierModel.getBackground();
-        widgets.address.setText(address1 + ", " + address3 + ", " + address4);
+
+        //widgets.address.setText(address1 + ", " + address3 + ", " + address4);
+        widgets.date_modified.setText(supplierModel.getUpdate_date());
 
         widgets.name_of_site.setText(company_name);
 
@@ -167,7 +169,7 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
     }
 
     public class Widgets {
-        TextView name_of_site, address;// date_modified;
+        TextView name_of_site, date_modified;// date_modified;
         LinearLayout rowBackground;
         Button viewInfo;
     }
