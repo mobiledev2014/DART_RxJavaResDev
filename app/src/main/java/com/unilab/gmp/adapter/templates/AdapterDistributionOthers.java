@@ -3,6 +3,7 @@ package com.unilab.gmp.adapter.templates;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,10 +84,15 @@ public class AdapterDistributionOthers extends BaseAdapter {
         return rowView;
     }
 
+    public static boolean isEmpty(String distribution_other) {
+        return distribution_other==null || distribution_other.isEmpty() || distribution_other.equals("");
+    }
+
     public void save(String report_id) {
         TemplateModelDistributionOthers.deleteAll(TemplateModelDistributionOthers.class, "reportid = ?", report_id);
+
         for (TemplateModelDistributionOthers t : templateModelDistributionOthers) {
-            if (t.getDistribution_other().isEmpty())
+            if (isEmpty(t.getDistribution_other()))
                 continue;
             t.setReport_id(report_id);
             t.save();
