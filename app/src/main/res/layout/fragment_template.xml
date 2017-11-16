@@ -197,7 +197,7 @@
                             android:gravity="center"
                             android:paddingBottom="10dp"
                             android:paddingTop="10dp"
-                            android:text=" "
+                            android:text="Action"
                             android:textAlignment="center"
                             android:textColor="#f7f7f7"
                             android:textSize="@dimen/row_text_size" />
