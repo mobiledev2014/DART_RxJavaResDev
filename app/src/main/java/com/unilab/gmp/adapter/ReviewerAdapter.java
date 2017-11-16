@@ -67,7 +67,7 @@ public class ReviewerAdapter extends BaseAdapter {
                 widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
 
             widgets.name = (TextView) rowView.findViewById(R.id.tv_reviewer_name);
-            widgets.designation = (TextView) rowView.findViewById(R.id.tv_reviewer_designation);
+            widgets.date_modified = (TextView) rowView.findViewById(R.id.tv_date_modified);
             widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
 
             reviewerModel = reviewerModels.get(position);
@@ -80,7 +80,7 @@ public class ReviewerAdapter extends BaseAdapter {
             final String email = reviewerModel.getEmail();
 
             widgets.name.setText(firstname + " " + middlename + " " + lastname);
-            widgets.designation.setText(designation);
+            widgets.date_modified.setText(reviewerModel.getUpdate_date());
 
             widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -97,7 +97,7 @@ public class ReviewerAdapter extends BaseAdapter {
     }
 
     public class Widgets {
-        TextView name, designation;
+        TextView name, date_modified;
         LinearLayout rowBackground;
         Button viewInfo;
     }

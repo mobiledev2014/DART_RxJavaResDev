@@ -47,21 +47,30 @@
                 <HorizontalScrollView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="1dp"
                     android:layout_weight=".5"
-                    android:fadeScrollbars="false"
                     android:layout_gravity="center"
-                    android:layout_marginRight="1dp">
+                    android:fadeScrollbars="false">
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="center"
+                        android:gravity="center">
 
                     <TextView
-                        android:id="@+id/tv_supplier_address"
-                        android:layout_width="match_parent"
+                        android:id="@+id/tv_date_modified"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textSize="18dp"
-                        android:text="122 Calingatan Batangas"
                         android:gravity="center"
-                        android:textColor="#444444"
                         android:paddingLeft="3dp"
-                        android:paddingRight="3dp"/>
+                        android:paddingRight="3dp"
+                        android:text="Date Modified"
+                        android:textColor="#444444"
+                        android:textSize="18dp" />
+                    </LinearLayout>
 
                 </HorizontalScrollView>
 
