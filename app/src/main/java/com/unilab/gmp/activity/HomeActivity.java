@@ -105,7 +105,10 @@ public class HomeActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         templateFragment = new TemplateFragment();
 
-        newTemplates = getIntent().getStringExtra("NEWTEMPLATE");
+        if(getIntent().getStringExtra("NEWTEMPLATE")!=null) {
+            newTemplates = getIntent().getStringExtra("NEWTEMPLATE");
+        }
+
 
         if (!newTemplates.equals("")) {
             if (Integer.parseInt(newTemplates) > 0) {
