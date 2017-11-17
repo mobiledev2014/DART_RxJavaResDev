@@ -26,7 +26,7 @@ this.context = context;
     public void createNotification(int changes)
     {
         Notification.Builder mBuilder = new Notification.Builder(context);
-        mBuilder.setSmallIcon(R.drawable.ic_sync);
+        mBuilder.setSmallIcon(R.drawable.logo_dart_header);
         mBuilder.setContentTitle("DART Notification");
         mBuilder.setContentText(changes + " template/s has been updated.");
 
@@ -47,9 +47,9 @@ this.context = context;
         NotificationManager mNotifyMgr =
                 (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
-//        mBuilder.setContentIntent(resultPendingIntent);
+        mBuilder.setContentIntent(resultPendingIntent);
 
-
+        mBuilder.setAutoCancel(true);
 //                mBuilder.flags |= Notification.FLAG_AUTO_CANCEL;
 
         mBuilder.setAutoCancel(true);
