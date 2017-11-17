@@ -105,7 +105,7 @@ public class HomeActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         templateFragment = new TemplateFragment();
 
-        if(getIntent().getStringExtra("NEWTEMPLATE")!=null) {
+        if (getIntent().getStringExtra("NEWTEMPLATE") != null) {
             newTemplates = getIntent().getStringExtra("NEWTEMPLATE");
         }
 
@@ -433,13 +433,19 @@ public class HomeActivity extends AppCompatActivity {
     @OnClick(R.id.iv_logo)
     public void onViewClicked() {
         if (Variable.menu) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fl_content, new HomeFragment()).addToBackStack(null).commit();
+            if (Variable.onTemplate) {
+                dialogCancelTemplate(new HomeFragment(), "Home");
+            } else {
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fl_content, new HomeFragment()).addToBackStack(null).commit();
+
+            }
         }
 
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(ivLogo.getWindowToken(), 0);
     }
 
