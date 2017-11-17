@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -73,6 +74,21 @@ public class AdapterCompanyBackgroundMajorChanges extends BaseAdapter {
             @Override
             public void afterTextChanged(Editable editable) {
 
+            }
+        });
+
+        widgets.majorchanges.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent motionEvent) {
+                if (v.getId() == R.id.et_template_next_company_background_major_changes) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                        case MotionEvent.ACTION_UP:
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                    }
+                }
+                return false;
             }
         });
 //            rowView.setTag(widgets);
