@@ -76,7 +76,7 @@
                         android:background="#2fa5ff"
                         android:paddingBottom="5dp"
                         android:paddingTop="5dp"
-                        android:text="Name"
+                        android:text="Products"
                         android:textAlignment="center"
                         android:textColor="#f7f7f7"
                         android:textSize="18dp" />

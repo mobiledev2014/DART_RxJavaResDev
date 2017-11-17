@@ -3,7 +3,6 @@ package com.unilab.gmp.activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -178,9 +177,9 @@ public class HomeActivity extends AppCompatActivity {
         if (Variable.onTemplate) {
             if (Variable.onAudit) {
                 //Toast.makeText(context, "On Template", Toast.LENGTH_SHORT).show();
-                dialogCancelTemplate(auditReportFragment, "audit report");
+                dialogCancelTemplate(auditReportFragment, "audit report", "Would you like to cancel answering this template?");
             } else {
-                dialogCancelTemplate(templateFragment, "template");
+                dialogCancelTemplate(templateFragment, "template", "Would you like to cancel answering this template?");
             }
         } else {
             if (Variable.menu) {
@@ -218,7 +217,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case R.id.iv_template:
                 if (Variable.onTemplate) {
-                    dialogCancelTemplate(templateFragment, "template");
+                    dialogCancelTemplate(templateFragment, "template", "Would you like to cancel answering this template?");
                 } else {
                     if (!selected.equals("template")) {
                         buttonSelector("template");
@@ -231,7 +230,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case R.id.iv_reference_data:
                 if (Variable.onTemplate) {
-                    dialogCancelTemplate(referenceDataFragment, "reference");
+                    dialogCancelTemplate(referenceDataFragment, "reference", "Would you like to cancel answering this template?");
                 } else {
                     if (!selected.equals("reference")) {
                         buttonSelector("reference");
@@ -257,7 +256,7 @@ public class HomeActivity extends AppCompatActivity {
 //                NotificationCreator notificationCreator = new NotificationCreator(context);
 //                notificationCreator.createNotification();
                 if (Variable.onTemplate) {
-                    dialogCancelTemplate(auditReportFragment, "audit");
+                    dialogCancelTemplate(auditReportFragment, "audit", "Would you like to cancel answering this template?");
                 } else {
                     if (!selected.equals("audit")) {
                         buttonSelector("audit");
@@ -304,8 +303,8 @@ public class HomeActivity extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, MainActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(context, MainActivity.class);
+                //startActivity(intent);
                 finish();
             }
         });
@@ -321,7 +320,7 @@ public class HomeActivity extends AppCompatActivity {
         dialogCloseConfirmation.show();
     }
 
-    public void dialogCancelTemplate(final Fragment selectedFragment, final String selectedFragmentText) {
+    public void dialogCancelTemplate(final Fragment selectedFragment, final String selectedFragmentText, String messages) {
         dialogCancelTemplate = new Dialog(context);
         dialogCancelTemplate.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialogCancelTemplate.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -331,6 +330,9 @@ public class HomeActivity extends AppCompatActivity {
 
         Button yes = (Button) dialogCancelTemplate.findViewById(R.id.btn_yes);
         Button no = (Button) dialogCancelTemplate.findViewById(R.id.btn_no);
+        TextView message = (TextView) dialogCancelTemplate.findViewById(R.id.tv_message);
+
+        message.setText(messages);
 
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -434,7 +436,7 @@ public class HomeActivity extends AppCompatActivity {
     public void onViewClicked() {
         if (Variable.menu) {
             if (Variable.onTemplate) {
-                dialogCancelTemplate(new HomeFragment(), "Home");
+                dialogCancelTemplate(new HomeFragment(), "Home", "You have unsaved information. Are you sure you want to leave this page?");
             } else {
 
                 FragmentManager fragmentManager = getSupportFragmentManager();

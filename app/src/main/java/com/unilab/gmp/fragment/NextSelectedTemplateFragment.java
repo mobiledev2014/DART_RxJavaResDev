@@ -348,6 +348,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         Variable.onAudit = false;
         templateFragment = new TemplateFragment();
         wrapupdate = "";
+        btnSubmit.setText("SUBMIT");
 
         modelTemplateActivities = find(ModelTemplateActivities.class, "templateid = ?", modelTemplates.getTemplateID());
         activityAdapter = new ActivityAdapter(context, modelTemplateActivities, "");

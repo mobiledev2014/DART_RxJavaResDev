@@ -364,6 +364,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         templateFragment = new TemplateFragment();
         auditReportFragment = new AuditReportFragment();
         tvTitle.setText("REPORT");
+        btnSubmit.setText("SUBMIT");
 
         year = currentTime.get(Calendar.YEAR);
         month = currentTime.get(Calendar.MONTH);
