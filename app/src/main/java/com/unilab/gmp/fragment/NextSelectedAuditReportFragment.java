@@ -1196,16 +1196,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             TemplateModelTranslator t = new TemplateModelTranslator();
             templateModelTranslators.add(t);
             adapterTranslator.notifyDataSetChanged();
-            if (templateModelTranslators.size()>1)
-            {
-                scrlMain.post(new Runnable()
-                {
-                    public void run()
-                    {
-                        scrlMain.fullScroll(View.FOCUS_DOWN);
-                    }
-                });
-            }
+            scrlMain.fullScroll(View.FOCUS_DOWN);//scrolling
         } else
             dialogDeleteFromListConfirmation("You've reached the maximum number of 10",simpleMessageDialog);
     }

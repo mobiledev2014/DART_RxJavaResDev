@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelCategory;
-import com.unilab.gmp.model.ModelClassification;
 import com.unilab.gmp.model.ModelClassificationCategory;
 import com.unilab.gmp.model.ModelReportQuestion;
 import com.unilab.gmp.model.ModelTemplateQuestionDetails;
@@ -33,7 +32,7 @@ import java.util.List;
 /**
  * Created by c_jhcanuto on 11/21/2016.
  */
-public class TemplateElementQuestionAdapter extends BaseAdapter {
+public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<TemplateElementQuestionAdapter.Widgets> {
 
     public List<ModelTemplateQuestionDetails> questionList;
     public String text = "N/A";
@@ -104,14 +103,14 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return questionList.size();
     }
-
-    @Override
-    public Object getItem(int position) {
-        return position;
-    }
+//
+//    @Override
+//    public Object getItem(int position) {
+//        return position;
+//    }
 
     @Override
     public long getItemId(int position) {
@@ -119,20 +118,14 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        final Widgets widgets = new Widgets();
-        final View rowView;
+    public void onBindViewHolder(final Widgets widgets, final int position) {
+
         final String question, questionNumber;
         final int z = position;
 
-        rowView = inflater.inflate(R.layout.custom_listview_question, null);
-        widgets.btnYes = (Button) rowView.findViewById(R.id.btn_yes);
-        widgets.btnNo = (Button) rowView.findViewById(R.id.btn_no);
-        widgets.btnNa = (Button) rowView.findViewById(R.id.btn_na);
-        widgets.btnNc = (Button) rowView.findViewById(R.id.btn_nc);
 
 //        widgets.tvQuestionNumber = (TextView) rowView.findViewById(R.id.tv_question_number);
-        widgets.tvQuestion = (TextView) rowView.findViewById(R.id.tv_question);
+
 
         questionNumber = position + 1 + ""; //get question number
         question = questionList.get(position).getQuestion(); //get question
@@ -186,8 +179,7 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
                 widgets.btnNo.setBackgroundResource(R.drawable.yes_button);
                 widgets.btnNa.setBackgroundResource(R.drawable.selected_button);
                 widgets.btnNc.setBackgroundResource(R.drawable.yes_button);
-            }
-            else if (questionList.get(position).getAnswer_id().equals("4")) {
+            } else if (questionList.get(position).getAnswer_id().equals("4")) {
                 widgets.btnYes.setBackgroundResource(R.drawable.yes_button);
                 widgets.btnNo.setBackgroundResource(R.drawable.yes_button);
                 widgets.btnNa.setBackgroundResource(R.drawable.yes_button);
@@ -265,8 +257,6 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
                 }
             }
         });
-
-        return rowView;
     }
 
     public void dialogYes(String defaultText, final Button yes, final Button no, final Button na, final Button nc, final int z, final List<ModelReportQuestion> mrq) {
@@ -386,16 +376,14 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
         Button cancel = (Button) dialogNo.findViewById(R.id.btn_cancel);
 
 
-
         Log.d("TemplateElementQA", productType + "");
 //        List<ModelClassification> modelClassificationList = ModelClassification.find(ModelClassification.class, "classificationname like '%"+ productType +"%'");
-        List<ModelClassificationCategory> modelClassificationCategoryList = ModelClassificationCategory.find(ModelClassificationCategory.class, "classificationname like '%"+ productType +"%'");
+        List<ModelClassificationCategory> modelClassificationCategoryList = ModelClassificationCategory.find(ModelClassificationCategory.class, "classificationname like '%" + productType + "%'");
 
         Log.d("TemplateElementQA", modelClassificationCategoryList.toString() + " size :" + modelClassificationCategoryList.size());
         List<String> categoryId = new ArrayList<>();
-        if (modelClassificationCategoryList.size()>0){
-            for (ModelClassificationCategory mcc: modelClassificationCategoryList)
-            {
+        if (modelClassificationCategoryList.size() > 0) {
+            for (ModelClassificationCategory mcc : modelClassificationCategoryList) {
                 categoryId.add(mcc.getCategory_id());
                 Log.d("TemplateElementQA", mcc.getCategory_id() + "");
             }
@@ -410,8 +398,7 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
         int x = categoryList.size();
         int selected = 0;
         for (int count = 0; count < x; count++) {
-            if (categoryId.indexOf(categoryList.get(count).getCategory_id())!=-1)
-            {
+            if (categoryId.indexOf(categoryList.get(count).getCategory_id()) != -1) {
                 list.add(categoryList.get(count).getCategory_name());
                 listid.add(categoryList.get(count).getCategory_id());
                 //if (mrq.size() > 0) {
@@ -435,7 +422,7 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(save.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
 
                 strRemarks = remarks.getText().toString();
@@ -499,8 +486,24 @@ public class TemplateElementQuestionAdapter extends BaseAdapter {
         }
     }
 
-    public class Widgets {
+    @Override
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_question,parent, false);
+        return new Widgets(v);
+    }
+
+    public class Widgets extends RecyclerView.ViewHolder{
         TextView tvQuestion, tvQuestionNumber;
         Button btnYes, btnNo, btnNa, btnNc;
+
+        public Widgets(View rowView) {
+            super(rowView);
+            this.btnYes = (Button) rowView.findViewById(R.id.btn_yes);
+            this.btnNo = (Button) rowView.findViewById(R.id.btn_no);
+            this.btnNa = (Button) rowView.findViewById(R.id.btn_na);
+            this.btnNc = (Button) rowView.findViewById(R.id.btn_nc);
+            this.tvQuestion = (TextView) rowView.findViewById(R.id.tv_question);
+        }
     }
 }

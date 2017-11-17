@@ -369,11 +369,12 @@
 
                         </LinearLayout><!--standard reference-->
 
-                        <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                        <android.support.v7.widget.RecyclerView
                             android:id="@+id/lv_template_element"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="3dp"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                            android:layout_height="match_parent"
+                            android:scrollbars="vertical"
+                            android:layout_marginBottom="3dp"/>
 
                     </LinearLayout>
 

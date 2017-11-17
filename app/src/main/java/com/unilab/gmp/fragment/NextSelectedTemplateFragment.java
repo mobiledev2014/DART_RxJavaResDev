@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -109,9 +108,6 @@ public class NextSelectedTemplateFragment extends Fragment {
     public AdapterScopeAudit adapterScopeAudit;
     Unbinder unbinder;
     Context context;
-
-    @BindView(R.id.scrl_main)
-    ScrollView scrlMain;
     @BindView(R.id.btn_cancel)
     Button btnCancel;
     @BindView(R.id.btn_save_draft)
@@ -1167,7 +1163,6 @@ public class NextSelectedTemplateFragment extends Fragment {
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelAuditorses.add(t);
             adapterAuditors.notifyDataSetChanged();
-
         } else
             dialogDeleteFromListConfirmation("You've reached the maximum number of "
                     + adapterAuditors.getAuditorSize(), simpleMessageDialog);
@@ -1179,16 +1174,6 @@ public class NextSelectedTemplateFragment extends Fragment {
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelTranslators.add(t);
             adapterTranslator.notifyDataSetChanged();
-            if (templateModelTranslators.size()>1)
-            {
-                scrlMain.post(new Runnable()
-                {
-                    public void run()
-                    {
-                        scrlMain.fullScroll(View.FOCUS_DOWN);
-                    }
-                });
-            }
         } else
             dialogDeleteFromListConfirmation("You've reached the maximum number of 10", simpleMessageDialog);
 

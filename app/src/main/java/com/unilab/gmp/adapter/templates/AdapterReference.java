@@ -6,13 +6,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -27,7 +27,7 @@ import java.util.List;
  * Created by c_jhcanuto on 8/24/2017.
  */
 
-public class AdapterReference extends BaseAdapter {
+public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widgets> {
     List<TemplateModelReference> templateModelReferences;
     LayoutInflater inflater;
     Context context;
@@ -40,14 +40,14 @@ public class AdapterReference extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return templateModelReferences.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return templateModelReferences.get(i);
-    }
+//    @Override
+//    public Object getItem(int i) {
+//        return templateModelReferences.get(i);
+//    }
 
     @Override
     public long getItemId(int i) {
@@ -55,91 +55,92 @@ public class AdapterReference extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View rowView, ViewGroup viewGroup) {
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_template_reference, parent, false);
+        return new Widgets(v);
+    }
+
+    @Override
+    public void onBindViewHolder(final Widgets widgets, int i) {
         final int z = i;
-        final Widgets widgets;
-//        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_template_reference, null);
-            widgets.certification = (EditText) rowView.findViewById(R.id.et_template_next_license);
-            widgets.body = (EditText) rowView.findViewById(R.id.et_template_next_issuing_regulation);
-            widgets.number = (EditText) rowView.findViewById(R.id.et_template_next_license_certificate_num);
-            widgets.validity = (EditText) rowView.findViewById(R.id.et_template_next_validity);
-            widgets.issue_date = (EditText) rowView.findViewById(R.id.et_template_next_issue_date);
 
-            widgets.certification.setText(templateModelReferences.get(i).getCertification());
-            widgets.certification.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        widgets.certification.setText(templateModelReferences.get(i).getCertification());
+        widgets.certification.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                }
+            }
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (z < templateModelReferences.size())
                     templateModelReferences.get(z).setCertification(widgets.certification.getText().toString());
-                }
+            }
 
-                @Override
-                public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
-                }
-            });
+            }
+        });
 
-            widgets.body.setText(templateModelReferences.get(i).getBody());
-            widgets.body.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        widgets.body.setText(templateModelReferences.get(i).getBody());
+        widgets.body.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                }
+            }
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (z < templateModelReferences.size())
                     templateModelReferences.get(z).setBody(widgets.body.getText().toString());
-                }
+            }
 
-                @Override
-                public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
-                }
-            });
+            }
+        });
 
-            widgets.number.setText(templateModelReferences.get(i).getNumber());
-            widgets.number.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        widgets.number.setText(templateModelReferences.get(i).getNumber());
+        widgets.number.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                }
+            }
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (z < templateModelReferences.size())
                     templateModelReferences.get(z).setNumber(widgets.number.getText().toString());
-                }
+            }
 
-                @Override
-                public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
-                }
-            });
+            }
+        });
 
-            if (!templateModelReferences.get(i).getValidity().equals(""))
-                widgets.validity.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(i).getValidity()));
-            widgets.validity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    DDatePicker datePicker = new DDatePicker(widgets.validity, templateModelReferences.get(z), true);
-                    datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "datePicker");
-                }
-            });
+        if (!templateModelReferences.get(i).getValidity().equals(""))
+            widgets.validity.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(i).getValidity()));
+        widgets.validity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DDatePicker datePicker = new DDatePicker(widgets.validity, templateModelReferences.get(z), true);
+                datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "datePicker");
+            }
+        });
 
-            if (!templateModelReferences.get(i).getIssue_date().equals(""))
-                widgets.issue_date.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(i).getIssue_date()));
-            widgets.issue_date.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    DDatePicker datePicker = new DDatePicker(widgets.issue_date, templateModelReferences.get(z), false);
-                    datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "datePicker");
-                }
-            });
+        if (!templateModelReferences.get(i).getIssue_date().equals(""))
+            widgets.issue_date.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(i).getIssue_date()));
+        widgets.issue_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DDatePicker datePicker = new DDatePicker(widgets.issue_date, templateModelReferences.get(z), false);
+                datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "datePicker");
+            }
+        });
 
 //            rowView.setTag(widgets);
 //        } else {
@@ -151,7 +152,6 @@ public class AdapterReference extends BaseAdapter {
                 widgets.certification.setError("This field is required");
             }
         }
-        return rowView;
     }
 
     public boolean check() {
@@ -174,11 +174,11 @@ public class AdapterReference extends BaseAdapter {
         TemplateModelReference.deleteAll(TemplateModelReference.class, "reportid = ?", report_id);
         for (TemplateModelReference t : templateModelReferences) {
             if (
-                    t.getIssue_date().isEmpty()&&
-                    t.getNumber().isEmpty()&&
-                    t.getBody().isEmpty()&&
-                    t.getCertification().isEmpty()&&
-                    t.getValidity().isEmpty()
+                    t.getIssue_date().isEmpty() &&
+                            t.getNumber().isEmpty() &&
+                            t.getBody().isEmpty() &&
+                            t.getCertification().isEmpty() &&
+                            t.getValidity().isEmpty()
                     )
                 continue;
             t.setReport_id(report_id);
@@ -186,12 +186,21 @@ public class AdapterReference extends BaseAdapter {
         }
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder {
         EditText certification;
         EditText body;
         EditText number;
         EditText validity;
         EditText issue_date;
+
+        Widgets(View rowView) {
+            super(rowView);
+            this.certification = (EditText) rowView.findViewById(R.id.et_template_next_license);
+            this.body = (EditText) rowView.findViewById(R.id.et_template_next_issuing_regulation);
+            this.number = (EditText) rowView.findViewById(R.id.et_template_next_license_certificate_num);
+            this.validity = (EditText) rowView.findViewById(R.id.et_template_next_validity);
+            this.issue_date = (EditText) rowView.findViewById(R.id.et_template_next_issue_date);
+        }
     }
 
     public static class DDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {

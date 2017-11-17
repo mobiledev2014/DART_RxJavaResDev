@@ -6,13 +6,15 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListAdapter;
@@ -31,7 +33,7 @@ import java.util.List;
 /**
  * Created by c_jhcanuto on 11/21/2016.
  */
-public class TemplateElementAdapter extends BaseAdapter {
+public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElementAdapter.Widgets> {
 
     LayoutInflater inflater = null;
     Context context;
@@ -99,14 +101,14 @@ public class TemplateElementAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return questionModel.size();
     }
 
-    @Override
-    public Object getItem(int position) {
-        return position;
-    }
+//    @Override
+//    public Object getItem(int position) {
+//        return position;
+//    }
 
     @Override
     public long getItemId(int position) {
@@ -114,51 +116,21 @@ public class TemplateElementAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, final View convertView, ViewGroup parent) {
-        final Widgets widgets = new Widgets();
-        final View rowView;
+    public void onBindViewHolder(final Widgets widgets, int position) {
         final int z = position;
         final String elementNumber;
-        //String pick = "";
 
-        rowView = inflater.inflate(R.layout.custom_listview_element, null);
-        widgets.tvElementNumber = (TextView) rowView.findViewById(R.id.tv_element_number);
-        widgets.lvQuestionList = (ExpandableHeightListView) rowView.findViewById(R.id.lv_question_list);
-        widgets.cbElementNa = (CheckBox) rowView.findViewById(R.id.cb_element_na);
 
         elementNumber = questionModel.get(position).getElement_name();
 
-//        if (size != templateElementQuestionAdapters.size()) {
-//            Log.e("JHUN---", "pasok sa check NAasdasd");
-//            TemplateElementQuestionAdapter questionList = new TemplateElementQuestionAdapter(context, ModelTemplateQuestionDetails.find(ModelTemplateQuestionDetails.class,
-//                    "elementid = ? ", questionModel.get(position).getElement_id()), this);
-//            templateElementQuestionAdapters.add(questionList);
-//        }
-//
-//        boolean valid = true;
-//        for (ModelTemplateQuestionDetails mtqd : templateElementQuestionAdapters.get(position).questionList) {
-//            if (mtqd.getAnswer_id() != "3") {
-//                valid = false;
-//            }
-//        }
-//        widgets.cbElementNa.setChecked(valid);
-
         widgets.tvElementNumber.setText(elementNumber);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+        widgets.lvQuestionList.setLayoutManager(mLayoutManager);
+        widgets.lvQuestionList.setItemAnimator(new DefaultItemAnimator());
+
         widgets.lvQuestionList.setAdapter(templateElementQuestionAdapters.get(position));
-        widgets.lvQuestionList.setExpanded(true);
-
-        //setListViewHeightBasedOnChildren(widgets.lvQuestionList);
-
-//        widgets.cbElementNa.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                if (b) {
-//                    dialogElementNa(widgets.cbElementNa, z);
-//                } else {
-//                    widgets.cbElementNa.setText("N/A");
-//                }
-//            }
-//        });
+        //widgets.lvQuestionList.setExpanded(true);
 
         if (!templateElementQuestionAdapters.get(position).isChecked().isEmpty()) {
             widgets.cbElementNa.setText(templateElementQuestionAdapters.get(position).isChecked());
@@ -196,8 +168,13 @@ public class TemplateElementAdapter extends BaseAdapter {
             }
         });
 
+    }
 
-        return rowView;
+    @Override
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_element,parent, false);
+        return new Widgets(v);
     }
 
     public void save(String report_id) {
@@ -279,9 +256,16 @@ public class TemplateElementAdapter extends BaseAdapter {
         dialogElementNa.show();
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder {
         TextView tvElementNumber;
-        ExpandableHeightListView lvQuestionList;
+        RecyclerView lvQuestionList;
         CheckBox cbElementNa;
+
+        public Widgets(View rowView) {
+            super(rowView);
+            this.tvElementNumber = (TextView) rowView.findViewById(R.id.tv_element_number);
+            this.lvQuestionList = (RecyclerView) rowView.findViewById(R.id.lv_question_list);
+            this.cbElementNa = (CheckBox) rowView.findViewById(R.id.cb_element_na);
+        }
     }
 }

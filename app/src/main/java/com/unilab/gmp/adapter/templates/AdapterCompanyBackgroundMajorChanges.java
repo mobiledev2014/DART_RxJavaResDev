@@ -1,14 +1,13 @@
 package com.unilab.gmp.adapter.templates;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 
 import com.unilab.gmp.R;
@@ -20,7 +19,7 @@ import java.util.List;
  * Created by c_jhcanuto on 8/24/2017.
  */
 
-public class AdapterCompanyBackgroundMajorChanges extends BaseAdapter {
+public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<AdapterCompanyBackgroundMajorChanges.Widgets> {
     List<TemplateModelCompanyBackgroundMajorChanges> templateModelCompanyBackgroundMajorChanges;
     LayoutInflater inflater;
     Context context;
@@ -35,14 +34,14 @@ public class AdapterCompanyBackgroundMajorChanges extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return templateModelCompanyBackgroundMajorChanges.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return templateModelCompanyBackgroundMajorChanges.get(i);
-    }
+//    @Override
+//    public Object getItem(int i) {
+//        return templateModelCompanyBackgroundMajorChanges.get(i);
+//    }
 
     @Override
     public long getItemId(int i) {
@@ -50,62 +49,44 @@ public class AdapterCompanyBackgroundMajorChanges extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View rowView, ViewGroup viewGroup) {
-        final int z = i;
-        final Widgets widgets;
-//        if (rowView == null) {
-        widgets = new Widgets();
-        rowView = inflater.inflate(R.layout.custom_listview_template_company_background_major_changes, null);
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_template_company_background_major_changes, parent, false);
+        return new Widgets(v);
+    }
 
-        widgets.majorchanges = (EditText) rowView.findViewById(R.id.et_template_next_company_background_major_changes);
+    @Override
+    public void onBindViewHolder(final Widgets widgets, final int position) {
+        if (templateModelCompanyBackgroundMajorChanges.size() > position) {
+            widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges());
+            widgets.majorchanges.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(i).getMajorchanges());
-        widgets.majorchanges.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                templateModelCompanyBackgroundMajorChanges.get(z).setMajorchanges(widgets.majorchanges.getText().toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        widgets.majorchanges.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent motionEvent) {
-                if (v.getId() == R.id.et_template_next_company_background_major_changes) {
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                    switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-                        case MotionEvent.ACTION_UP:
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            break;
-                    }
                 }
-                return false;
-            }
-        });
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (position < templateModelCompanyBackgroundMajorChanges.size())
+                        templateModelCompanyBackgroundMajorChanges.get(position).setMajorchanges(charSequence.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+        }
         if (!isCheck) {
-            if (templateModelCompanyBackgroundMajorChanges.get(i).getMajorchanges().isEmpty()) {
+            if (templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges().isEmpty()) {
                 widgets.majorchanges.setError("This field is required");
             }
         }
 
-        if (disable > i) {
+        if (disable > position) {
             widgets.majorchanges.setEnabled(false);
         }
 
-        return rowView;
     }
 
     public boolean check() {
@@ -126,9 +107,9 @@ public class AdapterCompanyBackgroundMajorChanges extends BaseAdapter {
 
     public void save(String report_id) {
         TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
-       int i = 0;
+        int i = 0;
         for (TemplateModelCompanyBackgroundMajorChanges t : templateModelCompanyBackgroundMajorChanges) {
-            if(i++ < disable||t.getMajorchanges().isEmpty()){
+            if (i++ < disable) {
                 continue;
             }
             t.setReport_id(report_id);
@@ -136,7 +117,12 @@ public class AdapterCompanyBackgroundMajorChanges extends BaseAdapter {
         }
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder {
         EditText majorchanges;
+
+        Widgets(View rowView) {
+            super(rowView);
+            this.majorchanges = (EditText) rowView.findViewById(R.id.et_template_next_company_background_major_changes);
+        }
     }
 }

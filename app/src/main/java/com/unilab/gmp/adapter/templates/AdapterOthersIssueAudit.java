@@ -1,6 +1,7 @@
 package com.unilab.gmp.adapter.templates;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -11,10 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 
 import com.unilab.gmp.R;
-import com.unilab.gmp.model.ModelDistribution;
-import com.unilab.gmp.model.TemplateModelDistributionOthers;
 import com.unilab.gmp.model.TemplateModelOtherIssuesAudit;
-import com.unilab.gmp.model.TemplateModelOtherIssuesExecutive;
 
 import java.util.List;
 
@@ -22,7 +20,7 @@ import java.util.List;
  * Created by c_jhcanuto on 8/24/2017.
  */
 
-public class AdapterOthersIssueAudit extends BaseAdapter {
+public class AdapterOthersIssueAudit extends RecyclerView.Adapter<AdapterOthersIssueAudit.Widgets> {
     LayoutInflater inflater;
     Context context;
     List<TemplateModelOtherIssuesAudit> templateModelOtherIssuesAudits;
@@ -35,14 +33,14 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return templateModelOtherIssuesAudits.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return templateModelOtherIssuesAudits.get(i);
-    }
+//    @Override
+//    public Object getItem(int i) {
+//        return templateModelOtherIssuesAudits.get(i);
+//    }
 
     @Override
     public long getItemId(int i) {
@@ -50,33 +48,33 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View rowView, ViewGroup viewGroup) {
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_template_other_issue_audit,parent, false);
+        return new Widgets(v);
+    }
+
+    @Override
+    public void onBindViewHolder(final Widgets widgets, int i) {
         final int z = i;
-        final Widgets widgets;
-//        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_template_other_issue_audit, null);
 
+        widgets.otherIssueAudit.setText(templateModelOtherIssuesAudits.get(i).getOther_issues_audit());
+        widgets.otherIssueAudit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            widgets.otherIssueAudit = (EditText) rowView.findViewById(R.id.et_template_next_other_issue_audit);
+            }
 
-            widgets.otherIssueAudit.setText(templateModelOtherIssuesAudits.get(i).getOther_issues_audit());
-            widgets.otherIssueAudit.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                templateModelOtherIssuesAudits.get(z).setOther_issues_audit(widgets.otherIssueAudit.getText().toString());
+            }
 
-                }
+            @Override
+            public void afterTextChanged(Editable editable) {
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    templateModelOtherIssuesAudits.get(z).setOther_issues_audit(widgets.otherIssueAudit.getText().toString());
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
+            }
+        });
 //            rowView.setTag(widgets);
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
@@ -86,7 +84,6 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
                 widgets.otherIssueAudit.setError("This field is required");
             }
         }
-        return rowView;
     }
 
     public boolean check() {
@@ -104,6 +101,7 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
         }
         return isCheck;
     }
+
     public void save(String report_id) {
         TemplateModelOtherIssuesAudit.deleteAll(TemplateModelOtherIssuesAudit.class, "reportid = ?", report_id);
         for (TemplateModelOtherIssuesAudit t : templateModelOtherIssuesAudits) {
@@ -114,7 +112,12 @@ public class AdapterOthersIssueAudit extends BaseAdapter {
         }
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder{
         EditText otherIssueAudit;
+
+        public Widgets(View rowView) {
+            super(rowView);
+            this.otherIssueAudit = (EditText) rowView.findViewById(R.id.et_template_next_other_issue_audit);
+        }
     }
 }

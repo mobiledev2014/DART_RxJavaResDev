@@ -2,6 +2,7 @@ package com.unilab.gmp.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,7 @@ import java.util.List;
  * Created by c_jhcanuto on 7/31/2017.
  */
 
-public class ActivityAdapter extends BaseAdapter {
+public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widgets> {
     LayoutInflater inflater;
     Context context;
 
@@ -45,14 +46,14 @@ public class ActivityAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return modelTemplateActivities.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return i;
-    }
+//    @Override
+//    public Object getItem(int i) {
+//        return i;
+//    }
 
     @Override
     public long getItemId(int i) {
@@ -60,16 +61,9 @@ public class ActivityAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View rowView, ViewGroup viewGroup) {
-        final Widgets widgets;
-//        if (rowView == null) {
+    public void onBindViewHolder(Widgets widgets, final int position) {
 
-        widgets = new Widgets();
-        rowView = inflater.inflate(R.layout.custom_listview_activities, null);
-        widgets.name = (TextView) rowView.findViewById(R.id.tv_activity_name);
-        widgets.lv = (ExpandableHeightListView) rowView.findViewById(R.id.lv_sub_activity);
-        widgets.cbActivity = (CheckBox) rowView.findViewById(R.id.cb_activity);
-        rowView.setTag(widgets);
+
         widgets.name.setText(modelTemplateActivities.get(position).getActivityName());
         widgets.cbActivity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -112,7 +106,6 @@ public class ActivityAdapter extends BaseAdapter {
 //            widgets = (Widgets) rowView.getTag();
 //        }
         widgets.lv.setExpanded(true);
-        return rowView;
     }
 
     public void save(String report_id) {
@@ -130,11 +123,25 @@ public class ActivityAdapter extends BaseAdapter {
         }
     }
 
-    public class Widgets {
+    @Override
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_activities,parent, false);
+        return new Widgets(v);
+    }
+
+    public class Widgets extends RecyclerView.ViewHolder {
         TextView name;
         LinearLayout rowBackground;
         ExpandableHeightListView lv;
         CheckBox cbActivity;
+        public Widgets(View rowView){
+            super(rowView);
+            this.name = (TextView) rowView.findViewById(R.id.tv_activity_name);
+            this.lv = (ExpandableHeightListView) rowView.findViewById(R.id.lv_sub_activity);
+            this.cbActivity = (CheckBox) rowView.findViewById(R.id.cb_activity);
+        }
+
     }
 
 }

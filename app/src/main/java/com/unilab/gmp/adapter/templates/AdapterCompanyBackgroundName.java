@@ -1,6 +1,7 @@
 package com.unilab.gmp.adapter.templates;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by c_jhcanuto on 8/24/2017.
  */
 
-public class AdapterCompanyBackgroundName extends BaseAdapter {
+public class AdapterCompanyBackgroundName extends RecyclerView.Adapter<AdapterCompanyBackgroundName.Widgets> {
     List<TemplateModelCompanyBackgroundName> templateModelCompanyBackgroundNames;
     LayoutInflater inflater;
     Context context;
@@ -32,14 +33,14 @@ public class AdapterCompanyBackgroundName extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return templateModelCompanyBackgroundNames.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return templateModelCompanyBackgroundNames.get(i);
-    }
+//    @Override
+//    public Object getItem(int i) {
+//        return templateModelCompanyBackgroundNames.get(i);
+//    }
 
     @Override
     public long getItemId(int i) {
@@ -47,14 +48,15 @@ public class AdapterCompanyBackgroundName extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View rowView, ViewGroup viewGroup) {
-        final int z = i;
-        Widgets widgets;
-//        if (rowView == null) {
-        widgets = new Widgets();
-        rowView = inflater.inflate(R.layout.custom_listview_template_company_background_name, null);
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_template_company_background_name,parent, false);
+        return new Widgets(v);
+    }
 
-        widgets.bgname = (EditText) rowView.findViewById(R.id.et_template_next_company_background_name);
+    @Override
+    public void onBindViewHolder(Widgets widgets, int i) {
+        final int z = i;
 
         widgets.bgname.setText(templateModelCompanyBackgroundNames.get(i).getBgname());
         widgets.bgname.addTextChangedListener(new TextWatcher() {
@@ -81,7 +83,6 @@ public class AdapterCompanyBackgroundName extends BaseAdapter {
         if (disable > i) {
             widgets.bgname.setEnabled(false);
         }
-        return rowView;
     }
 
     public void save(String report_id) {
@@ -96,7 +97,11 @@ public class AdapterCompanyBackgroundName extends BaseAdapter {
         }
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder{
         EditText bgname;
+        Widgets(View rowView){
+            super(rowView);
+            this.bgname = (EditText) rowView.findViewById(R.id.et_template_next_company_background_name);
+        }
     }
 }

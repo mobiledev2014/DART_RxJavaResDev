@@ -39,4 +39,5 @@ dependencies {
     compile 'com.github.satyan:sugar:1.4'
     compile files('libs/lombok.jar')
     //provided 'org.projectlombok:lombok:1.16.10'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
 }

@@ -1,19 +1,16 @@
 package com.unilab.gmp.adapter.templates;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 
 import com.unilab.gmp.R;
-import com.unilab.gmp.model.ModelDistribution;
-import com.unilab.gmp.model.TemplateModelCompanyBackgroundMajorChanges;
-import com.unilab.gmp.model.TemplateModelDistributionOthers;
 import com.unilab.gmp.model.TemplateModelOtherIssuesExecutive;
 
 import java.util.List;
@@ -22,7 +19,7 @@ import java.util.List;
  * Created by c_jhcanuto on 8/24/2017.
  */
 
-public class AdapterOthersIssueExecutive extends BaseAdapter {
+public class AdapterOthersIssueExecutive extends RecyclerView.Adapter<AdapterOthersIssueExecutive.Widgets> {
     LayoutInflater inflater;
     Context context;
     List<TemplateModelOtherIssuesExecutive> templateModelOtherIssuesExecutives;
@@ -35,14 +32,14 @@ public class AdapterOthersIssueExecutive extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return templateModelOtherIssuesExecutives.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return templateModelOtherIssuesExecutives.get(i);
-    }
+//    @Override
+//    public Object getItem(int i) {
+//        return templateModelOtherIssuesExecutives.get(i);
+//    }
 
     @Override
     public long getItemId(int i) {
@@ -50,16 +47,18 @@ public class AdapterOthersIssueExecutive extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View rowView, ViewGroup viewGroup) {
-        final int z = i;
-        final Widgets widgets;
-//        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_template_other_issue_executive, null);
-//
-//            List<ModelDistribution> distributionList = ModelDistribution.listAll(ModelDistribution.class);
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_template_other_issue_executive, parent, false);
+        return new Widgets(v);
+    }
 
-            widgets.otherIssueExecutive = (EditText) rowView.findViewById(R.id.et_template_next_other_issue_executive);
+    @Override
+    public void onBindViewHolder(final Widgets widgets, int i) {
+        if (templateModelOtherIssuesExecutives.size() > i) {
+            final int z = i;
+
+//            List<ModelDistribution> distributionList = ModelDistribution.listAll(ModelDistribution.class);
 
             widgets.otherIssueExecutive.setText(templateModelOtherIssuesExecutives.get(i).getOther_issues_executive());
             widgets.otherIssueExecutive.addTextChangedListener(new TextWatcher() {
@@ -82,12 +81,12 @@ public class AdapterOthersIssueExecutive extends BaseAdapter {
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
 //        }
-        if (!isCheck) {
-            if (templateModelOtherIssuesExecutives.get(i).getOther_issues_executive().isEmpty()) {
-                widgets.otherIssueExecutive.setError("This field is required");
+            if (!isCheck) {
+                if (templateModelOtherIssuesExecutives.get(i).getOther_issues_executive().isEmpty()) {
+                    widgets.otherIssueExecutive.setError("This field is required");
+                }
             }
         }
-        return rowView;
     }
 
     public boolean check() {
@@ -116,8 +115,12 @@ public class AdapterOthersIssueExecutive extends BaseAdapter {
         }
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder {
         EditText otherIssueExecutive;
 
+        Widgets(View rowView) {
+            super(rowView);
+            this.otherIssueExecutive = (EditText) rowView.findViewById(R.id.et_template_next_other_issue_executive);
+        }
     }
 }

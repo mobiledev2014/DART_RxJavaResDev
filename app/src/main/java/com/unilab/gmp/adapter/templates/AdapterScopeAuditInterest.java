@@ -40,7 +40,7 @@ public class AdapterScopeAuditInterest extends BaseAdapter {
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         modelProducts = ModelProduct.find(ModelProduct.class, "companyid = ? AND status > 0", company_id);
-        modelDispositions = ModelDisposition.find(ModelDisposition.class,"status > 0");
+        modelDispositions = ModelDisposition.find(ModelDisposition.class, "status > 0");
 
         List<String> dispotList = new ArrayList<>();
         idDispotList = new ArrayList<>();
@@ -83,60 +83,56 @@ public class AdapterScopeAuditInterest extends BaseAdapter {
         final int z = i;
         final Widgets widgets;
 //        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_template_scope_audit_interest, null);
 
+        rowView = inflater.inflate(R.layout.custom_listview_template_scope_audit_interest, null);
+        widgets = new Widgets(rowView);
+        widgets.spnDisposition.setAdapter(adapterDispo);
+        widgets.spnTypeAudit.setAdapter(adapter);
 
-            widgets.spnDisposition = (Spinner) rowView.findViewById(R.id.s_template_next_summary_recommendation_disposition);
-            widgets.spnDisposition.setAdapter(adapterDispo);
-
-            widgets.spnTypeAudit = (Spinner) rowView.findViewById(R.id.s_template_next_next_scope_audit_interest);
-            widgets.spnTypeAudit.setAdapter(adapter);
-
-            if (templateModelScopeAuditInterests.get(z).getDisposition_id().isEmpty()) {
-                templateModelScopeAuditInterests.get(z).setDisposition_id(modelDispositions.get(
-                        widgets.spnDisposition.getSelectedItemPosition()).getDisposition_id());
-            } else {
-                templateModelScopeAuditInterests.get(z).setSelected2(idDispotList.indexOf(
-                        templateModelScopeAuditInterests.get(i).getDisposition_id()));
-            }
-            widgets.spnDisposition.setSelection(templateModelScopeAuditInterests.get(i).getSelected2());
-            widgets.spnDisposition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    templateModelScopeAuditInterests.get(z).setDisposition(widgets.spnDisposition.getSelectedItem().toString());
-                    templateModelScopeAuditInterests.get(z).setSelected2(i);
-                    templateModelScopeAuditInterests.get(z).setDisposition_id(modelDispositions.get(i).getDisposition_id());
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
-
-            if (templateModelScopeAuditInterests.get(z).getProduct_id().isEmpty()) {
-                templateModelScopeAuditInterests.get(z).setProduct_id(modelProducts.get(widgets.spnTypeAudit.getSelectedItemPosition()).getProduct_id());
-            } else {
-                templateModelScopeAuditInterests.get(z).setSelected(idList.indexOf(
-                        templateModelScopeAuditInterests.get(i).getProduct_id()
-                ));
+        if (templateModelScopeAuditInterests.get(z).getDisposition_id().isEmpty()) {
+            templateModelScopeAuditInterests.get(z).setDisposition_id(modelDispositions.get(
+                    widgets.spnDisposition.getSelectedItemPosition()).getDisposition_id());
+        } else {
+            templateModelScopeAuditInterests.get(z).setSelected2(idDispotList.indexOf(
+                    templateModelScopeAuditInterests.get(i).getDisposition_id()));
+        }
+        widgets.spnDisposition.setSelection(templateModelScopeAuditInterests.get(i).getSelected2());
+        widgets.spnDisposition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                templateModelScopeAuditInterests.get(z).setDisposition(widgets.spnDisposition.getSelectedItem().toString());
+                templateModelScopeAuditInterests.get(z).setSelected2(i);
+                templateModelScopeAuditInterests.get(z).setDisposition_id(modelDispositions.get(i).getDisposition_id());
             }
 
-            widgets.spnTypeAudit.setSelection(templateModelScopeAuditInterests.get(i).getSelected());
-            widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    templateModelScopeAuditInterests.get(z).setProduct_name(widgets.spnTypeAudit.getSelectedItem().toString());
-                    templateModelScopeAuditInterests.get(z).setSelected(i);
-                    templateModelScopeAuditInterests.get(z).setProduct_id(modelProducts.get(i).getProduct_id());
-                }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
-                }
-            });
+        if (templateModelScopeAuditInterests.get(z).getProduct_id().isEmpty()) {
+            templateModelScopeAuditInterests.get(z).setProduct_id(modelProducts.get(widgets.spnTypeAudit.getSelectedItemPosition()).getProduct_id());
+        } else {
+            templateModelScopeAuditInterests.get(z).setSelected(idList.indexOf(
+                    templateModelScopeAuditInterests.get(i).getProduct_id()
+            ));
+        }
+
+        widgets.spnTypeAudit.setSelection(templateModelScopeAuditInterests.get(i).getSelected());
+        widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                templateModelScopeAuditInterests.get(z).setProduct_name(widgets.spnTypeAudit.getSelectedItem().toString());
+                templateModelScopeAuditInterests.get(z).setSelected(i);
+                templateModelScopeAuditInterests.get(z).setProduct_id(modelProducts.get(i).getProduct_id());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 //            rowView.setTag(widgets);
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
@@ -158,6 +154,11 @@ public class AdapterScopeAuditInterest extends BaseAdapter {
 
     public class Widgets {
         Spinner spnTypeAudit, spnDisposition;
+
+        Widgets(View rowView) {
+            this.spnDisposition = (Spinner) rowView.findViewById(R.id.s_template_next_summary_recommendation_disposition);
+            this.spnTypeAudit = (Spinner) rowView.findViewById(R.id.s_template_next_next_scope_audit_interest);
+        }
     }
 
 

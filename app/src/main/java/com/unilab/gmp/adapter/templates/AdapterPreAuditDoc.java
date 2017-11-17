@@ -1,13 +1,13 @@
 package com.unilab.gmp.adapter.templates;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 
 import com.unilab.gmp.R;
@@ -19,7 +19,7 @@ import java.util.List;
  * Created by c_jhcanuto on 8/24/2017.
  */
 
-public class AdapterPreAuditDoc extends BaseAdapter {
+public class AdapterPreAuditDoc extends RecyclerView.Adapter<AdapterPreAuditDoc.Widgets> {
     List<TemplateModelPreAuditDoc> templateModelPreAuditDocs;
     LayoutInflater inflater;
     Context context;
@@ -32,14 +32,14 @@ public class AdapterPreAuditDoc extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return templateModelPreAuditDocs.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return templateModelPreAuditDocs.get(i);
-    }
+//    @Override
+//    public Object getItem(int i) {
+//        return templateModelPreAuditDocs.get(i);
+//    }
 
     @Override
     public long getItemId(int i) {
@@ -47,32 +47,33 @@ public class AdapterPreAuditDoc extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View rowView, ViewGroup viewGroup) {
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_template_pre_audit_doc, parent, false);
+        return new Widgets(v);
+    }
+
+    @Override
+    public void onBindViewHolder(final Widgets widgets, int i) {
         final int z = i;
-        final Widgets widgets;
-//        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_template_pre_audit_doc, null);
 
-            widgets.preaudit = (EditText) rowView.findViewById(R.id.et_template_next_pre_audit_doc);
+        widgets.preaudit.setText(templateModelPreAuditDocs.get(z).getPreaudit());
+        widgets.preaudit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            widgets.preaudit.setText(templateModelPreAuditDocs.get(z).getPreaudit());
-            widgets.preaudit.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
-                }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                templateModelPreAuditDocs.get(z).setPreaudit(widgets.preaudit.getText().toString());
+            }
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    templateModelPreAuditDocs.get(z).setPreaudit(widgets.preaudit.getText().toString());
-                }
+            @Override
+            public void afterTextChanged(Editable editable) {
 
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
+            }
+        });
 //            rowView.setTag(widgets);
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
@@ -82,7 +83,6 @@ public class AdapterPreAuditDoc extends BaseAdapter {
                 widgets.preaudit.setError("This field is required");
             }
         }
-        return rowView;
     }
 
     public boolean check() {
@@ -111,7 +111,12 @@ public class AdapterPreAuditDoc extends BaseAdapter {
         }
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder {
         EditText preaudit;
+
+        public Widgets(View rowView) {
+            super(rowView);
+            this.preaudit = (EditText) rowView.findViewById(R.id.et_template_next_pre_audit_doc);
+        }
     }
 }

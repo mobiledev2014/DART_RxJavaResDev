@@ -88,11 +88,11 @@
 
                             </TableLayout> <!--activities carried out-->
 
-                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                            <android.support.v7.widget.RecyclerView
                                 android:id="@+id/lv_template_next_activities_carried"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                android:layout_marginBottom="10dp"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -160,12 +160,12 @@
 
                             </TableLayout> <!--scope of audit-->
 
-                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                            <android.support.v7.widget.RecyclerView
                                 android:id="@+id/lv_template_next_scope_audit"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:divider="@color/dividerColor"
-                                android:dividerHeight="3dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                android:dividerHeight="3dip"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -329,12 +329,12 @@
 
                             </TableLayout> <!--reference-->
 
-                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                            <android.support.v7.widget.RecyclerView
                                 android:id="@+id/lv_template_next_reference"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                android:dividerHeight="2dip"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -404,12 +404,12 @@
                                     android:layout_weight=".5"
                                     android:orientation="horizontal">
 
-                                    <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                    <android.support.v7.widget.RecyclerView
                                         android:id="@+id/lv_template_next_pre_audit_doc"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight=".7"
-                                        android:gravity="center|top"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                        android:gravity="center|top"/>
 
                                     <LinearLayout
                                         android:layout_width="0dp"
@@ -528,12 +528,12 @@
                             </LinearLayout><!--date of wrap up-->
 
 
-                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                            <android.support.v7.widget.RecyclerView
                                 android:id="@+id/lv_template_next_present_during_meeting"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                android:dividerHeight="2dip"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -599,12 +599,12 @@
 
                             </TableLayout> <!--present during inspection-->
 
-                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                            <android.support.v7.widget.RecyclerView
                                 android:id="@+id/lv_template_next_personnel_inspection"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                android:dividerHeight="2dip"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -715,11 +715,11 @@
                                         android:gravity="center|top"
                                         android:orientation="vertical">
 
-                                        <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                        <android.support.v7.widget.RecyclerView
                                             android:id="@+id/lv_template_next_distribution_list"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginTop="5dp"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                            android:layout_marginTop="5dp"/>
 
                                     </LinearLayout>
 
@@ -784,10 +784,10 @@
                                         android:gravity="center|top"
                                         android:orientation="vertical">
 
-                                        <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                        <android.support.v7.widget.RecyclerView
                                             android:id="@+id/lv_template_next_other_distribution"
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                            android:layout_height="wrap_content"/>
 
                                     </LinearLayout>
 
@@ -858,12 +858,12 @@
 
                             </TableLayout>
 
-                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                            <android.support.v7.widget.RecyclerView
                                 android:id="@+id/lv_template_next_summary_recommendation"
                                 android:layout_width="match_parent"
-                                android:layout_height="40dp"
+                                android:layout_height="wrap_content"
                                 android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                android:dividerHeight="2dip"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -952,10 +952,10 @@
                                                 android:gravity="center|top"
                                                 android:orientation="vertical">
 
-                                                <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                                <android.support.v7.widget.RecyclerView
                                                     android:id="@+id/lv_template_next_summary_recommendation_other_issues_audit"
                                                     android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                                    android:layout_height="wrap_content"/>
 
                                             </LinearLayout>
 
@@ -1044,10 +1044,10 @@
                                                 android:gravity="center|top"
                                                 android:orientation="vertical">
 
-                                                <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                                <android.support.v7.widget.RecyclerView
                                                     android:id="@+id/lv_template_next_summary_recommendation_other_issues_executive"
                                                     android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                                    android:layout_height="match_parent"/>
 
                                             </LinearLayout>
 
@@ -1268,10 +1268,10 @@
                                             android:paddingTop="5dp"
                                             android:textSize="20sp" />-->
 
-                                        <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                        <android.support.v7.widget.RecyclerView
                                             android:id="@+id/lv_template_next_company_background_inspection_date"
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                            android:layout_height="wrap_content"/>
 
 
                                     </LinearLayout>
@@ -1308,10 +1308,10 @@
                                             android:gravity="center|top"
                                             android:orientation="vertical">
 
-                                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                            <android.support.v7.widget.RecyclerView
                                                 android:id="@+id/lv_template_next_company_background_name"
                                                 android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                                android:layout_height="wrap_content"/>
 
                                         </LinearLayout>
 
@@ -1395,10 +1395,10 @@
                                         android:gravity="center|top"
                                         android:orientation="vertical">
 
-                                        <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                        <android.support.v7.widget.RecyclerView
                                             android:id="@+id/lv_template_next_company_background_major_changes"
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                            android:layout_height="wrap_content"/>
 
                                     </LinearLayout>
 
@@ -1580,12 +1580,12 @@
 
                             </LinearLayout><!--auditor lead department-->
 
-                            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                            <android.support.v7.widget.RecyclerView
                                 android:id="@+id/lv_template_next_auditors"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                android:dividerHeight="2dip"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -2014,10 +2014,10 @@
                                         android:gravity="center|top"
                                         android:orientation="vertical">
 
-                                        <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+                                        <android.support.v7.widget.RecyclerView
                                             android:id="@+id/lv_template_next_translator"
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+                                            android:layout_height="wrap_content"/>
 
                                     </LinearLayout>
 

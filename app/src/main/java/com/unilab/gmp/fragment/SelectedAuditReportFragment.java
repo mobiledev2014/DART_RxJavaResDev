@@ -11,6 +11,9 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -85,7 +88,7 @@ public class SelectedAuditReportFragment extends Fragment {
     @BindView(R.id.et_template_site)
     AutoCompleteTextView etTemplateSite;
 
-    ExpandableHeightListView lvTemplateElement;
+    RecyclerView lvTemplateElement;
     ExpandableHeightListView lvTemplateAuditDate;
     ModelAuditReports modelAuditReports;
 
@@ -198,7 +201,7 @@ public class SelectedAuditReportFragment extends Fragment {
         templateFragment = new TemplateFragment();
         auditReportFragment = new AuditReportFragment();
 
-        lvTemplateElement = (ExpandableHeightListView) rootView.findViewById(R.id.lv_template_element);
+        lvTemplateElement = (RecyclerView) rootView.findViewById(R.id.lv_template_element);
         lvTemplateAuditDate = (ExpandableHeightListView) rootView.findViewById(R.id.lv_template_audit_date);
         setWidgets();
         setWatcher();
@@ -279,8 +282,13 @@ public class SelectedAuditReportFragment extends Fragment {
         //questionModel = tableDirectory.getDirectory();
         templateElementAdapter = new TemplateElementAdapter(context, modelTemplates.getModelTemplateElements()
                 , modelAuditReports.getReport_id(), modelTemplates.getProductType());
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
+        lvTemplateElement.setLayoutManager(mLayoutManager);
+        lvTemplateElement.setItemAnimator(new DefaultItemAnimator());
+
         lvTemplateElement.setAdapter(templateElementAdapter);
-        lvTemplateElement.setExpanded(true);
+//        lvTemplateElement.setExpanded(true);
 
         lvTemplateElement.setOnTouchListener(new View.OnTouchListener() {
             // Setting on Touch Listener for handling the touch inside ScrollView

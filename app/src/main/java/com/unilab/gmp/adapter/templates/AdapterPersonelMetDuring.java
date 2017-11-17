@@ -1,6 +1,7 @@
 package com.unilab.gmp.adapter.templates;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by c_jhcanuto on 8/24/2017.
  */
 
-public class AdapterPersonelMetDuring extends BaseAdapter {
+public class AdapterPersonelMetDuring extends RecyclerView.Adapter<AdapterPersonelMetDuring.Widgets>  {
     List<TemplateModelPersonelMetDuring> templateModelPersonelMetDurings;
     LayoutInflater inflater;
     Context context;
@@ -32,13 +33,8 @@ public class AdapterPersonelMetDuring extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return templateModelPersonelMetDurings.size();
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return templateModelPersonelMetDurings.get(i);
     }
 
     @Override
@@ -47,52 +43,51 @@ public class AdapterPersonelMetDuring extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View rowView, ViewGroup viewGroup) {
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_template_personel_met_during,parent, false);
+        return new Widgets(v);
+    }
+
+    @Override
+    public void onBindViewHolder(final Widgets widgets, int i) {
         final int z = i;
-        final Widgets widgets;
-//        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_template_personel_met_during, null);
 
-            widgets.name = (EditText) rowView.findViewById(R.id.et_template_next_name_personnel_inspection);
+        widgets.name.setText(templateModelPersonelMetDurings.get(i).getName());
+        widgets.name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            widgets.name.setText(templateModelPersonelMetDurings.get(i).getName());
-            widgets.name.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
-                }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                templateModelPersonelMetDurings.get(z).setName(widgets.name.getText().toString());
+            }
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    templateModelPersonelMetDurings.get(z).setName(widgets.name.getText().toString());
-                }
+            @Override
+            public void afterTextChanged(Editable editable) {
 
-                @Override
-                public void afterTextChanged(Editable editable) {
+            }
+        });
 
-                }
-            });
+        widgets.position.setText(templateModelPersonelMetDurings.get(i).getPosition());
+        widgets.position.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            widgets.position = (EditText) rowView.findViewById(R.id.et_template_next_position_personnel_inspection);
+            }
 
-            widgets.position.setText(templateModelPersonelMetDurings.get(i).getPosition());
-            widgets.position.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                templateModelPersonelMetDurings.get(z).setPosition(widgets.position.getText().toString());
+            }
 
-                }
+            @Override
+            public void afterTextChanged(Editable editable) {
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    templateModelPersonelMetDurings.get(z).setPosition(widgets.position.getText().toString());
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
+            }
+        });
 
 //            rowView.setTag(widgets);
 //        } else {
@@ -104,7 +99,6 @@ public class AdapterPersonelMetDuring extends BaseAdapter {
                 widgets.name.setError("This field is required");
             }
         }
-        return rowView;
     }
 
 
@@ -127,15 +121,21 @@ public class AdapterPersonelMetDuring extends BaseAdapter {
     public void save(String report_id) {
         TemplateModelPersonelMetDuring.deleteAll(TemplateModelPersonelMetDuring.class, "reportid = ?", report_id);
         for (TemplateModelPersonelMetDuring t : templateModelPersonelMetDurings) {
-            if (t.getName().isEmpty()&&t.getPosition().isEmpty())
+            if (t.getName().isEmpty() && t.getPosition().isEmpty())
                 continue;
             t.setReport_id(report_id);
             t.save();
         }
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder{
         EditText name;
         EditText position;
+
+        Widgets(View rowView) {
+            super(rowView);
+            this.name = (EditText) rowView.findViewById(R.id.et_template_next_name_personnel_inspection);
+            this.position = (EditText) rowView.findViewById(R.id.et_template_next_position_personnel_inspection);
+        }
     }
 }

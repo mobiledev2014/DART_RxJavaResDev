@@ -4,6 +4,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,9 +131,9 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
         TextView address = (TextView) dialogViewSupplier.findViewById(R.id.tv_address);
         TextView background = (TextView) dialogViewSupplier.findViewById(R.id.tv_background);
         ExpandableHeightListView products = (ExpandableHeightListView) dialogViewSupplier.findViewById(R.id.lv_products);
-        ExpandableHeightListView lvPreviousDate = (ExpandableHeightListView) dialogViewSupplier.findViewById(R.id.lv_previous_date);
-        ExpandableHeightListView lvInspector = (ExpandableHeightListView) dialogViewSupplier.findViewById(R.id.lv_inspector);
-        ExpandableHeightListView lvMajorChanges = (ExpandableHeightListView) dialogViewSupplier.findViewById(R.id.lv_major_changes);
+        RecyclerView lvPreviousDate = (RecyclerView) dialogViewSupplier.findViewById(R.id.lv_previous_date);
+        RecyclerView lvInspector = (RecyclerView) dialogViewSupplier.findViewById(R.id.lv_inspector);
+        RecyclerView lvMajorChanges = (RecyclerView) dialogViewSupplier.findViewById(R.id.lv_major_changes);
         Button done = (Button) dialogViewSupplier.findViewById(R.id.btn_done);
 
         name.setText("Name: " + Name);
@@ -147,16 +150,28 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
         products.setExpanded(true);
 
         adapterInspectionDate = new AdapterInspectionDate(context, previousDateList);
+
+        lvPreviousDate.setLayoutManager(new LinearLayoutManager(context));
+        lvPreviousDate.setItemAnimator(new DefaultItemAnimator());
+
         lvPreviousDate.setAdapter(adapterInspectionDate);
-        lvPreviousDate.setExpanded(true);
+//        lvPreviousDate.setExpanded(true);
 
         adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(inspectorList, context, 100);
+
+        lvInspector.setLayoutManager(new LinearLayoutManager(context));
+        lvInspector.setItemAnimator(new DefaultItemAnimator());
+
         lvInspector.setAdapter(adapterCompanyBackgroundName);
-        lvInspector.setExpanded(true);
+//        lvInspector.setExpanded(true);
 
         adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(majorChangesList, context, 100);
+
+        lvMajorChanges.setLayoutManager(new LinearLayoutManager(context));
+        lvMajorChanges.setItemAnimator(new DefaultItemAnimator());
+
         lvMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
-        lvMajorChanges.setExpanded(true);
+//        lvMajorChanges.setExpanded(true);
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override

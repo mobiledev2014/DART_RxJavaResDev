@@ -1,13 +1,13 @@
 package com.unilab.gmp.adapter.templates;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 
 import com.unilab.gmp.R;
@@ -19,7 +19,7 @@ import java.util.List;
  * Created by c_jhcanuto on 8/24/2017.
  */
 
-public class AdapterPresentDuringMeeting extends BaseAdapter {
+public class AdapterPresentDuringMeeting extends RecyclerView.Adapter<AdapterPresentDuringMeeting.Widgets> {
     List<TemplateModelPresentDuringMeeting> templateModelPresentDuringMeetings;
     LayoutInflater inflater;
     Context context;
@@ -32,83 +32,86 @@ public class AdapterPresentDuringMeeting extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return templateModelPresentDuringMeetings.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return templateModelPresentDuringMeetings.get(i);
-    }
+//    @Override
+//    public Object getItem(int i) {
+//        return templateModelPresentDuringMeetings.get(i);
+//    }
 
     @Override
     public long getItemId(int i) {
         return i;
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder {
         EditText name, position;
+
+        Widgets(View rowView) {
+            super(rowView);
+            this.name = (EditText) rowView.findViewById(R.id.et_template_next_name_close_out_meeting);
+            this.position = (EditText) rowView.findViewById(R.id.et_template_next_position_close_out_meeting);
+        }
     }
 
     @Override
-    public View getView(int i, View rowView, ViewGroup viewGroup) {
-        final int z = i;
-        final Widgets widgets;
-//        if (rowView == null) {
-            widgets = new Widgets();
-        rowView = inflater.inflate(R.layout.custom_listview_template_present_during_meeting, null);
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_template_present_during_meeting, parent, false);
+        return new Widgets(v);
+    }
 
-        widgets.name = (EditText) rowView.findViewById(R.id.et_template_next_name_close_out_meeting);
-        widgets.position = (EditText) rowView.findViewById(R.id.et_template_next_position_close_out_meeting);
+    @Override
+    public void onBindViewHolder(final Widgets widgets, int i) {
+        if (templateModelPresentDuringMeetings.size() > i) {
+            final int z = i;
+            widgets.name.setText(templateModelPresentDuringMeetings.get(i).getName());
+            widgets.position.setText(templateModelPresentDuringMeetings.get(i).getPosition());
+            widgets.name.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        widgets.name.setText(templateModelPresentDuringMeetings.get(i).getName());
-        widgets.position.setText(templateModelPresentDuringMeetings.get(i).getPosition());
-        widgets.name.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
 
-            }
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (z < templateModelPresentDuringMeetings.size())
+                    templateModelPresentDuringMeetings.get(z).setName(widgets.name.getText().toString());
+                }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                templateModelPresentDuringMeetings.get(z).setName(widgets.name.getText().toString());
-            }
+                @Override
+                public void afterTextChanged(Editable editable) {
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+                }
+            });
 
-            }
-        });
+            widgets.position.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-        widgets.position.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
 
-            }
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (z < templateModelPresentDuringMeetings.size())
+                    templateModelPresentDuringMeetings.get(z).setPosition(widgets.position.getText().toString());
+                }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                templateModelPresentDuringMeetings.get(z).setPosition(widgets.position.getText().toString());
-            }
+                @Override
+                public void afterTextChanged(Editable editable) {
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-//        rowView.setTag(widgets);
-//    } else {
-//        widgets = (Widgets) rowView.getTag();
-//    }
-
-        if (!isCheck) {
-            if (templateModelPresentDuringMeetings.get(i).getName().isEmpty()) {
-                widgets.name.setError("This field is required");
+                }
+            });
+            if (!isCheck) {
+                if (templateModelPresentDuringMeetings.get(i).getName().isEmpty()) {
+                    widgets.name.setError("This field is required");
+                }
             }
         }
-
-        return rowView;
     }
+
     public boolean check() {
         isCheck = true;
         Log.e("getWidgets", "getWidgets1");
@@ -124,10 +127,11 @@ public class AdapterPresentDuringMeeting extends BaseAdapter {
         }
         return isCheck;
     }
-    public void save(String report_id){
-        TemplateModelPresentDuringMeeting.deleteAll(TemplateModelPresentDuringMeeting.class,"reportid = ?", report_id);
+
+    public void save(String report_id) {
+        TemplateModelPresentDuringMeeting.deleteAll(TemplateModelPresentDuringMeeting.class, "reportid = ?", report_id);
         for (TemplateModelPresentDuringMeeting t : templateModelPresentDuringMeetings) {
-            if (t.getName().isEmpty()&&t.getPosition().isEmpty())
+            if (t.getName().isEmpty() && t.getPosition().isEmpty())
                 continue;
             t.setReport_id(report_id);
             t.save();

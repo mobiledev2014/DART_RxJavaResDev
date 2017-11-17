@@ -1,13 +1,13 @@
 package com.unilab.gmp.adapter.templates;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -22,7 +22,7 @@ import java.util.List;
  * Created by c_jhcanuto on 8/24/2017.
  */
 
-public class AdapterAuditors extends BaseAdapter {
+public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widgets> {
     List<TemplateModelAuditors> templateModelAuditors;
     LayoutInflater inflater;
     Context context;
@@ -36,14 +36,14 @@ public class AdapterAuditors extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return templateModelAuditors.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return templateModelAuditors.get(i);
-    }
+//    @Override
+//    public Object getItem(int i) {
+//        return templateModelAuditors.get(i);
+//    }
 
     @Override
     public long getItemId(int i) {
@@ -51,17 +51,15 @@ public class AdapterAuditors extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View rowView, ViewGroup viewGroup) {
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_template_auditors, parent, false);
+        return new Widgets(v);
+    }
+
+    @Override
+    public void onBindViewHolder(final Widgets widgets, int i) {
         final int z = i;
-        final Widgets widgets;
-//        if (rowView == null) {
-        widgets = new Widgets();
-
-        rowView = inflater.inflate(R.layout.custom_listview_template_auditors, null);
-
-        widgets.name = (Spinner) rowView.findViewById(R.id.s_template_next_auditor_co_name);
-        widgets.position = (EditText) rowView.findViewById(R.id.et_template_next_auditor_co_position);
-        widgets.department = (EditText) rowView.findViewById(R.id.et_template_next_auditor_co_department);
 
         final List<String> list = new ArrayList<>();
         Log.d("SIZE", auditorsList.size() + "");
@@ -92,11 +90,6 @@ public class AdapterAuditors extends BaseAdapter {
 
         widgets.position.setText(templateModelAuditors.get(i).getPosition());
         widgets.department.setText(templateModelAuditors.get(i).getDepartment());
-//        rowView.setTag(widgets);
-//    } else {
-//        widgets = (Widgets) rowView.getTag();
-//    }
-        return rowView;
     }
 
     public int getAuditorSize() {
@@ -110,9 +103,17 @@ public class AdapterAuditors extends BaseAdapter {
         }
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder {
         Spinner name;
         EditText position;
         EditText department;
+
+        Widgets(View rowView) {
+            super(rowView);
+            this.name = (Spinner) rowView.findViewById(R.id.s_template_next_auditor_co_name);
+            this.position = (EditText) rowView.findViewById(R.id.et_template_next_auditor_co_position);
+            this.department = (EditText) rowView.findViewById(R.id.et_template_next_auditor_co_department);
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 package com.unilab.gmp.adapter.templates;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by c_jhcanuto on 8/24/2017.
  */
 
-public class AdapterDistributionList extends BaseAdapter {
+public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistributionList.Widgets> {
     List<TemplateModelDistributionList> templateModelDistributionLists;
     LayoutInflater inflater;
     Context context;
@@ -33,7 +34,7 @@ public class AdapterDistributionList extends BaseAdapter {
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        distributionList = ModelDistribution.find(ModelDistribution.class,"status > 0");
+        distributionList = ModelDistribution.find(ModelDistribution.class, "status > 0");
         List<String> distriList = new ArrayList<>();
         distriIdList = new ArrayList<>();
         int d = distributionList.size();
@@ -46,14 +47,14 @@ public class AdapterDistributionList extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return templateModelDistributionLists.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return templateModelDistributionLists.get(i);
-    }
+//    @Override
+//    public Object getItem(int i) {
+//        return templateModelDistributionLists.get(i);
+//    }
 
     @Override
     public long getItemId(int i) {
@@ -61,42 +62,42 @@ public class AdapterDistributionList extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View rowView, ViewGroup viewGroup) {
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_template_distribution_list,parent, false);
+        return new Widgets(v);
+    }
+
+    @Override
+    public void onBindViewHolder(final Widgets widgets, int i) {
         final int z = i;
-        final Widgets widgets;
-//        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_template_distribution_list, null);
 
-            widgets.spnTemplateNextDistributionList = (Spinner) rowView.findViewById(R.id.s_template_next_distribution_list);
-            widgets.spnTemplateNextDistributionList.setAdapter(adapterDistri);
+        widgets.spnTemplateNextDistributionList.setAdapter(adapterDistri);
 
-            if (!templateModelDistributionLists.get(z).getDistribution_id().isEmpty()) {
-                templateModelDistributionLists.get(z).setSelected(distriIdList.indexOf(
-                        templateModelDistributionLists.get(z).getDistribution_id()));
+        if (!templateModelDistributionLists.get(z).getDistribution_id().isEmpty()) {
+            templateModelDistributionLists.get(z).setSelected(distriIdList.indexOf(
+                    templateModelDistributionLists.get(z).getDistribution_id()));
+        }
+
+        widgets.spnTemplateNextDistributionList.setSelection(templateModelDistributionLists.get(i).getSelected());
+        widgets.spnTemplateNextDistributionList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                templateModelDistributionLists.get(z).setDistribution(widgets.spnTemplateNextDistributionList.getSelectedItem().toString());
+                templateModelDistributionLists.get(z).setSelected(i);
+                templateModelDistributionLists.get(z).setDistribution_id(distributionList.get(i).getDistribution_id());
             }
 
-            widgets.spnTemplateNextDistributionList.setSelection(templateModelDistributionLists.get(i).getSelected());
-            widgets.spnTemplateNextDistributionList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    templateModelDistributionLists.get(z).setDistribution(widgets.spnTemplateNextDistributionList.getSelectedItem().toString());
-                    templateModelDistributionLists.get(z).setSelected(i);
-                    templateModelDistributionLists.get(z).setDistribution_id(distributionList.get(i).getDistribution_id());
-                }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
+            }
+        });
 
 //            rowView.setTag(widgets);
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
 //        }
-
-        return rowView;
     }
 
     public void save(String report_id) {
@@ -107,7 +108,11 @@ public class AdapterDistributionList extends BaseAdapter {
         }
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder{
         Spinner spnTemplateNextDistributionList;
+        Widgets(View rowView){
+            super(rowView);
+            this.spnTemplateNextDistributionList = (Spinner) rowView.findViewById(R.id.s_template_next_distribution_list);
+        }
     }
 }

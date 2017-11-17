@@ -1,13 +1,12 @@
 package com.unilab.gmp.adapter.templates;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 
 import com.unilab.gmp.R;
@@ -20,7 +19,7 @@ import java.util.List;
  * Created by c_jhcanuto on 8/24/2017.
  */
 
-public class AdapterDistributionOthers extends BaseAdapter {
+public class AdapterDistributionOthers extends RecyclerView.Adapter<AdapterDistributionOthers.Widgets> {
     LayoutInflater inflater;
     Context context;
     List<TemplateModelDistributionOthers> templateModelDistributionOthers;
@@ -32,14 +31,14 @@ public class AdapterDistributionOthers extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return templateModelDistributionOthers.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return templateModelDistributionOthers.get(i);
-    }
+//    @Override
+//    public Object getItem(int i) {
+//        return templateModelDistributionOthers.get(i);
+//    }
 
     @Override
     public long getItemId(int i) {
@@ -47,16 +46,19 @@ public class AdapterDistributionOthers extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View rowView, ViewGroup viewGroup) {
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_template_other_distribution, parent, false);
+        return new Widgets(v);
+    }
+
+    @Override
+    public void onBindViewHolder(final Widgets widgets, int i) {
         final int z = i;
-        final Widgets widgets;
-//        if (rowView == null) {
-        widgets = new Widgets();
-        rowView = inflater.inflate(R.layout.custom_listview_template_other_distribution, null);
 
         List<ModelDistribution> distributionList = ModelDistribution.listAll(ModelDistribution.class);
 
-        widgets.distributionOther = (EditText) rowView.findViewById(R.id.et_template_next_distribution_other);
+
         if (distributionList.size() > i) {
             widgets.distributionOther.setText(distributionList.get(z).getDistribution_name());
         }
@@ -77,15 +79,11 @@ public class AdapterDistributionOthers extends BaseAdapter {
 
             }
         });
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
-        return rowView;
+
     }
 
     public static boolean isEmpty(String distribution_other) {
-        return distribution_other==null || distribution_other.isEmpty() || distribution_other.equals("");
+        return distribution_other == null || distribution_other.isEmpty() || distribution_other.equals("");
     }
 
     public void save(String report_id) {
@@ -99,8 +97,12 @@ public class AdapterDistributionOthers extends BaseAdapter {
         }
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder {
         EditText distributionOther;
 
+        Widgets(View rowView) {
+            super(rowView);
+            this.distributionOther = (EditText) rowView.findViewById(R.id.et_template_next_distribution_other);
+        }
     }
 }

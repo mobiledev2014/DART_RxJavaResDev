@@ -120,7 +120,7 @@
 
             </TableLayout>
 
-            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/lv_previous_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -155,7 +155,7 @@
 
             </TableLayout>
 
-            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/lv_inspector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -190,7 +190,7 @@
 
             </TableLayout>
 
-            <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/lv_major_changes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -30,7 +30,7 @@ public class DateOfAuditAdapter extends BaseAdapter {
     public DateOfAuditAdapter(Context context, List<ModelDateOfAudit> datesOfAudit) {
         this.context = context;
         this.datesOfAudit = datesOfAudit;
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class DateOfAuditAdapter extends BaseAdapter {
     }
 
     public void save(String report_id) {
-        ModelDateOfAudit.deleteAll(ModelDateOfAudit.class,"reportid = ?", report_id);
+        ModelDateOfAudit.deleteAll(ModelDateOfAudit.class, "reportid = ?", report_id);
         for (ModelDateOfAudit t : datesOfAudit) {
             if (t.getDateOfAudit().isEmpty())
                 continue;
@@ -58,31 +58,34 @@ public class DateOfAuditAdapter extends BaseAdapter {
         }
     }
 
-    public class Widgets
-    {
+    public class Widgets {
         Button btn_date_of_audit;
+
+        Widgets(View rowView) {
+            this.btn_date_of_audit = (Button) rowView.findViewById(R.id.btn_template_audit_date);
+        }
     }
 
     @Override
     public View getView(final int position, View view, ViewGroup viewGroup) {
-        final Widgets widgets = new Widgets();
-        View rowView;
-        rowView = inflater.inflate(R.layout.custom_listview_template_audit_date, null);
-        widgets.btn_date_of_audit = (Button) rowView.findViewById(R.id.btn_template_audit_date);
 
-        if(!datesOfAudit.get(position).getDateOfAudit().isEmpty()){
+        view = inflater.inflate(R.layout.custom_listview_template_audit_date, null);
+        final Widgets widgets = new Widgets(view);
+
+
+        if (!datesOfAudit.get(position).getDateOfAudit().isEmpty()) {
             widgets.btn_date_of_audit.setText(DateTimeUtils.parseDateMonthToWord(datesOfAudit.get(position).getDateOfAudit()));
         }
 
         widgets.btn_date_of_audit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StartDatePickerButton datePicker = new StartDatePickerButton(widgets.btn_date_of_audit,datesOfAudit,position);
+                StartDatePickerButton datePicker = new StartDatePickerButton(widgets.btn_date_of_audit, datesOfAudit, position);
                 datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "datePicker");
             }
         });
 
-        return rowView;
+        return view;
     }
 
 
