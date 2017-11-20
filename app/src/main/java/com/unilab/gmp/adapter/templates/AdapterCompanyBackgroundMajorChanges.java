@@ -105,7 +105,7 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
         return isCheck;
     }
 
-    public void save(String report_id) {
+    public void save(String report_id,String company_id) {
         TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
         int i = 0;
         for (TemplateModelCompanyBackgroundMajorChanges t : templateModelCompanyBackgroundMajorChanges) {
@@ -113,6 +113,7 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
                 continue;
             }
             t.setReport_id(report_id);
+            t.setCompany_id(company_id);
             t.save();
         }
     }

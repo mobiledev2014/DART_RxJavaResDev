@@ -12,6 +12,9 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +27,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
 import com.unilab.gmp.adapter.ActivityAdapter;
 import com.unilab.gmp.adapter.TemplateElementAdapter;
@@ -108,6 +111,10 @@ public class NextSelectedTemplateFragment extends Fragment {
     public AdapterScopeAudit adapterScopeAudit;
     Unbinder unbinder;
     Context context;
+
+
+    @BindView(R.id.scrl_main)
+    ScrollView scrlMain;
     @BindView(R.id.btn_cancel)
     Button btnCancel;
     @BindView(R.id.btn_save_draft)
@@ -115,7 +122,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     @BindView(R.id.btn_submit)
     Button btnSubmit;
     @BindView(R.id.lv_template_next_activities_carried)
-    ExpandableHeightListView lvTemplateNextActivitiesCarried;
+    RecyclerView lvTemplateNextActivitiesCarried;
     @BindView(R.id.et_template_next_activity_carried)
     EditText etTemplateNextActivityCarried;
     @BindView(R.id.btn_template_next_scope_audit_add)
@@ -123,15 +130,15 @@ public class NextSelectedTemplateFragment extends Fragment {
     @BindView(R.id.btn_template_next_scope_audit_delete)
     Button btnTemplateNextScopeAuditDelete;
     @BindView(R.id.lv_template_next_scope_audit)
-    ExpandableHeightListView lvTemplateNextScopeAudit;
+    RecyclerView lvTemplateNextScopeAudit;
     @BindView(R.id.btn_template_next_reference_add)
     Button btnTemplateNextReferenceAdd;
     @BindView(R.id.btn_template_next_reference_delete)
     Button btnTemplateNextReferenceDelete;
     @BindView(R.id.lv_template_next_reference)
-    ExpandableHeightListView lvTemplateNextReference;
+    RecyclerView lvTemplateNextReference;
     @BindView(R.id.lv_template_next_pre_audit_doc)
-    ExpandableHeightListView lvTemplateNextPreAuditDoc;
+    RecyclerView lvTemplateNextPreAuditDoc;
     @BindView(R.id.btn_template_next_pre_audit_doc_add)
     Button btnTemplateNextPreAuditDocAdd;
     @BindView(R.id.btn_template_next_pre_audit_doc_delete)
@@ -147,15 +154,15 @@ public class NextSelectedTemplateFragment extends Fragment {
     @BindView(R.id.btn_template_next_present_close_up_delete)
     Button btnTemplateNextPresentCloseUpDelete;
     @BindView(R.id.lv_template_next_present_during_meeting)
-    ExpandableHeightListView lvTemplateNextPresentDuringMeeting;
+    RecyclerView lvTemplateNextPresentDuringMeeting;
     @BindView(R.id.btn_template_next_personnel_inspection_add)
     Button btnTemplateNextPersonnelInspectionAdd;
     @BindView(R.id.btn_template_next_personnel_inspection_delete)
     Button btnTemplateNextPersonnelInspectionDelete;
     @BindView(R.id.lv_template_next_personnel_inspection)
-    ExpandableHeightListView lvTemplateNextPersonnelInspection;
+    RecyclerView lvTemplateNextPersonnelInspection;
     @BindView(R.id.lv_template_next_distribution_list)
-    ExpandableHeightListView lvTemplateNextDistributionList;
+    RecyclerView lvTemplateNextDistributionList;
     @BindView(R.id.ll_template_next_distribution_list)
     LinearLayout llTemplateNextDistributionList;
     @BindView(R.id.btn_template_next_distribution_add)
@@ -167,7 +174,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     @BindView(R.id.btn_template_next_summary_recommendation_delete)
     Button btnTemplateNextSummaryRecommendationDelete;
     @BindView(R.id.lv_template_next_summary_recommendation)
-    ExpandableHeightListView lvTemplateNextSummaryRecommendation;
+    RecyclerView lvTemplateNextSummaryRecommendation;
     @BindView(R.id.et_template_next_summary_recommendation_audit_close_date)
     EditText etTemplateNextSummaryRecommendationAuditCloseDate;
     /*@BindView(R.id.et_template_next_summary_recommendation_other_issues_audit)
@@ -177,7 +184,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     @BindView(R.id.et_template_next_company_background_history)
     EditText etTemplateNextCompanyBackgroundHistory;
     @BindView(R.id.lv_template_next_company_background_name)
-    ExpandableHeightListView lvTemplateNextCompanyBackgroundName;
+    RecyclerView lvTemplateNextCompanyBackgroundName;
     @BindView(R.id.ll_template_next_company_background_name)
     LinearLayout llTemplateNextCompanyBackgroundName;
     @BindView(R.id.btn_template_next_company_background_inspector_name_add)
@@ -185,7 +192,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     @BindView(R.id.btn_template_next_company_background_inspector_name_delete)
     Button btnTemplateNextCompanyBackgroundInspectorNameDelete;
     @BindView(R.id.lv_template_next_company_background_major_changes)
-    ExpandableHeightListView lvTemplateNextCompanyBackgroundMajorChanges;
+    RecyclerView lvTemplateNextCompanyBackgroundMajorChanges;
     @BindView(R.id.ll_template_next_company_background_major_changes)
     LinearLayout llTemplateNextCompanyBackgroundMajorChanges;
     @BindView(R.id.btn_template_next_company_background_major_changes_add)
@@ -203,7 +210,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     @BindView(R.id.btn_template_next_auditor_delete)
     Button btnTemplateNextAuditorDelete;
     @BindView(R.id.lv_template_next_auditors)
-    ExpandableHeightListView lvTemplateNextAuditors;
+    RecyclerView lvTemplateNextAuditors;
     @BindView(R.id.s_template_next_reviewer_name)
     Spinner sTemplateNextReviewerName;
     @BindView(R.id.et_template_next_reviewer_position)
@@ -217,7 +224,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     @BindView(R.id.et_template_next_approver_department)
     EditText etTemplateNextApproverDepartment;
     @BindView(R.id.lv_template_next_translator)
-    ExpandableHeightListView lvTemplateNextTranslator;
+    RecyclerView lvTemplateNextTranslator;
     @BindView(R.id.ll_template_next_translator)
     LinearLayout llTemplateNextTranslator;
     @BindView(R.id.btn_template_next_translator_add)
@@ -225,15 +232,15 @@ public class NextSelectedTemplateFragment extends Fragment {
     @BindView(R.id.btn_template_next_translator_delete)
     Button btnTemplateNextTranslatorDelete;
     @BindView(R.id.lv_template_next_other_distribution)
-    ExpandableHeightListView lvTemplateNextOtherDistribution;
+    RecyclerView lvTemplateNextOtherDistribution;
     @BindView(R.id.cb_template_next_reviewer)
     CheckBox cbTemplateNextReviewer;
     @BindView(R.id.btn_prev)
     Button btnPrev;
     @BindView(R.id.lv_template_next_company_background_inspection_date)
-    ExpandableHeightListView lvTemplateNextCompanyBackgroundInspectionDate;
+    RecyclerView lvTemplateNextCompanyBackgroundInspectionDate;
     @BindView(R.id.lv_template_next_summary_recommendation_other_issues_audit)
-    ExpandableHeightListView lvTemplateNextSummaryRecommendationOtherIssuesAudit;
+    RecyclerView lvTemplateNextSummaryRecommendationOtherIssuesAudit;
     @BindView(R.id.ll_template_next_summary_recommendation_other_issues_audit)
     LinearLayout llTemplateNextSummaryRecommendationOtherIssuesAudit;
     @BindView(R.id.btn_template_next_summary_recommendation_other_issues_audit_add)
@@ -241,7 +248,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     @BindView(R.id.btn_template_next_summary_recommendation_other_issues_audit_delete)
     Button btnTemplateNextSummaryRecommendationOtherIssuesAuditDelete;
     @BindView(R.id.lv_template_next_summary_recommendation_other_issues_executive)
-    ExpandableHeightListView lvTemplateNextSummaryRecommendationOtherIssuesExecutive;
+    RecyclerView lvTemplateNextSummaryRecommendationOtherIssuesExecutive;
     @BindView(R.id.ll_template_next_summary_recommendation_other_issues_executive)
     LinearLayout llTemplateNextSummaryRecommendationOtherIssuesExecutive;
     @BindView(R.id.btn_template_next_summary_recommendation_other_issues_executive_add)
@@ -352,9 +359,9 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         modelTemplateActivities = find(ModelTemplateActivities.class, "templateid = ?", modelTemplates.getTemplateID());
         activityAdapter = new ActivityAdapter(context, modelTemplateActivities, "");
-        Log.i("activityadapter", "call : " + activityAdapter.getCount());
+//        Log.i("activityadapter", "call : " + activityAdapter.getCount());
         lvTemplateNextActivitiesCarried.setAdapter(activityAdapter);
-        lvTemplateNextActivitiesCarried.setExpanded(true);
+//        lvTemplateNextActivitiesCarried.setExpanded(true);
 
         //--- Lead Auditor setting start
         //auditorsModels = AuditorsModel.listAll(AuditorsModel.class);
@@ -457,8 +464,11 @@ public class NextSelectedTemplateFragment extends Fragment {
         // --- Audit Scope
         templateModelScopeAudits = new ArrayList<>();
         adapterScopeAudit = new AdapterScopeAudit(templateModelScopeAudits, context, modelTemplates.getCompany_id(), this, null, btnTemplateNextScopeAuditAdd);
+
+        lvTemplateNextScopeAudit.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextScopeAudit.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextScopeAudit.setAdapter(adapterScopeAudit);
-        lvTemplateNextScopeAudit.setExpanded(true);
+//        lvTemplateNextScopeAudit.setExpanded(true);
         //templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelScopeAudits.size() > 0) {
             adapterScopeAudit.notifyDataSetChanged();
@@ -469,8 +479,10 @@ public class NextSelectedTemplateFragment extends Fragment {
         // --- Other issues Audit
         templateModelOtherIssuesAudits = new ArrayList<>();
         adapterOthersIssueAudit = new AdapterOthersIssueAudit(templateModelOtherIssuesAudits, context);
+        lvTemplateNextSummaryRecommendationOtherIssuesAudit.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextSummaryRecommendationOtherIssuesAudit.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextSummaryRecommendationOtherIssuesAudit.setAdapter(adapterOthersIssueAudit);
-        lvTemplateNextSummaryRecommendationOtherIssuesAudit.setExpanded(true);
+//        lvTemplateNextSummaryRecommendationOtherIssuesAudit.setExpanded(true);
 //        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
         if (templateModelOtherIssuesAudits.size() > 0) {
             adapterOthersIssueAudit.notifyDataSetChanged();
@@ -480,8 +492,10 @@ public class NextSelectedTemplateFragment extends Fragment {
         // --- Other issues Executive
         templateModelOtherIssuesExecutives = new ArrayList<>();
         adapterOthersIssueExecutive = new AdapterOthersIssueExecutive(templateModelOtherIssuesExecutives, context);
+        lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setAdapter(adapterOthersIssueExecutive);
-        lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setExpanded(true);
+//        lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setExpanded(true);
 //        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
         if (templateModelOtherIssuesExecutives.size() > 0) {
             adapterOthersIssueExecutive.notifyDataSetChanged();
@@ -503,8 +517,10 @@ public class NextSelectedTemplateFragment extends Fragment {
         // --- Reference
         templateModelReferences = new ArrayList<>();
         adapterReference = new AdapterReference(templateModelReferences, context);
+        lvTemplateNextReference.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextReference.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextReference.setAdapter(adapterReference);
-        lvTemplateNextReference.setExpanded(true);
+//        lvTemplateNextReference.setExpanded(true);
         //templateModelReferences.addAll(TemplateModelReference.find(TemplateModelReference.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelReferences.size() > 0) {
             adapterReference.notifyDataSetChanged();
@@ -515,8 +531,10 @@ public class NextSelectedTemplateFragment extends Fragment {
         // --- Pre Audit Doc
         templateModelPreAuditDocs = new ArrayList<>();
         adapterPreAuditDoc = new AdapterPreAuditDoc(templateModelPreAuditDocs, context);
+        lvTemplateNextPreAuditDoc.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextPreAuditDoc.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextPreAuditDoc.setAdapter(adapterPreAuditDoc);
-        lvTemplateNextPreAuditDoc.setExpanded(true);
+//        lvTemplateNextPreAuditDoc.setExpanded(true);
         //templateModelPreAuditDocs.addAll(TemplateModelPreAuditDoc.find(TemplateModelPreAuditDoc.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelPreAuditDocs.size() > 0) {
             adapterPreAuditDoc.notifyDataSetChanged();
@@ -526,8 +544,10 @@ public class NextSelectedTemplateFragment extends Fragment {
         // --- Present during meeting
         templateModelPresentDuringMeetings = new ArrayList<>();
         adapterPresentDuringMeeting = new AdapterPresentDuringMeeting(templateModelPresentDuringMeetings, context);
+        lvTemplateNextPresentDuringMeeting.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextPresentDuringMeeting.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextPresentDuringMeeting.setAdapter(adapterPresentDuringMeeting);
-        lvTemplateNextPresentDuringMeeting.setExpanded(true);
+//        lvTemplateNextPresentDuringMeeting.setExpanded(true);
         //templateModelPresentDuringMeetings.addAll(TemplateModelPresentDuringMeeting.find(TemplateModelPresentDuringMeeting.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelPresentDuringMeetings.size() > 0) {
             adapterPresentDuringMeeting.notifyDataSetChanged();
@@ -537,8 +557,10 @@ public class NextSelectedTemplateFragment extends Fragment {
         // --- Personel Met During
         templateModelPersonelMetDurings = new ArrayList<>();
         adapterPersonelMetDuring = new AdapterPersonelMetDuring(templateModelPersonelMetDurings, context);
+        lvTemplateNextPersonnelInspection.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextPersonnelInspection.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextPersonnelInspection.setAdapter(adapterPersonelMetDuring);
-        lvTemplateNextPersonnelInspection.setExpanded(true);
+//        lvTemplateNextPersonnelInspection.setExpanded(true);
         //templateModelPersonelMetDurings.addAll(TemplateModelPersonelMetDuring.find(TemplateModelPersonelMetDuring.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelPersonelMetDurings.size() > 0) {
             adapterPersonelMetDuring.notifyDataSetChanged();
@@ -548,8 +570,10 @@ public class NextSelectedTemplateFragment extends Fragment {
         // --- Distribution List
         templateModelDistributionLists = new ArrayList<>();
         adapterDistributionList = new AdapterDistributionList(templateModelDistributionLists, context);
+        lvTemplateNextDistributionList.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextDistributionList.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextDistributionList.setAdapter(adapterDistributionList);
-        lvTemplateNextDistributionList.setExpanded(true);
+//        lvTemplateNextDistributionList.setExpanded(true);
         //templateModelDistributionLists.addAll(TemplateModelDistributionList.find(TemplateModelDistributionList.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelDistributionLists.size() > 0) {
             adapterDistributionList.notifyDataSetChanged();
@@ -561,8 +585,10 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         templateModelDistributionOthers = new ArrayList<>();
         adapterDistributionOthers = new AdapterDistributionOthers(templateModelDistributionOthers, context);
+        lvTemplateNextOtherDistribution.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextOtherDistribution.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextOtherDistribution.setAdapter(adapterDistributionOthers);
-        lvTemplateNextOtherDistribution.setExpanded(true);
+//        lvTemplateNextOtherDistribution.setExpanded(true);
         //templateModelTranslators.addAll(TemplateModelTranslator.find(TemplateModelTranslator.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelDistributionOthers.size() > 0) {
             adapterDistributionOthers.notifyDataSetChanged();
@@ -574,8 +600,10 @@ public class NextSelectedTemplateFragment extends Fragment {
         // --- Reocommendation
         templateModelSummaryRecommendations = new ArrayList<>();
         adapterSummaryRecommendation = new AdapterSummaryRecommendation(templateModelSummaryRecommendations, context, modelTemplates.getTemplateID());
+        lvTemplateNextSummaryRecommendation.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextSummaryRecommendation.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextSummaryRecommendation.setAdapter(adapterSummaryRecommendation);
-        lvTemplateNextSummaryRecommendation.setExpanded(true);
+//        lvTemplateNextSummaryRecommendation.setExpanded(true);
         //templateModelSummaryRecommendations.addAll(TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelSummaryRecommendations.size() > 0) {
             adapterSummaryRecommendation.notifyDataSetChanged();
@@ -586,8 +614,10 @@ public class NextSelectedTemplateFragment extends Fragment {
         templateModelCompanyBackgroundNames = new ArrayList<>();
         templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", modelTemplates.getCompany_id()));
         adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(templateModelCompanyBackgroundNames, context, templateModelCompanyBackgroundNames.size());
+        lvTemplateNextCompanyBackgroundName.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextCompanyBackgroundName.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextCompanyBackgroundName.setAdapter(adapterCompanyBackgroundName);
-        lvTemplateNextCompanyBackgroundName.setExpanded(true);
+//        lvTemplateNextCompanyBackgroundName.setExpanded(true);
         if (templateModelCompanyBackgroundNames.size() > 0) {
             adapterCompanyBackgroundName.notifyDataSetChanged();
         } else {
@@ -596,10 +626,12 @@ public class NextSelectedTemplateFragment extends Fragment {
         // ---
         templateModelCompanyBackgroundMajorChanges = new ArrayList<>();
         templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges
-                .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", modelTemplates.getCompany_id()));
+                .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = ''", modelTemplates.getCompany_id()));
         adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context, templateModelCompanyBackgroundMajorChanges.size());
+        lvTemplateNextCompanyBackgroundMajorChanges.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextCompanyBackgroundMajorChanges.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextCompanyBackgroundMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
-        lvTemplateNextCompanyBackgroundMajorChanges.setExpanded(true);
+//        lvTemplateNextCompanyBackgroundMajorChanges.setExpanded(true);
         if (templateModelCompanyBackgroundMajorChanges.size() > 0) {
             adapterCompanyBackgroundMajorChanges.notifyDataSetChanged();
         } else {
@@ -608,8 +640,10 @@ public class NextSelectedTemplateFragment extends Fragment {
         // ---
         templateModelAuditorses = new ArrayList<>();
         adapterAuditors = new AdapterAuditors(templateModelAuditorses, context);
+        lvTemplateNextAuditors.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextAuditors.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextAuditors.setAdapter(adapterAuditors);
-        lvTemplateNextAuditors.setExpanded(true);
+//        lvTemplateNextAuditors.setExpanded(true);
         //templateModelAuditorses.addAll(TemplateModelAuditors.find(TemplateModelAuditors.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelAuditorses.size() > 0) {
             adapterAuditors.notifyDataSetChanged();
@@ -619,8 +653,10 @@ public class NextSelectedTemplateFragment extends Fragment {
         // --- Translator
         templateModelTranslators = new ArrayList<>();
         adapterTranslator = new AdapterTranslator(templateModelTranslators, context);
+        lvTemplateNextTranslator.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextTranslator.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextTranslator.setAdapter(adapterTranslator);
-        lvTemplateNextTranslator.setExpanded(true);
+//        lvTemplateNextTranslator.setExpanded(true);
         //templateModelTranslators.addAll(TemplateModelTranslator.find(TemplateModelTranslator.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelTranslators.size() > 0) {
             adapterTranslator.notifyDataSetChanged();
@@ -657,8 +693,11 @@ public class NextSelectedTemplateFragment extends Fragment {
         //adapter inspection date call and set
         List<ModelSiteDate> modelSiteDates = ModelSiteDate.find(ModelSiteDate.class, "companyid = ?", modelTemplates.getCompany_id());
         AdapterInspectionDate adapterInspectionDate = new AdapterInspectionDate(context, modelSiteDates);
+
+        lvTemplateNextCompanyBackgroundInspectionDate.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextCompanyBackgroundInspectionDate.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextCompanyBackgroundInspectionDate.setAdapter(adapterInspectionDate);
-        lvTemplateNextCompanyBackgroundInspectionDate.setExpanded(true);
+//        lvTemplateNextCompanyBackgroundInspectionDate.setExpanded(true);
 
 
         final Handler handler = new Handler();
@@ -998,7 +1037,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         adapterScopeAudit.save(report_id);
         adapterPreAuditDoc.save(report_id);
         adapterReference.save(report_id);
-        adapterCompanyBackgroundMajorChanges.save(report_id);//inspection
+        adapterCompanyBackgroundMajorChanges.save(report_id,mar.getCompany_id());//inspection
         adapterCompanyBackgroundName.save(report_id);//inspector
         adapterPersonelMetDuring.save(report_id);
         activityAdapter.save(report_id);
@@ -1174,6 +1213,16 @@ public class NextSelectedTemplateFragment extends Fragment {
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelTranslators.add(t);
             adapterTranslator.notifyDataSetChanged();
+            if (templateModelTranslators.size()>1)
+            {
+                scrlMain.post(new Runnable()
+                {
+                    public void run()
+                    {
+                        scrlMain.fullScroll(View.FOCUS_DOWN);
+                    }
+                });
+            }
         } else
             dialogDeleteFromListConfirmation("You've reached the maximum number of 10", simpleMessageDialog);
 
@@ -1390,7 +1439,8 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         counter = 0;
         String inspection = "";
-        List<TemplateModelCompanyBackgroundMajorChanges> tmc = TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelCompanyBackgroundMajorChanges> tmc = TemplateModelCompanyBackgroundMajorChanges.find(
+                TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id());
         for (TemplateModelCompanyBackgroundMajorChanges t : tmc) {
             inspection += "{\"changes\":\"" + t.getMajorchanges() + "\"}";
             if (++counter != tmc.size()) {

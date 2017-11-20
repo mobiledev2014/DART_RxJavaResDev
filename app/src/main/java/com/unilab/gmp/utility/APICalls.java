@@ -489,6 +489,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                     TemplateModelCompanyBackgroundMajorChanges majorChanges = new TemplateModelCompanyBackgroundMajorChanges();
                                     majorChanges.setCompany_id(company_id);
                                     majorChanges.setMajorchanges(mmc.getMajorchanges());
+                                    majorChanges.setReport_id("");
                                     majorChanges.save();
                                     Log.e("APICalls", " CompanySite:changes " + mmc.getMajorchanges());
 
@@ -537,7 +538,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             @Override
             public void onResponse(Call<TemplateListModel> call, Response<TemplateListModel> response) {
                 TemplateListModel templateListModel = response.body();
-                ModelTemplates.executeQuery("UPDATE MODEL_TEMPLATES SET status='0'", new String[]{});
+                ModelTemplates.executeQuery("UPDATE MODEL_TEMPLATES SET status='0' where status > 0", new String[]{});
                 numberoftemplates = templateListModel.getTemplate_list().size();
                 isdone = true;
                 Log.e("numberoftemplates", "numberoftemplates : " + numberoftemplates);
@@ -1001,13 +1002,13 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 }
 
                 //-
-//                for (TemplateModelCompanyBackgroundMajorChanges mmc : modelAuditReports.getInspection()) {
-//                    mmc.setReport_id(report_id);
-//                    mmc.setMajorchanges(mmc.getMajorchanges());
-//                    mmc.save();
-//
-//                    Log.e("APICalls", "company major changes : " + mmc.getMajorchanges());
-//                }
+                for (TemplateModelCompanyBackgroundMajorChanges mmc : modelAuditReports.getInspection()) {
+                    mmc.setReport_id(report_id);
+                    mmc.setMajorchanges(mmc.getMajorchanges());
+                    mmc.save();
+
+                    Log.e("APICalls", "company major changes : " + mmc.getMajorchanges());
+                }
 
                 //-
 //                for (TemplateModelCompanyBackgroundName mmn : modelAuditReports.getInspector()) {
@@ -1742,7 +1743,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
             if (found) {
                 Log.i("ARGULOOP", "UPDATE");
-                //if (!date.equals(modelTemplates.getDateUpdated()))
+                if (!date.equals(modelTemplates.getDateUpdated()))
                 updateDataTemplate(modelTemplates);
 
             } else {
