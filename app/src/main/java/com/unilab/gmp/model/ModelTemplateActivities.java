@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +26,7 @@ public class ModelTemplateActivities extends SugarRecord {
     String update_date;
 
     @SerializedName("sub_activities")
-    ArrayList<ModelTemplateSubActivities> modelTemplateSubActivities;
+    List<ModelTemplateSubActivities> modelTemplateSubActivities;
 
     boolean isCheck;
 

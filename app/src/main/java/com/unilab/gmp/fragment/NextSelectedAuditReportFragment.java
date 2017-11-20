@@ -513,9 +513,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextScopeAudit.setAdapter(adapterScopeAudit);
 //        lvTemplateNextScopeAudit.setExpanded(true);
 //        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
-        if (templateModelScopeAudits.size() > 0) {
-//            adapterScopeAudit.notifyDataSetChanged();
-        } else {
+        if (templateModelScopeAudits.size() <= 0) {
             addScopeAuditType();
         }
 
@@ -528,9 +526,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextSummaryRecommendationOtherIssuesAudit.setAdapter(adapterOthersIssueAudit);
 //        lvTemplateNextSummaryRecommendationOtherIssuesAudit.setExpanded(true);
 //        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
-        if (templateModelOtherIssuesAudits.size() > 0) {
-//            adapterOthersIssueAudit.notifyDataSetChanged();
-        } else {
+        if (templateModelOtherIssuesAudits.size() <= 0) {
             addOtherIssuesAudit();
         }
         // --- Other issues Executive
@@ -542,23 +538,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setAdapter(adapterOthersIssueExecutive);
 //        lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setExpanded(true);
 //        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
-        if (templateModelOtherIssuesExecutives.size() > 0) {
-//            adapterOthersIssueExecutive.notifyDataSetChanged();
-        } else {
+        if (templateModelOtherIssuesExecutives.size() <= 0) {
             addOtherIssuesExecutive();
         }
-
-        // --- Audit Scope Interest
-        /*templateModelScopeAuditInterests = new ArrayList<>();
-        adapterScope = new AdapterScopeAuditInterest(templateModelScopeAuditInterests, context, modelTemplates.getCompany_id());
-        lvTemplateNextScopeAuditInterest.setAdapter(adapterScope);
-        lvTemplateNextScopeAuditInterest.setExpanded(true);
-        templateModelScopeAuditInterests.addAll(TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
-        if (templateModelScopeAuditInterests.size() > 0) {
-            adapterScope.notifyDataSetChanged();
-        } else {
-            addScopeAuditTypeInterest();
-        }*/
 
         // --- Reference
         templateModelReferences = new ArrayList<>();
@@ -568,9 +550,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextReference.setAdapter(adapterReference);
 //        lvTemplateNextReference.setExpanded(true);
         templateModelReferences.addAll(TemplateModelReference.find(TemplateModelReference.class, "reportid = ?", report.getReport_id()));
-        if (templateModelReferences.size() > 0) {
-//            adapterReference.notifyDataSetChanged();
-        } else {
+        if (templateModelReferences.size() <= 0) {
             addReference();
         }
 
@@ -582,9 +562,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextPreAuditDoc.setAdapter(adapterPreAuditDoc);
 //        lvTemplateNextPreAuditDoc.setExpanded(true);
         templateModelPreAuditDocs.addAll(TemplateModelPreAuditDoc.find(TemplateModelPreAuditDoc.class, " reportid = ?", report.getReport_id()));
-        if (templateModelPreAuditDocs.size() > 0) {
-//            adapterPreAuditDoc.notifyDataSetChanged();
-        } else {
+        if (templateModelPreAuditDocs.size() <= 0) {
             addPreAuditDoc();
         }
         // --- Present during meeting
@@ -595,9 +573,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextPresentDuringMeeting.setAdapter(adapterPresentDuringMeeting);
 //        lvTemplateNextPresentDuringMeeting.setExpanded(true);
         templateModelPresentDuringMeetings.addAll(TemplateModelPresentDuringMeeting.find(TemplateModelPresentDuringMeeting.class, "reportid = ?", report.getReport_id()));
-        if (templateModelPresentDuringMeetings.size() > 0) {
-//            adapterPresentDuringMeeting.notifyDataSetChanged();
-        } else {
+        if (templateModelPresentDuringMeetings.size() <= 0) {
             addPresentDuringMeeting();
         }
         // --- Personel Met During
@@ -608,9 +584,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextPersonnelInspection.setAdapter(adapterPersonelMetDuring);
 //        lvTemplateNextPersonnelInspection.setExpanded(true);
         templateModelPersonelMetDurings.addAll(TemplateModelPersonelMetDuring.find(TemplateModelPersonelMetDuring.class, "reportid = ?", report.getReport_id()));
-        if (templateModelPersonelMetDurings.size() > 0) {
-//            adapterPersonelMetDuring.notifyDataSetChanged();
-        } else {
+        if (templateModelPersonelMetDurings.size() <= 0) {
             addPersonelMet();
         }
         // --- Distribution List
@@ -621,9 +595,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextDistributionList.setAdapter(adapterDistributionList);
 //        lvTemplateNextDistributionList.setExpanded(true);
         templateModelDistributionLists.addAll(TemplateModelDistributionList.find(TemplateModelDistributionList.class, "reportid = ?", report.getReport_id()));
-        if (templateModelDistributionLists.size() > 0) {
-//            adapterDistributionList.notifyDataSetChanged();
-        } else {
+        if (templateModelDistributionLists.size() <= 0) {
             addDistribution();
         }
 
@@ -636,9 +608,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextOtherDistribution.setAdapter(adapterDistributionOthers);
 //        lvTemplateNextOtherDistribution.setExpanded(true);
         templateModelDistributionOthers.addAll(TemplateModelDistributionOthers.find(TemplateModelDistributionOthers.class, "reportid = ?", report.getReport_id()));
-        if (templateModelDistributionOthers.size() > 0) {
-//            adapterDistributionOthers.notifyDataSetChanged();
-        } else {
+        if (templateModelDistributionOthers.size() <= 0) {
             addDistributionOthers();
         }
 
@@ -650,9 +620,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextSummaryRecommendation.setAdapter(adapterSummaryRecommendation);
 //        lvTemplateNextSummaryRecommendation.setExpanded(true);
         templateModelSummaryRecommendations.addAll(TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "reportid = ?", report.getReport_id()));
-        if (templateModelSummaryRecommendations.size() > 0) {
-//            adapterSummaryRecommendation.notifyDataSetChanged();
-        } else {
+        if (templateModelSummaryRecommendations.size() <= 0) {
             addRecommendation();
         }
         // ---
@@ -664,9 +632,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextCompanyBackgroundName.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextCompanyBackgroundName.setAdapter(adapterCompanyBackgroundName);
 //        lvTemplateNextCompanyBackgroundName.setExpanded(true);
-        if (templateModelCompanyBackgroundNames.size() > 0) {
-//            adapterCompanyBackgroundName.notifyDataSetChanged();
-        } else {
+        if (templateModelCompanyBackgroundNames.size() <= 0) {
             addBackgroundName();
         }
         // ---
@@ -680,9 +646,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextCompanyBackgroundMajorChanges.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextCompanyBackgroundMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
 //        lvTemplateNextCompanyBackgroundMajorChanges.setExpanded(true);
-        if (templateModelCompanyBackgroundMajorChanges.size() > 0) {
-//            adapterCompanyBackgroundMajorChanges.notifyDataSetChanged();
-        } else {
+        if (templateModelCompanyBackgroundMajorChanges.size() <= 0) {
             addMajorChanges();
         }
         // ---
@@ -693,9 +657,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextAuditors.setAdapter(adapterAuditors);
 //        lvTemplateNextAuditors.setExpanded(true);
         templateModelAuditorses.addAll(TemplateModelAuditors.find(TemplateModelAuditors.class, "reportid = ?", report.getReport_id()));
-        if (templateModelAuditorses.size() > 0) {
-//            adapterAuditors.notifyDataSetChanged();
-        } else {
+        if (templateModelAuditorses.size() <= 0) {
             addAuditors();
         }
         // ---
@@ -706,30 +668,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextTranslator.setAdapter(adapterTranslator);
 //        lvTemplateNextTranslator.setExpanded(true);
         templateModelTranslators.addAll(TemplateModelTranslator.find(TemplateModelTranslator.class, "reportid = ?", report.getReport_id()));
-        if (templateModelTranslators.size() > 0) {
-//            adapterTranslator.notifyDataSetChanged();
-        } else {
+        if (templateModelTranslators.size() <= 0) {
             addTranslator();
         }
         // ---
-//        List<ModelTemplates> l = ModelTemplates.find(ModelTemplates.class, "template_id = ?", report.getTemplate_id());
-//        etTemplateNextActivityCarried.setText(l.get(0).getOther_activities());
-//        etTemplateNextActivityCarried.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                modelTemplates.setOther_activities(etTemplateNextActivityCarried.getText().toString());
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//
-//            }
-//        });
 
         etTemplateNextActivityCarried.setText(report.getOther_activities());
 
@@ -1094,7 +1036,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         adapterScopeAudit.save(mar.getReport_id());
         adapterPreAuditDoc.save(mar.getReport_id());
         adapterReference.save(mar.getReport_id());
-        adapterCompanyBackgroundMajorChanges.save(mar.getReport_id(),mar.getCompany_id());//inspection
+        adapterCompanyBackgroundMajorChanges.save(mar.getReport_id(), mar.getCompany_id());//inspection
         adapterCompanyBackgroundName.save(mar.getReport_id());//inspector
         adapterPersonelMetDuring.save(mar.getReport_id());
         activityAdapter.save(mar.getReport_id());
@@ -1153,14 +1095,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
         } else
             dialogDeleteFromListConfirmation("You've reached the maximum number of " + adapterScopeAudit.getTypeAuditSize(), simpleMessageDialog);
     }
-
-//    private void addScopeAuditTypeInterest() {
-//        if (adapterScope.getTypeAuditSize() > templateModelScopeAuditInterests.size()) {
-//            TemplateModelScopeAuditInterest t = new TemplateModelScopeAuditInterest();
-//            templateModelScopeAuditInterests.add(t);
-//            adapterScope.notifyDataSetChanged();
-//        }
-//    }
 
     private void addReference() {
         if (20 > templateModelReferences.size()) {
@@ -1626,7 +1560,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         String co_auditor_id = "";
         List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class,
-                "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id());
+                "reportid = ?", report.getReport_id());
         int counter = 0;
         for (TemplateModelAuditors tma : ltma) {
             if (++counter != ltma.size()) {
@@ -2078,7 +2012,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                             adapterTranslator.notifyItemRemoved(templateModelTranslators.size());
                         } else {
                             templateModelTranslators.get(0).setTranslator("");
-                            adapterTranslator.notifyDataSetChanged();
+                            adapterTranslator.notifyItemChanged(0);
                         }
                     }
 
@@ -2088,7 +2022,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                             adapterPreAuditDoc.notifyItemRemoved(templateModelPreAuditDocs.size());
                         } else {
                             templateModelPreAuditDocs.get(0).setPreaudit("");
-                            adapterPreAuditDoc.notifyDataSetChanged();
+                            adapterPreAuditDoc.notifyItemChanged(0);
                         }
 
                     }
@@ -2099,7 +2033,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                             adapterDistributionOthers.notifyItemRemoved(templateModelDistributionOthers.size());
                         } else {
                             templateModelDistributionOthers.get(0).setDistribution_other("");
-                            adapterDistributionOthers.notifyDataSetChanged();
+                            adapterDistributionOthers.notifyItemChanged(0);
                         }
                     }
 
@@ -2115,7 +2049,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                         } else {
                             templateModelPersonelMetDurings.get(0).setName("");
                             templateModelPersonelMetDurings.get(0).setPosition("");
-                            adapterPersonelMetDuring.notifyDataSetChanged();
+                            adapterPersonelMetDuring.notifyItemChanged(0);
                         }
                     }
 
@@ -2130,7 +2064,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                             adapterOthersIssueExecutive.notifyItemRemoved(templateModelOtherIssuesExecutives.size());
                         } else {
                             templateModelOtherIssuesExecutives.get(0).setOther_issues_executive("");
-                            adapterOthersIssueExecutive.notifyDataSetChanged();
+                            adapterOthersIssueExecutive.notifyItemChanged(0);
                         }
                     }
 
@@ -2140,7 +2074,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                             adapterOthersIssueAudit.notifyItemRemoved(templateModelOtherIssuesAudits.size());
                         } else {
                             templateModelOtherIssuesAudits.get(0).setOther_issues_audit("");
-                            adapterOthersIssueAudit.notifyDataSetChanged();
+                            adapterOthersIssueAudit.notifyItemChanged(0);
                         }
                     }
                     if (list == auditorDelete) {
@@ -2154,7 +2088,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                         } else {
                             templateModelPresentDuringMeetings.get(0).setName("");
                             templateModelPresentDuringMeetings.get(0).setPosition("");
-                            adapterPresentDuringMeeting.notifyDataSetChanged();
+                            adapterPresentDuringMeeting.notifyItemChanged(0);
                         }
                     }
                     if (list == majorChangesDelete) {
@@ -2164,7 +2098,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                             adapterCompanyBackgroundMajorChanges.notifyItemRemoved(templateModelCompanyBackgroundMajorChanges.size());
                         } else {
                             templateModelCompanyBackgroundMajorChanges.get(0).setMajorchanges("");
-                            adapterCompanyBackgroundMajorChanges.notifyDataSetChanged();
+                            adapterCompanyBackgroundMajorChanges.notifyItemChanged(0);
                         }
                     }
                     dialogDeleteIsShowing = false;

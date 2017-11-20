@@ -538,7 +538,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             @Override
             public void onResponse(Call<TemplateListModel> call, Response<TemplateListModel> response) {
                 TemplateListModel templateListModel = response.body();
-                ModelTemplates.executeQuery("UPDATE MODEL_TEMPLATES SET status='0' where status > 0", new String[]{});
+                ModelTemplates.executeQuery("UPDATE MODEL_TEMPLATES SET status='2' where status = 1", new String[]{});
                 numberoftemplates = templateListModel.getTemplate_list().size();
                 isdone = true;
                 Log.e("numberoftemplates", "numberoftemplates : " + numberoftemplates);
@@ -748,10 +748,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     modelClassification.setStatus(modelClassificationInfo.getModelClassifications().get(x).getStatus());
                     modelClassification.save();
                     Log.e("testing", response.toString() + " Classification: " + modelClassification.toString());
-                    if (modelClassificationInfo.getModelClassifications().get(x).getCategory()!=null)
-                    {
-                        for (ModelClassificationCategory mcc:modelClassificationInfo.getModelClassifications().get(x).getCategory())
-                        {
+                    if (modelClassificationInfo.getModelClassifications().get(x).getCategory() != null) {
+                        for (ModelClassificationCategory mcc : modelClassificationInfo.getModelClassifications().get(x).getCategory()) {
                             Log.e("testing", "ClassificationCategory: " + mcc.getCategory_id());
                             mcc.setClassification_id(modelClassification.getClassification_id());
                             mcc.setClassification_name(modelClassification.getClassification_name());
@@ -762,14 +760,13 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 //                    isDispositionExisting(modelClassification);
                 }
             }
+
             @Override
             public void onFailure(Call<ModelClassificationInfo> call, Throwable t) {
                 Log.e("testing", t.getMessage());
             }
         });
     }
-
-
 
 
     //Distribution
@@ -1057,8 +1054,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 //-
                 for (TemplateModelDistributionOthers mdl : modelAuditReports.getOther_distribution()) {
                     mdl.setReport_id(report_id);
-                    if (mdl.getDistribution_other().equals("null"))
-                    {
+                    if (mdl.getDistribution_other().equals("null")) {
                         mdl.setDistribution_other("");
                     }
                     mdl.setDistribution_other(mdl.getDistribution_other());
@@ -1525,7 +1521,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             }
 
             if (found) {
-                Log.i("ARGULOOP", "UPDATE : "+ date);
+                Log.i("ARGULOOP", "UPDATE : " + date);
                 if (!date.equals(modelAuditReports.getModified_date()))
                     updateAuditReport(modelAuditReports);
 //                    auditorsAdapter.notifyDataSetChanged();
@@ -1716,9 +1712,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             template.setStatus("1");
         } else if (modelTemplates.getStatus().equals("1")) {
             template.setStatus("2");
-        } /*else if (modelTemplates.getStatus().equals("3")){
-
-        } */
+        }
 
         template.setDateUpdated(modelTemplates.getDateUpdated());
 
@@ -1744,7 +1738,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             if (found) {
                 Log.i("ARGULOOP", "UPDATE");
                 if (!date.equals(modelTemplates.getDateUpdated()))
-                updateDataTemplate(modelTemplates);
+                    updateDataTemplate(modelTemplates);
 
             } else {
                 Log.i("ARGULOOP", "SAVE");

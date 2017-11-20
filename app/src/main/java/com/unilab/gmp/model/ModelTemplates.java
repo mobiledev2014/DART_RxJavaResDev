@@ -32,7 +32,7 @@ public class ModelTemplates extends SugarRecord{
     String dateUpdated;
 
     @SerializedName("activities")
-    ArrayList<ModelTemplateActivities> modelTemplateActivities;
+    List<ModelTemplateActivities> modelTemplateActivities ;
 
     @SerializedName("elements")
     List<ModelTemplateElements> modelTemplateElements;

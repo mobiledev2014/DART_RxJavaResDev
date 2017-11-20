@@ -69,16 +69,16 @@ public class TemplateFragment extends Fragment {
         Variable.onAudit = false;
         sharedPref = new SharedPreferenceManager(context);
 
-        //templateList = ModelTemplates.listAll(ModelTemplates.class, "date_Created DESC");
+//        templateList = ModelTemplates.listAll(ModelTemplates.class, "date_Created DESC");
         templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2' ",
                 new String[]{}, null, "date_Created DESC", "50");
-        List<ModelTemplates> newCounter = ModelTemplates.listAll(ModelTemplates.class);
-//        Log.i("Template count ", " " + templateList.size() + templateList.get(0).getStatus());
         templateAdapter = new TemplateAdapter(context, templateList);
         lvTemplateList.setAdapter(templateAdapter);
         tvTemplateCount.setText(templateList.size() + " Total Record(s)");
         tvSyncDate.setText("Data as of: " + sharedPref.getStringData("DATE"));
-
+        for(ModelTemplates m : templateList) {
+            Log.e("status", m.getStatus());
+        }
         return rootView;
     }
 
