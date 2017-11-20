@@ -3,6 +3,7 @@ package com.unilab.gmp.activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -44,6 +45,8 @@ import butterknife.OnClick;
 public class HomeActivity extends AppCompatActivity {
 
     public static ProgressDialog pDialog;
+    //@BindView(R.id.tv_sync_notif_count)
+    public static TextView tvSyncNotifCount;
     Context context;
     @BindView(R.id.iv_logout)
     ImageView ivLogout;
@@ -77,9 +80,6 @@ public class HomeActivity extends AppCompatActivity {
     TextView tvIndicator;
     @BindView(R.id.ll_online_indicator)
     LinearLayout llOnlineIndicator;
-    //@BindView(R.id.tv_sync_notif_count)
-    public static TextView tvSyncNotifCount;
-
     CountDownTimer countDownTimer;
 
     String newTemplates = "";
@@ -190,7 +190,7 @@ public class HomeActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().replace(R.id.fl_content, homeFragment).addToBackStack(null).commit();
                 Log.i("TAG", "EXIT");
             } else {
-                dialogCloseConfirmation("Are you sure you want to close the application?");
+                dialogCloseConfirmation("Are you sure you want to close the application?", "CLOSE");
             }
         }
     }
@@ -213,7 +213,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.iv_logout:
-                dialogCloseConfirmation("Are you sure you want to log out?");
+                dialogCloseConfirmation("Are you sure you want to log out?", "LOGOUT");
                 break;
             case R.id.iv_template:
                 if (Variable.onTemplate) {
@@ -286,7 +286,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    public void dialogCloseConfirmation(String mess) {
+    public void dialogCloseConfirmation(String mess, final String status) {
         dialogCloseConfirmation = new Dialog(context);
         dialogCloseConfirmation.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialogCloseConfirmation.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -303,9 +303,13 @@ public class HomeActivity extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(context, MainActivity.class);
-                //startActivity(intent);
-                finish();
+                if (status.equals("CLOSE")) {
+                    finish();
+                } else {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
