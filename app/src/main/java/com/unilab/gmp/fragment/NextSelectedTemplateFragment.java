@@ -85,6 +85,7 @@ import com.unilab.gmp.retrofit.Async.PostAsync;
 import com.unilab.gmp.utility.DateTimeUtils;
 import com.unilab.gmp.utility.Glovar;
 import com.unilab.gmp.utility.SharedPreferenceManager;
+import com.unilab.gmp.utility.SimpleDividerItemDecoration;
 import com.unilab.gmp.utility.StartDatePicker;
 import com.unilab.gmp.utility.Variable;
 
@@ -467,6 +468,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         lvTemplateNextScopeAudit.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextScopeAudit.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextScopeAudit.setAdapter(adapterScopeAudit);
+        lvTemplateNextScopeAudit.addItemDecoration(new SimpleDividerItemDecoration(context));
 //        lvTemplateNextScopeAudit.setExpanded(true);
         //templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelScopeAudits.size() <= 0) {
@@ -502,6 +504,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         lvTemplateNextReference.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextReference.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextReference.setAdapter(adapterReference);
+        lvTemplateNextReference.addItemDecoration(new SimpleDividerItemDecoration(context));
 //        lvTemplateNextReference.setExpanded(true);
         //templateModelReferences.addAll(TemplateModelReference.find(TemplateModelReference.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelReferences.size() <= 0) {
@@ -525,6 +528,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         lvTemplateNextPresentDuringMeeting.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextPresentDuringMeeting.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextPresentDuringMeeting.setAdapter(adapterPresentDuringMeeting);
+        lvTemplateNextPresentDuringMeeting.addItemDecoration(new SimpleDividerItemDecoration(context));
 //        lvTemplateNextPresentDuringMeeting.setExpanded(true);
         //templateModelPresentDuringMeetings.addAll(TemplateModelPresentDuringMeeting.find(TemplateModelPresentDuringMeeting.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelPresentDuringMeetings.size() <= 0) {
@@ -536,6 +540,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         lvTemplateNextPersonnelInspection.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextPersonnelInspection.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextPersonnelInspection.setAdapter(adapterPersonelMetDuring);
+        lvTemplateNextPersonnelInspection.addItemDecoration(new SimpleDividerItemDecoration(context));
 //        lvTemplateNextPersonnelInspection.setExpanded(true);
         //templateModelPersonelMetDurings.addAll(TemplateModelPersonelMetDuring.find(TemplateModelPersonelMetDuring.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelPersonelMetDurings.size() <= 0) {
@@ -573,6 +578,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         lvTemplateNextSummaryRecommendation.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextSummaryRecommendation.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextSummaryRecommendation.setAdapter(adapterSummaryRecommendation);
+        lvTemplateNextSummaryRecommendation.addItemDecoration(new SimpleDividerItemDecoration(context));
 //        lvTemplateNextSummaryRecommendation.setExpanded(true);
         //templateModelSummaryRecommendations.addAll(TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelSummaryRecommendations.size() <= 0) {
@@ -607,6 +613,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         lvTemplateNextAuditors.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextAuditors.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextAuditors.setAdapter(adapterAuditors);
+        lvTemplateNextAuditors.addItemDecoration(new SimpleDividerItemDecoration(context));
 //        lvTemplateNextAuditors.setExpanded(true);
         //templateModelAuditorses.addAll(TemplateModelAuditors.find(TemplateModelAuditors.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelAuditorses.size() <= 0) {
