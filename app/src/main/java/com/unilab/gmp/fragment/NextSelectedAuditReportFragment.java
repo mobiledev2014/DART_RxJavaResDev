@@ -1015,7 +1015,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         ModelReportReviewer mrr = new ModelReportReviewer();
         mrr.setReport_id(mar.getReport_id());
-        mrr.setReviewer_id(reviewerModels.get(sTemplateNextApproverName.getSelectedItemPosition()).getReviewer_id());
+        mrr.setReviewer_id(reviewerModels.get(sTemplateNextReviewerName.getSelectedItemPosition()).getReviewer_id());
         mrr.save();
 
         ModelReportApprover mra = new ModelReportApprover();

@@ -924,9 +924,6 @@ public class NextSelectedTemplateFragment extends Fragment {
         if (size < 10) {
             zero = "00";
         }
-//        if (size < 10) {
-//            zero = "000";
-//        }
 
         String report_id = zero + size;
         mar.setReport_id(report_id);
@@ -935,8 +932,6 @@ public class NextSelectedTemplateFragment extends Fragment {
         mar.setCompany_id(modelTemplates.getCompany_id());
         mar.setAudit_date_1(modelTemplates.getAudit_date_1());
         mar.setAudit_date_2(modelTemplates.getAudit_date_2());
-//        mar.setP_inspection_date_1(etTemplateNextCompanyBackgroundDateFrom.getText().toString());
-//        mar.setP_inspection_date_2(etTemplateNextCompanyBackgroundDateTo.getText().toString());
         mar.setAuditor_id(auditorsModels.get(sTemplateNextAuditorLeadName.getSelectedItemPosition()).getAuditor_id());
         mar.setReviewer_id(reviewer_id);
         mar.setApprover_id(approver_id);
@@ -947,11 +942,13 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         adapterAuditors.save(report_id);
 
+        ModelReportReviewer.deleteAll(ModelReportReviewer.class, "reportid = ?", report_id);
         ModelReportReviewer mrr = new ModelReportReviewer();
         mrr.setReport_id(report_id);
         mrr.setReviewer_id(reviewerModels.get(sTemplateNextReviewerName.getSelectedItemPosition()).getReviewer_id());
         mrr.save();
 
+        ModelReportApprover.deleteAll(ModelReportApprover.class, "reportid = ?", report_id);
         ModelReportApprover mra = new ModelReportApprover();
         mra.setReport_id(report_id);
         mra.setApprover_id(approverModels.get(sTemplateNextApproverName.getSelectedItemPosition()).getApprover_id());
@@ -965,13 +962,10 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         mar.setAudit_close_date(DateTimeUtils.parseDateMonthToDigit(
                 etTemplateNextSummaryRecommendationAuditCloseDate.getText().toString()));
-//        mar.setOther_issues(etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString());
         mar.setAudited_areas(etTemplateNextAuditedArea.getText().toString());
         mar.setAreas_to_consider(etTemplateNextNotAuditedArea.getText().toString());
-//        mar.setDate_of_wrap(DateTimeUtils.parseDateMonthToDigit(etTemplateNextDateOfWrapUp.getText().toString()));
+
         adapterTranslator.save(report_id);
-
-
         adapterScopeAudit.save(report_id);
         adapterPreAuditDoc.save(report_id);
         adapterReference.save(report_id);
@@ -982,9 +976,6 @@ public class NextSelectedTemplateFragment extends Fragment {
         templateElementAdapter.save(report_id);
 
         mar.setOther_activities(etTemplateNextActivityCarried.getText().toString());
-//        mar.setOther_issues_executive(etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString());
-
-        // adapterScope.save(report_id);//w
         adapterPresentDuringMeeting.save(report_id);//w
         adapterDistributionList.save(report_id);//w
         adapterDistributionOthers.save(report_id);
