@@ -263,6 +263,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
     Button btnTemplateNextSummaryRecommendationOtherIssuesExecutiveAdd;
     @BindView(R.id.btn_template_next_summary_recommendation_other_issues_executive_delete)
     Button btnTemplateNextSummaryRecommendationOtherIssuesExecutiveDelete;
+    @BindView(R.id.btn_template_next_other_distribution_add)
+    Button btnTemplateNextDistributionOthersAdd;
 
     Dialog dialogCancelTemplate;
     Dialog dialogSaveDraft;
@@ -379,6 +381,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         lvTemplateNextActivitiesCarried.setAdapter(activityAdapter);
 //        lvTemplateNextActivitiesCarried.setExpanded(true);
+
+
 
 
         etTemplateNextAuditedArea.setText(report.getAudited_areas());
@@ -580,6 +584,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         if (templateModelPresentDuringMeetings.size() <= 0) {
             addPresentDuringMeeting();
         }
+
         // --- Personel Met During
         templateModelPersonelMetDurings = new ArrayList<>();
         adapterPersonelMetDuring = new AdapterPersonelMetDuring(templateModelPersonelMetDurings, context);
@@ -616,6 +621,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         if (templateModelDistributionOthers.size() <= 0) {
             addDistributionOthers();
         }
+
+
 
         // --- Reocommendation
         templateModelSummaryRecommendations = new ArrayList<>();
@@ -656,6 +663,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             addMajorChanges();
         }
         // ---
+
         templateModelAuditorses = new ArrayList<>();
         adapterAuditors = new AdapterAuditors(templateModelAuditorses, context);
         lvTemplateNextAuditors.setLayoutManager(new LinearLayoutManager(context));
@@ -680,12 +688,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
         // ---
 
+
         etTemplateNextActivityCarried.setText(report.getOther_activities());
 
         List<ModelCompany> mc = ModelCompany.find(ModelCompany.class, "companyid = ?", modelTemplates.getCompany_id());
         if (mc.size() > 0) {
             etTemplateNextCompanyBackgroundHistory.setText(mc.get(0).getBackground());
         }
+
 
         //adapter inspection date call and set
         List<ModelSiteDate> modelSiteDates = ModelSiteDate.find(ModelSiteDate.class, "companyid = ?", modelTemplates.getCompany_id());
@@ -695,7 +705,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextCompanyBackgroundInspectionDate.setAdapter(adapterInspectionDate);
 //        lvTemplateNextCompanyBackgroundInspectionDate.setExpanded(true);
 
-
+        if (!checkIfAuthorizedUser())
+            disableWidgets();
 
         /*progress dialog dismiss*/
         final Handler handler = new Handler();
@@ -710,6 +721,49 @@ public class NextSelectedAuditReportFragment extends Fragment {
         this.rootView = rootView;
 
         return rootView;
+    }
+
+    private void disableWidgets()
+    {
+        etTemplateNextDateOfWrapUp.setEnabled(false);
+        etTemplateNextSummaryRecommendationAuditCloseDate.setEnabled(false);
+        etTemplateNextAuditedArea.setEnabled(false);
+        etTemplateNextNotAuditedArea.setEnabled(false);
+        sTemplateNextAuditorLeadName.setEnabled(false);
+        cbTemplateNextReviewer.setEnabled(false);
+        sTemplateNextReviewerName.setEnabled(false);
+        sTemplateNextApproverName.setEnabled(false);
+        lvTemplateNextScopeAudit.setEnabled(false);
+        lvTemplateNextSummaryRecommendationOtherIssuesAudit.setEnabled(false);
+        lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setEnabled(false);
+        lvTemplateNextReference.setEnabled(false);
+        lvTemplateNextPreAuditDoc.setEnabled(false);
+        lvTemplateNextPresentDuringMeeting.setEnabled(false);
+        lvTemplateNextPersonnelInspection.setEnabled(false);
+        lvTemplateNextDistributionList.setEnabled(false);
+        lvTemplateNextOtherDistribution.setEnabled(false);
+        lvTemplateNextSummaryRecommendation.setEnabled(false);
+        lvTemplateNextCompanyBackgroundName.setEnabled(false);
+        lvTemplateNextCompanyBackgroundMajorChanges.setEnabled(false);
+        lvTemplateNextAuditors.setEnabled(false);
+        lvTemplateNextTranslator.setEnabled(false);
+        lvTemplateNextCompanyBackgroundInspectionDate.setEnabled(false);
+
+        btnTemplateNextAuditorAdd.setEnabled(false);
+        btnTemplateNextDistributionAdd.setEnabled(false);
+        btnTemplateNextReferenceAdd.setEnabled(false);
+        btnTemplateNextTranslatorAdd.setEnabled(false);
+        btnTemplateNextPersonnelInspectionAdd.setEnabled(false);
+        btnTemplateNextScopeAuditAdd.setEnabled(false);
+        btnTemplateNextSummaryRecommendationAdd.setEnabled(false);
+        btnTemplateNextPresentCloseUpAdd.setEnabled(false);
+        btnTemplateNextCompanyBackgroundInspectorNameAdd.setEnabled(false);
+        btnTemplateNextSummaryRecommendationOtherIssuesAuditAdd.setEnabled(false);
+        btnTemplateNextSummaryRecommendationOtherIssuesExecutiveAdd.setEnabled(false);
+        btnTemplateNextCompanyBackgroundMajorChangesAdd.setEnabled(false);
+        btnTemplateNextPreAuditDocAdd.setEnabled(false);
+        btnTemplateNextDistributionOthersAdd.setEnabled(false);
+
     }
 
 //    @Override
@@ -740,7 +794,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         return cm.getActiveNetworkInfo() != null;
     }
 
-    public void checkIfAuthorizedUser() {
+    public boolean checkIfAuthorizedUser() {
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context);
         String loggedEmail = sharedPreferenceManager.getStringData("EMAIL");
 
@@ -768,11 +822,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
 
         }
+        return found;
 
-        if (found)
-            dialogSubmit("Are you sure you want to submit?");
-        else
-            dialogDeleteFromListConfirmation("You are not authorized", simpleMessageDialog);
     }
 
     @OnClick({R.id.btn_cancel, R.id.btn_save_draft, R.id.btn_submit,
@@ -818,7 +869,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 //saveReport();
                 break;
             case R.id.btn_submit:
-                checkIfAuthorizedUser();
+                if (checkIfAuthorizedUser())
+                    dialogSubmit("Are you sure you want to submit?");
+                else
+                    dialogDeleteFromListConfirmation("You are not authorized", simpleMessageDialog);
                 break;
             case R.id.btn_template_next_summary_recommendation_other_issues_audit_add:
                 addOtherIssuesAudit();

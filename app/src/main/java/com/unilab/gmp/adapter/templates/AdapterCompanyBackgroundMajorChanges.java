@@ -109,7 +109,7 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
         TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
         int i = 0;
         for (TemplateModelCompanyBackgroundMajorChanges t : templateModelCompanyBackgroundMajorChanges) {
-            if (i++ < disable) {
+            if (i++ < disable||t.getMajorchanges().isEmpty()) {
                 continue;
             }
             t.setReport_id(report_id);
