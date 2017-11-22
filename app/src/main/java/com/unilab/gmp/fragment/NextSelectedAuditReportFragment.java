@@ -265,6 +265,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
     Button btnTemplateNextSummaryRecommendationOtherIssuesExecutiveDelete;
     @BindView(R.id.btn_template_next_other_distribution_add)
     Button btnTemplateNextDistributionOthersAdd;
+    @BindView(R.id.btn_template_next_other_distribution_delete)
+    Button btnTemplateNextDistributionOthersDelete;
 
     Dialog dialogCancelTemplate;
     Dialog dialogSaveDraft;
@@ -750,19 +752,34 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextCompanyBackgroundInspectionDate.setEnabled(false);
 
         btnTemplateNextAuditorAdd.setEnabled(false);
+        btnTemplateNextAuditorDelete.setEnabled(false);
         btnTemplateNextDistributionAdd.setEnabled(false);
+        btnTemplateNextDistributionDelete.setEnabled(false);
         btnTemplateNextReferenceAdd.setEnabled(false);
+        btnTemplateNextReferenceDelete.setEnabled(false);
         btnTemplateNextTranslatorAdd.setEnabled(false);
+        btnTemplateNextTranslatorDelete.setEnabled(false);
         btnTemplateNextPersonnelInspectionAdd.setEnabled(false);
+        btnTemplateNextPersonnelInspectionDelete.setEnabled(false);
         btnTemplateNextScopeAuditAdd.setEnabled(false);
+        btnTemplateNextScopeAuditDelete.setEnabled(false);
         btnTemplateNextSummaryRecommendationAdd.setEnabled(false);
+        btnTemplateNextSummaryRecommendationDelete.setEnabled(false);
         btnTemplateNextPresentCloseUpAdd.setEnabled(false);
+        btnTemplateNextPresentCloseUpDelete.setEnabled(false);
         btnTemplateNextCompanyBackgroundInspectorNameAdd.setEnabled(false);
+        btnTemplateNextCompanyBackgroundInspectorNameDelete.setEnabled(false);
         btnTemplateNextSummaryRecommendationOtherIssuesAuditAdd.setEnabled(false);
+        btnTemplateNextSummaryRecommendationOtherIssuesAuditDelete.setEnabled(false);
         btnTemplateNextSummaryRecommendationOtherIssuesExecutiveAdd.setEnabled(false);
+        btnTemplateNextSummaryRecommendationOtherIssuesExecutiveDelete.setEnabled(false);
         btnTemplateNextCompanyBackgroundMajorChangesAdd.setEnabled(false);
-        btnTemplateNextPreAuditDocAdd.setEnabled(false);
+        btnTemplateNextCompanyBackgroundMajorChangesDelete.setEnabled(false);
+        btnTemplateNextPreAuditDocDelete.setEnabled(false);
         btnTemplateNextDistributionOthersAdd.setEnabled(false);
+        btnTemplateNextDistributionOthersDelete.setEnabled(false);
+
+
 
     }
 
