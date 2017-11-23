@@ -2,14 +2,13 @@ package com.unilab.gmp.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.unilab.gmp.R;
@@ -22,7 +21,7 @@ import java.util.List;
  * Created by c_jhcanuto on 7/31/2017.
  */
 
-public class SubActivityAdapter extends BaseAdapter {
+public class SubActivityAdapter extends RecyclerView.Adapter<SubActivityAdapter.Widgets> {
     LayoutInflater inflater;
     Context context;
 
@@ -52,14 +51,14 @@ public class SubActivityAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return modelTemplateActivities.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return i;
-    }
+//    @Override
+//    public Object getItem(int i) {
+//        return i;
+//    }
 
     @Override
     public long getItemId(int i) {
@@ -67,21 +66,14 @@ public class SubActivityAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View rowView, ViewGroup viewGroup) {
-        final Widgets widgets;
-        final int z = position;
-//        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_subactivities, null);
+    public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_subactivities, parent, false);
+        return new Widgets(v);
+    }
 
-            widgets.name = (TextView) rowView.findViewById(R.id.tv_subactivity_name);
-            widgets.cbSubactivity = (CheckBox) rowView.findViewById(R.id.cb_subactivity);
-
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
-
+    @Override
+    public void onBindViewHolder(Widgets widgets, final int z) {
         widgets.name.setText(modelTemplateActivities.get(z).getSubItemName());
         widgets.cbSubactivity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -94,7 +86,6 @@ public class SubActivityAdapter extends BaseAdapter {
             widgets.cbSubactivity.setChecked(true);
         }
 
-        return rowView;
     }
 
     public void save(String report_id) {
@@ -108,10 +99,15 @@ public class SubActivityAdapter extends BaseAdapter {
         }
     }
 
-    public class Widgets {
+    public class Widgets extends RecyclerView.ViewHolder {
         TextView name;
-        LinearLayout rowBackground;
         CheckBox cbSubactivity;
+
+        public Widgets(View rowView) {
+            super(rowView);
+            this.name = (TextView) rowView.findViewById(R.id.tv_subactivity_name);
+            this.cbSubactivity = (CheckBox) rowView.findViewById(R.id.cb_subactivity);
+        }
     }
 
 }

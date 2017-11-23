@@ -2,6 +2,8 @@ package com.unilab.gmp.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -96,7 +98,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
 
         widgets.lv.setAdapter(subActivityAdapters.get(position));
 
-        if (subActivityAdapters.get(position).getCount() > 0){
+        if (subActivityAdapters.get(position).getItemCount() > 0){
             widgets.cbActivity.setVisibility(View.GONE);
         } else {
             widgets.cbActivity.setVisibility(View.VISIBLE);
@@ -105,7 +107,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
 //        }
-        widgets.lv.setExpanded(true);
+        //widgets.lv.setExpanded(true);
     }
 
     public void save(String report_id) {
@@ -133,13 +135,16 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
     public class Widgets extends RecyclerView.ViewHolder {
         TextView name;
         LinearLayout rowBackground;
-        ExpandableHeightListView lv;
+        RecyclerView lv;
         CheckBox cbActivity;
         public Widgets(View rowView){
             super(rowView);
             this.name = (TextView) rowView.findViewById(R.id.tv_activity_name);
-            this.lv = (ExpandableHeightListView) rowView.findViewById(R.id.lv_sub_activity);
+            this.lv = (RecyclerView) rowView.findViewById(R.id.lv_sub_activity);
             this.cbActivity = (CheckBox) rowView.findViewById(R.id.cb_activity);
+            this.lv.setLayoutManager(new LinearLayoutManager(context));
+            this.lv.setItemAnimator(new DefaultItemAnimator());
+
         }
 
     }
