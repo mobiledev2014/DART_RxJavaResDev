@@ -1850,10 +1850,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
     public String getDate() {
         String dateStr = "";
 
-        /*Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-        dateStr = df.format(c.getTime());*/
-
         DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         Date date = new Date();
         dateStr = dateFormat.format(date);

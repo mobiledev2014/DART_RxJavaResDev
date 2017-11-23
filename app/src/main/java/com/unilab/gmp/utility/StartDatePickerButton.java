@@ -6,15 +6,26 @@ package com.unilab.gmp.utility;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
+import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelDateOfAudit;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class StartDatePickerButton extends DialogFragment implements DatePickerDialog.OnDateSetListener {
@@ -27,11 +38,14 @@ public class StartDatePickerButton extends DialogFragment implements DatePickerD
     Button button;
     List<ModelDateOfAudit> datesOfAudit;
     int position;
+    Dialog dialogErrorDate;
+    Context cont;
 
-    public StartDatePickerButton(Button button, List<ModelDateOfAudit> datesOfAudit, int position) {
+    public StartDatePickerButton(Button button, List<ModelDateOfAudit> datesOfAudit, int position, Context context) {
         this.datesOfAudit = datesOfAudit;
         this.button = button;
         this.position = position;
+        this.cont = context;
     }
 
     @Override
@@ -50,8 +64,62 @@ public class StartDatePickerButton extends DialogFragment implements DatePickerD
 
         Log.i("DATE OF AUDIT : ", date);
 
-        button.setText(DateTimeUtils.parseDateMonthToWord(date));
-
+        if (errorDate(date)) {
+            button.setText(DateTimeUtils.parseDateMonthToWord(date));
+        } else {
+            dialogErrorDate();
+        }
         //updateStartDateDisplay();
+    }
+
+    public void dialogErrorDate() {
+        dialogErrorDate = new Dialog(cont);
+        dialogErrorDate.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialogErrorDate.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogErrorDate.setCancelable(false);
+        dialogErrorDate.setContentView(R.layout.dialog_error_login);
+        dialogErrorDate.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        String message = "Invalid date.";
+
+        TextView tv_message = (TextView) dialogErrorDate.findViewById(R.id.tv_message);
+        Button ok = (Button) dialogErrorDate.findViewById(R.id.btn_ok);
+
+        tv_message.setText(message);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogErrorDate.dismiss();
+            }
+        });
+
+
+        dialogErrorDate.show();
+    }
+
+    public boolean errorDate(String date) {
+        boolean result = false;
+        date = date.replace("-", "");
+        int currentDate = Integer.parseInt(getDate());
+
+        Log.i("CurrentDate : ", getDate() + ", pickDate : " + date);
+
+        if (currentDate >= Integer.parseInt(date)) {
+            result = true;
+        } else {
+            result = false;
+        }
+
+        return result;
+    }
+
+    public String getDate() {
+        String dateStr = "";
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        Date date = new Date();
+        dateStr = dateFormat.format(date);
+
+        return dateStr;
     }
 }

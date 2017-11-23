@@ -80,7 +80,7 @@ public class DateOfAuditAdapter extends BaseAdapter {
         widgets.btn_date_of_audit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StartDatePickerButton datePicker = new StartDatePickerButton(widgets.btn_date_of_audit, datesOfAudit, position);
+                StartDatePickerButton datePicker = new StartDatePickerButton(widgets.btn_date_of_audit, datesOfAudit, position, context);
                 datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "datePicker");
             }
         });
