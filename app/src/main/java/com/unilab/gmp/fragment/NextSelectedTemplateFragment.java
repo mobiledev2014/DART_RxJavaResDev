@@ -1333,6 +1333,28 @@ public class NextSelectedTemplateFragment extends Fragment {
             }
         }
 
+        String new_scope = "";
+        counter = 0;
+        List<TemplateModelScopeAudit> tmsa2 = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class,
+                "reportid = ?", report.getReport_id());
+        for (TemplateModelScopeAudit t : tmsa2) {
+            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class,
+                    "reportid = ? AND auditid = ?", report.getReport_id(), t.getId() + "");
+            String scope_product = "";
+            int m_counter = 0;
+            for (TemplateModelScopeAuditInterest m : mm) {
+                scope_product += "{\"product_id\":" + m.getProduct_id() + ",\"disposition_id\":" + m.getDisposition_id() + "}";
+                if (++m_counter != mm.size()) {
+                    scope_product += ",";
+                }
+            }
+
+            new_scope += "{\"scope_id\":" + t.getScope_id() + ",\"scope_remarks\":\"" + t.getScope_detail() + "\",\"scope_product\":[" + scope_product + "]}";
+            if (++counter != tmsa.size()) {
+                new_scope += ",";
+            }
+        }
+
         counter = 0;
         String pre_audit_documents = "";
         List<TemplateModelPreAuditDoc> tmpd = TemplateModelPreAuditDoc.find(TemplateModelPreAuditDoc.class, "reportid = ?", report.getReport_id());
@@ -1509,7 +1531,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "co_auditor_id:[" + co_auditor_id + "]\n" +
                 "reviewer_id:" + report.getReviewer_id() + "\n" +
                 "approver_id:" + report.getApprover_id() + "\n" +
-                "scope:[" + scope + "]\n" +
+                "scope:[" + new_scope + "]\n" +
                 "disposition:[" + disposition + "]\n" +
                 "pre_audit_documents:[" + pre_audit_documents + "]\n" +
                 "references:[" + references + "]\n" +
@@ -1546,7 +1568,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "[" + co_auditor_id + "]",
                 report.getReviewer_id(),
                 report.getApprover_id(),
-                "[" + scope + "]",
+                "[" + new_scope + "]",
                 "[" + disposition + "]",
                 "[" + pre_audit_documents + "]",
                 "[" + references + "]",

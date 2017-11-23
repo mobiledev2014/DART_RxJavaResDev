@@ -66,7 +66,8 @@ public class AdapterTranslator extends RecyclerView.Adapter<AdapterTranslator.Wi
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    templateModelTranslators.get(position).setTranslator(charSequence.toString());
+                    if (position < templateModelTranslators.size())
+                        templateModelTranslators.get(position).setTranslator(charSequence.toString());
                 }
 
                 @Override
