@@ -5,17 +5,14 @@ import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelReportActivities;
 import com.unilab.gmp.model.ModelReportSubActivities;
@@ -98,7 +95,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
 
         widgets.lv.setAdapter(subActivityAdapters.get(position));
 
-        if (subActivityAdapters.get(position).getItemCount() > 0){
+        if (subActivityAdapters.get(position).getItemCount() > 0) {
             widgets.cbActivity.setVisibility(View.GONE);
         } else {
             widgets.cbActivity.setVisibility(View.VISIBLE);
@@ -128,7 +125,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.custom_listview_activities,parent, false);
+                .inflate(R.layout.custom_listview_activities, parent, false);
         return new Widgets(v);
     }
 
@@ -137,7 +134,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
         LinearLayout rowBackground;
         RecyclerView lv;
         CheckBox cbActivity;
-        public Widgets(View rowView){
+
+        public Widgets(View rowView) {
             super(rowView);
             this.name = (TextView) rowView.findViewById(R.id.tv_activity_name);
             this.lv = (RecyclerView) rowView.findViewById(R.id.lv_sub_activity);
