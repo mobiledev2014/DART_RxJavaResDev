@@ -673,7 +673,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
+                                android:layout_marginBottom="5dp"
                                 android:orientation="horizontal">
 
                                 <LinearLayout
@@ -753,6 +753,14 @@
                                 </LinearLayout>
 
                             </LinearLayout><!--distribution list-->
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:background="@color/dividerColorSub"
+                                android:enabled="false"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -911,7 +919,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="5dp"
-                                        android:gravity="center"
+                                        android:gravity="center|top"
                                         android:orientation="horizontal">
 
                                         <LinearLayout
@@ -932,6 +940,7 @@
                                                 android:layout_width="0dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_weight=".5"
+                                                android:gravity="center|left"
                                                 android:text="Other Issues (For Audit Report) : "
                                                 android:textSize="20sp"
                                                 android:textStyle="bold" />
@@ -993,6 +1002,14 @@
 
                                 </LinearLayout><!--other issues audit-->
 
+                                <EditText
+                                    android:layout_width="match_parent"
+                                    android:layout_height="2dp"
+                                    android:background="@color/dividerColorSub"
+                                    android:enabled="false"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"/>
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -1003,7 +1020,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="5dp"
-                                        android:gravity="center"
+                                        android:gravity="center|top"
                                         android:orientation="horizontal">
 
                                         <LinearLayout
@@ -1024,6 +1041,7 @@
                                                 android:layout_width="0dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_weight=".5"
+                                                android:gravity="center|left"
                                                 android:text="Other Issues (For Executive Summary Report) : "
                                                 android:textSize="20sp"
                                                 android:textStyle="bold" />
