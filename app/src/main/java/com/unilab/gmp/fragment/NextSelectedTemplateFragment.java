@@ -359,6 +359,8 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         modelTemplateActivities = find(ModelTemplateActivities.class, "templateid = ?", modelTemplates.getTemplateID());
         activityAdapter = new ActivityAdapter(context, modelTemplateActivities, "");
+        lvTemplateNextActivitiesCarried.setLayoutManager(new LinearLayoutManager(context));
+        lvTemplateNextActivitiesCarried.setItemAnimator(new DefaultItemAnimator());
 //        Log.i("activityadapter", "call : " + activityAdapter.getCount());
         lvTemplateNextActivitiesCarried.setAdapter(activityAdapter);
 //        lvTemplateNextActivitiesCarried.setExpanded(true);

@@ -1,5 +1,6 @@
 package com.unilab.gmp.fragment;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -50,6 +51,8 @@ public class HomeFragment extends Fragment {
 
         ButterKnife.bind(this, rootView);
         unbinder = ButterKnife.bind(this, rootView);
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         fragmentSetter();
 
