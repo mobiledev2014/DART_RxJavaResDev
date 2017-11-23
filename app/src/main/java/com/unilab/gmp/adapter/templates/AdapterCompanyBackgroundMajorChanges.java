@@ -105,16 +105,16 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
         return isCheck;
     }
 
-    public void save(String report_id,String company_id) {
+    public void save(String report_id, String company_id) {
         TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
         int i = 0;
         for (TemplateModelCompanyBackgroundMajorChanges t : templateModelCompanyBackgroundMajorChanges) {
-            if (i++ < disable||t.getMajorchanges().isEmpty()) {
-                continue;
+            if (i++ >= disable && !t.getMajorchanges().isEmpty()) {
+                t.setReport_id(report_id);
+                t.setCompany_id(company_id);
+                t.save();
+                Log.e("nagsave ba?", "" + i);
             }
-            t.setReport_id(report_id);
-            t.setCompany_id(company_id);
-            t.save();
         }
     }
 

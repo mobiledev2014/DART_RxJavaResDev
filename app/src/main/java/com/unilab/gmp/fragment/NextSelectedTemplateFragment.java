@@ -600,7 +600,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         // ---
         templateModelCompanyBackgroundMajorChanges = new ArrayList<>();
         templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges
-                .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = ''", modelTemplates.getCompany_id()));
+                .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", modelTemplates.getCompany_id()));
         adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context, templateModelCompanyBackgroundMajorChanges.size());
         lvTemplateNextCompanyBackgroundMajorChanges.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextCompanyBackgroundMajorChanges.setItemAnimator(new DefaultItemAnimator());
@@ -1312,9 +1312,9 @@ public class NextSelectedTemplateFragment extends Fragment {
         int counter = 0;
         for (TemplateModelAuditors tma : ltma) {
             if (++counter != ltma.size()) {
-                co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
-            } else {
                 co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "},";
+            } else {
+                co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
             }
         }
 

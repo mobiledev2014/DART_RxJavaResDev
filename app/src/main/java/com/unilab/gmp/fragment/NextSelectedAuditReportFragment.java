@@ -387,8 +387,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
 //        lvTemplateNextActivitiesCarried.setExpanded(true);
 
 
-
-
         etTemplateNextAuditedArea.setText(report.getAudited_areas());
         etTemplateNextNotAuditedArea.setText(report.getAreas_to_consider());
 //        etTemplateNextDateOfWrapUp.setText(DateTimeUtils.parseDateMonthToWord(report.getWrap_date()));
@@ -627,7 +625,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
 
 
-
         // --- Reocommendation
         templateModelSummaryRecommendations = new ArrayList<>();
         adapterSummaryRecommendation = new AdapterSummaryRecommendation(templateModelSummaryRecommendations, context, report.getTemplate_id());
@@ -654,11 +651,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
         // ---
         templateModelCompanyBackgroundMajorChanges = new ArrayList<>();
-        sitemajorchangescount = TemplateModelCompanyBackgroundMajorChanges.find(
-                TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", report.getCompany_id()).size();
-        templateModelCompanyBackgroundMajorChanges.addAll(
-                TemplateModelCompanyBackgroundMajorChanges.find(
-                        TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", report.getCompany_id()));
+        sitemajorchangescount = TemplateModelCompanyBackgroundMajorChanges
+                .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", modelTemplates.getCompany_id()).size();
+        templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges
+                .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", modelTemplates.getCompany_id()));
         adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context, templateModelCompanyBackgroundMajorChanges.size());
         templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id()));
         lvTemplateNextCompanyBackgroundMajorChanges.setLayoutManager(new LinearLayoutManager(context));
@@ -729,8 +725,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         return rootView;
     }
 
-    private void disableWidgets()
-    {
+    private void disableWidgets() {
         etTemplateNextDateOfWrapUp.setEnabled(false);
         etTemplateNextSummaryRecommendationAuditCloseDate.setEnabled(false);
         etTemplateNextAuditedArea.setEnabled(false);
@@ -782,7 +777,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
         btnTemplateNextPreAuditDocDelete.setEnabled(false);
         btnTemplateNextDistributionOthersAdd.setEnabled(false);
         btnTemplateNextDistributionOthersDelete.setEnabled(false);
-
 
 
     }
@@ -1646,9 +1640,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
         int counter = 0;
         for (TemplateModelAuditors tma : ltma) {
             if (++counter != ltma.size()) {
-                co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
-            } else {
                 co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "},";
+            } else {
+                co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
             }
         }
 

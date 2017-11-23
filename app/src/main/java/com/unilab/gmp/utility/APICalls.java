@@ -489,7 +489,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                     TemplateModelCompanyBackgroundMajorChanges majorChanges = new TemplateModelCompanyBackgroundMajorChanges();
                                     majorChanges.setCompany_id(company_id);
                                     majorChanges.setMajorchanges(mmc.getMajorchanges());
-                                    majorChanges.setReport_id("");
+                                    majorChanges.setReport_id("0");
                                     majorChanges.save();
                                     Log.e("APICalls", " CompanySite:changes " + mmc.getMajorchanges());
 
