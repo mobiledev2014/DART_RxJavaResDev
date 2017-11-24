@@ -262,6 +262,8 @@ public class NextSelectedTemplateFragment extends Fragment {
     Dialog dialogSucSaveDraft;
     Dialog dialogSubmit;
     Dialog dialogSubmitFailed;
+    Dialog dialogErrorDate;
+
     TemplateFragment templateFragment;
     ModelTemplates modelTemplates;
     ActivityAdapter activityAdapter;
@@ -887,7 +889,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     private void callDatePicker(EditText editText) {
-        StartDatePicker datePicker = new StartDatePicker(editText);
+        StartDatePicker datePicker = new StartDatePicker(editText, context);
         datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "datePicker");
     }
 
