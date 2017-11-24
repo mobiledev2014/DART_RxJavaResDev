@@ -31,6 +31,7 @@ import com.unilab.gmp.fragment.HomeFragment;
 import com.unilab.gmp.fragment.ReferenceDataFragment;
 import com.unilab.gmp.fragment.SelectedTemplateFragment;
 import com.unilab.gmp.fragment.TemplateFragment;
+import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.ModelUser;
 import com.unilab.gmp.utility.APICalls;
 import com.unilab.gmp.utility.SharedPreferenceManager;
@@ -80,6 +81,9 @@ public class HomeActivity extends AppCompatActivity {
     TextView tvIndicator;
     @BindView(R.id.ll_online_indicator)
     LinearLayout llOnlineIndicator;
+    @BindView(R.id.tv_name_user)
+    TextView tvNameUser;
+
     CountDownTimer countDownTimer;
 
     String newTemplates = "";
@@ -124,6 +128,14 @@ public class HomeActivity extends AppCompatActivity {
         initializeHome();
 
         checkConnectionStatus();
+
+        getLoggedUser(sharedPref.getStringData("EMAIL"));
+    }
+
+    public void getLoggedUser(String email) {
+        List<AuditorsModel> firstName = AuditorsModel.find(AuditorsModel.class, "email = ?", email);
+        Log.i("UserLogged", firstName.get(0).getFname());
+        tvNameUser.setText("Welcome, " + firstName.get(0).getFname());
     }
 
     private void checkConnectionStatus() {
