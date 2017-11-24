@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -1276,6 +1277,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             if (templateModelTranslators.size() > 1) {
                 scrlMain.post(new Runnable() {
                     public void run() {
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(btnTemplateNextTranslatorAdd.getWindowToken(), 0);
                         scrlMain.fullScroll(View.FOCUS_DOWN);
                     }
                 });
