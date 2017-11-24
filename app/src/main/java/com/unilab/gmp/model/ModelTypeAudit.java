@@ -16,4 +16,5 @@ public class ModelTypeAudit extends SugarRecord{
     String create_date;
     String update_date;
     String status;
+    String selected = "0";
 }

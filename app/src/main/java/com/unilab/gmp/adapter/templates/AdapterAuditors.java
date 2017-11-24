@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.TemplateModelAuditors;
+import com.unilab.gmp.utility.SharedPreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,12 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         final List<String> list = new ArrayList<>();
         Log.d("SIZE", auditorsList.size() + "");
         int x = auditorsList.size();
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context);
+        String email = sharedPreferenceManager.getStringData("EMAIL");
+
         for (int count = 0; count < x; count++) {
+            if (auditorsList.get(count).getEmail().equals(email))
+                continue;
             list.add(auditorsList.get(count).getFname() + " " + auditorsList.get(count).getLname());
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);

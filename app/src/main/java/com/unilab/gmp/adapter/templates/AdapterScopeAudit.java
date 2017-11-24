@@ -73,8 +73,10 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         Log.d("SIZE", scopeAudits.size() + "");
         int x = scopeAudits.size();
         for (int count = 0; count < x; count++) {
-            list.add(scopeAudits.get(count).getScope_name());
-            idList.add(scopeAudits.get(count).getScope_id());
+            if (scopeAudits.get(count).getSelected().equals("0")) {
+                list.add(scopeAudits.get(count).getScope_name());
+                idList.add(scopeAudits.get(count).getScope_id());
+            }
         }
 
         adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
@@ -136,6 +138,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
                 templateModelScopeAudit.get(z).setScope_name(widgets.spnTypeAudit.getSelectedItem().toString());
                 templateModelScopeAudit.get(z).setSelected(i);
                 templateModelScopeAudit.get(z).setScope_id(scopeAudits.get(i).getScope_id());
+                scopeAudits.get(z).setSelected("1");
             }
 
             @Override
