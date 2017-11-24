@@ -114,8 +114,11 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
 
         widgets.spnTypeAudit.setAdapter(adapter);
         if (templateModelScopeAuditInterests.size() < templateModelScopeAudit.size()) {
+//        if (TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND auditid = ?", templateModelScopeAudit.get(i).getReport_id(), templateModelScopeAudit.get(i).getId() + "").size() > 0) {
             templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());
-            templateModelScopeAuditInterests.get(i).addAll(TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND auditid = ?", templateModelScopeAudit.get(i).getReport_id(), templateModelScopeAudit.get(i).getId() + ""));
+            templateModelScopeAuditInterests.get(i).addAll(TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND auditid = ?", templateModelScopeAudit.get(i).getReport_id(), i + ""));// templateModelScopeAudit.get(i).getId() + ""));
+        } else {
+            templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());
         }
         templateModelScopeAudit.get(i).setAdapterScope(new AdapterScopeAuditInterest(templateModelScopeAuditInterests.get(i), context, companyId));
         widgets.lvTemplateNextScopeAuditInterest.setAdapter(templateModelScopeAudit.get(i).getAdapterScope());
@@ -157,7 +160,8 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                templateModelScopeAudit.get(z).setScope_detail(widgets.remarks.getText().toString());
+                if (z < templateModelScopeAudit.size())
+                    templateModelScopeAudit.get(z).setScope_detail(widgets.remarks.getText().toString());
             }
 
             @Override
@@ -256,12 +260,15 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     public void save(String report_id) {
         TemplateModelScopeAudit.deleteAll(TemplateModelScopeAudit.class, "reportid = ?", report_id);
         TemplateModelScopeAuditInterest.deleteAll(TemplateModelScopeAuditInterest.class, "reportid = ?", report_id);
+        int counter = 0;
         for (TemplateModelScopeAudit tmsa : templateModelScopeAudit) {
-            if (tmsa.getScope_detail().isEmpty())
-                continue;
-            tmsa.setReport_id(report_id);
-            tmsa.save();
-            tmsa.getAdapterScope().save(report_id, tmsa.getId());
+            if (!tmsa.getScope_detail().isEmpty()) {
+                tmsa.setReport_id(report_id);
+                tmsa.setAudit_id("" + counter);
+                tmsa.save();
+                if (tmsa.getAdapterScope() != null)
+                    tmsa.getAdapterScope().save(report_id, counter++);
+            }
         }
     }
 

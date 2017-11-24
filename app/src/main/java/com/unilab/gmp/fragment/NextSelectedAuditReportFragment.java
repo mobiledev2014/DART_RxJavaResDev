@@ -90,8 +90,11 @@ import com.unilab.gmp.utility.SimpleDividerItemDecoration;
 import com.unilab.gmp.utility.StartDatePicker;
 import com.unilab.gmp.utility.Variable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -113,6 +116,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
     Unbinder unbinder;
     Context context;
+    String email;
 
     @BindView(R.id.scrl_main)
     ScrollView scrlMain;
@@ -524,6 +528,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 //        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
         if (templateModelScopeAudits.size() <= 0) {
             addScopeAuditType();
+        } else {
+            adapterScopeAudit.notifyDataSetChanged();
         }
 
         // --- Other issues Audit
@@ -816,7 +822,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         boolean found = false;
 
-
         List<AuditorsModel> aaa = AuditorsModel.find(AuditorsModel.class,
                 "auditorid = ?", report.getAuditor_id());
         if (aaa.size() > 0) {
@@ -827,6 +832,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         List<TemplateModelAuditors> a = TemplateModelAuditors.find(TemplateModelAuditors.class,
                 "reportid = ?", report.getReport_id());
         if (a.size() > 0) {
+//        for (TemplateModelAuditors am : templateModelAuditorses) {
             for (TemplateModelAuditors am : a) {
                 List<AuditorsModel> a2 = AuditorsModel.find(AuditorsModel.class,
                         "auditorid = ?", am.getAuditor_id());
@@ -835,9 +841,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
                         found = true;
                 }
             }
-
-
         }
+
+
         return found;
 
     }
@@ -881,8 +887,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 dialogCancelTemplate();
                 break;
             case R.id.btn_save_draft:
-                dialogSaveDraft("Are you sure you want to save as draft?");
-                //saveReport();
+                if (checkIfAuthorizedUser())
+                    dialogSaveDraft("Are you sure you want to save as draft?");
+                else
+                    dialogDeleteFromListConfirmation("You are not authorized", simpleMessageDialog);
                 break;
             case R.id.btn_submit:
                 if (checkIfAuthorizedUser())
@@ -1061,7 +1069,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             if (isNetworkConnected()) {
                 saveReport();
                 sharedPref = new SharedPreferenceManager(context);
-                String email = sharedPref.getStringData("EMAIL");
+                email = sharedPref.getStringData("EMAIL");
                 String password = sharedPref.getStringData("PASSWORD");
                 Log.i("ERROR", "POSTASYNC 2");
                 new PostAsync(context, loginDialog, email, password, Glovar.POST_AUDIT, NextSelectedAuditReportFragment.this, null).execute();
@@ -1087,19 +1095,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
         mar.setApprover_id(approver_id);
         mar.setWrap_date(DateTimeUtils.parseDateMonthToDigit(etTemplateNextDateOfWrapUp.getText().toString()));
         mar.setReviewerChecked(modelTemplates.isReviewerChecked());
-
-        adapterAuditors.save(mar.getReport_id());
-
         ModelReportReviewer mrr = new ModelReportReviewer();
         mrr.setReport_id(mar.getReport_id());
         mrr.setReviewer_id(reviewerModels.get(sTemplateNextReviewerName.getSelectedItemPosition()).getReviewer_id());
         mrr.save();
-
         ModelReportApprover mra = new ModelReportApprover();
         mra.setReport_id(mar.getReport_id());
         mra.setApprover_id(approverModels.get(sTemplateNextApproverName.getSelectedItemPosition()).getApprover_id());
         mra.save();
-
         mar.setAudit_close_date(DateTimeUtils.parseDateMonthToDigit(
                 etTemplateNextSummaryRecommendationAuditCloseDate.getText().toString()));
 //        mar.setOther_issues(etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString());
@@ -1107,14 +1110,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
         mar.setAreas_to_consider(etTemplateNextNotAuditedArea.getText().toString());
 //        mar.setDate_of_wrap(DateTimeUtils.parseDateMonthToDigit(etTemplateNextDateOfWrapUp.getText().toString()));
 //        mar.setTranslator(adapterTranslator.saveReport(mar.getReport_id()));//translator
-        adapterTranslator.save(mar.getReport_id());//translator
 
-
+        adapterTranslator.save(mar.getReport_id());
+        adapterAuditors.save(mar.getReport_id());
         adapterScopeAudit.save(mar.getReport_id());
         adapterPreAuditDoc.save(mar.getReport_id());
         adapterReference.save(mar.getReport_id());
-        adapterCompanyBackgroundMajorChanges.save(mar.getReport_id(), mar.getCompany_id());//inspection
-        adapterCompanyBackgroundName.save(mar.getReport_id());//inspector
+        adapterCompanyBackgroundMajorChanges.save(mar.getReport_id(), mar.getCompany_id());
+        adapterCompanyBackgroundName.save(mar.getReport_id());
         adapterPersonelMetDuring.save(mar.getReport_id());
         activityAdapter.save(mar.getReport_id());
         templateElementAdapter.save(mar.getReport_id());
@@ -1134,7 +1137,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
         adapterPresentDuringMeeting.save(mar.getReport_id());//w
         adapterDistributionList.save(mar.getReport_id());//w
         adapterDistributionOthers.save(mar.getReport_id());
-
         adapterSummaryRecommendation.save(mar.getReport_id());//(y)
 
         mar.save();
@@ -1650,30 +1652,30 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
 
         // need to discuss this shit
-        String scope = "";
-        String disposition = "";
-        counter = 0;
-        List<TemplateModelScopeAudit> tmsa = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class,
-                "reportid = ?", report.getReport_id());
-        for (TemplateModelScopeAudit t : tmsa) {
-            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class,
-                    "reportid = ? AND id = ?", report.getReport_id(), t.getId() + "");
-            String scope_product = "";
-            int m_counter = 0;
-            for (TemplateModelScopeAuditInterest m : mm) {
-                scope_product += "{\"product_id\":" + m.getProduct_id() + "}";
-                if (++m_counter != mm.size()) {
-                    scope_product += ",";
-                }
-            }
-            scope += "{\"scope_id\":" + t.getScope_id() + ",\"scope_detail\":\"" + t.getScope_detail() + "\",\"scope_product\":[" + scope_product + "]}";
-            //disposition += "{\"disposition_id\":" + t.getDisposition_id() + ",\"scope_product\":[{\"scope_id\":" + t.getScope_id() + ",\"scope_detail\":\"" + t.getScope_detail() + "\"}]}";
-            disposition += "{\"disposition_id\": 1,\"scope_product\":[{\"product_id\": 1,\"remarks\":\"" + t.getScope_detail() + "\"}]}";
-            if (++counter != tmsa.size()) {
-                scope += ",";
-                disposition += ",";
-            }
-        }
+//        String scope = "";
+//        String disposition = "";
+//        counter = 0;
+//        List<TemplateModelScopeAudit> tmsa = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class,
+//                "reportid = ?", report.getReport_id());
+//        for (TemplateModelScopeAudit t : tmsa) {
+//            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class,
+//                    "reportid = ? AND id = ?", report.getReport_id(), t.getId() + "");
+//            String scope_product = "";
+//            int m_counter = 0;
+//            for (TemplateModelScopeAuditInterest m : mm) {
+//                scope_product += "{\"product_id\":" + m.getProduct_id() + "}";
+//                if (++m_counter != mm.size()) {
+//                    scope_product += ",";
+//                }
+//            }
+//            scope += "{\"scope_id\":" + t.getScope_id() + ",\"scope_detail\":\"" + t.getScope_detail() + "\",\"scope_product\":[" + scope_product + "]}";
+//            //disposition += "{\"disposition_id\":" + t.getDisposition_id() + ",\"scope_product\":[{\"scope_id\":" + t.getScope_id() + ",\"scope_detail\":\"" + t.getScope_detail() + "\"}]}";
+//            disposition += "{\"disposition_id\": 1,\"scope_product\":[{\"product_id\": 1,\"remarks\":\"" + t.getScope_detail() + "\"}]}";
+//            if (++counter != tmsa.size()) {
+//                scope += ",";
+//                disposition += ",";
+//            }
+//        }
 
         String new_scope = "";
         counter = 0;
@@ -1681,7 +1683,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 "reportid = ?", report.getReport_id());
         for (TemplateModelScopeAudit t : tmsa2) {
             List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class,
-                    "reportid = ? AND auditid = ?", report.getReport_id(), t.getId() + "");
+                    "reportid = ? AND auditid = ?", report.getReport_id(), counter + "");
             String scope_product = "";
             int m_counter = 0;
             for (TemplateModelScopeAuditInterest m : mm) {
@@ -1690,13 +1692,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
                     scope_product += ",";
                 }
             }
-
             new_scope += "{\"scope_id\":" + t.getScope_id() + ",\"scope_remarks\":\"" + t.getScope_detail() + "\",\"scope_product\":[" + scope_product + "]}";
-            if (++counter != tmsa.size()) {
+            if (++counter != tmsa2.size()) {
                 new_scope += ",";
             }
         }
-
 
         counter = 0;
         String pre_audit_documents = "";
@@ -1750,18 +1750,23 @@ public class NextSelectedAuditReportFragment extends Fragment {
         String activities = "";
         List<ModelReportActivities> mra = ModelReportActivities.find(ModelReportActivities.class, "reportid = ?", report.getReport_id());
         for (ModelReportActivities t : mra) {
-            String sub_activities = "";
-            int m_counter = 0;
-            List<ModelReportSubActivities> mm = ModelReportSubActivities.find(ModelReportSubActivities.class, "reportid = ? AND activityid = ?", report.getReport_id(), t.getActivity_id());
-            for (ModelReportSubActivities m : mm) {
-                sub_activities += "{\"sub_item_id\":" + m.getSub_item_id() + "}";
-                if (++m_counter != mm.size()) {
-                    sub_activities += ",";
+            if (t.isCheck()) {
+                String sub_activities = "";
+                int m_counter = 0;
+                if (counter++ > 0) {
+                    activities += ",";
                 }
-            }
-            activities += "{\"activity_id\":\"" + t.getActivity_id() + "\",\"sub_activities\":[" + sub_activities + "]}";
-            if (++counter != mra.size()) {
-                activities += ",";
+                List<ModelReportSubActivities> mm = ModelReportSubActivities.find(ModelReportSubActivities.class, "reportid = ? AND activityid = ?", report.getReport_id(), t.getActivity_id());
+                for (ModelReportSubActivities m : mm) {
+                    if (m.isCheck()) {
+                        if (m_counter++ > 0) {
+                            sub_activities += ",";
+                        }
+                        sub_activities += "{\"sub_item_id\":" + m.getSub_item_id() + "}";
+                    }
+                }
+
+                activities += "{\"activity_id\":\"" + t.getActivity_id() + "\",\"sub_activities\":[" + sub_activities + "]}";
             }
         }
 
@@ -1816,9 +1821,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 present_during_meeting += ",";
             }
         }
-
-//        String auditdate = "[{\"" + report.getAudit_date_1() + "\" ,\"" + report.getAudit_date_2() + "\"}]";
-
 
         counter = 0;
         String auditdate = ""; //"[{\"" + report.getAudit_date_1() + "\" ,\"" + report.getAudit_date_2() + "\"}]";
@@ -1887,24 +1889,23 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 "reviewer_id:" + report.getReviewer_id() + "\n" +
                 "approver_id:" + report.getApprover_id() + "\n" +
                 "scope:[" + new_scope + "]\n" +
-                "disposition:[" + disposition + "]\n" +
                 "pre_audit_documents:[" + pre_audit_documents + "]\n" +
                 "references:[" + references + "]\n" +
-                "inspection:[" + inspection + "]\n" +
+                "inspection:[" + inspection.replace("\n", " ") + "]\n" +
                 "inspector:[" + inspector + "]\n" +
                 "personnel:[" + personnel + "]\n" +
                 "activities:[" + activities + "]\n" +
-                "question:[" + question + "]\n" +
+                //"question:[" + question + "]\n" +
                 "recommendation:[" + recommendation + "]\n" +
                 "distribution:[" + distribution + "]\n" +
                 "present_during_meeting:[" + present_during_meeting + "]\n" +
-                "status:" + report.getStatus() + "\n" +
                 "version:" + version + "\n" +
                 "other_distribution:[" + otherdistribution + "]\n" +
                 "head_lead:" + report.getHead_lead() + "");
+        Log.e("Bulk Edit", "question:[" + question + "]");
 
         apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
-        final Call<ModelAuditReportReply> modelAuditReportReplyCall = apiInterface.sendAuditReports(
+        Call<ModelAuditReportReply> modelAuditReportReplyCall = apiInterface.sendAuditReports(
                 "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839",
                 "postInput",
                 id,//report_id
@@ -1924,10 +1925,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 report.getReviewer_id(),
                 report.getApprover_id(),
                 "[" + new_scope + "]",
-                "[" + disposition + "]",
                 "[" + pre_audit_documents + "]",
                 "[" + references + "]",
-                "[" + inspection + "]",
+                "[" + inspection.replace("\n", " ") + "]",
                 "[" + inspector + "]",
                 "[" + personnel + "]",
                 "[" + activities + "]",
@@ -1935,7 +1935,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 "[" + recommendation + "]",
                 "[" + distribution + "]",
                 "[" + present_during_meeting + "]",
-                report.getStatus(),//"status",
                 version,//"version"
                 "[" + otherdistribution + "]",
                 report.getHead_lead()
@@ -1958,21 +1957,77 @@ public class NextSelectedAuditReportFragment extends Fragment {
                     } catch (Exception e) {
                         Log.e("ResultCatch", e.toString() + "");
                     }
-                    updateDate(modelAuditReportReply.getReport_id());
+                    updateDate(modelAuditReportReply.getReport_id());//, report.getCompany_id());
                     report.setReport_id(modelAuditReportReply.getReport_id());
                     report.setReport_no(modelAuditReportReply.getReport_no());
                     report.setStatus(modelAuditReportReply.getStatus());
+                    report.setModified_date(getDate());
                     report.save();
+
+                    // send to co_auditors
+                    apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
+                    List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class,
+                            "reportid = ?", report.getReport_id());
+                    for (TemplateModelAuditors tma : ltma) {
+
+                        List<AuditorsModel> coEmail = AuditorsModel.find(AuditorsModel.class, "auditorid = ?", tma.getAuditor_id());
+                        if (coEmail.get(0).getEmail().equals(email)) {
+                            Log.e("Email", coEmail.get(0).getEmail());
+                            Call<ModelAuditReportReply> emailsending = apiInterface.sendToCoAuditors(
+                                    "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839",
+                                    "EmailtoLead",
+                                    report.getReport_id(),
+                                    coEmail.get(0).getEmail(),
+                                    tma.getName());
+
+                            emailsending.enqueue(new Callback<ModelAuditReportReply>() {
+
+                                @Override
+                                public void onResponse(Call<ModelAuditReportReply> call, Response<ModelAuditReportReply> response) {
+                                    Log.e("EmailSending", "Sent");
+                                }
+
+                                @Override
+                                public void onFailure(Call<ModelAuditReportReply> call, Throwable throwable) {
+                                    Log.e("EmailSending", "Failed");
+                                }
+                            });
+
+                        }
+                    }
+
+                    dialogSuccess("Successfully submitted.");
                 }
             }
 
             @Override
             public void onFailure(Call<ModelAuditReportReply> call, Throwable t) {
                 Log.e("AuditReport ", "OnFailure " + t.getMessage());
+                Toast.makeText(context, "FAIL", Toast.LENGTH_SHORT);
+                dialogSubmitFailed("Sending Failed.");
             }
         });
         return true;
     }
+
+//    public void updateDate(String report_id, String company_id) {
+//        adapterTranslator.save(report_id);
+//        adapterAuditors.save(report_id);
+//        adapterScopeAudit.save(report_id);
+//        adapterPreAuditDoc.save(report_id);
+//        adapterReference.save(report_id);
+//        adapterCompanyBackgroundMajorChanges.save(report_id, company_id);
+//        adapterCompanyBackgroundName.save(report_id);
+//        adapterPersonelMetDuring.save(report_id);
+//        activityAdapter.save(report_id);
+//        templateElementAdapter.save(report_id);
+//        adapterOthersIssueAudit.save(report_id);
+//        adapterOthersIssueExecutive.save(report_id);
+//        adapterPresentDuringMeeting.save(report_id);//w
+//        adapterDistributionList.save(report_id);//w
+//        adapterDistributionOthers.save(report_id);
+//        adapterSummaryRecommendation.save(report_id);//(y)
+//    }
 
     public void updateDate(String report_id) {
         List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id());
@@ -2077,6 +2132,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         List<TemplateModelOtherIssuesExecutive> issuex = TemplateModelOtherIssuesExecutive.find(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
         for (TemplateModelOtherIssuesExecutive t : issuex) {
+            t.setReport_id(report_id);
+            t.save();
+        }
+
+        List<TemplateModelTranslator> tra = TemplateModelTranslator.find(TemplateModelTranslator.class, "reportid = ?", report.getReport_id());
+        for (TemplateModelTranslator t : tra) {
             t.setReport_id(report_id);
             t.save();
         }
@@ -2222,6 +2283,44 @@ public class NextSelectedAuditReportFragment extends Fragment {
             dialogDeleteDateOfAudit.show();
         }
 
+    }
+
+    public String getDate() {
+        String dateStr = "";
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        dateStr = dateFormat.format(date);
+        return dateStr;
+    }
+
+    Dialog dialogSuccess;
+
+    public void dialogSuccess(String mess) {
+        dialogSuccess = new Dialog(context);
+        dialogSuccess.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialogSuccess.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogSuccess.setCancelable(false);
+        dialogSuccess.setContentView(R.layout.dialog_error_login);
+        dialogSuccess.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        TextView msg = (TextView) dialogSuccess.findViewById(R.id.tv_message);
+        Button ok = (Button) dialogSuccess.findViewById(R.id.btn_ok);
+
+        msg.setText(mess);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fl_content, auditReportFragment).addToBackStack(null).commit();
+
+                dialogSuccess.dismiss();
+            }
+        });
+
+        dialogSuccess.show();
     }
 
 }

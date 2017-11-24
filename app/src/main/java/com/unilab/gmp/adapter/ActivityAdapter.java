@@ -5,12 +5,12 @@ import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.unilab.gmp.R;
@@ -61,8 +61,6 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
 
     @Override
     public void onBindViewHolder(Widgets widgets, final int position) {
-
-
         widgets.name.setText(modelTemplateActivities.get(position).getActivityName());
         widgets.cbActivity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -72,21 +70,28 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
             }
         });
 
-        for (ModelTemplateActivities mta : modelTemplateActivities) {
+        //for (ModelTemplateActivities mta : modelTemplateActivities) {
+//            subActivityAdapters.add(new SubActivityAdapter(context, ModelTemplateSubActivities.
+//                    find(ModelTemplateSubActivities.class, "templateid = ? AND activityid = ?",
+//                            mta.getTemplate_id(), mta.getActivityID()), report_id, mta.getActivityID()));
+//
+//            List<ModelReportActivities> mra = ModelReportActivities.find(ModelReportActivities.class,
+//                    "reportid = ? AND activityid = ?", report_id, mta.getActivityID());
+//
+//            if (mra.size() > 0) {
+//                mta.setCheck(mra.get(0).isCheck());
+//            }
+//        }
 
-            subActivityAdapters.add(new SubActivityAdapter(context, ModelTemplateSubActivities.
-                    find(ModelTemplateSubActivities.class, "templateid = ? AND activityid = ?",
-                            mta.getTemplate_id(), mta.getActivityID()), report_id, mta.getActivityID()));
+        subActivityAdapters.add(new SubActivityAdapter(context, ModelTemplateSubActivities.
+                find(ModelTemplateSubActivities.class, "templateid = ? AND activityid = ?",
+                        modelTemplateActivities.get(position).getTemplate_id(), modelTemplateActivities.get(position).getActivityID()), report_id, modelTemplateActivities.get(position).getActivityID()));
 
-            List<ModelReportActivities> mra = ModelReportActivities.find(ModelReportActivities.class,
-                    "reportid = ? AND activityid = ?", report_id, mta.getActivityID());
+        List<ModelReportActivities> mra = ModelReportActivities.find(ModelReportActivities.class,
+                "reportid = ? AND activityid = ?", report_id, modelTemplateActivities.get(position).getActivityID());
 
-//            List<ModelTemplateSubActivities> counterList = ModelTemplateSubActivities.find
-//                    (ModelTemplateSubActivities.class, "activityid = ?", mta.getActivityID());
-
-            if (mra.size() > 0) {
-                mta.setCheck(mra.get(0).isCheck());
-            }
+        if (mra.size() > 0) {
+            modelTemplateActivities.get(position).setCheck(mra.get(0).isCheck());
         }
 
         if (modelTemplateActivities.get(position).isCheck()) {
@@ -97,6 +102,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
 
         if (subActivityAdapters.get(position).getItemCount() > 0) {
             widgets.cbActivity.setVisibility(View.GONE);
+            widgets.cbActivity.setChecked(true);
         } else {
             widgets.cbActivity.setVisibility(View.VISIBLE);
         }
@@ -115,6 +121,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
             mra.setActivity_id(mta.getActivityID());
             mra.setCheck(mta.isCheck());
             mra.save();
+            Log.e("activity saving", mta.getActivityID() + " --- " + mta.isCheck());
         }
         ModelReportSubActivities.deleteAll(ModelReportSubActivities.class, "reportid = ?", report_id);
         for (SubActivityAdapter saa : subActivityAdapters) {
@@ -131,7 +138,6 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
 
     public class Widgets extends RecyclerView.ViewHolder {
         TextView name;
-        LinearLayout rowBackground;
         RecyclerView lv;
         CheckBox cbActivity;
 
@@ -142,7 +148,6 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
             this.cbActivity = (CheckBox) rowView.findViewById(R.id.cb_activity);
             this.lv.setLayoutManager(new LinearLayoutManager(context));
             this.lv.setItemAnimator(new DefaultItemAnimator());
-
         }
 
     }

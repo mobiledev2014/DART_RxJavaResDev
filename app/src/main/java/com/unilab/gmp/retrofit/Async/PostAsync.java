@@ -182,10 +182,10 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
 
                 } else if (this.action.equals(Glovar.POST_AUDIT)) {
                     nextSelectedAuditReportFragment.postData();
-                    dialogSuccess("Successfully submitted.", false);
+                    //dialogSuccess("Successfully submitted.", false);
                 } else if (this.action.equals(Glovar.POST_TEMPLATE)) {
                     nextSelectedTemplateFragment.postData();
-                    dialogSuccess("Successfully submitted.", true);
+                    //dialogSuccess("Successfully submitted.", true);
                 }
             } else {
                 dialog.dismiss();

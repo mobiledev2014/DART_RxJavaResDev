@@ -73,6 +73,9 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
         Log.d("SIZE", mte.size() + "");
         int x = mte.size();
         for (int count = 0; count < x; count++) {
+            if (templateModelSummaryRecommendations.get(i).getElement_id().equals(mte.get(count).getElement_id())) {
+                templateModelSummaryRecommendations.get(i).setSelected(count);
+            }
             list.add(mte.get(count).getElement_name());
         }
 

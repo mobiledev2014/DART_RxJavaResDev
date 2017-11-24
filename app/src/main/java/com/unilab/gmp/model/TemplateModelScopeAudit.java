@@ -17,6 +17,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class TemplateModelScopeAudit extends SugarRecord {
+    String audit_id = "";
     String scope_id = "";
     @SerializedName("scope_detail")
     String scope_detail = "";

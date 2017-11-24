@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -113,7 +114,6 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
                 t.setReport_id(report_id);
                 t.setCompany_id(company_id);
                 t.save();
-                Log.e("nagsave ba?", "" + i);
             }
         }
     }
@@ -124,6 +124,22 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
         Widgets(View rowView) {
             super(rowView);
             this.majorchanges = (EditText) rowView.findViewById(R.id.et_template_next_company_background_major_changes);
+
+            this.majorchanges.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View view, MotionEvent event) {
+                    // TODO Auto-generated method stub
+                    if (view.getId() == R.id.et_template_next_company_background_major_changes) {
+                        view.getParent().requestDisallowInterceptTouchEvent(true);
+                        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                            case MotionEvent.ACTION_UP:
+                                view.getParent().requestDisallowInterceptTouchEvent(false);
+                                break;
+                        }
+                    }
+                    return false;
+                }
+            });
+
         }
     }
 }

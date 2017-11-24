@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.adapter.ActivityAdapter;
@@ -90,7 +91,10 @@ import com.unilab.gmp.utility.SimpleDividerItemDecoration;
 import com.unilab.gmp.utility.StartDatePicker;
 import com.unilab.gmp.utility.Variable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -313,6 +317,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     String reviewer_id = "", approver_id = "";
     SelectedTemplateFragment selectedTemplateFragment;
     View rootView;
+    int sitemajorchangescount = 0;
 
     Dialog dialogDeleteDateOfAudit;
     boolean dialogDeleteIsShowing = false;
@@ -602,9 +607,13 @@ public class NextSelectedTemplateFragment extends Fragment {
         }
         // ---
         templateModelCompanyBackgroundMajorChanges = new ArrayList<>();
+
+        sitemajorchangescount = TemplateModelCompanyBackgroundMajorChanges
+                .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", modelTemplates.getCompany_id()).size();
+
         templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges
                 .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", modelTemplates.getCompany_id()));
-        adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context, templateModelCompanyBackgroundMajorChanges.size());
+        adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context, sitemajorchangescount);//templateModelCompanyBackgroundMajorChanges.size());
         lvTemplateNextCompanyBackgroundMajorChanges.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextCompanyBackgroundMajorChanges.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextCompanyBackgroundMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
@@ -1144,7 +1153,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             TemplateModelTranslator t = new TemplateModelTranslator();
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelTranslators.add(t);
-            adapterTranslator.notifyItemInserted(templateModelTranslators.size()-1);
+            adapterTranslator.notifyItemInserted(templateModelTranslators.size() - 1);
             if (templateModelTranslators.size() > 1) {
                 scrlMain.post(new Runnable() {
                     public void run() {
@@ -1313,7 +1322,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     public boolean postData() {
 
         String co_auditor_id = "";
-        List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class, "reportid = ?",  report.getReport_id());
+        List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class, "reportid = ?", report.getReport_id());
         int counter = 0;
         for (TemplateModelAuditors tma : ltma) {
             if (++counter != ltma.size()) {
@@ -1324,28 +1333,28 @@ public class NextSelectedTemplateFragment extends Fragment {
         }
 
         // need to discuss this shit
-        String scope = "";
-        String disposition = "";
-        counter = 0;
-        List<TemplateModelScopeAudit> tmsa = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
-        for (TemplateModelScopeAudit t : tmsa) {
-            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND id = ?", report.getReport_id(), t.getId() + "");
-            String scope_product = "";
-            int m_counter = 0;
-            for (TemplateModelScopeAuditInterest m : mm) {
-                scope_product += "{\"product_id\":" + m.getProduct_id() + "}";
-                if (++m_counter != mm.size()) {
-                    scope_product += ",";
-                }
-            }
-            scope += "{\"scope_id\":" + t.getScope_id() + ",\"scope_detail\":\"" + t.getScope_detail() + "\",\"scope_product\":[" + scope_product + "]}";
-            //disposition += "{\"disposition_id\":" + t.getDisposition_id() + ",\"scope_product\":[{\"scope_id\":" + t.getScope_id() + ",\"scope_detail\":\"" + t.getScope_detail() + "\"}]}";
-            disposition += "{\"disposition_id\": 1,\"scope_product\":[{\"product_id\": 1,\"remarks\":\"" + t.getScope_detail() + "\"}]}";
-            if (++counter != tmsa.size()) {
-                scope += ",";
-                disposition += ",";
-            }
-        }
+//        String scope = "";
+//        String disposition = "";
+//        counter = 0;
+//        List<TemplateModelScopeAudit> tmsa = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
+//        for (TemplateModelScopeAudit t : tmsa) {
+//            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND id = ?", report.getReport_id(), t.getId() + "");
+//            String scope_product = "";
+//            int m_counter = 0;
+//            for (TemplateModelScopeAuditInterest m : mm) {
+//                scope_product += "{\"product_id\":" + m.getProduct_id() + "}";
+//                if (++m_counter != mm.size()) {
+//                    scope_product += ",";
+//                }
+//            }
+//            scope += "{\"scope_id\":" + t.getScope_id() + ",\"scope_detail\":\"" + t.getScope_detail() + "\",\"scope_product\":[" + scope_product + "]}";
+//            //disposition += "{\"disposition_id\":" + t.getDisposition_id() + ",\"scope_product\":[{\"scope_id\":" + t.getScope_id() + ",\"scope_detail\":\"" + t.getScope_detail() + "\"}]}";
+//            disposition += "{\"disposition_id\": 1,\"scope_product\":[{\"product_id\": 1,\"remarks\":\"" + t.getScope_detail() + "\"}]}";
+//            if (++counter != tmsa.size()) {
+//                scope += ",";
+//                disposition += ",";
+//            }
+//        }
 
         String new_scope = "";
         counter = 0;
@@ -1353,7 +1362,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "reportid = ?", report.getReport_id());
         for (TemplateModelScopeAudit t : tmsa2) {
             List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class,
-                    "reportid = ? AND auditid = ?", report.getReport_id(), t.getId() + "");
+                    "reportid = ? AND auditid = ?", report.getReport_id(), counter + "");
             String scope_product = "";
             int m_counter = 0;
             for (TemplateModelScopeAuditInterest m : mm) {
@@ -1364,7 +1373,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             }
 
             new_scope += "{\"scope_id\":" + t.getScope_id() + ",\"scope_remarks\":\"" + t.getScope_detail() + "\",\"scope_product\":[" + scope_product + "]}";
-            if (++counter != tmsa.size()) {
+            if (++counter != tmsa2.size()) {
                 new_scope += ",";
             }
         }
@@ -1422,18 +1431,22 @@ public class NextSelectedTemplateFragment extends Fragment {
         String activities = "";
         List<ModelReportActivities> mra = ModelReportActivities.find(ModelReportActivities.class, "reportid = ?", report.getReport_id());
         for (ModelReportActivities t : mra) {
-            String sub_activities = "";
-            int m_counter = 0;
-            List<ModelReportSubActivities> mm = ModelReportSubActivities.find(ModelReportSubActivities.class, "reportid = ? AND activityid = ?", report.getReport_id(), t.getActivity_id());
-            for (ModelReportSubActivities m : mm) {
-                sub_activities += "{\"sub_item_id\":" + m.getSub_item_id() + "}";
-                if (++m_counter != mm.size()) {
-                    sub_activities += ",";
+            if (t.isCheck()) {
+                String sub_activities = "";
+                if (counter++ > 0) {
+                    activities += ",";
                 }
-            }
-            activities += "{\"activity_id\":\"" + t.getActivity_id() + "\",\"sub_activities\":[" + sub_activities + "]}";
-            if (++counter != mra.size()) {
-                activities += ",";
+                int m_counter = 0;
+                List<ModelReportSubActivities> mm = ModelReportSubActivities.find(ModelReportSubActivities.class, "reportid = ? AND activityid = ?", report.getReport_id(), t.getActivity_id());
+                for (ModelReportSubActivities m : mm) {
+                    if (m.isCheck()) {
+                        if (m_counter++ > 0) {
+                            sub_activities += ",";
+                        }
+                        sub_activities += "{\"sub_item_id\":" + m.getSub_item_id() + "}";
+                    }
+                }
+                activities += "{\"activity_id\":\"" + t.getActivity_id() + "\",\"sub_activities\":[" + sub_activities + "]}";
             }
         }
 
@@ -1546,7 +1559,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "reviewer_id:" + report.getReviewer_id() + "\n" +
                 "approver_id:" + report.getApprover_id() + "\n" +
                 "scope:[" + new_scope + "]\n" +
-                "disposition:[" + disposition + "]\n" +
+                //"disposition:[" + disposition + "]\n" +
                 "pre_audit_documents:[" + pre_audit_documents + "]\n" +
                 "references:[" + references + "]\n" +
                 "inspection:[" + inspection + "]\n" +
@@ -1557,7 +1570,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "recommendation:[" + recommendation + "]\n" +
                 "distribution:[" + distribution + "]\n" +
                 "present_during_meeting:[" + present_during_meeting + "]\n" +
-                "status:0\n" +
+                //"status:0\n" +
                 "version:0\n" +
                 "other_distribution:[" + otherdistribution + "]\n" +
                 "head_lead:" + report.getHead_lead() + "");
@@ -1583,7 +1596,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 report.getReviewer_id(),
                 report.getApprover_id(),
                 "[" + new_scope + "]",
-                "[" + disposition + "]",
+                //"[" + disposition + "]",
                 "[" + pre_audit_documents + "]",
                 "[" + references + "]",
                 "[" + inspection + "]",
@@ -1594,7 +1607,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "[" + recommendation + "]",
                 "[" + distribution + "]",
                 "[" + present_during_meeting + "]",
-                "0",//"status",
+                // "0",//"status",
                 "0",//"version"
                 "[" + otherdistribution + "]",
                 report.getHead_lead()
@@ -1610,12 +1623,47 @@ public class NextSelectedTemplateFragment extends Fragment {
                 report.setReport_id(modelAuditReportReply.getReport_id());
                 report.setReport_no(modelAuditReportReply.getReport_no());
                 report.setStatus(modelAuditReportReply.getStatus());
+                report.setModified_date(getDate());
                 report.save();
+
+                // send to co_auditors
+//                apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
+//                List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class,
+//                        "reportid = ?", report.getReport_id());
+//                for (TemplateModelAuditors tma : ltma) {
+//
+//                    List<AuditorsModel> coEmail = AuditorsModel.find(AuditorsModel.class, "auditorid = ?", tma.getAuditor_id());
+//                    Log.e("Email", coEmail.get(0).getEmail());
+//                    Call<ModelAuditReportReply> emailsending = apiInterface.sendToCoAuditors(
+//                            "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839",
+//                            "EmailtoLead",
+//                            report.getReport_id(),
+//                            coEmail.get(0).getEmail(),
+//                            tma.getName());
+//
+//                    emailsending.enqueue(new Callback<ModelAuditReportReply>() {
+//
+//                        @Override
+//                        public void onResponse(Call<ModelAuditReportReply> call, Response<ModelAuditReportReply> response) {
+//                            Log.e("EmailSending", "Sent");
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<ModelAuditReportReply> call, Throwable throwable) {
+//                            Log.e("EmailSending", "Failed");
+//                        }
+//                    });
+//
+//                }
+
+                dialogSuccess("Successfully submitted.");
+
             }
 
             @Override
             public void onFailure(Call<ModelAuditReportReply> call, Throwable t) {
                 Log.e("TemplateFragment ", "OnFailure " + t.getMessage());
+                Toast.makeText(context, "FAIL", Toast.LENGTH_SHORT);
             }
         });
         return true;
@@ -1733,6 +1781,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             t.setReport_id(report_id);
             t.save();
         }
+
     }
 
     public void dialogSaveDraft(String mess) {
@@ -1961,13 +2010,14 @@ public class NextSelectedTemplateFragment extends Fragment {
                         }
                     }
                     if (list == majorChangesDelete) {
-
-                        if (templateModelCompanyBackgroundMajorChanges.size() > 1) {
-                            templateModelCompanyBackgroundMajorChanges.remove(templateModelCompanyBackgroundMajorChanges.size() - 1);
-                            adapterCompanyBackgroundMajorChanges.notifyItemRemoved(templateModelCompanyBackgroundMajorChanges.size());
-                        } else {
-                            templateModelCompanyBackgroundMajorChanges.get(0).setMajorchanges("");
-                            adapterCompanyBackgroundMajorChanges.notifyItemChanged(0);
+                        if (templateModelCompanyBackgroundMajorChanges.size() > sitemajorchangescount) {
+                            if (templateModelCompanyBackgroundMajorChanges.size() > 1) {
+                                templateModelCompanyBackgroundMajorChanges.remove(templateModelCompanyBackgroundMajorChanges.size() - 1);
+                                adapterCompanyBackgroundMajorChanges.notifyItemRemoved(templateModelCompanyBackgroundMajorChanges.size());
+                            } else {
+                                templateModelCompanyBackgroundMajorChanges.get(0).setMajorchanges("");
+                                adapterCompanyBackgroundMajorChanges.notifyItemChanged(0);
+                            }
                         }
                     }
                     dialogDeleteIsShowing = false;
@@ -1986,6 +2036,44 @@ public class NextSelectedTemplateFragment extends Fragment {
             dialogDeleteIsShowing = true;
             dialogDeleteDateOfAudit.show();
         }
+    }
+
+    public String getDate() {
+        String dateStr = "";
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        dateStr = dateFormat.format(date);
+        return dateStr;
+    }
+
+    Dialog dialogSuccess;
+
+    public void dialogSuccess(String mess) {
+        dialogSuccess = new Dialog(context);
+        dialogSuccess.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialogSuccess.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogSuccess.setCancelable(false);
+        dialogSuccess.setContentView(R.layout.dialog_error_login);
+        dialogSuccess.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        TextView msg = (TextView) dialogSuccess.findViewById(R.id.tv_message);
+        Button ok = (Button) dialogSuccess.findViewById(R.id.btn_ok);
+
+        msg.setText(mess);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fl_content, templateFragment).addToBackStack(null).commit();
+
+                dialogSuccess.dismiss();
+            }
+        });
+
+        dialogSuccess.show();
     }
 
 }

@@ -156,7 +156,7 @@
             android:layout_height="wrap_content"
             android:background="#fff"
             android:divider="@color/dividerColorSub"
-            android:dividerHeight="2dip"></com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView>
+            android:dividerHeight="2dip"/>
 
         <!--</LinearLayout>-->
 

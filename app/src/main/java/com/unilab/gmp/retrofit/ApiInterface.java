@@ -59,7 +59,7 @@ public interface ApiInterface {
             @Field("reviewer_id") String reviewer_id,
             @Field("approver_id") String approver_id,
             @Field("scope") String scope,
-            @Field("disposition") String disposition,
+           // @Field("disposition") String disposition,
             @Field("pre_audit_documents") String pre_audit_documents,
             @Field("references") String references,
             @Field("inspection") String inspection,
@@ -70,7 +70,7 @@ public interface ApiInterface {
             @Field("recommendation") String recommendation,
             @Field("distribution") String distribution,
             @Field("present_during_meeting") String present_during_meeting,
-            @Field("status") String status,
+           // @Field("status") String status,
             @Field("version") String version,
             @Field("other_distribution") String other_distribution,
             @Field("head_lead") String head_lead);
@@ -173,4 +173,14 @@ public interface ApiInterface {
 
     @GET("distribution.json")
     Call<ModelDistributionInfo> getDistribution();
+
+    @FormUrlEncoded
+    @POST("api")
+    Call<ModelAuditReportReply> sendToCoAuditors(
+            @Field("token") String token,
+            @Field("cmdEvent") String cmdEvent,
+            @Field("report_id") String report_id,
+            @Field("co_auditor_email") String co_auditor_email,
+            @Field("co_auditor_name") String co_auditor_name);
+
 }

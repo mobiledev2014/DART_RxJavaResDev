@@ -96,6 +96,7 @@ public class SubActivityAdapter extends RecyclerView.Adapter<SubActivityAdapter.
             mra.setCheck(mta.isCheck());
             mra.setActivity_id(activity_id);
             mra.save();
+            Log.e("sub activity saving",mta.getSubItemID() + " --- " + mta.isCheck());
         }
     }
 

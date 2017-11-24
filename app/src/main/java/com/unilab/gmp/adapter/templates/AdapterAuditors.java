@@ -69,8 +69,13 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         String email = sharedPreferenceManager.getStringData("EMAIL");
 
         for (int count = 0; count < x; count++) {
-            if (auditorsList.get(count).getEmail().equals(email))
-                continue;
+//            if (auditorsList.get(count).getEmail().equals(email)) {
+//                auditorsList.remove(count);
+//                x--;
+//            }
+            if (templateModelAuditors.get(i).getAuditor_id().equals(auditorsList.get(count).getAuditor_id())) {
+                templateModelAuditors.get(i).setSelected(count);
+            }
             list.add(auditorsList.get(count).getFname() + " " + auditorsList.get(count).getLname());
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
@@ -86,6 +91,7 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
                 templateModelAuditors.get(z).setPosition(auditorsList.get(i).getDesignation());
                 templateModelAuditors.get(z).setDepartment(auditorsList.get(i).getDepartment());
                 templateModelAuditors.get(z).setAuditor_id(auditorsList.get(i).getAuditor_id());
+                Log.e("auditor ID", widgets.name.getSelectedItem().toString() + " --- " + templateModelAuditors.get(z).getAuditor_id());
             }
 
             @Override
@@ -106,6 +112,7 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         for (TemplateModelAuditors t : templateModelAuditors) {
             t.setReport_id(report_id);
             t.save();
+            Log.e("auditor ID", t.getAuditor_id());
         }
     }
 

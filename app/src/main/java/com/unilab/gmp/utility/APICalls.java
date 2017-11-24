@@ -864,34 +864,33 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
                                 if (version != null) {
                                     Log.i("AUDIT REPORT", "START 4");
-                                    if (checkAuditReport(report_id, version)) {
-                                        Log.i("AUDIT REPORT", "START 5");
-                                        ModelDateOfAudit.deleteAll(ModelDateOfAudit.class, "reportid = ?", report_id);
-                                        TemplateModelAuditors.deleteAll(TemplateModelAuditors.class, "reportid = ?", report_id);
-                                        TemplateModelScopeAudit.deleteAll(TemplateModelScopeAudit.class, "reportid = ?", report_id);
-                                        TemplateModelScopeAuditInterest.deleteAll(TemplateModelScopeAuditInterest.class, "reportid = ?", report_id);
-                                        TemplateModelPreAuditDoc.deleteAll(TemplateModelPreAuditDoc.class, "reportid = ?", report_id);
-                                        TemplateModelReference.deleteAll(TemplateModelReference.class, "reportid = ?", report_id);
-//                                        TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
+//                                    if (checkAuditReport(report_id, version)) {
+//                                        Log.i("AUDIT REPORT", "START 5");
+                                    ModelDateOfAudit.deleteAll(ModelDateOfAudit.class, "reportid = ?", report_id);
+                                    TemplateModelAuditors.deleteAll(TemplateModelAuditors.class, "reportid = ?", report_id);
+                                    TemplateModelScopeAudit.deleteAll(TemplateModelScopeAudit.class, "reportid = ?", report_id);
+                                    TemplateModelScopeAuditInterest.deleteAll(TemplateModelScopeAuditInterest.class, "reportid = ?", report_id);
+                                    TemplateModelPreAuditDoc.deleteAll(TemplateModelPreAuditDoc.class, "reportid = ?", report_id);
+                                    TemplateModelReference.deleteAll(TemplateModelReference.class, "reportid = ?", report_id);
+                                    TemplateModelTranslator.deleteAll(TemplateModelTranslator.class, "reportid = ?", report_id);
+                                    TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
 //                                        TemplateModelCompanyBackgroundName.deleteAll(TemplateModelCompanyBackgroundName.class, "reportid = ?", report_id);
-                                        TemplateModelPersonelMetDuring.deleteAll(TemplateModelPersonelMetDuring.class, "reportid = ?", report_id);
-                                        TemplateModelSummaryRecommendation.deleteAll(TemplateModelSummaryRecommendation.class, "reportid = ?", report_id);
-                                        TemplateModelDistributionList.deleteAll(TemplateModelDistributionList.class, "reportid = ?", report_id);
-                                        TemplateModelPresentDuringMeeting.deleteAll(TemplateModelPresentDuringMeeting.class, "reportid = ?", report_id);
-                                        TemplateModelDistributionOthers.deleteAll(TemplateModelDistributionOthers.class, "reportid = ?", report_id);
-                                        ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", report_id);
-                                        ModelReportActivities.deleteAll(ModelReportActivities.class, "reportid = ?", report_id);
-                                        ModelReportSubActivities.deleteAll(ModelReportSubActivities.class, "reportid = ?", report_id);
-                                        TemplateModelOtherIssuesAudit.deleteAll(TemplateModelOtherIssuesAudit.class, "reportid = ?", report_id);
-                                        TemplateModelOtherIssuesExecutive.deleteAll(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report_id);
+                                    TemplateModelPersonelMetDuring.deleteAll(TemplateModelPersonelMetDuring.class, "reportid = ?", report_id);
+                                    TemplateModelSummaryRecommendation.deleteAll(TemplateModelSummaryRecommendation.class, "reportid = ?", report_id);
+                                    TemplateModelDistributionList.deleteAll(TemplateModelDistributionList.class, "reportid = ?", report_id);
+                                    TemplateModelPresentDuringMeeting.deleteAll(TemplateModelPresentDuringMeeting.class, "reportid = ?", report_id);
+                                    TemplateModelDistributionOthers.deleteAll(TemplateModelDistributionOthers.class, "reportid = ?", report_id);
+                                    ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", report_id);
+                                    ModelReportActivities.deleteAll(ModelReportActivities.class, "reportid = ?", report_id);
+                                    ModelReportSubActivities.deleteAll(ModelReportSubActivities.class, "reportid = ?", report_id);
+                                    TemplateModelOtherIssuesAudit.deleteAll(TemplateModelOtherIssuesAudit.class, "reportid = ?", report_id);
+                                    TemplateModelOtherIssuesExecutive.deleteAll(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report_id);
 
+                                    saveListsOfAuditReport(report_id);
 
-                                        saveListsOfAuditReport(report_id);
-
-//                            List<ModelReportDisposition> disposition;
-                                    } else {
-                                        saveListsOfAuditReport(report_id);
-                                    }
+//                                    } else {
+//                                        saveListsOfAuditReport(report_id);
+//                                    }
                                 }
 
                                 Log.e("APICalls", response.toString() + " AuditReports: " + modelAuditReports.toString());
@@ -1080,7 +1079,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     for (ModelReportActivities mra : modelAuditReports.getActivities()) {
                         mra.setReport_id(report_id);
                         mra.setActivity_id(mra.getActivity_id());
-                        if (mra.getSub_activities().size() < 1)
+//                        if (mra.getSub_activities().size() < 1)
                             mra.setCheck(true);
                         mra.save();
                         for (ModelReportSubActivities mrsa : mra.getSub_activities()) {
@@ -1849,6 +1848,10 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
     public String getDate() {
         String dateStr = "";
+
+        /*Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+        dateStr = df.format(c.getTime());*/
 
         DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         Date date = new Date();
