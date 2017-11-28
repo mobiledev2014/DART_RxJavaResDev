@@ -4,6 +4,7 @@ package com.unilab.gmp.utility;
  * Created by c_rcmiguel on 3/1/2017.
  */
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -26,7 +27,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
+@SuppressLint("ValidFragment")
 public class StartDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     public String date = "";

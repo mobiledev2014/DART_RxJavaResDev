@@ -233,7 +233,9 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
                 dialogLoginError("There is no internet connection detected. Please check your connection and try again.");
             }
         } catch (Exception e) {
-            dialog.dismiss();
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
             /*dUtils.DialogWarning("Network error",
                     "Internet connection cannot access the web service, please connect to other network.",
                     MainActivity.orientation);*/

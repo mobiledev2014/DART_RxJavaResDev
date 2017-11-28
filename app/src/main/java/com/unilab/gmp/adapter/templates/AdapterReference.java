@@ -1,5 +1,6 @@
 package com.unilab.gmp.adapter.templates;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -27,11 +28,14 @@ import java.util.List;
  * Created by c_jhcanuto on 8/24/2017.
  */
 
+@SuppressLint("ValidFragment")
 public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widgets> {
     List<TemplateModelReference> templateModelReferences;
     LayoutInflater inflater;
     Context context;
     boolean isCheck = true;
+
+    public AdapterReference() {}
 
     public AdapterReference(List<TemplateModelReference> templateModelReferences, Context context) {
         this.templateModelReferences = templateModelReferences;
@@ -213,6 +217,8 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
         EditText editText;
         TemplateModelReference tmr;
         boolean valid;
+
+        public DDatePicker() {}
 
         public DDatePicker(EditText editText, TemplateModelReference tmr, boolean valid) {
             this.editText = editText;

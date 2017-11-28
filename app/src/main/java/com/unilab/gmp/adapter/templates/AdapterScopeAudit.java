@@ -30,7 +30,9 @@ import com.unilab.gmp.model.TemplateModelScopeAudit;
 import com.unilab.gmp.model.TemplateModelScopeAuditInterest;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by c_rcmiguel on 8/23/2017.
@@ -240,17 +242,36 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     public boolean check() {
         isCheck = true;
         Log.e("getWidgets", "getWidgets1");
+
+
+        Set<String> lump = new HashSet<>();
         for (TemplateModelScopeAudit tmsa : templateModelScopeAudit) {
-            Log.e("getWidgets", "getWidgets2");
             if (tmsa.getScope_detail().isEmpty()) {
                 isCheck = false;
                 break;
             }
+
+            if (lump.contains(tmsa.getScope_id())) {
+                isCheck = false;
+                break;
+            }
+            lump.add(tmsa.getScope_id());
         }
+
+
         if (!isCheck) {
             notifyDataSetChanged();
         }
         return isCheck;
+    }
+
+    boolean duplicates(final List<String> array) {
+        Set<String> lump = new HashSet<>();
+        for (String i : array) {
+            if (lump.contains(i)) return true;
+            lump.add(i);
+        }
+        return false;
     }
 
     public int getTypeAuditSize() {

@@ -1,5 +1,6 @@
 package com.unilab.gmp.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -112,6 +113,7 @@ import static com.unilab.gmp.activity.HomeActivity.pDialog;
  * Created by c_rcmiguel on 7/14/2017.
  */
 
+@SuppressLint("ValidFragment")
 public class NextSelectedAuditReportFragment extends Fragment {
 
     Unbinder unbinder;
@@ -674,7 +676,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         // ---
 
         templateModelAuditorses = new ArrayList<>();
-        adapterAuditors = new AdapterAuditors(templateModelAuditorses, context);
+        adapterAuditors = new AdapterAuditors(templateModelAuditorses, context, report.getAuditor_id());
         lvTemplateNextAuditors.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextAuditors.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextAuditors.setAdapter(adapterAuditors);
@@ -1138,7 +1140,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         adapterDistributionList.save(mar.getReport_id());//w
         adapterDistributionOthers.save(mar.getReport_id());
         adapterSummaryRecommendation.save(mar.getReport_id());//(y)
-
+        mar.setModified_date(getDate());
         mar.save();
         report = mar;
     }
@@ -1440,113 +1442,111 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     public boolean validate() {
-
-
         boolean passed = true;
         if (etTemplateNextAuditedArea.getText().toString().equals("")) {
             passed = false;
             set_error(etTemplateNextAuditedArea);
+            Log.e("validate", "0");
         }
         if (etTemplateNextNotAuditedArea.getText().toString().equals("")) {
             passed = false;
             set_error(etTemplateNextNotAuditedArea);
+            Log.e("validate", "1");
         }
         if (etTemplateNextDateOfWrapUp.getText().toString().equals("")) {
             passed = false;
             set_error(etTemplateNextDateOfWrapUp);
+            Log.e("validate", "2");
         }
-//        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().equals("")) {
-//            passed = false;
-//            set_error(etTemplateNextSummaryRecommendationOtherIssuesAudit);
-//        }
-//        if (etTemplateNextSummaryRecommendationOtherIssuesExecutive.getText().toString().equals("")) {
-//            passed = false;
-//            set_error(etTemplateNextSummaryRecommendationOtherIssuesExecutive);
-//        }
-
 
         if (!adapterScopeAudit.check()) {
             passed = false;
+            Log.e("validate", "3");
         }
         if (!adapterReference.check()) {
             passed = false;
+            Log.e("validate", "4");
         }
         if (!adapterPreAuditDoc.check()) {
             passed = false;
+            Log.e("validate", "5");
         }
         if (!adapterPresentDuringMeeting.check()) {
             passed = false;
+            Log.e("validate", "6");
         }
         if (!adapterPersonelMetDuring.check()) {
             passed = false;
+            Log.e("validate", "7");
         }
         if (!adapterCompanyBackgroundMajorChanges.check()) {
             passed = false;
+            Log.e("validate", "8");
         }
         if (!adapterTranslator.check()) {
             passed = false;
+            Log.e("validate", "9");
         }
         if (!adapterOthersIssueAudit.check()) {
             passed = false;
+            Log.e("validate", "10");
         }
         if (!adapterOthersIssueExecutive.check()) {
             passed = false;
+            Log.e("validate", "11");
         }
 
-        if (!passed)
-            return passed;
-        if (passed)
-            return passed;
+        return passed;
 
-        if (templateModelScopeAudits.get(0).getScope_name().isEmpty() || templateModelScopeAudits.get(0).getScope_detail().isEmpty()) {
-//            templateModelScopeAudits.get(0).getEtremarks().setError("Field Required!");
-            Log.e("validate", "templateModelScopeAudits");
-            return false;
-        }
-        if (templateModelReferences.get(0).getCertification().isEmpty() || templateModelReferences.get(0).getBody().isEmpty() ||
-                templateModelReferences.get(0).getNumber().isEmpty() || templateModelReferences.get(0).getValidity().isEmpty()) {
-            Log.e("validate", "templateModelReferences");
-            return false;
-        }
-        if (templateModelPreAuditDocs.get(0).getPreaudit().isEmpty()) {
-            Log.e("validate", "templateModelPreAuditDocs");
-            return false;
-        }
-        if (templateModelPresentDuringMeetings.get(0).getName().isEmpty() || templateModelPresentDuringMeetings.get(0).getPosition().isEmpty()) {
-            Log.e("validate", "templateModelPresentDuringMeetings");
-            return false;
-        }
-        if (templateModelPersonelMetDurings.get(0).getName().isEmpty() || templateModelPersonelMetDurings.get(0).getPosition().isEmpty()) {
-            Log.e("validate", "templateModelPersonelMetDurings");
-            return false;
-        }
-        if (templateModelDistributionLists.get(0).getDistribution().isEmpty()) {
-            Log.e("validate", "templateModelDistributionLists");
-            return false;
-        }
-        if (templateModelSummaryRecommendations.get(0).getElement().isEmpty()) {
-            Log.e("validate", "templateModelSummaryRecommendations");
-            return false;
-        }
-        if (templateModelCompanyBackgroundNames.get(0).getBgname().isEmpty()) {
-            Log.e("validate", "templateModelCompanyBackgroundNames");
-            return false;
-        }
-        if (templateModelCompanyBackgroundMajorChanges.get(0).getMajorchanges().isEmpty()) {
-            Log.e("validate", "templateModelCompanyBackgroundMajorChanges");
-            return false;
-        }
-        if (templateModelAuditorses.get(0).getName().isEmpty() || templateModelAuditorses.get(0).getPosition().isEmpty() ||
-                templateModelAuditorses.get(0).getDepartment().isEmpty()) {
-            Log.e("validate", "templateModelAuditorses");
-            return false;
-        }
-        if (templateModelTranslators.get(0).getTranslator().isEmpty()) {
-            Log.e("validate", "templateModelTranslators");
-            return false;
-        }
-
-        return true;
+//        if (templateModelScopeAudits.get(0).getScope_name().isEmpty() || templateModelScopeAudits.get(0).getScope_detail().isEmpty()) {
+////            templateModelScopeAudits.get(0).getEtremarks().setError("Field Required!");
+//            Log.e("validate", "templateModelScopeAudits");
+//            return false;
+//        }
+//        if (templateModelReferences.get(0).getCertification().isEmpty() || templateModelReferences.get(0).getBody().isEmpty() ||
+//                templateModelReferences.get(0).getNumber().isEmpty() || templateModelReferences.get(0).getValidity().isEmpty()) {
+//            Log.e("validate", "templateModelReferences");
+//            return false;
+//        }
+//        if (templateModelPreAuditDocs.get(0).getPreaudit().isEmpty()) {
+//            Log.e("validate", "templateModelPreAuditDocs");
+//            return false;
+//        }
+//        if (templateModelPresentDuringMeetings.get(0).getName().isEmpty() || templateModelPresentDuringMeetings.get(0).getPosition().isEmpty()) {
+//            Log.e("validate", "templateModelPresentDuringMeetings");
+//            return false;
+//        }
+//        if (templateModelPersonelMetDurings.get(0).getName().isEmpty() || templateModelPersonelMetDurings.get(0).getPosition().isEmpty()) {
+//            Log.e("validate", "templateModelPersonelMetDurings");
+//            return false;
+//        }
+//        if (templateModelDistributionLists.get(0).getDistribution().isEmpty()) {
+//            Log.e("validate", "templateModelDistributionLists");
+//            return false;
+//        }
+//        if (templateModelSummaryRecommendations.get(0).getElement().isEmpty()) {
+//            Log.e("validate", "templateModelSummaryRecommendations");
+//            return false;
+//        }
+//        if (templateModelCompanyBackgroundNames.get(0).getBgname().isEmpty()) {
+//            Log.e("validate", "templateModelCompanyBackgroundNames");
+//            return false;
+//        }
+//        if (templateModelCompanyBackgroundMajorChanges.get(0).getMajorchanges().isEmpty()) {
+//            Log.e("validate", "templateModelCompanyBackgroundMajorChanges");
+//            return false;
+//        }
+//        if (templateModelAuditorses.get(0).getName().isEmpty() || templateModelAuditorses.get(0).getPosition().isEmpty() ||
+//                templateModelAuditorses.get(0).getDepartment().isEmpty()) {
+//            Log.e("validate", "templateModelAuditorses");
+//            return false;
+//        }
+//        if (templateModelTranslators.get(0).getTranslator().isEmpty()) {
+//            Log.e("validate", "templateModelTranslators");
+//            return false;
+//        }
+//
+//        return true;
 //        if (templateModelScopeAudits.get(0).getScope_name().isEmpty() || templateModelScopeAudits.get(0).getScope_detail().isEmpty()) {
 //            Log.e("validate", "templateModelScopeAudits");
 //            return false;
@@ -1972,7 +1972,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
                         List<AuditorsModel> coEmail = AuditorsModel.find(AuditorsModel.class, "auditorid = ?", tma.getAuditor_id());
                         if (coEmail.get(0).getEmail().equals(email)) {
-                            Log.e("Email", coEmail.get(0).getEmail());
+//                            Log.e("Email", coEmail.get(0).getEmail());
+                            Log.e("Email Bulk Edit", "token:35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839\n" +
+                                    "cmdEvent:EmailtoLead\n" +
+                                    "report_id:" + report.getReport_id() + "\n" +
+                                    "co_auditor_email:" + coEmail.get(0).getEmail() + "\n" +
+                                    "co_auditor_name:" + tma.getName());
                             Call<ModelAuditReportReply> emailsending = apiInterface.sendToCoAuditors(
                                     "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839",
                                     "EmailtoLead",

@@ -29,11 +29,11 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
     Context context;
     List<AuditorsModel> auditorsList;
 
-    public AdapterAuditors(List<TemplateModelAuditors> templateModelScopeAudit, Context context) {
+    public AdapterAuditors(List<TemplateModelAuditors> templateModelScopeAudit, Context context, String lead) {
         this.templateModelAuditors = templateModelScopeAudit;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        auditorsList = AuditorsModel.find(AuditorsModel.class, "status > 0");
+        auditorsList = AuditorsModel.find(AuditorsModel.class, "status > 0 AND auditorid != ?", new String[]{lead});
     }
 
     @Override

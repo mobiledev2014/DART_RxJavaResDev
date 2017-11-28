@@ -1,5 +1,6 @@
 package com.unilab.gmp.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -57,7 +58,7 @@ import static com.unilab.gmp.activity.HomeActivity.pDialog;
 /**
  * Created by c_rcmiguel on 7/14/2017.
  */
-
+@SuppressLint("ValidFragment")
 public class SelectedAuditReportFragment extends Fragment {
 
     Unbinder unbinder;

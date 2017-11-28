@@ -1,5 +1,6 @@
 package com.unilab.gmp.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -112,6 +113,7 @@ import static com.unilab.gmp.activity.HomeActivity.pDialog;
  * Created by c_rcmiguel on 7/14/2017.
  */
 
+@SuppressLint("ValidFragment")
 public class NextSelectedTemplateFragment extends Fragment {
 
     public AdapterScopeAudit adapterScopeAudit;
@@ -623,7 +625,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         }
         // ---
         templateModelAuditorses = new ArrayList<>();
-        adapterAuditors = new AdapterAuditors(templateModelAuditorses, context);
+        adapterAuditors = new AdapterAuditors(templateModelAuditorses, context, auditorsModels.get(0).getAuditor_id());
         lvTemplateNextAuditors.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextAuditors.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextAuditors.setAdapter(adapterAuditors);
@@ -1004,7 +1006,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         adapterSummaryRecommendation.save(report_id);//(y)
         adapterOthersIssueAudit.save(report_id);
         adapterOthersIssueExecutive.save(report_id);
-
+        mar.setModified_date(getDate());
         mar.save();
         report = mar;
     }
