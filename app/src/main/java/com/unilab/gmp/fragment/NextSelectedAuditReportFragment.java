@@ -383,6 +383,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
         month = currentTime.get(Calendar.MONTH);
         day = currentTime.get(Calendar.DAY_OF_MONTH);
 
+
+
+        if (!checkIfAuthorizedUser())
+        {
+            Variable.isAuthorized = false;
+            disableWidgets();
+        }
+
         activityAdapter = new ActivityAdapter(context, find(ModelTemplateActivities.class, "templateid = ?", report.getTemplate_id()), report.getReport_id());
 
         lvTemplateNextActivitiesCarried.setLayoutManager(new LinearLayoutManager(context));
@@ -459,6 +467,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         sTemplateNextReviewerName.setAdapter(reviewerAdapter);
         sTemplateNextReviewerName.setSelection(rev);
 
+        sTemplateNextReviewerName.setEnabled(Variable.isAuthorized);
+
         sTemplateNextReviewerName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -473,8 +483,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
         });
 
+        cbTemplateNextReviewer.setEnabled(Variable.isAuthorized);
         cbTemplateNextReviewer.setChecked(report.isReviewerChecked());
         sTemplateNextReviewerName.setEnabled(!report.isReviewerChecked());
+        sTemplateNextReviewerName.setEnabled(Variable.isAuthorized);
+
         cbTemplateNextReviewer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -500,6 +513,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         ArrayAdapter<String> approverAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, approverList);
         sTemplateNextApproverName.setAdapter(approverAdapter);
         sTemplateNextApproverName.setSelection(app);
+        sTemplateNextApproverName.setEnabled(Variable.isAuthorized);
 
         sTemplateNextApproverName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -714,8 +728,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextCompanyBackgroundInspectionDate.setAdapter(adapterInspectionDate);
 //        lvTemplateNextCompanyBackgroundInspectionDate.setExpanded(true);
 
-        if (!checkIfAuthorizedUser())
-            disableWidgets();
 
         /*progress dialog dismiss*/
         final Handler handler = new Handler();
@@ -757,6 +769,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextTranslator.setEnabled(false);
         lvTemplateNextCompanyBackgroundInspectionDate.setEnabled(false);
 
+        btnTemplateNextPreAuditDocAdd.setEnabled(false);
+        btnTemplateNextPreAuditDocDelete.setEnabled(false);
         btnTemplateNextAuditorAdd.setEnabled(false);
         btnTemplateNextAuditorDelete.setEnabled(false);
         btnTemplateNextDistributionAdd.setEnabled(false);
@@ -785,6 +799,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
         btnTemplateNextDistributionOthersAdd.setEnabled(false);
         btnTemplateNextDistributionOthersDelete.setEnabled(false);
 
+
+        etTemplateNextActivityCarried.setEnabled(false);
+        etTemplateNextDateOfWrapUp.setEnabled(false);
+        etTemplateNextAuditedArea.setEnabled(false);
+        etTemplateNextNotAuditedArea.setEnabled(false);
 
     }
 
@@ -1013,11 +1032,17 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 addMajorChanges();
                 break;
             case R.id.btn_template_next_company_background_major_changes_delete:
-                if (templateModelCompanyBackgroundMajorChanges.size() > 1)
-                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", majorChangesDelete);
-                else {
-                    if (!templateModelCompanyBackgroundMajorChanges.get(0).getMajorchanges().equals(""))
+                List<TemplateModelCompanyBackgroundMajorChanges> majorChanges =
+                        TemplateModelCompanyBackgroundMajorChanges.find(
+                                TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", report.getCompany_id());
+                if (templateModelCompanyBackgroundMajorChanges.size() > majorChanges.size()) {
+
+                    if (templateModelCompanyBackgroundMajorChanges.size() > 1)
                         dialogDeleteFromListConfirmation("Are you sure you want to delete?", majorChangesDelete);
+                    else {
+                        if (!templateModelCompanyBackgroundMajorChanges.get(0).getMajorchanges().equals(""))
+                            dialogDeleteFromListConfirmation("Are you sure you want to delete?", majorChangesDelete);
+                    }
                 }
                 break;
             case R.id.btn_template_next_auditor_add:

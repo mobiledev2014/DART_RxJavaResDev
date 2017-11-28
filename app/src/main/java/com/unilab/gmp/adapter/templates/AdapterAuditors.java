@@ -15,6 +15,7 @@ import com.unilab.gmp.R;
 import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.TemplateModelAuditors;
 import com.unilab.gmp.utility.SharedPreferenceManager;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +82,7 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
         widgets.name.setAdapter(adapter);
         widgets.name.setSelection(templateModelAuditors.get(i).getSelected());
+        widgets.name.setEnabled(Variable.isAuthorized);
         widgets.name.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -101,7 +103,9 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         });
 
         widgets.position.setText(templateModelAuditors.get(i).getPosition());
+        widgets.position.setEnabled(Variable.isAuthorized);
         widgets.department.setText(templateModelAuditors.get(i).getDepartment());
+        widgets.department.setEnabled(Variable.isAuthorized);
     }
 
     public int getAuditorSize() {

@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.TemplateModelTranslator;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
 
@@ -58,6 +59,7 @@ public class AdapterTranslator extends RecyclerView.Adapter<AdapterTranslator.Wi
     public void onBindViewHolder(Widgets widgets, final int position) {
         if (templateModelTranslators.size() > position) {
             widgets.translator.setText(templateModelTranslators.get(position).getTranslator());
+            widgets.translator.setEnabled(Variable.isAuthorized);
             widgets.translator.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

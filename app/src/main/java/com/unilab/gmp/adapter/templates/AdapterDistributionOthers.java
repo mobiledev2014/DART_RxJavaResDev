@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelDistribution;
 import com.unilab.gmp.model.TemplateModelDistributionOthers;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
 
@@ -63,6 +64,7 @@ public class AdapterDistributionOthers extends RecyclerView.Adapter<AdapterDistr
             widgets.distributionOther.setText(distributionList.get(z).getDistribution_name());
         }
         widgets.distributionOther.setText(templateModelDistributionOthers.get(i).getDistribution_other());
+        widgets.distributionOther.setEnabled(Variable.isAuthorized);
         widgets.distributionOther.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

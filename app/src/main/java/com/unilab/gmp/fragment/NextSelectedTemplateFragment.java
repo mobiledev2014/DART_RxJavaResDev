@@ -846,11 +846,16 @@ public class NextSelectedTemplateFragment extends Fragment {
                 addMajorChanges();
                 break;
             case R.id.btn_template_next_company_background_major_changes_delete:
-                if (templateModelCompanyBackgroundMajorChanges.size() > 1)
-                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", majorChangesDelete);
-                else {
-                    if (!templateModelCompanyBackgroundMajorChanges.get(0).getMajorchanges().equals(""))
+                List<TemplateModelCompanyBackgroundMajorChanges> majorChanges =
+                        TemplateModelCompanyBackgroundMajorChanges.find(
+                                TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", modelTemplates.getCompany_id());
+                if (templateModelCompanyBackgroundMajorChanges.size() > majorChanges.size()) {
+                    if (templateModelCompanyBackgroundMajorChanges.size() > 1)
                         dialogDeleteFromListConfirmation("Are you sure you want to delete?", majorChangesDelete);
+                    else {
+                        if (!templateModelCompanyBackgroundMajorChanges.get(0).getMajorchanges().equals(""))
+                            dialogDeleteFromListConfirmation("Are you sure you want to delete?", majorChangesDelete);
+                    }
                 }
                 break;
             case R.id.btn_template_next_auditor_add:

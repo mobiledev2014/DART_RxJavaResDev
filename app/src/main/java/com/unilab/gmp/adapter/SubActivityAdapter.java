@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelReportSubActivities;
 import com.unilab.gmp.model.ModelTemplateSubActivities;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
 
@@ -81,6 +82,8 @@ public class SubActivityAdapter extends RecyclerView.Adapter<SubActivityAdapter.
                 modelTemplateActivities.get(z).setCheck(b);
             }
         });
+
+        widgets.cbSubactivity.setEnabled(Variable.isAuthorized);
 
         if (modelTemplateActivities.get(z).isCheck()) {
             widgets.cbSubactivity.setChecked(true);

@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.TemplateModelPresentDuringMeeting;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
 
@@ -68,7 +69,9 @@ public class AdapterPresentDuringMeeting extends RecyclerView.Adapter<AdapterPre
         if (templateModelPresentDuringMeetings.size() > i) {
             final int z = i;
             widgets.name.setText(templateModelPresentDuringMeetings.get(i).getName());
+            widgets.name.setEnabled(Variable.isAuthorized);
             widgets.position.setText(templateModelPresentDuringMeetings.get(i).getPosition());
+            widgets.position.setEnabled(Variable.isAuthorized);
             widgets.name.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

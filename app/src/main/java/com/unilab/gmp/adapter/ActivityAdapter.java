@@ -18,6 +18,7 @@ import com.unilab.gmp.model.ModelReportActivities;
 import com.unilab.gmp.model.ModelReportSubActivities;
 import com.unilab.gmp.model.ModelTemplateActivities;
 import com.unilab.gmp.model.ModelTemplateSubActivities;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
             }
         });
 
+        widgets.cbActivity.setEnabled(Variable.isAuthorized);
+        for (ModelTemplateActivities mta : modelTemplateActivities) {
         //for (ModelTemplateActivities mta : modelTemplateActivities) {
 //            subActivityAdapters.add(new SubActivityAdapter(context, ModelTemplateSubActivities.
 //                    find(ModelTemplateSubActivities.class, "templateid = ? AND activityid = ?",

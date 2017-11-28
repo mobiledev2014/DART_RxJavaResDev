@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.TemplateModelOtherIssuesAudit;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class AdapterOthersIssueAudit extends RecyclerView.Adapter<AdapterOthersI
         final int z = i;
 
         widgets.otherIssueAudit.setText(templateModelOtherIssuesAudits.get(i).getOther_issues_audit());
+        widgets.otherIssueAudit.setEnabled(Variable.isAuthorized);
         widgets.otherIssueAudit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
