@@ -34,12 +34,15 @@ import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
 import com.unilab.gmp.adapter.TemplateElementAdapter;
 import com.unilab.gmp.adapter.templates.DateOfAuditAdapter;
+import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.ModelAuditReports;
 import com.unilab.gmp.model.ModelCompany;
 import com.unilab.gmp.model.ModelDateOfAudit;
 import com.unilab.gmp.model.ModelTemplateElements;
 import com.unilab.gmp.model.ModelTemplates;
+import com.unilab.gmp.model.TemplateModelAuditors;
 import com.unilab.gmp.utility.DateTimeUtils;
+import com.unilab.gmp.utility.SharedPreferenceManager;
 import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
@@ -87,6 +90,10 @@ public class SelectedAuditReportFragment extends Fragment {
     Button btnSubmit;
     @BindView(R.id.et_template_site)
     AutoCompleteTextView etTemplateSite;
+    @BindView(R.id.btn_template_audit_date_add)
+    Button btnTemplateAuditAdd;
+    @BindView(R.id.btn_template_audit_date_delete)
+    Button btnTemplateAuditDelete;
 
     RecyclerView lvTemplateElement;
     ExpandableHeightListView lvTemplateAuditDate;
@@ -195,8 +202,13 @@ public class SelectedAuditReportFragment extends Fragment {
         month = currentTime.get(Calendar.MONTH);
         day = currentTime.get(Calendar.DAY_OF_MONTH);
 
+        if (checkIfAuthorizedUser())
+            disableWidgets();
+
+
         tvTemplateProductType.setText(modelTemplates.getProductType());
         tvTemplateStandard.setText(modelTemplates.getTemplateName());
+
 
         templateFragment = new TemplateFragment();
         auditReportFragment = new AuditReportFragment();
@@ -211,6 +223,12 @@ public class SelectedAuditReportFragment extends Fragment {
         return rootView;
     }
 
+    private void disableWidgets() {
+        Variable.isAuthorized = false;
+        etTemplateSite.setEnabled(false);
+        btnTemplateAuditAdd.setEnabled(false);
+        btnTemplateAuditDelete.setEnabled(false);
+    }
    /* @Override
     public void onResume() {
         super.onResume();
@@ -621,5 +639,36 @@ public class SelectedAuditReportFragment extends Fragment {
             }
 
         }
+    }
+
+    public boolean checkIfAuthorizedUser() {
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context);
+        String loggedEmail = sharedPreferenceManager.getStringData("EMAIL");
+
+        boolean found = false;
+
+        List<AuditorsModel> aaa = AuditorsModel.find(AuditorsModel.class,
+                "auditorid = ?", modelAuditReports.getAuditor_id());
+        if (aaa.size() > 0) {
+            if (aaa.get(0).getEmail().equals(loggedEmail))
+                found = true;
+        }
+
+        List<TemplateModelAuditors> a = TemplateModelAuditors.find(TemplateModelAuditors.class,
+                "reportid = ?", modelAuditReports.getReport_id());
+        if (a.size() > 0) {
+//        for (TemplateModelAuditors am : templateModelAuditorses) {
+            for (TemplateModelAuditors am : a) {
+                List<AuditorsModel> a2 = AuditorsModel.find(AuditorsModel.class,
+                        "auditorid = ?", am.getAuditor_id());
+                if (a2.size() > 0) {
+                    if (a2.get(0).getEmail().equals(loggedEmail))
+                        found = true;
+                }
+            }
+        }
+
+
+        return found;
     }
 }

@@ -26,6 +26,7 @@ import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelTemplateElements;
 import com.unilab.gmp.model.ModelTemplateQuestionDetails;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,6 +138,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
             widgets.cbElementNa.setChecked(true);
         }
 
+        widgets.cbElementNa.setEnabled(Variable.isAuthorized);
         widgets.cbElementNa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

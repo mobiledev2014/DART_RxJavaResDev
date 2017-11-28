@@ -25,6 +25,7 @@ import com.unilab.gmp.model.ModelCategory;
 import com.unilab.gmp.model.ModelClassificationCategory;
 import com.unilab.gmp.model.ModelReportQuestion;
 import com.unilab.gmp.model.ModelTemplateQuestionDetails;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -187,6 +188,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
             }
         }
         if (!checked) {
+            widgets.btnYes.setEnabled(Variable.isAuthorized);
             widgets.btnYes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -201,6 +203,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                     }
                 }
             });
+            widgets.btnNo.setEnabled(Variable.isAuthorized);
             widgets.btnNo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -209,6 +212,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
             });
         }
 
+        widgets.btnNa.setEnabled(Variable.isAuthorized);
         widgets.btnNa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -233,6 +237,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
             }
         });
 
+        widgets.btnNc.setEnabled(Variable.isAuthorized);
         widgets.btnNc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -12,6 +12,7 @@ import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelDateOfAudit;
 import com.unilab.gmp.utility.DateTimeUtils;
 import com.unilab.gmp.utility.StartDatePickerButton;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.Calendar;
 import java.util.List;
@@ -77,6 +78,7 @@ public class DateOfAuditAdapter extends BaseAdapter {
             widgets.btn_date_of_audit.setText(DateTimeUtils.parseDateMonthToWord(datesOfAudit.get(position).getDateOfAudit()));
         }
 
+        widgets.btn_date_of_audit.setEnabled(Variable.isAuthorized);
         widgets.btn_date_of_audit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
