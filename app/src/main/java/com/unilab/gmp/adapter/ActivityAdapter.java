@@ -114,7 +114,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Widget
 //            widgets = (Widgets) rowView.getTag();
 //        }
         //widgets.lv.setExpanded(true);
-    }
+    }}
 
     public void save(String report_id) {
         ModelReportActivities.deleteAll(ModelReportActivities.class, "reportid = ?", report_id);

@@ -385,11 +385,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
 
 
-        if (!checkIfAuthorizedUser())
-        {
-            Variable.isAuthorized = false;
+        if (checkIfAuthorizedUser())
             disableWidgets();
-        }
 
         activityAdapter = new ActivityAdapter(context, find(ModelTemplateActivities.class, "templateid = ?", report.getTemplate_id()), report.getReport_id());
 
@@ -745,6 +742,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     private void disableWidgets() {
+        Variable.isAuthorized = false;
         etTemplateNextDateOfWrapUp.setEnabled(false);
         etTemplateNextSummaryRecommendationAuditCloseDate.setEnabled(false);
         etTemplateNextAuditedArea.setEnabled(false);
