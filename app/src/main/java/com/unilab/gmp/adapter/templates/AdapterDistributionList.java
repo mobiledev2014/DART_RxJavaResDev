@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelDistribution;
 import com.unilab.gmp.model.TemplateModelDistributionList;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,7 @@ public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistrib
         final int z = i;
 
         widgets.spnTemplateNextDistributionList.setAdapter(adapterDistri);
+        widgets.spnTemplateNextDistributionList.setEnabled(Variable.isAuthorized);
 
         if (!templateModelDistributionLists.get(z).getDistribution_id().isEmpty()) {
             templateModelDistributionLists.get(z).setSelected(distriIdList.indexOf(

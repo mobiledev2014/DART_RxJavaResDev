@@ -69,7 +69,7 @@ public class AuditReportFragment extends Fragment {
         sharedPref = new SharedPreferenceManager(context);
 
         //modelAuditReports = ModelAuditReports.listAll(ModelAuditReports.class, "modifieddate DESC");
-        modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0'", new String[]{}, null, "modifieddate DESC", "50");
+        modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0'", new String[]{}, null, "modifieddate DESC", "50");
 
         auditReportAdapter = new AuditReportAdapter(context, modelAuditReports);
         lvAuditReportList.setAdapter(auditReportAdapter);
@@ -94,7 +94,8 @@ public class AuditReportFragment extends Fragment {
 
     public void searchTemplate() {
         String audName = etSearchTemplate.getText().toString();
-        List<ModelCompany> site = ModelCompany.find(ModelCompany.class, "companyname = ?", audName);
+
+        List<ModelCompany> site = ModelCompany.find(ModelCompany.class, "companyname LIKE ?", "%"+audName+"%");
         List<AuditorsModel> auditor = AuditorsModel.find(AuditorsModel.class, "fname LIKE ? OR mname LIKE ? OR lname LIKE ?",
                 "%" + audName + "%", "%" + audName + "%", "%" + audName + "%");
 

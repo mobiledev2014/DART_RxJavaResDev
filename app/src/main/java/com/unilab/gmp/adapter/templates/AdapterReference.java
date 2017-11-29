@@ -20,6 +20,7 @@ import android.widget.EditText;
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.TemplateModelReference;
 import com.unilab.gmp.utility.DateTimeUtils;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.Calendar;
 import java.util.List;
@@ -70,6 +71,7 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
         final int z = i;
 
         widgets.certification.setText(templateModelReferences.get(i).getCertification());
+        widgets.certification.setEnabled(Variable.isAuthorized);
         widgets.certification.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -89,6 +91,7 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
         });
 
         widgets.body.setText(templateModelReferences.get(i).getBody());
+        widgets.body.setEnabled(Variable.isAuthorized);
         widgets.body.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -108,6 +111,7 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
         });
 
         widgets.number.setText(templateModelReferences.get(i).getNumber());
+        widgets.number.setEnabled(Variable.isAuthorized);
         widgets.number.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -128,6 +132,7 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
 
         if (!templateModelReferences.get(i).getValidity().equals(""))
             widgets.validity.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(i).getValidity()));
+
         widgets.validity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,9 +140,10 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
                 datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "datePicker");
             }
         });
-
+        widgets.validity.setEnabled(Variable.isAuthorized);
         if (!templateModelReferences.get(i).getIssue_date().equals(""))
             widgets.issue_date.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(i).getIssue_date()));
+
         widgets.issue_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,7 +151,7 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
                 datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "datePicker");
             }
         });
-
+        widgets.issue_date.setEnabled(Variable.isAuthorized);
 //            rowView.setTag(widgets);
 //        } else {
 //            widgets = (Widgets) rowView.getTag();

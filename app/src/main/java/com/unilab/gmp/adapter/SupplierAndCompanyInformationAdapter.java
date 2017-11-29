@@ -50,6 +50,8 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
     AdapterCompanyBackgroundName adapterCompanyBackgroundName;
     AdapterCompanyBackgroundMajorChanges adapterCompanyBackgroundMajorChanges;
 
+    boolean isDialogOpen = false;
+
     public SupplierAndCompanyInformationAdapter(Context context, List<ModelCompany> supplierModels) {
         this.supplierModels = supplierModels;
         this.context = context;
@@ -120,67 +122,71 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
     }
 
     public void dialogViewSupplier(String id, String Name, String Address, String Background) {
-        dialogViewSupplier = new Dialog(context);
-        dialogViewSupplier.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialogViewSupplier.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogViewSupplier.setCancelable(false);
-        dialogViewSupplier.setContentView(R.layout.dialog_supplier_view);
-        dialogViewSupplier.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if (!isDialogOpen) {
+            dialogViewSupplier = new Dialog(context);
+            dialogViewSupplier.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialogViewSupplier.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogViewSupplier.setCancelable(false);
+            dialogViewSupplier.setContentView(R.layout.dialog_supplier_view);
+            dialogViewSupplier.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        TextView name = (TextView) dialogViewSupplier.findViewById(R.id.tv_name);
-        TextView address = (TextView) dialogViewSupplier.findViewById(R.id.tv_address);
-        TextView background = (TextView) dialogViewSupplier.findViewById(R.id.tv_background);
-        ExpandableHeightListView products = (ExpandableHeightListView) dialogViewSupplier.findViewById(R.id.lv_products);
-        RecyclerView lvPreviousDate = (RecyclerView) dialogViewSupplier.findViewById(R.id.lv_previous_date);
-        RecyclerView lvInspector = (RecyclerView) dialogViewSupplier.findViewById(R.id.lv_inspector);
-        RecyclerView lvMajorChanges = (RecyclerView) dialogViewSupplier.findViewById(R.id.lv_major_changes);
-        Button done = (Button) dialogViewSupplier.findViewById(R.id.btn_done);
+            TextView name = (TextView) dialogViewSupplier.findViewById(R.id.tv_name);
+            TextView address = (TextView) dialogViewSupplier.findViewById(R.id.tv_address);
+            TextView background = (TextView) dialogViewSupplier.findViewById(R.id.tv_background);
+            ExpandableHeightListView products = (ExpandableHeightListView) dialogViewSupplier.findViewById(R.id.lv_products);
+            RecyclerView lvPreviousDate = (RecyclerView) dialogViewSupplier.findViewById(R.id.lv_previous_date);
+            RecyclerView lvInspector = (RecyclerView) dialogViewSupplier.findViewById(R.id.lv_inspector);
+            RecyclerView lvMajorChanges = (RecyclerView) dialogViewSupplier.findViewById(R.id.lv_major_changes);
+            Button done = (Button) dialogViewSupplier.findViewById(R.id.btn_done);
 
-        name.setText("Name: " + Name);
-        address.setText("Address: " + Address);
-        background.setText(Background);
+            name.setText("Name: " + Name);
+            address.setText("Address: " + Address);
+            background.setText(Background);
 
-        productLists = ModelProduct.find(ModelProduct.class, "companyid = ?", id);
-        previousDateList = ModelSiteDate.find(ModelSiteDate.class, "companyid = ?", id);
-        inspectorList = TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", id);
-        majorChangesList = TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", id);
+            productLists = ModelProduct.find(ModelProduct.class, "companyid = ?", id);
+            previousDateList = ModelSiteDate.find(ModelSiteDate.class, "companyid = ?", id);
+            inspectorList = TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", id);
+            majorChangesList = TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", id);
 
-        supplierAndCompanyProductViewAdapter = new SupplierAndCompanyProductViewAdapter(context, productLists);
-        products.setAdapter(supplierAndCompanyProductViewAdapter);
-        products.setExpanded(true);
+            supplierAndCompanyProductViewAdapter = new SupplierAndCompanyProductViewAdapter(context, productLists);
+            products.setAdapter(supplierAndCompanyProductViewAdapter);
+            products.setExpanded(true);
 
-        adapterInspectionDate = new AdapterInspectionDate(context, previousDateList);
+            adapterInspectionDate = new AdapterInspectionDate(context, previousDateList);
 
-        lvPreviousDate.setLayoutManager(new LinearLayoutManager(context));
-        lvPreviousDate.setItemAnimator(new DefaultItemAnimator());
+            lvPreviousDate.setLayoutManager(new LinearLayoutManager(context));
+            lvPreviousDate.setItemAnimator(new DefaultItemAnimator());
 
-        lvPreviousDate.setAdapter(adapterInspectionDate);
+            lvPreviousDate.setAdapter(adapterInspectionDate);
 //        lvPreviousDate.setExpanded(true);
 
-        adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(inspectorList, context, 100);
+            adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(inspectorList, context, 100);
 
-        lvInspector.setLayoutManager(new LinearLayoutManager(context));
-        lvInspector.setItemAnimator(new DefaultItemAnimator());
+            lvInspector.setLayoutManager(new LinearLayoutManager(context));
+            lvInspector.setItemAnimator(new DefaultItemAnimator());
 
-        lvInspector.setAdapter(adapterCompanyBackgroundName);
+            lvInspector.setAdapter(adapterCompanyBackgroundName);
 //        lvInspector.setExpanded(true);
 
-        adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(majorChangesList, context, 100);
+            adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(majorChangesList, context, 100);
 
-        lvMajorChanges.setLayoutManager(new LinearLayoutManager(context));
-        lvMajorChanges.setItemAnimator(new DefaultItemAnimator());
+            lvMajorChanges.setLayoutManager(new LinearLayoutManager(context));
+            lvMajorChanges.setItemAnimator(new DefaultItemAnimator());
 
-        lvMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
+            lvMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
 //        lvMajorChanges.setExpanded(true);
 
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogViewSupplier.dismiss();
-            }
-        });
+            done.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogViewSupplier.dismiss();
+                    isDialogOpen = false;
+                }
+            });
 
-        dialogViewSupplier.show();
+            isDialogOpen = true;
+            dialogViewSupplier.show();
+        }
     }
 
     public class Widgets {

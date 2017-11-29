@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.TemplateModelPreAuditDoc;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
 
@@ -58,6 +59,7 @@ public class AdapterPreAuditDoc extends RecyclerView.Adapter<AdapterPreAuditDoc.
         final int z = i;
 
         widgets.preaudit.setText(templateModelPreAuditDocs.get(z).getPreaudit());
+        widgets.preaudit.setEnabled(Variable.isAuthorized);
         widgets.preaudit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

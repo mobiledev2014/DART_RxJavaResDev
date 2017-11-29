@@ -14,6 +14,7 @@ import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelDisposition;
 import com.unilab.gmp.model.ModelProduct;
 import com.unilab.gmp.model.TemplateModelScopeAuditInterest;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +88,9 @@ public class AdapterScopeAuditInterest extends BaseAdapter {
         rowView = inflater.inflate(R.layout.custom_listview_template_scope_audit_interest, null);
         widgets = new Widgets(rowView);
         widgets.spnDisposition.setAdapter(adapterDispo);
+        widgets.spnDisposition.setEnabled(Variable.isAuthorized);
         widgets.spnTypeAudit.setAdapter(adapter);
+        widgets.spnTypeAudit.setEnabled(Variable.isAuthorized);
 
         if (templateModelScopeAuditInterests.get(z).getDisposition_id().isEmpty()) {
             templateModelScopeAuditInterests.get(z).setDisposition_id(modelDispositions.get(

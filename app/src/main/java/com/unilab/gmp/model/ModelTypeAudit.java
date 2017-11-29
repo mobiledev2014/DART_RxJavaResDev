@@ -17,4 +17,16 @@ public class ModelTypeAudit extends SugarRecord{
     String update_date;
     String status;
     String selected = "0";
+
+    @Override
+    public String toString() {
+        return "ModelTypeAudit{" +
+                "scope_id='" + scope_id + '\'' +
+                ", scope_name='" + scope_name + '\'' +
+                ", create_date='" + create_date + '\'' +
+                ", update_date='" + update_date + '\'' +
+                ", status='" + status + '\'' +
+                ", selected='" + selected + '\'' +
+                '}';
+    }
 }

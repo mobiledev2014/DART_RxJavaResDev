@@ -74,7 +74,7 @@ public class SupplierFragment extends Fragment {
 
         supplierModel = new SupplierAndCompanyInformationModel();
         //supplierList = ModelCompany.listAll(ModelCompany.class, "createdate DESC");
-        supplierList = ModelCompany.find(ModelCompany.class, "status = '1'");
+        supplierList = ModelCompany.find(ModelCompany.class, "status > 0");
         Log.d("SIZE", supplierList.size() + "");
 
         supplierAdapter = new SupplierAndCompanyInformationAdapter(context, supplierList);

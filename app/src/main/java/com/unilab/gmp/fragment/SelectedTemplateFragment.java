@@ -188,6 +188,7 @@ public class SelectedTemplateFragment extends Fragment {
         Variable.menu = true;
         Variable.onTemplate = true;
         Variable.onAudit = false;
+        Variable.isAuthorized = true;
 
         year = currentTime.get(Calendar.YEAR);
         month = currentTime.get(Calendar.MONTH);
@@ -355,7 +356,10 @@ public class SelectedTemplateFragment extends Fragment {
                 dialogCancelTemplate();
                 break;
             case R.id.btn_save_draft:
-                dialogSaveDraft();
+                if (validateDraft())
+                    dialogSaveDraft();
+                else
+                    dialogAnswerAll("Please fill out all the required field(s).");
                 break;
             case R.id.btn_submit:
                 dialogSubmit("Would you like to proceed?");
@@ -571,6 +575,21 @@ public class SelectedTemplateFragment extends Fragment {
 
         }
         return true;
+    }
+    public boolean validateDraft() {
+        boolean noAnswer = false;
+        Log.e("validate", "date of audit : " + dateOfAuditAdapter.getItem(0));
+        if (modelTemplates.getCompany_id().isEmpty()) {
+            pDialog.dismiss();
+            noAnswer = true;
+
+        }
+        if (dateOfAuditAdapter.getItem(0).equals("")) {
+            pDialog.dismiss();
+            noAnswer = true;
+
+        }
+        return noAnswer;
     }
 
     public void dialogSucSaveDraft(String mess) {

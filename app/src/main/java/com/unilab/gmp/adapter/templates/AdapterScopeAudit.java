@@ -28,6 +28,7 @@ import com.unilab.gmp.model.ModelDisposition;
 import com.unilab.gmp.model.ModelTypeAudit;
 import com.unilab.gmp.model.TemplateModelScopeAudit;
 import com.unilab.gmp.model.TemplateModelScopeAuditInterest;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -55,6 +56,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     Button btn_add;
     int simpleMessageDialog = -1, delete = 1;
     private boolean onBind;
+    boolean isDialogOpen = false;
 
     public AdapterScopeAudit(List<TemplateModelScopeAudit> templateModelScopeAudit, Context context
             , String company_id, NextSelectedTemplateFragment nextSelectedTemplateFragment,
@@ -75,10 +77,8 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         Log.d("SIZE", scopeAudits.size() + "");
         int x = scopeAudits.size();
         for (int count = 0; count < x; count++) {
-            if (scopeAudits.get(count).getSelected().equals("0")) {
                 list.add(scopeAudits.get(count).getScope_name());
                 idList.add(scopeAudits.get(count).getScope_id());
-            }
         }
 
         adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
@@ -115,6 +115,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         final int z = i;
 
         widgets.spnTypeAudit.setAdapter(adapter);
+        widgets.spnTypeAudit.setEnabled(Variable.isAuthorized);
         if (templateModelScopeAuditInterests.size() < templateModelScopeAudit.size()) {
 //        if (TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND auditid = ?", templateModelScopeAudit.get(i).getReport_id(), templateModelScopeAudit.get(i).getId() + "").size() > 0) {
             templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());
@@ -125,6 +126,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         templateModelScopeAudit.get(i).setAdapterScope(new AdapterScopeAuditInterest(templateModelScopeAuditInterests.get(i), context, companyId));
         widgets.lvTemplateNextScopeAuditInterest.setAdapter(templateModelScopeAudit.get(i).getAdapterScope());
         widgets.lvTemplateNextScopeAuditInterest.setExpanded(true);
+        widgets.lvTemplateNextScopeAuditInterest.setEnabled(Variable.isAuthorized);
 
         if (templateModelScopeAuditInterests.get(i).size() == 0) {
             addScopeAuditTypeInterest(templateModelScopeAudit.get(i).getAdapterScope(), i);
@@ -137,13 +139,14 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         }
 
         widgets.spnTypeAudit.setSelection(templateModelScopeAudit.get(i).getSelected());
+        widgets.spnTypeAudit.setEnabled(Variable.isAuthorized);
         widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 templateModelScopeAudit.get(z).setScope_name(widgets.spnTypeAudit.getSelectedItem().toString());
                 templateModelScopeAudit.get(z).setSelected(i);
                 templateModelScopeAudit.get(z).setScope_id(scopeAudits.get(i).getScope_id());
-                scopeAudits.get(z).setSelected("1");
+
             }
 
             @Override
@@ -154,6 +157,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
 
 //        templateModelScopeAudit.get(i).setEtremarks(widgets.remarks);
         widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail());
+        widgets.remarks.setEnabled(Variable.isAuthorized);
         widgets.remarks.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -181,6 +185,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
 //                getView(z, null, viewGroup);
             }
         });
+        widgets.btnTemplateNextScopeAuditInterestAdd.setEnabled(Variable.isAuthorized);
 
         widgets.btnTemplateNextScopeAuditInterestDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,6 +197,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
             }
         });
 
+        widgets.btnTemplateNextScopeAuditInterestDelete.setEnabled(Variable.isAuthorized);
 
         if (!isCheck) {
             if (templateModelScopeAudit.get(i).getScope_detail().isEmpty()) {
@@ -202,41 +208,45 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     }
 
     public void dialogDeleteDateConfirmation(String mess, final int z, int action) {
-        dialogDeleteDateOfAudit = new Dialog(context);
-        dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogDeleteDateOfAudit.setCancelable(false);
-        dialogDeleteDateOfAudit.setContentView(R.layout.dialog_exit_confirmation);
-        dialogDeleteDateOfAudit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if (!isDialogOpen) {
+            dialogDeleteDateOfAudit = new Dialog(context);
+            dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogDeleteDateOfAudit.setCancelable(false);
+            dialogDeleteDateOfAudit.setContentView(R.layout.dialog_exit_confirmation);
+            dialogDeleteDateOfAudit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        TextView msg = (TextView) dialogDeleteDateOfAudit.findViewById(R.id.tv_message);
-        Button yes = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_yes);
-        Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
+            TextView msg = (TextView) dialogDeleteDateOfAudit.findViewById(R.id.tv_message);
+            Button yes = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_yes);
+            Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
 
-        msg.setText(mess);
-        if (action == simpleMessageDialog) {
-            yes.setVisibility(View.GONE);
-            no.setText("Close");
+            msg.setText(mess);
+            if (action == simpleMessageDialog) {
+                yes.setVisibility(View.GONE);
+                no.setText("Close");
+            }
+            yes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    templateModelScopeAuditInterests.get(z).remove(templateModelScopeAuditInterests.get(z).size() - 1);
+                    //templateModelScopeAudit.get(z).getAdapterScope().notifyDataSetChanged();
+                    notifyDataSetChanged();
+                    isDialogOpen = false;
+                    dialogDeleteDateOfAudit.dismiss();
+                }
+            });
+
+            no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isDialogOpen = false;
+                    dialogDeleteDateOfAudit.dismiss();
+                }
+            });
+
+            isDialogOpen = true;
+            dialogDeleteDateOfAudit.show();
         }
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                templateModelScopeAuditInterests.get(z).remove(templateModelScopeAuditInterests.get(z).size() - 1);
-                //templateModelScopeAudit.get(z).getAdapterScope().notifyDataSetChanged();
-                notifyDataSetChanged();
-                dialogDeleteDateOfAudit.dismiss();
-            }
-        });
-
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogDeleteDateOfAudit.dismiss();
-            }
-        });
-
-
-        dialogDeleteDateOfAudit.show();
     }
 
     public boolean check() {

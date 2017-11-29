@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelTemplateElements;
 import com.unilab.gmp.model.TemplateModelSummaryRecommendation;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +87,7 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
         widgets.element.setAdapter(adapter);
         widgets.element.setSelection(templateModelSummaryRecommendations.get(i).getSelected());
+        widgets.element.setEnabled(Variable.isAuthorized);
         widgets.element.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -109,6 +111,7 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
         });
 
         widgets.remarks.setText(templateModelSummaryRecommendations.get(i).getRemarks());
+        widgets.remarks.setEnabled(Variable.isAuthorized);
         widgets.remarks.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

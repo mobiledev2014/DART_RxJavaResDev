@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.TemplateModelPersonelMetDuring;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class AdapterPersonelMetDuring extends RecyclerView.Adapter<AdapterPerson
         final int z = i;
 
         widgets.name.setText(templateModelPersonelMetDurings.get(i).getName());
+        widgets.name.setEnabled(Variable.isAuthorized);
         widgets.name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -72,6 +74,7 @@ public class AdapterPersonelMetDuring extends RecyclerView.Adapter<AdapterPerson
         });
 
         widgets.position.setText(templateModelPersonelMetDurings.get(i).getPosition());
+        widgets.position.setEnabled(Variable.isAuthorized);
         widgets.position.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
