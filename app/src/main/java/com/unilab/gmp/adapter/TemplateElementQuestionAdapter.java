@@ -46,6 +46,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
     String report_id;
     String productType;
     boolean checked, edited;
+    boolean isDialogYesOpen = false, isDialogYesRequiredOpen = false, isDialogNoOpen = false;
 
     public TemplateElementQuestionAdapter(Context context, List<ModelTemplateQuestionDetails> questionList,
                                           String report_id, String product_type) {
@@ -265,84 +266,32 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
     }
 
     public void dialogYes(String defaultText, final Button yes, final Button no, final Button na, final Button nc, final int z, final List<ModelReportQuestion> mrq) {
-        dialogYes = new Dialog(context);
-        dialogYes.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialogYes.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogYes.setCancelable(false);
-        dialogYes.setContentView(R.layout.dialog_yes_answer);
-        dialogYes.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if (!isDialogYesOpen) {
+            dialogYes = new Dialog(context);
+            dialogYes.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialogYes.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogYes.setCancelable(false);
+            dialogYes.setContentView(R.layout.dialog_yes_answer);
+            dialogYes.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        TextView default_text = (TextView) dialogYes.findViewById(R.id.tv_default_answer);
-        final EditText remarks = (EditText) dialogYes.findViewById(R.id.et_remarks);
-        Button save = (Button) dialogYes.findViewById(R.id.btn_save);
-        Button cancel = (Button) dialogYes.findViewById(R.id.btn_cancel);
+            TextView default_text = (TextView) dialogYes.findViewById(R.id.tv_default_answer);
+            final EditText remarks = (EditText) dialogYes.findViewById(R.id.et_remarks);
+            Button save = (Button) dialogYes.findViewById(R.id.btn_save);
+            Button cancel = (Button) dialogYes.findViewById(R.id.btn_cancel);
 
-        default_text.setText(defaultText);
-        //if (mrq.size() > 0) {
-        if (questionList.get(z).getAnswer_id().equals("1")) {
-            remarks.setText(questionList.get(z).getAnswer_details());
-        }
-        //}
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                strRemarks = remarks.getText().toString();
-                //Toast.makeText(context, "save data to db : " + strRemarks, Toast.LENGTH_SHORT).show();
-
-                yes.setBackgroundResource(R.drawable.selected_button);
-                no.setBackgroundResource(R.drawable.yes_button);
-                na.setBackgroundResource(R.drawable.yes_button);
-                nc.setBackgroundResource(R.drawable.yes_button);
-
-                questionList.get(z).setAnswer_details(strRemarks);
-                questionList.get(z).setAnswer_id("1");
-                text = "N/A";
-                //cb.setChecked(false);
-                dialogYes.dismiss();
+            default_text.setText(defaultText);
+            //if (mrq.size() > 0) {
+            if (questionList.get(z).getAnswer_id().equals("1")) {
+                remarks.setText(questionList.get(z).getAnswer_details());
             }
-        });
+            //}
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogYes.dismiss();
-            }
-        });
+            save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    strRemarks = remarks.getText().toString();
+                    //Toast.makeText(context, "save data to db : " + strRemarks, Toast.LENGTH_SHORT).show();
 
-
-        dialogYes.show();
-    }
-
-    public void dialogYesRequired(String defaultText, final Button yes, final Button no, final Button na, final Button nc, final int z, final List<ModelReportQuestion> mrq) {
-        dialogYes = new Dialog(context);
-        dialogYes.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialogYes.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogYes.setCancelable(false);
-        dialogYes.setContentView(R.layout.dialog_yes_answer);
-        dialogYes.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        TextView default_text = (TextView) dialogYes.findViewById(R.id.tv_default_answer);
-        final EditText remarks = (EditText) dialogYes.findViewById(R.id.et_remarks);
-        Button save = (Button) dialogYes.findViewById(R.id.btn_save);
-        Button cancel = (Button) dialogYes.findViewById(R.id.btn_cancel);
-
-        remarks.setHint("Remarks");
-        default_text.setText(defaultText);
-        //if (mrq.size() > 0) {
-        if (questionList.get(z).getAnswer_id().equals("1")) {
-            remarks.setText(questionList.get(z).getAnswer_details());
-        }
-        //}
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                strRemarks = remarks.getText().toString();
-
-                if (strRemarks.equals("")) {
-                    Toast.makeText(context, "Remarks is required.", Toast.LENGTH_SHORT).show();
-                } else {
                     yes.setBackgroundResource(R.drawable.selected_button);
                     no.setBackgroundResource(R.drawable.yes_button);
                     na.setBackgroundResource(R.drawable.yes_button);
@@ -351,116 +300,182 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                     questionList.get(z).setAnswer_details(strRemarks);
                     questionList.get(z).setAnswer_id("1");
                     text = "N/A";
+                    //cb.setChecked(false);
+                    isDialogYesOpen = false;
                     dialogYes.dismiss();
                 }
+            });
+
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isDialogYesOpen = false;
+                    dialogYes.dismiss();
+                }
+            });
+
+            isDialogYesOpen = true;
+            dialogYes.show();
+        }
+    }
+
+    public void dialogYesRequired(String defaultText, final Button yes, final Button no, final Button na, final Button nc, final int z, final List<ModelReportQuestion> mrq) {
+        if (!isDialogYesRequiredOpen) {
+            dialogYes = new Dialog(context);
+            dialogYes.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialogYes.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogYes.setCancelable(false);
+            dialogYes.setContentView(R.layout.dialog_yes_answer);
+            dialogYes.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+            TextView default_text = (TextView) dialogYes.findViewById(R.id.tv_default_answer);
+            final EditText remarks = (EditText) dialogYes.findViewById(R.id.et_remarks);
+            Button save = (Button) dialogYes.findViewById(R.id.btn_save);
+            Button cancel = (Button) dialogYes.findViewById(R.id.btn_cancel);
+
+            remarks.setHint("Remarks");
+            default_text.setText(defaultText);
+            //if (mrq.size() > 0) {
+            if (questionList.get(z).getAnswer_id().equals("1")) {
+                remarks.setText(questionList.get(z).getAnswer_details());
             }
-        });
+            //}
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogYes.dismiss();
-            }
-        });
+            save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    strRemarks = remarks.getText().toString();
+
+                    if (strRemarks.equals("")) {
+                        Toast.makeText(context, "Remarks is required.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        yes.setBackgroundResource(R.drawable.selected_button);
+                        no.setBackgroundResource(R.drawable.yes_button);
+                        na.setBackgroundResource(R.drawable.yes_button);
+                        nc.setBackgroundResource(R.drawable.yes_button);
+
+                        questionList.get(z).setAnswer_details(strRemarks);
+                        questionList.get(z).setAnswer_id("1");
+                        text = "N/A";
+                        isDialogYesRequiredOpen = false;
+                        dialogYes.dismiss();
+                    }
+                }
+            });
+
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isDialogYesRequiredOpen = false;
+                    dialogYes.dismiss();
+                }
+            });
 
 
-        dialogYes.show();
+            isDialogYesRequiredOpen = true;
+            dialogYes.show();
+        }
     }
 
     public void dialogNo(final Button yes, final Button no, final Button na, final Button nc, final int z, final List<ModelReportQuestion> mrq) {
-        dialogNo = new Dialog(context);
-        dialogNo.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialogNo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogNo.setCancelable(false);
-        dialogNo.setContentView(R.layout.dialog_no_answer);
-        dialogNo.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if (!isDialogNoOpen) {
+            dialogNo = new Dialog(context);
+            dialogNo.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialogNo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogNo.setCancelable(false);
+            dialogNo.setContentView(R.layout.dialog_no_answer);
+            dialogNo.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        final EditText remarks = (EditText) dialogNo.findViewById(R.id.et_remarks);
-        final Spinner category = (Spinner) dialogNo.findViewById(R.id.spn_category);
-        final Button save = (Button) dialogNo.findViewById(R.id.btn_save);
-        Button cancel = (Button) dialogNo.findViewById(R.id.btn_cancel);
+            final EditText remarks = (EditText) dialogNo.findViewById(R.id.et_remarks);
+            final Spinner category = (Spinner) dialogNo.findViewById(R.id.spn_category);
+            final Button save = (Button) dialogNo.findViewById(R.id.btn_save);
+            Button cancel = (Button) dialogNo.findViewById(R.id.btn_cancel);
 
 
-        Log.d("TemplateElementQA", productType + "");
+            Log.d("TemplateElementQA", productType + "");
 //        List<ModelClassification> modelClassificationList = ModelClassification.find(ModelClassification.class, "classificationname like '%"+ productType +"%'");
-        List<ModelClassificationCategory> modelClassificationCategoryList = ModelClassificationCategory.find(ModelClassificationCategory.class, "classificationname like '%" + productType + "%'");
+            List<ModelClassificationCategory> modelClassificationCategoryList = ModelClassificationCategory.find(ModelClassificationCategory.class, "classificationname like '%" + productType + "%'");
 
-        Log.d("TemplateElementQA", modelClassificationCategoryList.toString() + " size :" + modelClassificationCategoryList.size());
-        List<String> categoryId = new ArrayList<>();
-        if (modelClassificationCategoryList.size() > 0) {
-            for (ModelClassificationCategory mcc : modelClassificationCategoryList) {
-                categoryId.add(mcc.getCategory_id());
-                Log.d("TemplateElementQA", mcc.getCategory_id() + "");
-            }
-        }
-
-        Log.d("TemplateElementQA", categoryId.size() + "");
-        //List<ModelCategory> categoryList = ModelCategory.listAll(ModelCategory.class);
-        List<ModelCategory> categoryList = ModelCategory.find(ModelCategory.class, "status > 0");
-        List<String> list = new ArrayList<>();
-        final List<String> listid = new ArrayList<>();
-        Log.d("SIZE", categoryList.size() + "");
-        int x = categoryList.size();
-        int selected = 0;
-        for (int count = 0; count < x; count++) {
-            if (categoryId.indexOf(categoryList.get(count).getCategory_id()) != -1) {
-                list.add(categoryList.get(count).getCategory_name());
-                listid.add(categoryList.get(count).getCategory_id());
-                //if (mrq.size() > 0) {
-                if (questionList.get(z).getCategory_id().equals(listid.get(count))) {
-                    selected = count;
+            Log.d("TemplateElementQA", modelClassificationCategoryList.toString() + " size :" + modelClassificationCategoryList.size());
+            List<String> categoryId = new ArrayList<>();
+            if (modelClassificationCategoryList.size() > 0) {
+                for (ModelClassificationCategory mcc : modelClassificationCategoryList) {
+                    categoryId.add(mcc.getCategory_id());
+                    Log.d("TemplateElementQA", mcc.getCategory_id() + "");
                 }
+            }
+
+            Log.d("TemplateElementQA", categoryId.size() + "");
+            //List<ModelCategory> categoryList = ModelCategory.listAll(ModelCategory.class);
+            List<ModelCategory> categoryList = ModelCategory.find(ModelCategory.class, "status > 0");
+            List<String> list = new ArrayList<>();
+            final List<String> listid = new ArrayList<>();
+            Log.d("SIZE", categoryList.size() + "");
+            int x = categoryList.size();
+            int selected = 0;
+            for (int count = 0; count < x; count++) {
+                if (categoryId.indexOf(categoryList.get(count).getCategory_id()) != -1) {
+                    list.add(categoryList.get(count).getCategory_name());
+                    listid.add(categoryList.get(count).getCategory_id());
+                    //if (mrq.size() > 0) {
+                    if (questionList.get(z).getCategory_id().equals(listid.get(count))) {
+                        selected = count;
+                    }
+                }
+                //}
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
+            category.setAdapter(adapter);
+
+            //if (mrq.size() > 0) {
+            if (questionList.get(z).getAnswer_id().equals("2")) {
+                remarks.setText(questionList.get(z).getAnswer_details());
+                category.setSelection(selected);
             }
             //}
-        }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
-        category.setAdapter(adapter);
+            save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(save.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
 
-        //if (mrq.size() > 0) {
-        if (questionList.get(z).getAnswer_id().equals("2")) {
-            remarks.setText(questionList.get(z).getAnswer_details());
-            category.setSelection(selected);
-        }
-        //}
+                    strRemarks = remarks.getText().toString();
+                    spnCategory = category.getSelectedItem().toString();
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(save.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                    if (strRemarks.equals("") || spnCategory.equals("")) {
+                        Toast.makeText(context, "Remarks and category are required.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        yes.setBackgroundResource(R.drawable.yes_button);
+                        no.setBackgroundResource(R.drawable.selected_button);
+                        na.setBackgroundResource(R.drawable.yes_button);
+                        nc.setBackgroundResource(R.drawable.yes_button);
 
-                strRemarks = remarks.getText().toString();
-                spnCategory = category.getSelectedItem().toString();
+                        //Toast.makeText(context, "save data to db : " + strRemarks + spnCategory, Toast.LENGTH_SHORT).show();
 
-                if (strRemarks.equals("") || spnCategory.equals("")) {
-                    Toast.makeText(context, "Remarks and category are required.", Toast.LENGTH_SHORT).show();
-                } else {
-                    yes.setBackgroundResource(R.drawable.yes_button);
-                    no.setBackgroundResource(R.drawable.selected_button);
-                    na.setBackgroundResource(R.drawable.yes_button);
-                    nc.setBackgroundResource(R.drawable.yes_button);
+                        questionList.get(z).setAnswer_id("2");
+                        questionList.get(z).setAnswer_details(strRemarks);
+                        questionList.get(z).setCategory_id(listid.get(category.getSelectedItemPosition()));
+                        text = "N/A";
+                        //cb.setChecked(false);
 
-                    //Toast.makeText(context, "save data to db : " + strRemarks + spnCategory, Toast.LENGTH_SHORT).show();
+                        isDialogNoOpen = false;
+                        dialogNo.dismiss();
+                    }
+                }
+            });
 
-                    questionList.get(z).setAnswer_id("2");
-                    questionList.get(z).setAnswer_details(strRemarks);
-                    questionList.get(z).setCategory_id(listid.get(category.getSelectedItemPosition()));
-                    text = "N/A";
-                    //cb.setChecked(false);
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isDialogNoOpen = false;
                     dialogNo.dismiss();
                 }
-            }
-        });
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogNo.dismiss();
-            }
-        });
-
-        dialogNo.show();
+            });
+            isDialogNoOpen = true;
+            dialogNo.show();
+        }
     }
 
     public List<ModelTemplateQuestionDetails> getQuestionList() {
@@ -494,11 +509,11 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.custom_listview_question,parent, false);
+                .inflate(R.layout.custom_listview_question, parent, false);
         return new Widgets(v);
     }
 
-    public class Widgets extends RecyclerView.ViewHolder{
+    public class Widgets extends RecyclerView.ViewHolder {
         TextView tvQuestion, tvQuestionNumber;
         Button btnYes, btnNo, btnNa, btnNc;
 

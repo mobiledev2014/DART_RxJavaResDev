@@ -54,6 +54,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     Button btn_add;
     int simpleMessageDialog = -1, delete = 1;
     private boolean onBind;
+    boolean isDialogOpen = false;
 
     public AdapterScopeAudit(List<TemplateModelScopeAudit> templateModelScopeAudit, Context context
             , String company_id, NextSelectedTemplateFragment nextSelectedTemplateFragment,
@@ -205,41 +206,45 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     }
 
     public void dialogDeleteDateConfirmation(String mess, final int z, int action) {
-        dialogDeleteDateOfAudit = new Dialog(context);
-        dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogDeleteDateOfAudit.setCancelable(false);
-        dialogDeleteDateOfAudit.setContentView(R.layout.dialog_exit_confirmation);
-        dialogDeleteDateOfAudit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if (!isDialogOpen) {
+            dialogDeleteDateOfAudit = new Dialog(context);
+            dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogDeleteDateOfAudit.setCancelable(false);
+            dialogDeleteDateOfAudit.setContentView(R.layout.dialog_exit_confirmation);
+            dialogDeleteDateOfAudit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        TextView msg = (TextView) dialogDeleteDateOfAudit.findViewById(R.id.tv_message);
-        Button yes = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_yes);
-        Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
+            TextView msg = (TextView) dialogDeleteDateOfAudit.findViewById(R.id.tv_message);
+            Button yes = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_yes);
+            Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
 
-        msg.setText(mess);
-        if (action == simpleMessageDialog) {
-            yes.setVisibility(View.GONE);
-            no.setText("Close");
+            msg.setText(mess);
+            if (action == simpleMessageDialog) {
+                yes.setVisibility(View.GONE);
+                no.setText("Close");
+            }
+            yes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    templateModelScopeAuditInterests.get(z).remove(templateModelScopeAuditInterests.get(z).size() - 1);
+                    //templateModelScopeAudit.get(z).getAdapterScope().notifyDataSetChanged();
+                    notifyDataSetChanged();
+                    isDialogOpen = false;
+                    dialogDeleteDateOfAudit.dismiss();
+                }
+            });
+
+            no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isDialogOpen = false;
+                    dialogDeleteDateOfAudit.dismiss();
+                }
+            });
+
+            isDialogOpen = true;
+            dialogDeleteDateOfAudit.show();
         }
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                templateModelScopeAuditInterests.get(z).remove(templateModelScopeAuditInterests.get(z).size() - 1);
-                //templateModelScopeAudit.get(z).getAdapterScope().notifyDataSetChanged();
-                notifyDataSetChanged();
-                dialogDeleteDateOfAudit.dismiss();
-            }
-        });
-
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogDeleteDateOfAudit.dismiss();
-            }
-        });
-
-
-        dialogDeleteDateOfAudit.show();
     }
 
     public boolean check() {

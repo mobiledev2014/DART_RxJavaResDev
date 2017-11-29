@@ -69,7 +69,7 @@ public class AuditReportFragment extends Fragment {
         sharedPref = new SharedPreferenceManager(context);
 
         //modelAuditReports = ModelAuditReports.listAll(ModelAuditReports.class, "modifieddate DESC");
-        modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0'", new String[]{}, null, "modifieddate DESC", "50");
+        modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0'", new String[]{}, null, "modifieddate DESC", "50");
 
         auditReportAdapter = new AuditReportAdapter(context, modelAuditReports);
         lvAuditReportList.setAdapter(auditReportAdapter);
