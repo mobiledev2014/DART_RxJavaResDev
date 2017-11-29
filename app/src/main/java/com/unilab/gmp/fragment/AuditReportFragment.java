@@ -94,7 +94,8 @@ public class AuditReportFragment extends Fragment {
 
     public void searchTemplate() {
         String audName = etSearchTemplate.getText().toString();
-        List<ModelCompany> site = ModelCompany.find(ModelCompany.class, "companyname = ?", audName);
+
+        List<ModelCompany> site = ModelCompany.find(ModelCompany.class, "companyname LIKE ?", "%"+audName+"%");
         List<AuditorsModel> auditor = AuditorsModel.find(AuditorsModel.class, "fname LIKE ? OR mname LIKE ? OR lname LIKE ?",
                 "%" + audName + "%", "%" + audName + "%", "%" + audName + "%");
 
