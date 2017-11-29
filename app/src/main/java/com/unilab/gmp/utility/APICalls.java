@@ -1080,7 +1080,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                         mra.setReport_id(report_id);
                         mra.setActivity_id(mra.getActivity_id());
 //                        if (mra.getSub_activities().size() < 1)
-                            mra.setCheck(true);
+                        mra.setCheck(true);
                         mra.save();
                         for (ModelReportSubActivities mrsa : mra.getSub_activities()) {
                             mrsa.setReport_id(report_id);
@@ -1876,7 +1876,9 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             @Override
             public void onClick(View view) {
                 setFragment();
-                HomeActivity.tvSyncNotifCount.setText(String.valueOf(changes));
+                if (changes > 0) {
+                    HomeActivity.tvSyncNotifCount.setText(String.valueOf(changes));
+                }
                 dialogSyncSuccess.dismiss();
             }
         });

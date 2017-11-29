@@ -104,7 +104,7 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
 
         widgets.position.setText(templateModelAuditors.get(i).getPosition());
         widgets.position.setEnabled(Variable.isAuthorized);
-        widgets.department.setText(templateModelAuditors.get(i).getDepartment());
+        widgets.department.setText(templateModelAuditors.get(i).getDepartment()+", "+templateModelAuditors.get(i).getCompany());
         widgets.department.setEnabled(Variable.isAuthorized);
     }
 

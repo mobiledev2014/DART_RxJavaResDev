@@ -17,6 +17,7 @@ public class TemplateModelAuditors extends SugarRecord {
     String position = "";
     String department = "";
     String auditor_id = "";
+    String company= "";
 
     String report_id;
 }

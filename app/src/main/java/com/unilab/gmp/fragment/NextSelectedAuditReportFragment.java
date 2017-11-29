@@ -385,8 +385,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
 
 
-        if (checkIfAuthorizedUser())
+        if (!checkIfAuthorizedUser())
+        {
             disableWidgets();
+        }
 
         activityAdapter = new ActivityAdapter(context, find(ModelTemplateActivities.class, "templateid = ?", report.getTemplate_id()), report.getReport_id());
 
@@ -437,7 +439,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 etTemplateNextAuditorLeadPosition.setText(auditorsModels.get(i).getDesignation());
-                etTemplateNextAuditorLeadDepartment.setText(auditorsModels.get(i).getDepartment());
+                etTemplateNextAuditorLeadDepartment.setText(auditorsModels.get(i).getDepartment()+", "+auditorsModels.get(i).getCompany());
             }
 
             @Override
@@ -470,7 +472,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 etTemplateNextReviewerPosition.setText(reviewerModels.get(i).getDesignation() + "a");
-                etTemplateNextReviewerDepartment.setText(reviewerModels.get(i).getDepartment());
+                etTemplateNextReviewerDepartment.setText(reviewerModels.get(i).getDepartment()+", "+reviewerModels.get(i).getCompany());
                 reviewer_id = reviewerModels.get(i).getReviewer_id();
             }
 
@@ -516,7 +518,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 etTemplateNextApproverPosition.setText(approverModels.get(i).getDesignation());
-                etTemplateNextApproverDepartment.setText(approverModels.get(i).getDepartment());
+                etTemplateNextApproverDepartment.setText(approverModels.get(i).getDepartment()+", "+approverModels.get(i).getCompany());
                 approver_id = approverModels.get(i).getApprover_id();
             }
 
@@ -860,6 +862,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
         }
 
+        Log.e("CheckUser",""+ found);
 
         return found;
 

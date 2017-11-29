@@ -197,13 +197,16 @@ public class SelectedAuditReportFragment extends Fragment {
         Variable.menu = true;
         Variable.onTemplate = true;
         Variable.onAudit = true;
+        Variable.isAuthorized = true;
 
         year = currentTime.get(Calendar.YEAR);
         month = currentTime.get(Calendar.MONTH);
         day = currentTime.get(Calendar.DAY_OF_MONTH);
 
-        if (checkIfAuthorizedUser())
+        if (!checkIfAuthorizedUser())
+        {
             disableWidgets();
+        }
 
 
         tvTemplateProductType.setText(modelTemplates.getProductType());
@@ -668,6 +671,7 @@ public class SelectedAuditReportFragment extends Fragment {
             }
         }
 
+        Log.e("CheckUser",""+ found);
 
         return found;
     }
