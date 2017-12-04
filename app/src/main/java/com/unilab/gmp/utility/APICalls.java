@@ -374,6 +374,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                         approversModel.setEmail(modelApproverInfo.getApproverModels().get(x).getEmail());
                         approversModel.setStatus(modelApproverInfo.getApproverModels().get(x).getStatus());
                         isAppoverExisting(approversModel);
+                        Log.e("APICalls ", "Approver " + modelApproverInfo.getApproverModels().get(x).toString());
                     }
             }
 
@@ -1186,6 +1187,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         approverModelUpdate.setCreate_date(approverModel.getCreate_date());
         approverModelUpdate.setUpdate_date(approverModel.getUpdate_date());
         approverModelUpdate.setEmail(approverModel.getEmail());
+        approverModelUpdate.setStatus(approverModel.getStatus());
         approverModelUpdate.save();
     }
 
@@ -1204,6 +1206,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         auditorsModelUpdate.setCreate_date(auditorsModel.getCreate_date());
         auditorsModelUpdate.setUpdate_date(auditorsModel.getUpdate_date());
         auditorsModelUpdate.setEmail(auditorsModel.getEmail());
+        auditorsModelUpdate.setStatus(auditorsModel.getStatus());
         auditorsModelUpdate.save();
     }
 
@@ -1255,6 +1258,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         reviewerModelUpdate.setCreate_date(reviewerModel.getCreate_date());
         reviewerModelUpdate.setUpdate_date(reviewerModel.getUpdate_date());
         reviewerModelUpdate.setEmail(reviewerModel.getEmail());
+        reviewerModelUpdate.setStatus(reviewerModel.getStatus());
         reviewerModelUpdate.save();
     }
 
@@ -1304,6 +1308,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         company.setBackground(modelCompany.getBackground());
         company.setCreate_date(modelCompany.getCreate_date());
         company.setUpdate_date(modelCompany.getUpdate_date());
+        company.setStatus(modelCompany.getStatus());
         company.save();
     }
 
@@ -1350,6 +1355,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         category.setCategory_name(modelCategory.getCategory_name());
         category.setCreate_date(modelCategory.getCreate_date());
         category.setUpdate_date(modelCategory.getUpdate_date());
+        category.setStatus(modelCategory.getStatus());
         category.save();
     }
 
@@ -1398,6 +1404,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         category.setType(modelProduct.getType());
         category.setCreate_date(modelProduct.getCreate_date());
         category.setUpdate_date(modelProduct.getUpdate_date());
+        category.setStatus(modelProduct.getStatus());
         category.save();
     }
 
@@ -1477,7 +1484,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         typeAudit.setScope_id(modelTypeAudit.getScope_id());
         typeAudit.setScope_name(modelTypeAudit.getScope_name());
         typeAudit.setCreate_date(modelTypeAudit.getCreate_date());
-        typeAudit.setUpdate_date(modelTypeAudit.getUpdate_date());
+        typeAudit.setStatus(modelTypeAudit.getStatus());
         typeAudit.save();
     }
 
@@ -1617,6 +1624,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         disposition.setDisposition_name(modelDisposition.getDisposition_name());
         disposition.setCreate_date(modelDisposition.getCreate_date());
         disposition.setUpdate_date(modelDisposition.getUpdate_date());
+        disposition.setStatus(modelDisposition.getStatus());
         disposition.save();
     }
 

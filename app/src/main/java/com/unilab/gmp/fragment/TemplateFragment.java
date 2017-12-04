@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,7 @@ public class TemplateFragment extends Fragment {
     Unbinder unbinder;
     Context context;
     ProgressDialog pDialog;
+    Handler handler;
 
     SelectedTemplateFragment selectedTemplateFragment;
     SharedPreferenceManager sharedPref;
@@ -74,6 +77,7 @@ public class TemplateFragment extends Fragment {
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading please wait...");
         pDialog.setCancelable(false);
+        handler = new Handler();
 
 //        templateList = ModelTemplates.listAll(ModelTemplates.class, "date_Created DESC");
         templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2' ",
@@ -82,7 +86,7 @@ public class TemplateFragment extends Fragment {
         lvTemplateList.setAdapter(templateAdapter);
         tvTemplateCount.setText(templateList.size() + " Total Record(s)");
         tvSyncDate.setText("Data as of: " + sharedPref.getStringData("DATE"));
-        for(ModelTemplates m : templateList) {
+        for (ModelTemplates m : templateList) {
             Log.e("status", m.getStatus());
         }
         return rootView;
@@ -98,8 +102,16 @@ public class TemplateFragment extends Fragment {
     @OnClick(R.id.iv_search)
     public void onViewClicked() {
         pDialog.show();
-        searchTemplate();
-        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                searchTemplate();
+            }
+        }, 700);
+
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(ivSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
@@ -121,13 +133,13 @@ public class TemplateFragment extends Fragment {
                 setTemplateList();
                 tvNoResult.setVisibility(View.VISIBLE);
             }
-            pDialog.dismiss();
+            //pDialog.dismiss();
         } else {
             templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2' ",
                     new String[]{}, null, "date_Created DESC", "50");
             setTemplateList();
             tvNoResult.setVisibility(View.GONE);
-            pDialog.dismiss();
+            //pDialog.dismiss();
         }
     }
 
@@ -135,6 +147,13 @@ public class TemplateFragment extends Fragment {
         templateAdapter = new TemplateAdapter(context, templateList);
         lvTemplateList.setAdapter(templateAdapter);
         tvTemplateCount.setText(templateList.size() + " Total Record(s)");
-    }
 
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                pDialog.dismiss();
+            }
+        }, 1000);
+    }
 }

@@ -1,8 +1,10 @@
 package com.unilab.gmp.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +39,8 @@ public class AuditReportFragment extends Fragment {
 
     Unbinder unbinder;
     Context context;
+    ProgressDialog pDialog;
+    Handler handler;
 
     List<ModelAuditReports> modelAuditReports;
 
@@ -68,8 +72,14 @@ public class AuditReportFragment extends Fragment {
         Variable.onTemplate = false;
         sharedPref = new SharedPreferenceManager(context);
 
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Loading please wait...");
+        pDialog.setCancelable(false);
+        handler = new Handler();
+
         //modelAuditReports = ModelAuditReports.listAll(ModelAuditReports.class, "modifieddate DESC");
-        modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0'", new String[]{}, null, "modifieddate DESC", "50");
+        modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0'",
+                new String[]{}, null, "modifieddate DESC", "50");
 
         auditReportAdapter = new AuditReportAdapter(context, modelAuditReports);
         lvAuditReportList.setAdapter(auditReportAdapter);
@@ -91,7 +101,16 @@ public class AuditReportFragment extends Fragment {
 
     @OnClick(R.id.iv_search)
     public void onViewClicked() {
-        searchTemplate();
+        pDialog.show();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                searchTemplate();
+            }
+        }, 700);
+
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(ivSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
@@ -106,13 +125,13 @@ public class AuditReportFragment extends Fragment {
         if (!audName.equals("")) {
             if (site.size() > 0)
                 modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "companyid LIKE ?",
-                        "%" + site.get(0).getCompany_id() + "" + "%");
+                        "%" + site.get(0).getCompany_id() + "" + "%", "modifieddate DESC", "50");
             else if (auditor.size() > 0)
                 modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "auditorid LIKE ?",
-                        "%" + auditor.get(0).getAuditor_id() + "" + "%");
+                        "%" + auditor.get(0).getAuditor_id() + "" + "%", "modifieddate DESC", "50");
             else
                 modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "reportno LIKE ?",
-                        "%" + audName + "%");
+                        "%" + audName + "%", "modifieddate DESC", "50");
             Log.e("AuditorsCount", modelAuditReports.size() + "");
             if (modelAuditReports.size() > 0) {
                 setTemplateList();
@@ -122,7 +141,9 @@ public class AuditReportFragment extends Fragment {
                 tvNoResult.setVisibility(View.VISIBLE);
             }
         } else {
-            modelAuditReports = ModelAuditReports.listAll(ModelAuditReports.class, "templateid DESC");
+//            modelAuditReports = ModelAuditReports.listAll(ModelAuditReports.class, "templateid DESC");
+            modelAuditReports =  ModelAuditReports.find(ModelAuditReports.class, "status >= '0'",
+                    new String[]{}, null, "modifieddate DESC", "50");
             setTemplateList();
             tvNoResult.setVisibility(View.GONE);
         }
@@ -132,5 +153,13 @@ public class AuditReportFragment extends Fragment {
         auditReportAdapter = new AuditReportAdapter(context, modelAuditReports);
         lvAuditReportList.setAdapter(auditReportAdapter);
         tvAuditReportCount.setText(modelAuditReports.size() + " Total Record(s)");
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                pDialog.dismiss();
+            }
+        }, 1000);
     }
 }
