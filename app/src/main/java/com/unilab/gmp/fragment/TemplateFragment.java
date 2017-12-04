@@ -1,5 +1,6 @@
 package com.unilab.gmp.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ public class TemplateFragment extends Fragment {
 
     Unbinder unbinder;
     Context context;
+    ProgressDialog pDialog;
 
     SelectedTemplateFragment selectedTemplateFragment;
     SharedPreferenceManager sharedPref;
@@ -69,6 +71,10 @@ public class TemplateFragment extends Fragment {
         Variable.onAudit = false;
         sharedPref = new SharedPreferenceManager(context);
 
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Loading please wait...");
+        pDialog.setCancelable(false);
+
 //        templateList = ModelTemplates.listAll(ModelTemplates.class, "date_Created DESC");
         templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2' ",
                 new String[]{}, null, "date_Created DESC", "50");
@@ -91,10 +97,10 @@ public class TemplateFragment extends Fragment {
 
     @OnClick(R.id.iv_search)
     public void onViewClicked() {
+        pDialog.show();
         searchTemplate();
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(ivSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
-
     }
 
     public void searchTemplate() {
@@ -115,11 +121,13 @@ public class TemplateFragment extends Fragment {
                 setTemplateList();
                 tvNoResult.setVisibility(View.VISIBLE);
             }
+            pDialog.dismiss();
         } else {
             templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2' ",
                     new String[]{}, null, "date_Created DESC", "50");
             setTemplateList();
             tvNoResult.setVisibility(View.GONE);
+            pDialog.dismiss();
         }
     }
 
