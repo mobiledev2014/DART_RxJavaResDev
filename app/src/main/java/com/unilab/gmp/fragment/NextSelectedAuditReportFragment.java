@@ -323,6 +323,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     List<AuditorsModel> auditorsModels;
     List<ReviewerModel> reviewerModels;
     List<ApproverModel> approverModels;
+    String message = "";
 
     int year, month, day;
     Calendar dateSelected = Calendar.getInstance();
@@ -385,13 +386,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
         month = currentTime.get(Calendar.MONTH);
         day = currentTime.get(Calendar.DAY_OF_MONTH);
 
-
-
-        if (!checkIfAuthorizedUser())
-        {
-            disableWidgets();
-        }
-
         activityAdapter = new ActivityAdapter(context, find(ModelTemplateActivities.class, "templateid = ?", report.getTemplate_id()), report.getReport_id());
 
         lvTemplateNextActivitiesCarried.setLayoutManager(new LinearLayoutManager(context));
@@ -441,7 +435,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 etTemplateNextAuditorLeadPosition.setText(auditorsModels.get(i).getDesignation());
-                etTemplateNextAuditorLeadDepartment.setText(auditorsModels.get(i).getDepartment()+", "+auditorsModels.get(i).getCompany());
+                etTemplateNextAuditorLeadDepartment.setText(auditorsModels.get(i).getDepartment());
             }
 
             @Override
@@ -468,13 +462,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
         sTemplateNextReviewerName.setAdapter(reviewerAdapter);
         sTemplateNextReviewerName.setSelection(rev);
 
-        sTemplateNextReviewerName.setEnabled(Variable.isAuthorized);
-
         sTemplateNextReviewerName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 etTemplateNextReviewerPosition.setText(reviewerModels.get(i).getDesignation() + "a");
-                etTemplateNextReviewerDepartment.setText(reviewerModels.get(i).getDepartment()+", "+reviewerModels.get(i).getCompany());
+                etTemplateNextReviewerDepartment.setText(reviewerModels.get(i).getDepartment());
                 reviewer_id = reviewerModels.get(i).getReviewer_id();
             }
 
@@ -484,11 +476,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
         });
 
-        cbTemplateNextReviewer.setEnabled(Variable.isAuthorized);
         cbTemplateNextReviewer.setChecked(report.isReviewerChecked());
         sTemplateNextReviewerName.setEnabled(!report.isReviewerChecked());
-        sTemplateNextReviewerName.setEnabled(Variable.isAuthorized);
-
         cbTemplateNextReviewer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -514,13 +503,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
         ArrayAdapter<String> approverAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, approverList);
         sTemplateNextApproverName.setAdapter(approverAdapter);
         sTemplateNextApproverName.setSelection(app);
-        sTemplateNextApproverName.setEnabled(Variable.isAuthorized);
 
         sTemplateNextApproverName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 etTemplateNextApproverPosition.setText(approverModels.get(i).getDesignation());
-                etTemplateNextApproverDepartment.setText(approverModels.get(i).getDepartment()+", "+approverModels.get(i).getCompany());
+                etTemplateNextApproverDepartment.setText(approverModels.get(i).getDepartment());
                 approver_id = approverModels.get(i).getApprover_id();
             }
 
@@ -729,6 +717,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextCompanyBackgroundInspectionDate.setAdapter(adapterInspectionDate);
 //        lvTemplateNextCompanyBackgroundInspectionDate.setExpanded(true);
 
+        if (!checkIfAuthorizedUser())
+            disableWidgets();
 
         /*progress dialog dismiss*/
         final Handler handler = new Handler();
@@ -746,7 +736,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     private void disableWidgets() {
-        Variable.isAuthorized = false;
         etTemplateNextDateOfWrapUp.setEnabled(false);
         etTemplateNextSummaryRecommendationAuditCloseDate.setEnabled(false);
         etTemplateNextAuditedArea.setEnabled(false);
@@ -771,8 +760,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextTranslator.setEnabled(false);
         lvTemplateNextCompanyBackgroundInspectionDate.setEnabled(false);
 
-        btnTemplateNextPreAuditDocAdd.setEnabled(false);
-        btnTemplateNextPreAuditDocDelete.setEnabled(false);
         btnTemplateNextAuditorAdd.setEnabled(false);
         btnTemplateNextAuditorDelete.setEnabled(false);
         btnTemplateNextDistributionAdd.setEnabled(false);
@@ -801,11 +788,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
         btnTemplateNextDistributionOthersAdd.setEnabled(false);
         btnTemplateNextDistributionOthersDelete.setEnabled(false);
 
-
-        etTemplateNextActivityCarried.setEnabled(false);
-        etTemplateNextDateOfWrapUp.setEnabled(false);
-        etTemplateNextAuditedArea.setEnabled(false);
-        etTemplateNextNotAuditedArea.setEnabled(false);
 
     }
 
@@ -864,7 +846,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
         }
 
-        Log.e("CheckUser",""+ found);
 
         return found;
 
@@ -1035,17 +1016,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 addMajorChanges();
                 break;
             case R.id.btn_template_next_company_background_major_changes_delete:
-                List<TemplateModelCompanyBackgroundMajorChanges> majorChanges =
-                        TemplateModelCompanyBackgroundMajorChanges.find(
-                                TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ?", report.getCompany_id());
-                if (templateModelCompanyBackgroundMajorChanges.size() > majorChanges.size()) {
-
-                    if (templateModelCompanyBackgroundMajorChanges.size() > 1)
+                if (templateModelCompanyBackgroundMajorChanges.size() > 1)
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", majorChangesDelete);
+                else {
+                    if (!templateModelCompanyBackgroundMajorChanges.get(0).getMajorchanges().equals(""))
                         dialogDeleteFromListConfirmation("Are you sure you want to delete?", majorChangesDelete);
-                    else {
-                        if (!templateModelCompanyBackgroundMajorChanges.get(0).getMajorchanges().equals(""))
-                            dialogDeleteFromListConfirmation("Are you sure you want to delete?", majorChangesDelete);
-                    }
                 }
                 break;
             case R.id.btn_template_next_auditor_add:
@@ -1106,7 +1081,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 dialogSaveDraft("No internet connection. Would you like to save as draft?");
             }
         } else {
-            dialogSubmitFailed("Please fill up all the required fields.");
+            dialogSubmitFailed(message);
         }
     }
 
@@ -1468,6 +1443,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     public boolean validate() {
+        message = "Please fill up all the required fields.";
         boolean passed = true;
         if (etTemplateNextAuditedArea.getText().toString().equals("")) {
             passed = false;
@@ -1488,6 +1464,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         if (!adapterScopeAudit.check()) {
             passed = false;
             Log.e("validate", "3");
+            message += "\nYou have entered duplicate scope.";
         }
         if (!adapterReference.check()) {
             passed = false;
@@ -1520,6 +1497,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
         if (!adapterOthersIssueExecutive.check()) {
             passed = false;
             Log.e("validate", "11");
+        }
+
+        if (!adapterAuditors.check()) {
+            passed = false;
+            Log.e("validate", "12");
+            message += "\nYou have entered duplicate co-auditor.";
         }
 
         return passed;

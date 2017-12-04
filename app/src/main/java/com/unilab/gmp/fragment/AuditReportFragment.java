@@ -76,6 +76,10 @@ public class AuditReportFragment extends Fragment {
         tvAuditReportCount.setText(modelAuditReports.size() + " Total Record(s)");
         tvSyncDate.setText("Data as of: " + sharedPref.getStringData("DATE"));
 
+        for(ModelAuditReports mar : modelAuditReports){
+            Log.e("Tset", mar.getReport_id() + " --- " + mar.getCompany_id());
+        }
+
         return rootView;
     }
 

@@ -320,6 +320,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     SelectedTemplateFragment selectedTemplateFragment;
     View rootView;
     int sitemajorchangescount = 0;
+    String message = "";
 
     Dialog dialogDeleteDateOfAudit;
     boolean dialogDeleteIsShowing = false;
@@ -938,7 +939,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             }
         } else {
             //Toast.makeText(context, "False", Toast.LENGTH_SHORT).show();
-            dialogSubmitFailed("Please fill up all the required fields.");
+            dialogSubmitFailed(message);
         }
     }
 
@@ -956,6 +957,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         String report_id = zero + size;
         mar.setReport_id(report_id);
         mar.setReport_no("GMP-00-" + zero + size);
+        mar.setStatus("1");
         mar.setTemplate_id(modelTemplates.getTemplateID());
         mar.setCompany_id(modelTemplates.getCompany_id());
         mar.setAudit_date_1(modelTemplates.getAudit_date_1());
@@ -1002,6 +1004,8 @@ public class NextSelectedTemplateFragment extends Fragment {
         adapterPersonelMetDuring.save(report_id);
         activityAdapter.save(report_id);
         templateElementAdapter.save(report_id);
+        adapterOthersIssueAudit.save(mar.getReport_id());
+        adapterOthersIssueExecutive.save(mar.getReport_id());
 
         mar.setOther_activities(etTemplateNextActivityCarried.getText().toString());
         adapterPresentDuringMeeting.save(report_id);//w
@@ -1212,7 +1216,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     public boolean validate() {
-
+        message = "Please fill up all the required fields.";
         boolean passed = true;
         if (etTemplateNextAuditedArea.getText().toString().equals("")) {
             passed = false;
@@ -1238,6 +1242,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         if (!adapterScopeAudit.check()) {
             passed = false;
+            message += "\nYou have entered duplicate scope.";
         }
         if (!adapterReference.check()) {
             passed = false;
@@ -1264,66 +1269,69 @@ public class NextSelectedTemplateFragment extends Fragment {
             passed = false;
         }
 
-        if (!passed)
-            return passed;
-        if (passed)
-            return passed;
-
-        if (templateModelScopeAudits.get(0).getScope_name().isEmpty() || templateModelScopeAudits.get(0).getScope_detail().isEmpty()) {
-//            templateModelScopeAudits.get(0).getEtremarks().setError("Field Required!");
-            Log.e("validate", "templateModelScopeAudits");
-            return false;
+        if (!adapterAuditors.check()) {
+            passed = false;
+            Log.e("validate", "12");
+            message += "\nYou have entered duplicate co-auditor.";
         }
-//        if (templateModelScopeAuditInterests.size() > 0) {
-//            if (templateModelScopeAuditInterests.get(0).getProduct_name().isEmpty()) {
-//                Log.e("validate", "templateModelScopeAuditInterests");
-//                return false;
-//            }
+
+        return passed;
+
+//        if (templateModelScopeAudits.get(0).getScope_name().isEmpty() || templateModelScopeAudits.get(0).getScope_detail().isEmpty()) {
+////            templateModelScopeAudits.get(0).getEtremarks().setError("Field Required!");
+//            Log.e("validate", "templateModelScopeAudits");
+//            return false;
 //        }
-        if (templateModelReferences.get(0).getCertification().isEmpty() || templateModelReferences.get(0).getBody().isEmpty() ||
-                templateModelReferences.get(0).getNumber().isEmpty() || templateModelReferences.get(0).getValidity().isEmpty()) {
-            Log.e("validate", "templateModelReferences");
-            return false;
-        }
-        if (templateModelPreAuditDocs.get(0).getPreaudit().isEmpty()) {
-            Log.e("validate", "templateModelPreAuditDocs");
-            return false;
-        }
-        if (templateModelPresentDuringMeetings.get(0).getName().isEmpty() || templateModelPresentDuringMeetings.get(0).getPosition().isEmpty()) {
-            Log.e("validate", "templateModelPresentDuringMeetings");
-            return false;
-        }
-        if (templateModelPersonelMetDurings.get(0).getName().isEmpty() || templateModelPersonelMetDurings.get(0).getPosition().isEmpty()) {
-            Log.e("validate", "templateModelPersonelMetDurings");
-            return false;
-        }
-        if (templateModelDistributionLists.get(0).getDistribution().isEmpty()) {
-            Log.e("validate", "templateModelDistributionLists");
-            return false;
-        }
-        if (templateModelSummaryRecommendations.get(0).getElement().isEmpty()) {
-            Log.e("validate", "templateModelSummaryRecommendations");
-            return false;
-        }
-        if (templateModelCompanyBackgroundNames.get(0).getBgname().isEmpty()) {
-            Log.e("validate", "templateModelCompanyBackgroundNames");
-            return false;
-        }
-        if (templateModelCompanyBackgroundMajorChanges.get(0).getMajorchanges().isEmpty()) {
-            Log.e("validate", "templateModelCompanyBackgroundMajorChanges");
-            return false;
-        }
-        if (templateModelAuditorses.get(0).getName().isEmpty() || templateModelAuditorses.get(0).getPosition().isEmpty() ||
-                templateModelAuditorses.get(0).getDepartment().isEmpty()) {
-            Log.e("validate", "templateModelAuditorses");
-            return false;
-        }
-        if (templateModelTranslators.get(0).getTranslator().isEmpty()) {
-            Log.e("validate", "templateModelTranslators");
-            return false;
-        }
-
-        return true;
+////        if (templateModelScopeAuditInterests.size() > 0) {
+////            if (templateModelScopeAuditInterests.get(0).getProduct_name().isEmpty()) {
+////                Log.e("validate", "templateModelScopeAuditInterests");
+////                return false;
+////            }
+////        }
+//        if (templateModelReferences.get(0).getCertification().isEmpty() || templateModelReferences.get(0).getBody().isEmpty() ||
+//                templateModelReferences.get(0).getNumber().isEmpty() || templateModelReferences.get(0).getValidity().isEmpty()) {
+//            Log.e("validate", "templateModelReferences");
+//            return false;
+//        }
+//        if (templateModelPreAuditDocs.get(0).getPreaudit().isEmpty()) {
+//            Log.e("validate", "templateModelPreAuditDocs");
+//            return false;
+//        }
+//        if (templateModelPresentDuringMeetings.get(0).getName().isEmpty() || templateModelPresentDuringMeetings.get(0).getPosition().isEmpty()) {
+//            Log.e("validate", "templateModelPresentDuringMeetings");
+//            return false;
+//        }
+//        if (templateModelPersonelMetDurings.get(0).getName().isEmpty() || templateModelPersonelMetDurings.get(0).getPosition().isEmpty()) {
+//            Log.e("validate", "templateModelPersonelMetDurings");
+//            return false;
+//        }
+//        if (templateModelDistributionLists.get(0).getDistribution().isEmpty()) {
+//            Log.e("validate", "templateModelDistributionLists");
+//            return false;
+//        }
+//        if (templateModelSummaryRecommendations.get(0).getElement().isEmpty()) {
+//            Log.e("validate", "templateModelSummaryRecommendations");
+//            return false;
+//        }
+//        if (templateModelCompanyBackgroundNames.get(0).getBgname().isEmpty()) {
+//            Log.e("validate", "templateModelCompanyBackgroundNames");
+//            return false;
+//        }
+//        if (templateModelCompanyBackgroundMajorChanges.get(0).getMajorchanges().isEmpty()) {
+//            Log.e("validate", "templateModelCompanyBackgroundMajorChanges");
+//            return false;
+//        }
+//        if (templateModelAuditorses.get(0).getName().isEmpty() || templateModelAuditorses.get(0).getPosition().isEmpty() ||
+//                templateModelAuditorses.get(0).getDepartment().isEmpty()) {
+//            Log.e("validate", "templateModelAuditorses");
+//            return false;
+//        }
+//        if (templateModelTranslators.get(0).getTranslator().isEmpty()) {
+//            Log.e("validate", "templateModelTranslators");
+//            return false;
+//        }
+//
+//        return true;
     }
 
     public boolean postData() {

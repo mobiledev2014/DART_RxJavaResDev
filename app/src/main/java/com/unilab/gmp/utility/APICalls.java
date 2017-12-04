@@ -482,7 +482,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                             ModelSiteAuditHistory modelSiteAuditHistory = new ModelSiteAuditHistory();
                             modelSiteAuditHistory.setCompany_id(company_id);
                             modelSiteAuditHistory.save();
-                            Log.e("APICalls", "CompanySite: " + modelCompany.toString());
+                            Log.e("APICalls", "CompanySite:company name : " + modelCompany.getCompany_name());
                             //+ modelSiteAuditHistory.getModelSiteDates().size());
                             if (mc.getMajor_changes() != null) {
                                 for (TemplateModelCompanyBackgroundMajorChanges mmc : mc.getMajor_changes()) {
@@ -1080,7 +1080,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                         mra.setReport_id(report_id);
                         mra.setActivity_id(mra.getActivity_id());
 //                        if (mra.getSub_activities().size() < 1)
-                        mra.setCheck(true);
+                            mra.setCheck(true);
                         mra.save();
                         for (ModelReportSubActivities mrsa : mra.getSub_activities()) {
                             mrsa.setReport_id(report_id);
@@ -1876,9 +1876,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             @Override
             public void onClick(View view) {
                 setFragment();
-                if (changes > 0) {
-                    HomeActivity.tvSyncNotifCount.setText(String.valueOf(changes));
-                }
                 dialogSyncSuccess.dismiss();
             }
         });

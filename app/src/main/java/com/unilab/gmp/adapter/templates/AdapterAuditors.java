@@ -14,11 +14,13 @@ import android.widget.Spinner;
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.TemplateModelAuditors;
+import com.unilab.gmp.model.TemplateModelScopeAudit;
 import com.unilab.gmp.utility.SharedPreferenceManager;
-import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by c_jhcanuto on 8/24/2017.
@@ -82,7 +84,6 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
         widgets.name.setAdapter(adapter);
         widgets.name.setSelection(templateModelAuditors.get(i).getSelected());
-        widgets.name.setEnabled(Variable.isAuthorized);
         widgets.name.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -103,9 +104,7 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         });
 
         widgets.position.setText(templateModelAuditors.get(i).getPosition());
-        widgets.position.setEnabled(Variable.isAuthorized);
-        widgets.department.setText(templateModelAuditors.get(i).getDepartment()+", "+templateModelAuditors.get(i).getCompany());
-        widgets.department.setEnabled(Variable.isAuthorized);
+        widgets.department.setText(templateModelAuditors.get(i).getDepartment());
     }
 
     public int getAuditorSize() {
@@ -118,6 +117,25 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
             t.save();
             Log.e("auditor ID", t.getAuditor_id());
         }
+    }
+
+    public boolean check() {
+        boolean isCheck = true;
+        Set<String> lump = new HashSet<>();
+        for (TemplateModelAuditors tmsa : templateModelAuditors) {
+
+            if (lump.contains(tmsa.getAuditor_id())) {
+                isCheck = false;
+                break;
+            }
+            lump.add(tmsa.getAuditor_id());
+        }
+
+
+        if (!isCheck) {
+            notifyDataSetChanged();
+        }
+        return isCheck;
     }
 
     public class Widgets extends RecyclerView.ViewHolder {

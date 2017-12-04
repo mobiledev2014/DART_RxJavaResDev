@@ -133,8 +133,10 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
         widgets.lvQuestionList.setAdapter(templateElementQuestionAdapters.get(position));
         //widgets.lvQuestionList.setExpanded(true);
 
-        if (!templateElementQuestionAdapters.get(position).isChecked().isEmpty()) {
-            widgets.cbElementNa.setText(templateElementQuestionAdapters.get(position).isChecked());
+        String check = templateElementQuestionAdapters.get(position).isChecked();
+
+        if (check.length() > 0) {
+            widgets.cbElementNa.setText(check);
             widgets.cbElementNa.setChecked(true);
         }
 

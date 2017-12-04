@@ -46,6 +46,8 @@ import com.unilab.gmp.utility.DateTimeUtils;
 import com.unilab.gmp.utility.SharedPreferenceManager;
 import com.unilab.gmp.utility.Variable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -204,8 +206,7 @@ public class SelectedAuditReportFragment extends Fragment {
         month = currentTime.get(Calendar.MONTH);
         day = currentTime.get(Calendar.DAY_OF_MONTH);
 
-        if (!checkIfAuthorizedUser())
-        {
+        if (!checkIfAuthorizedUser()) {
             disableWidgets();
         }
 
@@ -358,7 +359,7 @@ public class SelectedAuditReportFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_template_audit_date_delete:
-               deleteDateOfAudit();
+                deleteDateOfAudit();
                 break;
             case R.id.btn_template_audit_date_add:
                 addDateOfAudit();
@@ -378,7 +379,9 @@ public class SelectedAuditReportFragment extends Fragment {
                 dialogSaveDraft();
                 break;
             case R.id.btn_submit:
-                dialogSubmit("Would you like to proceed?");
+                if (validate()) {
+                    dialogSubmit("Would you like to proceed?");
+                }
                 break;
         }
     }
@@ -389,6 +392,7 @@ public class SelectedAuditReportFragment extends Fragment {
 
         }
     }
+
     public void dialogDeleteDateConfirmation(String mess) {
         dialogDeleteDateOfAudit = new Dialog(context);
         dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -422,6 +426,7 @@ public class SelectedAuditReportFragment extends Fragment {
 
         dialogDeleteDateOfAudit.show();
     }
+
     private void analyzeInputs(ArrayList<ModelTemplateElements> modelTemplateElements) {
 //        List<ModelTemplateElements> modelTemplateElements = ModelTemplateElements.listAll(ModelTemplateElements.class);
 //        boolean allIsAnswered = true;
@@ -508,6 +513,7 @@ public class SelectedAuditReportFragment extends Fragment {
                 mar.setAudit_date_1(modelTemplates.getAudit_date_1());
                 mar.setAudit_date_2(modelTemplates.getAudit_date_2());
                 templateElementAdapter.save(mar.getReport_id());
+                mar.setModified_date(getDate());
                 mar.save();
                 dialogSucSaveDraft("Successfully saved as draft.");
                 dialogSaveDraft.dismiss();
@@ -522,6 +528,14 @@ public class SelectedAuditReportFragment extends Fragment {
         });
 
         dialogSaveDraft.show();
+    }
+
+    public String getDate() {
+        String dateStr = "";
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        dateStr = dateFormat.format(date);
+        return dateStr;
     }
 
     public void dialogSubmit(String mess) {
@@ -622,8 +636,7 @@ public class SelectedAuditReportFragment extends Fragment {
 
     private void addDateOfAudit() {
         if (dateOfAuditAdapter.getCount() < 3) {
-            if (dateOfAuditAdapter.getCount()>0)
-            {
+            if (dateOfAuditAdapter.getCount() > 0) {
                 if (dateOfAuditAdapter.getItem(0).equals(""))
                     Toast.makeText(context, "Please select date.", Toast.LENGTH_SHORT).show();
                 else {
@@ -633,8 +646,7 @@ public class SelectedAuditReportFragment extends Fragment {
                     modelDateOfAudits.add(doa);
                     dateOfAuditAdapter.notifyDataSetChanged();
                 }
-            }
-            else {
+            } else {
                 ModelDateOfAudit doa = new ModelDateOfAudit();
                 doa.setDateOfAudit("");
 //            doa.setTemplate_id(modelTemplates.getTemplateID());
@@ -672,7 +684,7 @@ public class SelectedAuditReportFragment extends Fragment {
             }
         }
 
-        Log.e("CheckUser",""+ found);
+        Log.e("CheckUser", "" + found);
 
         return found;
     }

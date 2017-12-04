@@ -401,12 +401,12 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
             if (categoryId.indexOf(categoryList.get(count).getCategory_id()) != -1) {
                 list.add(categoryList.get(count).getCategory_name());
                 listid.add(categoryList.get(count).getCategory_id());
-                //if (mrq.size() > 0) {
-                if (questionList.get(z).getCategory_id().equals(listid.get(count))) {
-                    selected = count;
+                if (mrq.size() > 0) {
+                    if (questionList.get(z).getCategory_id().equals(listid.get(count))) {
+                        selected = count;
+                    }
                 }
             }
-            //}
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
@@ -489,11 +489,11 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.custom_listview_question,parent, false);
+                .inflate(R.layout.custom_listview_question, parent, false);
         return new Widgets(v);
     }
 
-    public class Widgets extends RecyclerView.ViewHolder{
+    public class Widgets extends RecyclerView.ViewHolder {
         TextView tvQuestion, tvQuestionNumber;
         Button btnYes, btnNo, btnNa, btnNc;
 

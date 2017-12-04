@@ -33,13 +33,16 @@ import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
 import com.unilab.gmp.adapter.TemplateElementAdapter;
 import com.unilab.gmp.adapter.templates.DateOfAuditAdapter;
+import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.ModelAuditReports;
 import com.unilab.gmp.model.ModelCompany;
 import com.unilab.gmp.model.ModelDateOfAudit;
 import com.unilab.gmp.model.ModelTemplateElements;
 import com.unilab.gmp.model.ModelTemplates;
+import com.unilab.gmp.utility.SharedPreferenceManager;
 import com.unilab.gmp.utility.Variable;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -356,13 +359,15 @@ public class SelectedTemplateFragment extends Fragment {
                 dialogCancelTemplate();
                 break;
             case R.id.btn_save_draft:
-                if (validateDraft())
+                if (!modelTemplates.getCompany_id().isEmpty())
                     dialogSaveDraft();
                 else
-                    dialogAnswerAll("Please fill out all the required field(s).");
+                    dialogAnswerAll("Please fill up Name of Site.");
                 break;
             case R.id.btn_submit:
-                dialogSubmit("Would you like to proceed?");
+                if (validate()) {
+                    dialogSubmit("Would you like to proceed?");
+                }
                 break;
         }
     }
@@ -373,6 +378,7 @@ public class SelectedTemplateFragment extends Fragment {
 
         }
     }
+
     public void dialogDeleteDateConfirmation(String mess) {
         dialogDeleteDateOfAudit = new Dialog(context);
         dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -406,6 +412,7 @@ public class SelectedTemplateFragment extends Fragment {
 
         dialogDeleteDateOfAudit.show();
     }
+
     private void analyzeInputs(ArrayList<ModelTemplateElements> modelTemplateElements) {
 //        List<ModelTemplateElements> modelTemplateElements = ModelTemplateElements.listAll(ModelTemplateElements.class);
 
@@ -522,6 +529,12 @@ public class SelectedTemplateFragment extends Fragment {
                 mar.setAudit_date_2(modelTemplates.getAudit_date_2());
                 templateElementAdapter.save(report_id);
                 dateOfAuditAdapter.save(report_id);
+                mar.setModified_date(getDate());
+                mar.setStatus("1");
+
+                SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context);
+                mar.setAuditor_id(AuditorsModel.find(AuditorsModel.class, "email=?", new String[]{sharedPreferenceManager.getStringData("EMAIL")}).get(0).getAuditor_id());
+
                 mar.save();
 
                 dialogSaveDraft.dismiss();
@@ -537,6 +550,14 @@ public class SelectedTemplateFragment extends Fragment {
         });
 
         dialogSaveDraft.show();
+    }
+
+    public String getDate() {
+        String dateStr = "";
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        dateStr = dateFormat.format(date);
+        return dateStr;
     }
 
     public void setWatcher() {
@@ -576,13 +597,13 @@ public class SelectedTemplateFragment extends Fragment {
         }
         return true;
     }
+
     public boolean validateDraft() {
         boolean noAnswer = false;
         Log.e("validate", "date of audit : " + dateOfAuditAdapter.getItem(0));
         if (modelTemplates.getCompany_id().isEmpty()) {
             pDialog.dismiss();
             noAnswer = true;
-
         }
         if (dateOfAuditAdapter.getItem(0).equals("")) {
             pDialog.dismiss();
@@ -674,8 +695,7 @@ public class SelectedTemplateFragment extends Fragment {
 
     private void addDateOfAudit() {
         if (dateOfAuditAdapter.getCount() < 3) {
-            if (dateOfAuditAdapter.getCount()>0)
-            {
+            if (dateOfAuditAdapter.getCount() > 0) {
                 if (dateOfAuditAdapter.getItem(0).equals(""))
                     Toast.makeText(context, "Please select date.", Toast.LENGTH_SHORT).show();
                 else {
@@ -685,8 +705,7 @@ public class SelectedTemplateFragment extends Fragment {
                     modelDateOfAudits.add(doa);
                     dateOfAuditAdapter.notifyDataSetChanged();
                 }
-            }
-            else {
+            } else {
                 ModelDateOfAudit doa = new ModelDateOfAudit();
                 doa.setDateOfAudit("");
 //            doa.setTemplate_id(modelTemplates.getTemplateID());

@@ -73,7 +73,7 @@ public class ReviewerFragment extends Fragment {
 
         reviewerModel = new ReviewerModel();
         //reviewerListall = ReviewerModel.listAll(ReviewerModel.class, "createdate DESC");
-        reviewerList = ReviewerModel.find(ReviewerModel.class, "status = '1'");
+        reviewerList = ReviewerModel.find(ReviewerModel.class, "status = '1'", new String[]{}, null, "updatedate DESC", "100");
         Log.d("SIZE", reviewerList.size() + "");
         reviewerAdapter = new ReviewerAdapter(context, reviewerList);
         lvReviewerList.setAdapter(reviewerAdapter);

@@ -72,7 +72,7 @@ public class AuditorsFragment extends Fragment {
 
         //auditorsList = AuditorsModel.listAll(AuditorsModel.class);
         //auditorsList = AuditorsModel.listAll(AuditorsModel.class, "createdate DESC");
-        auditorsList = AuditorsModel.find(AuditorsModel.class, "status = '1'");
+        auditorsList = AuditorsModel.find(AuditorsModel.class, "status = '1'", new String[]{}, null, "updatedate DESC", "100");
         Log.d("SIZE", auditorsList.size() + "");
         auditorsAdapter = new AuditorsAdapter(context, auditorsList);
         lvAuditList.setAdapter(auditorsAdapter);
