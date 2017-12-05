@@ -216,10 +216,11 @@ public class SelectedTemplateFragment extends Fragment {
     }
 
     private void getYearGmp() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-        yearGmp = sdf.format(new Date());
-        substr = yearGmp.substring(2);
-        Log.i("Year GMP", substr);
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+//        yearGmp = sdf.format(new Date());
+//        substr = yearGmp.substring(2);
+//        Log.i("Year GMP", substr);
+        substr = "00";
     }
 
     /*@Override

@@ -69,6 +69,10 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         checked = answer.length() > 0;
         edited = true;
 
+        for(int i = 0; i < questionList.size();i++){
+            notifyItemChanged(i);
+        }
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -81,7 +85,8 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
 
         boolean notcovered = true;
         for (ModelTemplateQuestionDetails mtqd : questionList) {
-            if (!mtqd.getAnswer_id().equals("4") || !mtqd.getNaoption_id().contains("Not covered")) {
+            List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
+            if (!mrq.get(0).getAnswer_id().equals("4") || !mrq.get(0).getNaoption_id().contains("Not covered")) {
                 notcovered = false;
                 break;
             }
@@ -91,7 +96,8 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
 
         boolean notapplicable = true;
         for (ModelTemplateQuestionDetails mtqd : questionList) {
-            if (!mtqd.getAnswer_id().equals("3") || !mtqd.getNaoption_id().equals("Not applicable")) {
+            List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
+            if (!mrq.get(0).getAnswer_id().equals("3") || !mrq.get(0).getNaoption_id().equals("Not applicable")) {
                 notapplicable = false;
                 break;
             }
@@ -122,10 +128,6 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
 
         final String question, questionNumber;
         final int z = position;
-
-
-//        widgets.tvQuestionNumber = (TextView) rowView.findViewById(R.id.tv_question_number);
-
 
         questionNumber = position + 1 + ""; //get question number
         question = questionList.get(position).getQuestion(); //get question
@@ -401,7 +403,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
             if (categoryId.indexOf(categoryList.get(count).getCategory_id()) != -1) {
                 list.add(categoryList.get(count).getCategory_name());
                 listid.add(categoryList.get(count).getCategory_id());
-                if (mrq.size() > 0) {
+                if (mrq.size() > 0 && questionList.size() < z) {
                     if (questionList.get(z).getCategory_id().equals(listid.get(count))) {
                         selected = count;
                     }

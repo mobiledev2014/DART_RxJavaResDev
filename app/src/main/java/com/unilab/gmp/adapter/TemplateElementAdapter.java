@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
+import com.unilab.gmp.model.ModelReportQuestion;
 import com.unilab.gmp.model.ModelTemplateElements;
 import com.unilab.gmp.model.ModelTemplateQuestionDetails;
 import com.unilab.gmp.utility.Variable;
@@ -44,12 +45,14 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
     boolean pick;
     int size = 0;
     private List<ModelTemplateElements> questionModel;
+    String report_id ="";
 
     public TemplateElementAdapter(Context context, List<ModelTemplateElements> questionModel, String report_id, String product_type) {
         this.questionModel = questionModel;
         this.context = context;
         this.productType = product_type;
         this.notifyDataSetChanged();
+        this.report_id = report_id;
         templateElementQuestionAdapters = new ArrayList<>();
         for (ModelTemplateElements mte : questionModel) {
             mte.setModelTemplateQuestionDetails(ModelTemplateQuestionDetails.find(ModelTemplateQuestionDetails.class,
@@ -164,7 +167,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                         public void run() {
                             //dialog.dismiss();
                             templateElementQuestionAdapters.get(z).setAnswer("", "", dialog);
-                            templateElementQuestionAdapters.get(z).notifyDataSetChanged();
+//                            templateElementQuestionAdapters.get(z).notifyItemChanged(0);
                             widgets.cbElementNa.setText("N/A");
                         }
                     }, 700);

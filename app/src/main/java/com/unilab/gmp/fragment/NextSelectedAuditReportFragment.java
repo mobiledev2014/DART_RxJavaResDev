@@ -138,12 +138,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
     Button btnTemplateNextScopeAuditDelete;
     @BindView(R.id.lv_template_next_scope_audit)
     RecyclerView lvTemplateNextScopeAudit;
-    /*@BindView(R.id.btn_template_next_scope_audit_interest_add)
-    Button btnTemplateNextScopeAuditInterestAdd;
-    @BindView(R.id.btn_template_next_scope_audit_interest_delete)
-    Button btnTemplateNextScopeAuditInterestDelete;
-    @BindView(R.id.lv_template_next_scope_audit_interest)
-    RecyclerView lvTemplateNextScopeAuditInterest;*/
     @BindView(R.id.btn_template_next_reference_add)
     Button btnTemplateNextReferenceAdd;
     @BindView(R.id.btn_template_next_reference_delete)
@@ -190,10 +184,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
     RecyclerView lvTemplateNextSummaryRecommendation;
     @BindView(R.id.et_template_next_summary_recommendation_audit_close_date)
     EditText etTemplateNextSummaryRecommendationAuditCloseDate;
-    /*@BindView(R.id.et_template_next_summary_recommendation_other_issues_audit)
-    EditText etTemplateNextSummaryRecommendationOtherIssuesAudit;
-    @BindView(R.id.et_template_next_summary_recommendation_other_issues_executive)
-    EditText etTemplateNextSummaryRecommendationOtherIssuesExecutive;*/
     @BindView(R.id.et_template_next_company_background_history)
     EditText etTemplateNextCompanyBackgroundHistory;
     @BindView(R.id.lv_template_next_company_background_name)
@@ -289,7 +279,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
     TemplateElementAdapter templateElementAdapter;
 
     List<TemplateModelScopeAudit> templateModelScopeAudits;
-    //    List<TemplateModelScopeAuditInterest> templateModelScopeAuditInterests;
     List<TemplateModelReference> templateModelReferences;
     List<TemplateModelPreAuditDoc> templateModelPreAuditDocs;
     List<TemplateModelPresentDuringMeeting> templateModelPresentDuringMeetings;
@@ -305,7 +294,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
     List<TemplateModelOtherIssuesExecutive> templateModelOtherIssuesExecutives;
 
     AdapterScopeAudit adapterScopeAudit;
-    //    AdapterScopeAuditInterest adapterScope;
     AdapterReference adapterReference;
     AdapterPreAuditDoc adapterPreAuditDoc;
     AdapterPresentDuringMeeting adapterPresentDuringMeeting;
@@ -326,9 +314,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     String message = "";
 
     int year, month, day;
-    Calendar dateSelected = Calendar.getInstance();
     Calendar currentTime = Calendar.getInstance();
-    int useDate;
     ModelAuditReports report;
 
     ApiInterface apiInterface;
@@ -363,7 +349,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    // Do something after 5s = 5000ms
                     pDialog.dismiss();
                 }
             }, 500);
@@ -392,13 +377,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextActivitiesCarried.setItemAnimator(new DefaultItemAnimator());
 
         lvTemplateNextActivitiesCarried.setAdapter(activityAdapter);
-//        lvTemplateNextActivitiesCarried.setExpanded(true);
 
 
         etTemplateNextAuditedArea.setText(report.getAudited_areas());
         etTemplateNextNotAuditedArea.setText(report.getAreas_to_consider());
-//        etTemplateNextDateOfWrapUp.setText(DateTimeUtils.parseDateMonthToWord(report.getWrap_date()));
-//        Log.i("DATE FORMAT", report.getDate_of_wrap() + " ");
         if (report.getWrap_date() != null) {
             etTemplateNextDateOfWrapUp.setText(DateTimeUtils.parseDateMonthToWord(report.getWrap_date()));
         }
@@ -406,8 +388,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
             etTemplateNextSummaryRecommendationAuditCloseDate.setText
                     (DateTimeUtils.parseDateMonthToWord(report.getAudit_close_date()));
         }
-//        etTemplateNextSummaryRecommendationOtherIssuesAudit.setText(report.getOther_issues());
-//        etTemplateNextSummaryRecommendationOtherIssuesExecutive.setText(report.getOther_issues_executive());
 
         etTemplateNextActivityCarried.setText(report.getOther_activities());
 
@@ -429,7 +409,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
         sTemplateNextAuditorLeadName.setAdapter(scopeAuditAdapter);
         sTemplateNextAuditorLeadName.setSelection(scopeAuditListselected);
         //  for saved data
-        // sTemplateNextAuditorLeadName.setSelection();
 
         sTemplateNextAuditorLeadName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
