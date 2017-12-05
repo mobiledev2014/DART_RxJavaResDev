@@ -44,7 +44,8 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
     String spnCategory = "";
     String report_id;
     String productType;
-    boolean checked, edited;
+    boolean checked, edited, dialogYesIsShowing = false, dialogNoIsShowing = false,
+            dialogYesRequiredIsShowing = false;
 
     public TemplateElementQuestionAdapter(Context context, List<ModelTemplateQuestionDetails> questionList,
                                           String report_id, String product_type) {
@@ -194,19 +195,22 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                 public void onClick(View view) {
                     //if (questionList.get(position).getRequired_remarks().equalsIgnoreCase("yes")) {
                     if (questionList.get(position).getRequired_remarks().equalsIgnoreCase("1")) {
-                        dialogYesRequired(questionList.get(position).getDefault_yes(), widgets.btnYes,
-                                widgets.btnNo, widgets.btnNa, widgets.btnNc, z, mrq);
+                        if (!dialogYesRequiredIsShowing)
+                            dialogYesRequired(questionList.get(position).getDefault_yes(), widgets.btnYes,
+                                    widgets.btnNo, widgets.btnNa, widgets.btnNc, z, mrq);
                     } else {
                         Log.e("TemplateElementQA", "position : " + position + " yes : " + questionList.get(position).getDefault_yes());
-                        dialogYes(questionList.get(position).getDefault_yes(), widgets.btnYes,
-                                widgets.btnNo, widgets.btnNa, widgets.btnNc, z, mrq);
+                        if (!dialogYesIsShowing)
+                            dialogYes(questionList.get(position).getDefault_yes(), widgets.btnYes,
+                                    widgets.btnNo, widgets.btnNa, widgets.btnNc, z, mrq);
                     }
                 }
             });
             widgets.btnNo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    dialogNo(widgets.btnYes, widgets.btnNo, widgets.btnNa, widgets.btnNc, z, mrq);
+                    if (!dialogNoIsShowing)
+                        dialogNo(widgets.btnYes, widgets.btnNo, widgets.btnNa, widgets.btnNc, z, mrq);
                 }
             });
         }
@@ -296,6 +300,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                 questionList.get(z).setAnswer_id("1");
                 text = "N/A";
                 //cb.setChecked(false);
+                dialogYesIsShowing = false;
                 dialogYes.dismiss();
             }
         });
@@ -303,11 +308,13 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialogYesIsShowing = false;
                 dialogYes.dismiss();
             }
         });
 
 
+        dialogYesIsShowing = true;
         dialogYes.show();
     }
 
@@ -348,6 +355,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                     questionList.get(z).setAnswer_details(strRemarks);
                     questionList.get(z).setAnswer_id("1");
                     text = "N/A";
+                    dialogYesRequiredIsShowing = false;
                     dialogYes.dismiss();
                 }
             }
@@ -356,11 +364,13 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialogYesRequiredIsShowing = false;
                 dialogYes.dismiss();
             }
         });
 
 
+        dialogYesRequiredIsShowing = true;
         dialogYes.show();
     }
 
@@ -445,6 +455,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                     questionList.get(z).setCategory_id(listid.get(category.getSelectedItemPosition()));
                     text = "N/A";
                     //cb.setChecked(false);
+                    dialogNoIsShowing = false;
                     dialogNo.dismiss();
                 }
             }
@@ -453,10 +464,12 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialogNoIsShowing = false;
                 dialogNo.dismiss();
             }
         });
 
+        dialogNoIsShowing = true;
         dialogNo.show();
     }
 
