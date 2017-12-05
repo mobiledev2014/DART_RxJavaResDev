@@ -120,6 +120,7 @@ public class SelectedAuditReportFragment extends Fragment {
     Calendar currentTime = Calendar.getInstance();
     int useDate;
 
+    Dialog dialogAnswerAll;
     View rootView;
 
     DateOfAuditAdapter dateOfAuditAdapter;
@@ -376,16 +377,43 @@ public class SelectedAuditReportFragment extends Fragment {
                 dialogCancelTemplate();
                 break;
             case R.id.btn_save_draft:
-                dialogSaveDraft();
+                if (!modelTemplates.getCompany_id().isEmpty())
+                    dialogSaveDraft();
+                else
+                    dialogAnswerAll("Please fill up Name of Site.");
                 break;
             case R.id.btn_submit:
                 if (validate()) {
                     dialogSubmit("Would you like to proceed?");
                 }
+                else
+                {
+                    dialogAnswerAll("Please fill up all required fields.");
+                }
                 break;
         }
     }
+    public void dialogAnswerAll(String mess) {
+        dialogAnswerAll = new Dialog(context);
+        dialogAnswerAll.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialogAnswerAll.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogAnswerAll.setCancelable(false);
+        dialogAnswerAll.setContentView(R.layout.dialog_error_login);
+        dialogAnswerAll.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        TextView msg = (TextView) dialogAnswerAll.findViewById(R.id.tv_message);
+        Button ok = (Button) dialogAnswerAll.findViewById(R.id.btn_ok);
+
+        msg.setText(mess);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogAnswerAll.dismiss();
+            }
+        });
+
+        dialogAnswerAll.show();
+    }
     private void deleteDateOfAudit() {
         if (modelDateOfAudits.size() > 1) {
             dialogDeleteDateConfirmation("Are you sure you want to delete?");
@@ -626,7 +654,7 @@ public class SelectedAuditReportFragment extends Fragment {
 //            pDialog.dismiss();
 //            return false;
 //        }
-        if (modelTemplates.getCompany_id().isEmpty()) {
+        if (modelTemplates.getCompany_id().isEmpty()|| dateOfAuditAdapter.getItem(0).equals("")) {
             /*progress dialog dismiss*/
             pDialog.dismiss();
             return false;

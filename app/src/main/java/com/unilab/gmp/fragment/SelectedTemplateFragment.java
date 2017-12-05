@@ -368,6 +368,9 @@ public class SelectedTemplateFragment extends Fragment {
             case R.id.btn_submit:
                 if (validate()) {
                     dialogSubmit("Would you like to proceed?");
+                } else
+                {
+                    dialogAnswerAll("Please fill up all required fields.");
                 }
                 break;
         }
