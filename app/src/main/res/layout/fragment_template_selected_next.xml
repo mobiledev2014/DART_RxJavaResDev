@@ -43,7 +43,7 @@
                 android:layout_height="0dp"
                 android:layout_weight=".95">
 
-                <ScrollView
+                <android.support.v4.widget.NestedScrollView
                     android:id="@+id/scrl_main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -2072,7 +2072,7 @@
 
                     </LinearLayout>
 
-                </ScrollView>
+                </android.support.v4.widget.NestedScrollView>
 
             </LinearLayout>
 
