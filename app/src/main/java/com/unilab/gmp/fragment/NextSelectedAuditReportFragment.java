@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -121,7 +122,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     String email;
 
     @BindView(R.id.scrl_main)
-    ScrollView scrlMain;
+    NestedScrollView scrlMain;
     @BindView(R.id.btn_cancel)
     Button btnCancel;
     @BindView(R.id.btn_save_draft)
@@ -501,7 +502,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         // --- Audit Scope
         templateModelScopeAudits = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
         adapterScopeAudit = new AdapterScopeAudit(templateModelScopeAudits, context, modelTemplates.getCompany_id(), null, this, btnTemplateNextScopeAuditAdd);
-
+        lvTemplateNextScopeAudit.setNestedScrollingEnabled(false);
         lvTemplateNextScopeAudit.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextScopeAudit.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextScopeAudit.setAdapter(adapterScopeAudit);
