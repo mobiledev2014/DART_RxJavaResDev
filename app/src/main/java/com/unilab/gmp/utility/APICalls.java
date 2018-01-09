@@ -130,7 +130,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 //    ModelReferenceInfo modelReferenceInfo;
 //
 
-
     public APICalls(Context context, String message, Boolean sync, HomeActivity homeActivity) {
         this.context = context;
         this.dialogMessage = message;
