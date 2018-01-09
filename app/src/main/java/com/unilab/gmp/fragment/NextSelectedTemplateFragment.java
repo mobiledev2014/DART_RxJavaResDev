@@ -30,7 +30,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -483,8 +482,6 @@ public class NextSelectedTemplateFragment extends Fragment {
         lvTemplateNextScopeAudit.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextScopeAudit.setAdapter(adapterScopeAudit);
         lvTemplateNextScopeAudit.addItemDecoration(new SimpleDividerItemDecoration(context));
-//        lvTemplateNextScopeAudit.setExpanded(true);
-        //templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ?", modelTemplates.getTemplateID()));
         if (templateModelScopeAudits.size() <= 0) {
             addScopeAuditType();
         }
