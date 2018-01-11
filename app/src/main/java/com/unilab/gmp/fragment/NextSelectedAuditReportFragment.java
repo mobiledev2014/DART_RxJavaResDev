@@ -1345,7 +1345,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 //saveReport as draft
                 saveReport();
                 dialogSaveDraft.dismiss();
-                dialogSucSaveDraft("Update successful");
+                dialogSucSaveDraft("Update successful.");
             }
         });
 
