@@ -543,7 +543,7 @@ public class SelectedAuditReportFragment extends Fragment {
                 templateElementAdapter.save(mar.getReport_id());
                 mar.setModified_date(getDate());
                 mar.save();
-                dialogSucSaveDraft("Successfully saved as draft.");
+                dialogSucSaveDraft("Update successful.");
                 dialogSaveDraft.dismiss();
             }
         });
