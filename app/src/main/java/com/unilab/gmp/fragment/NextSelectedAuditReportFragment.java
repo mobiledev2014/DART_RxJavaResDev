@@ -29,7 +29,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -1325,7 +1324,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 //saveReport as draft
                 saveReport();
                 dialogSaveDraft.dismiss();
-                dialogSucSaveDraft("Successfully saved as draft");
+                dialogSucSaveDraft("Update successful");
             }
         });
 
