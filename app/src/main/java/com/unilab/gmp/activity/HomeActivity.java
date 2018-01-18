@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -72,6 +74,7 @@ public class HomeActivity extends AppCompatActivity {
     Dialog dialogCancelTemplate;
     Dialog dialogSyncConfirmation;
     Dialog dialogErrorLogin;
+    Dialog dialogAboutUs;
     SharedPreferenceManager sharedPref;
     @BindView(R.id.iv_logo)
     ImageView ivLogo;
@@ -134,8 +137,10 @@ public class HomeActivity extends AppCompatActivity {
 
     public void getLoggedUser(String email) {
         List<AuditorsModel> firstName = AuditorsModel.find(AuditorsModel.class, "email = ?", email);
-        Log.i("UserLogged", firstName.get(0).getFname());
-        tvNameUser.setText("Welcome, " + firstName.get(0).getFname());
+        if (firstName.size() > 0) {
+            Log.i("UserLogged", firstName.get(0).getFname());
+            tvNameUser.setText("Welcome, " + firstName.get(0).getFname());
+        }
     }
 
     private void checkConnectionStatus() {
@@ -448,6 +453,37 @@ public class HomeActivity extends AppCompatActivity {
         dialogErrorLogin.show();
     }
 
+    public void dialogAboutUs() {
+        dialogAboutUs = new Dialog(context);
+        dialogAboutUs.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialogAboutUs.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogAboutUs.setCancelable(false);
+        dialogAboutUs.setContentView(R.layout.dialog_about_us);
+        dialogAboutUs.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        TextView tv_message = (TextView) dialogAboutUs.findViewById(R.id.tv_version);
+        Button ok = (Button) dialogAboutUs.findViewById(R.id.btn_ok);
+        String version = "";
+
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            version = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        tv_message.setText(version);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogAboutUs.dismiss();
+            }
+        });
+
+
+        dialogAboutUs.show();
+    }
+
     @OnClick(R.id.iv_logo)
     public void onViewClicked() {
         if (Variable.menu) {
@@ -461,6 +497,8 @@ public class HomeActivity extends AppCompatActivity {
                         .replace(R.id.fl_content, new HomeFragment()).addToBackStack(null).commit();
 
             }
+        } else {
+            dialogAboutUs();
         }
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

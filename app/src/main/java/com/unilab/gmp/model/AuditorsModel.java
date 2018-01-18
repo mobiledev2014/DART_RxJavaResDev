@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 public class AuditorsModel extends SugarRecord {
     String auditor_id;
-    String fname;
+    String fname = "";
     String mname;
     String lname;
     String designation;

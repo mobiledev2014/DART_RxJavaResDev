@@ -410,6 +410,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         //--- Reviewer setting start
         reviewerModels = ReviewerModel.find(ReviewerModel.class, "status > 0");
         List<String> reviewerList = new ArrayList<>();
+        reviewerList.add("Select");
         Log.i("REVIEWER", "SIZE : " + reviewerModels.size());
         for (int x = 0; x < reviewerModels.size(); x++) {
             reviewerList.add(reviewerModels.get(x).getFirstname() + " " + reviewerModels.get(x).getMiddlename()
@@ -424,9 +425,12 @@ public class NextSelectedTemplateFragment extends Fragment {
         sTemplateNextReviewerName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                etTemplateNextReviewerPosition.setText(reviewerModels.get(i).getDesignation() + "a");
-                etTemplateNextReviewerDepartment.setText(reviewerModels.get(i).getDepartment());
-                reviewer_id = reviewerModels.get(i).getReviewer_id();
+                int index = 0;
+                if (i > 0)
+                    index = i - 1;
+                etTemplateNextReviewerPosition.setText(reviewerModels.get(index).getDesignation());
+                etTemplateNextReviewerDepartment.setText(reviewerModels.get(index).getDepartment());
+                reviewer_id = reviewerModels.get(index).getReviewer_id();
             }
 
             @Override
@@ -448,6 +452,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         // --- Approver setting start
         approverModels = ApproverModel.find(ApproverModel.class, "status > 0");
         List<String> approverList = new ArrayList<>();
+        approverList.add("Select");
         for (int x = 0; x < approverModels.size(); x++) {
             approverList.add(approverModels.get(x).getFirstname() + " " + approverModels.get(x).getMiddlename()
                     + " " + approverModels.get(x).getLastname());
@@ -462,9 +467,12 @@ public class NextSelectedTemplateFragment extends Fragment {
         sTemplateNextApproverName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                etTemplateNextApproverPosition.setText(approverModels.get(i).getDesignation());
-                etTemplateNextApproverDepartment.setText(approverModels.get(i).getDepartment());
-                approver_id = approverModels.get(i).getApprover_id();
+                int index = 0;
+                if (i > 0)
+                    index = i - 1;
+                etTemplateNextApproverPosition.setText(approverModels.get(index).getDesignation());
+                etTemplateNextApproverDepartment.setText(approverModels.get(index).getDepartment());
+                approver_id = approverModels.get(index).getApprover_id();
             }
 
             @Override
@@ -973,13 +981,19 @@ public class NextSelectedTemplateFragment extends Fragment {
         ModelReportReviewer.deleteAll(ModelReportReviewer.class, "reportid = ?", report_id);
         ModelReportReviewer mrr = new ModelReportReviewer();
         mrr.setReport_id(report_id);
-        mrr.setReviewer_id(reviewerModels.get(sTemplateNextReviewerName.getSelectedItemPosition()).getReviewer_id());
+        int rev_index = sTemplateNextReviewerName.getSelectedItemPosition();
+        if (rev_index > 0)
+            rev_index -= 1;
+        mrr.setReviewer_id(reviewerModels.get(rev_index).getReviewer_id());
         mrr.save();
 
         ModelReportApprover.deleteAll(ModelReportApprover.class, "reportid = ?", report_id);
         ModelReportApprover mra = new ModelReportApprover();
         mra.setReport_id(report_id);
-        mra.setApprover_id(approverModels.get(sTemplateNextApproverName.getSelectedItemPosition()).getApprover_id());
+        int apprvr_index = sTemplateNextApproverName.getSelectedItemPosition();
+        if (apprvr_index > 0)
+            apprvr_index -= 1;
+        mra.setApprover_id(approverModels.get(apprvr_index).getApprover_id());
         mra.save();
 
         ModelDateOfAudit.deleteAll(ModelDateOfAudit.class, "reportid = ?", report_id);
@@ -1240,7 +1254,8 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         if (!adapterScopeAudit.check()) {
             passed = false;
-            message += "\nYou have entered duplicate scope.";
+            if (!adapterScopeAudit.check2())
+                message += "\nYou have entered duplicate scope.";
         }
         if (!adapterReference.check()) {
             passed = false;
@@ -1691,7 +1706,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         List<TemplateModelScopeAudit> tmsa = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
         for (TemplateModelScopeAudit t : tmsa) {
-            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND id = ?", report.getReport_id(), t.getId() + "");
+            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ?", report.getReport_id());
             for (TemplateModelScopeAuditInterest m : mm) {
                 m.setReport_id(report_id);
                 m.save();

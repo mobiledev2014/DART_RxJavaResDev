@@ -39,6 +39,9 @@ public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistrib
         List<String> distriList = new ArrayList<>();
         distriIdList = new ArrayList<>();
         int d = distributionList.size();
+
+        distriList.add("Select");
+        distriIdList.add("0");
         for (int count = 0; count < d; count++) {
             distriList.add(distributionList.get(count).getDistribution_name());
             distriIdList.add(distributionList.get(count).getDistribution_id());
@@ -85,9 +88,12 @@ public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistrib
         widgets.spnTemplateNextDistributionList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                int index = 0;
+                if (i>0)
+                    index = i - 1;
                 templateModelDistributionLists.get(z).setDistribution(widgets.spnTemplateNextDistributionList.getSelectedItem().toString());
                 templateModelDistributionLists.get(z).setSelected(i);
-                templateModelDistributionLists.get(z).setDistribution_id(distributionList.get(i).getDistribution_id());
+                templateModelDistributionLists.get(z).setDistribution_id(distributionList.get(index).getDistribution_id());
             }
 
             @Override

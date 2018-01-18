@@ -46,6 +46,10 @@ public class AdapterScopeAuditInterest extends BaseAdapter {
         List<String> dispotList = new ArrayList<>();
         idDispotList = new ArrayList<>();
         int d = modelDispositions.size();
+
+        dispotList.add("Select");
+        idDispotList.add("0");
+
         for (int count = 0; count < d; count++) {
             dispotList.add(modelDispositions.get(count).getDisposition_name());
             idDispotList.add(modelDispositions.get(count).getDisposition_id());
@@ -55,6 +59,10 @@ public class AdapterScopeAuditInterest extends BaseAdapter {
         idList = new ArrayList<>();
         Log.d("SIZE", modelProducts.size() + "");
         int x = modelProducts.size();
+
+        list.add("Select");
+        idList.add("0");
+
         for (int count = 0; count < x; count++) {
             list.add(modelProducts.get(count).getProduct_name());
             idList.add(modelProducts.get(count).getProduct_id());
@@ -92,20 +100,28 @@ public class AdapterScopeAuditInterest extends BaseAdapter {
         widgets.spnTypeAudit.setAdapter(adapter);
         widgets.spnTypeAudit.setEnabled(Variable.isAuthorized);
 
-        if (templateModelScopeAuditInterests.get(z).getDisposition_id().isEmpty()) {
+        if (templateModelScopeAuditInterests.get(z).getDisposition_id().equals("0")) {
             templateModelScopeAuditInterests.get(z).setDisposition_id(modelDispositions.get(
                     widgets.spnDisposition.getSelectedItemPosition()).getDisposition_id());
         } else {
             templateModelScopeAuditInterests.get(z).setSelected2(idDispotList.indexOf(
                     templateModelScopeAuditInterests.get(i).getDisposition_id()));
+            Log.e("testing", "asd dispo - " + templateModelScopeAuditInterests.get(i).getDisposition_id());
         }
         widgets.spnDisposition.setSelection(templateModelScopeAuditInterests.get(i).getSelected2());
         widgets.spnDisposition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                templateModelScopeAuditInterests.get(z).setDisposition(widgets.spnDisposition.getSelectedItem().toString());
-                templateModelScopeAuditInterests.get(z).setSelected2(i);
-                templateModelScopeAuditInterests.get(z).setDisposition_id(modelDispositions.get(i).getDisposition_id());
+                if (i <= 0) {
+                    templateModelScopeAuditInterests.get(z).setDisposition("");
+                    templateModelScopeAuditInterests.get(z).setSelected2(0);
+                    templateModelScopeAuditInterests.get(z).setDisposition_id("");
+                } else {
+                    templateModelScopeAuditInterests.get(z).setDisposition(widgets.spnDisposition.getSelectedItem().toString());
+                    templateModelScopeAuditInterests.get(z).setSelected2(i);
+                    templateModelScopeAuditInterests.get(z).setDisposition_id(modelDispositions.get(i - 1).getDisposition_id());
+                    Log.e("dis_id", modelDispositions.get(i - 1).getDisposition_id());
+                }
             }
 
             @Override
@@ -114,21 +130,31 @@ public class AdapterScopeAuditInterest extends BaseAdapter {
             }
         });
 
-        if (templateModelScopeAuditInterests.get(z).getProduct_id().isEmpty()) {
+        if (templateModelScopeAuditInterests.get(z).getProduct_id().equals("0")) {
             templateModelScopeAuditInterests.get(z).setProduct_id(modelProducts.get(widgets.spnTypeAudit.getSelectedItemPosition()).getProduct_id());
+//            templateModelScopeAuditInterests.get(z).setSelected(0);
         } else {
             templateModelScopeAuditInterests.get(z).setSelected(idList.indexOf(
                     templateModelScopeAuditInterests.get(i).getProduct_id()
             ));
+            Log.e("testing", "asd product - " + templateModelScopeAuditInterests.get(i).getProduct_id());
         }
 
         widgets.spnTypeAudit.setSelection(templateModelScopeAuditInterests.get(i).getSelected());
         widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                templateModelScopeAuditInterests.get(z).setProduct_name(widgets.spnTypeAudit.getSelectedItem().toString());
-                templateModelScopeAuditInterests.get(z).setSelected(i);
-                templateModelScopeAuditInterests.get(z).setProduct_id(modelProducts.get(i).getProduct_id());
+                //if (i < modelProducts.size() && i > 0) {
+                if (i <= 0) {
+                    templateModelScopeAuditInterests.get(z).setProduct_name("");
+                    templateModelScopeAuditInterests.get(z).setSelected(0);
+                    templateModelScopeAuditInterests.get(z).setProduct_id("");
+                } else {
+                    templateModelScopeAuditInterests.get(z).setProduct_name(widgets.spnTypeAudit.getSelectedItem().toString());
+                    templateModelScopeAuditInterests.get(z).setSelected(i);
+                    templateModelScopeAuditInterests.get(z).setProduct_id(modelProducts.get(i - 1).getProduct_id());
+                    Log.e("pro_id", modelProducts.get(i - 1).getProduct_id());
+                }
             }
 
             @Override

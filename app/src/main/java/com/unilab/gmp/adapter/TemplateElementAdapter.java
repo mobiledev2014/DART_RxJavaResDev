@@ -22,9 +22,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
-import com.unilab.gmp.model.ModelReportQuestion;
 import com.unilab.gmp.model.ModelTemplateElements;
 import com.unilab.gmp.model.ModelTemplateQuestionDetails;
 import com.unilab.gmp.utility.Variable;
@@ -45,7 +43,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
     boolean pick;
     int size = 0;
     private List<ModelTemplateElements> questionModel;
-    String report_id ="";
+    String report_id = "";
 
     public TemplateElementAdapter(Context context, List<ModelTemplateElements> questionModel, String report_id, String product_type) {
         this.questionModel = questionModel;
@@ -133,6 +131,8 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
         widgets.lvQuestionList.setLayoutManager(mLayoutManager);
         widgets.lvQuestionList.setItemAnimator(new DefaultItemAnimator());
 
+        templateElementQuestionAdapters.get(position).setCb(widgets.cbElementNa);
+
         widgets.lvQuestionList.setAdapter(templateElementQuestionAdapters.get(position));
         //widgets.lvQuestionList.setExpanded(true);
 
@@ -167,7 +167,6 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                         public void run() {
                             //dialog.dismiss();
                             templateElementQuestionAdapters.get(z).setAnswer("", "", dialog);
-//                            templateElementQuestionAdapters.get(z).notifyItemChanged(0);
                             widgets.cbElementNa.setText("N/A");
                         }
                     }, 700);
@@ -180,7 +179,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.custom_listview_element,parent, false);
+                .inflate(R.layout.custom_listview_element, parent, false);
         return new Widgets(v);
     }
 

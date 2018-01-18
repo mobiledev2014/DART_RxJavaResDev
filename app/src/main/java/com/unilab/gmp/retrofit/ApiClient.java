@@ -11,11 +11,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiClient {
 //    public static final String BASE_URL_AUDIT_REPORT = "https://api.myjson.com/bins/";
-    public static final String BASE_URL_AUDIT_REPORT = "http://sams.ecomqa.com/json/audit_report/";
-    public static final String BASE_URL_TEMPLATE = "http://sams.ecomqa.com/json/template/";
-    public static final String BASE_URL = "http://sams.ecomqa.com/json/data_maintenance/";
-    public static final String BASE_URL_POST = "http://sams.ecomqa.com/";
-    public static final String CONFIG_URL = "http://sams.ecomqa.com/json/";
+    public static final String BASE_URL_AUDIT_REPORT = "http://sams.webqa.unilab.com.ph/json/audit_report/";
+    public static final String BASE_URL_TEMPLATE = "http://sams.webqa.unilab.com.ph/json/template/";
+    //public static final String BASE_URL = "http://sams.ecomqa.com/json/data_maintenance/";
+    public static final String BASE_URL = "http://sams.webqa.unilab.com.ph/json/data_maintenance/"; // new api
+    //public static final String BASE_URL_POST = "http://sams.ecomqa.com/";
+    public static final String BASE_URL_POST = "http://sams.webqa.unilab.com.ph/";
+    public static final String CONFIG_URL = "http://sams.webqa.unilab.com.ph/json/";
 
     /*public static final String BASE_URL_TEMPLATE = "http://172.16.9.196/gmp/json/template/";
     public static final String BASE_URL = "http://172.16.9.196/gmp/json/data_maintenance/";

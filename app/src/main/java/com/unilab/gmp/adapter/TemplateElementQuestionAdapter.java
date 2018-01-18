@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -15,6 +16,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -44,6 +46,18 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
     String spnCategory = "";
     String report_id;
     String productType;
+
+    CheckBox cb;
+
+    public CheckBox getCb() {
+        return cb;
+    }
+
+    public void setCb(CheckBox cb) {
+        this.cb = cb;
+    }
+
+
     boolean checked, edited, dialogYesIsShowing = false, dialogNoIsShowing = false,
             dialogYesRequiredIsShowing = false;
 
@@ -70,7 +84,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         checked = answer.length() > 0;
         edited = true;
 
-        for(int i = 0; i < questionList.size();i++){
+        for (int i = 0; i < questionList.size(); i++) {
             notifyItemChanged(i);
         }
 
@@ -87,7 +101,12 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         boolean notcovered = true;
         for (ModelTemplateQuestionDetails mtqd : questionList) {
             List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
-            if (!mrq.get(0).getAnswer_id().equals("4") || !mrq.get(0).getNaoption_id().contains("Not covered")) {
+            if (mrq.size() > 0) {
+                if (!mrq.get(0).getAnswer_id().equals("4") || !mrq.get(0).getNaoption_id().contains("Not covered")) {
+                    notcovered = false;
+                    break;
+                }
+            } else {
                 notcovered = false;
                 break;
             }
@@ -98,7 +117,12 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         boolean notapplicable = true;
         for (ModelTemplateQuestionDetails mtqd : questionList) {
             List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
-            if (!mrq.get(0).getAnswer_id().equals("3") || !mrq.get(0).getNaoption_id().equals("Not applicable")) {
+            if (mrq.size() > 0) {
+                if (!mrq.get(0).getAnswer_id().equals("3") || !mrq.get(0).getNaoption_id().equals("Not applicable")) {
+                    notapplicable = false;
+                    break;
+                }
+            } else {
                 notapplicable = false;
                 break;
             }
@@ -232,10 +256,14 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                     }
                 }
                 if (check) {
-//                    Log.e("JHUN---", "pasok sa check NA");
-//                    text = "Not Applicable";
-                    // tea.notifyDataSetChanged();
+                    cb.setChecked(true);
+                    cb.setText("Not applicable");
+                } else {
+                    cb.setChecked(false);
+                    cb.setText("N/A");
                 }
+
+
             }
         });
 
@@ -257,10 +285,14 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                     }
                 }
                 if (check) {
-//                    Log.e("JHUN---", "pasok sa check NA");
-//                    text = "Not Applicable";
-                    // tea.notifyDataSetChanged();
+                    cb.setChecked(true);
+                    cb.setText("Not covered");
+                } else {
+                    cb.setChecked(false);
+                    cb.setText("N/A");
                 }
+
+
             }
         });
     }
@@ -356,6 +388,10 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                     questionList.get(z).setAnswer_id("1");
                     text = "N/A";
                     dialogYesRequiredIsShowing = false;
+
+                    cb.setChecked(false);
+                    cb.setText("N/A");
+
                     dialogYes.dismiss();
                 }
             }
@@ -456,6 +492,10 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                     text = "N/A";
                     //cb.setChecked(false);
                     dialogNoIsShowing = false;
+
+                    cb.setChecked(false);
+                    cb.setText("N/A");
+
                     dialogNo.dismiss();
                 }
             }
@@ -518,7 +558,22 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
             this.btnNo = (Button) rowView.findViewById(R.id.btn_no);
             this.btnNa = (Button) rowView.findViewById(R.id.btn_na);
             this.btnNc = (Button) rowView.findViewById(R.id.btn_nc);
-            this.tvQuestion = (TextView) rowView.findViewById(R.id.tv_question);
+            this.tvQuestion = (EditText) rowView.findViewById(R.id.tv_question);
+
+            this.tvQuestion.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View view, MotionEvent event) {
+                    // TODO Auto-generated method stub
+                    if (view.getId() == R.id.tv_question) {
+                        view.getParent().requestDisallowInterceptTouchEvent(true);
+                        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                            case MotionEvent.ACTION_UP:
+                                view.getParent().requestDisallowInterceptTouchEvent(false);
+                                break;
+                        }
+                    }
+                    return false;
+                }
+            });
         }
     }
 }

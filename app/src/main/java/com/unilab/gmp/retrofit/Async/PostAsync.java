@@ -119,13 +119,18 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
         dialog.setProgress(1);
         HttpClient httpclient = new DefaultHttpClient();
         InputStream inputStream = null;
-        HttpPost httppost = new HttpPost("http://ojl.ecomqa.com/azure/pwgrant.php");
+        //HttpPost httppost = new HttpPost("http://ojl.ecomqa.com/azure/pwgrant.php");
+        HttpPost httppost = new HttpPost("http://sams.webqa.unilab.com.ph/api"); //new api link applied
         httppost.setHeader("Content-type", "application/x-www-form-urlencoded");
         String s = "";
         try {
             // add data
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
                     1);
+            nameValuePairs.add(new BasicNameValuePair("token",
+                    "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839"));
+            nameValuePairs.add(new BasicNameValuePair("cmdEvent",
+                    "authenticate"));
             nameValuePairs.add(new BasicNameValuePair("email",
                     email));
             nameValuePairs.add(new BasicNameValuePair("password",
@@ -166,6 +171,7 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
         try {
             JSONObject obj = new JSONObject(result);
             Log.e("TAG", "RESULT LOG IN : " + obj.getString("status") + " Result : " + result);
+            String message = obj.getString("message");
             if (obj.getString("status").equals("success")) {
                 Call<ResultUser> call = apiInterface.getUser(email);
                 call.enqueue(this);
@@ -194,7 +200,8 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
                 if (this.action.equals(Glovar.LOGIN)) {
                     Log.i("ERROR", "invalid email");
                     //dialogLoginError("Invalid email address. Please make sure that your email address is correct.");
-                    dialogLoginError("Email and password do not match.");
+//                    dialogLoginError("Email and password do not match.");
+                    dialogLoginError(message);
                 } else {
                     //invalid credentials please re-login to continue
                     dialogPostError("Invalid credentials please re-login to continue.");

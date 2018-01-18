@@ -69,7 +69,7 @@ public class AuditReportFragment extends Fragment {
         sharedPref = new SharedPreferenceManager(context);
 
         //modelAuditReports = ModelAuditReports.listAll(ModelAuditReports.class, "modifieddate DESC");
-        modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0'", new String[]{}, null, "modifieddate DESC", "50");
+        modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0'", new String[]{}, null, "modifieddate DESC", "50");
 
         auditReportAdapter = new AuditReportAdapter(context, modelAuditReports);
         lvAuditReportList.setAdapter(auditReportAdapter);
@@ -105,14 +105,21 @@ public class AuditReportFragment extends Fragment {
 
         if (!audName.equals("")) {
             if (site.size() > 0)
-                modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0' AND status != '3' AND companyid LIKE ?",
+                modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0' AND companyid LIKE ?",
                         "%" + site.get(0).getCompany_id() + "" + "%");
+//            modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0' AND status != '3' AND companyid LIKE ?",
+//                    "%" + site.get(0).getCompany_id() + "" + "%");
             else if (auditor.size() > 0)
-                modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0' AND status != '3' AND auditorid LIKE ?",
+                modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0' AND auditorid LIKE ?",
                         "%" + auditor.get(0).getAuditor_id() + "" + "%");
+//            modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0' AND status != '3' AND auditorid LIKE ?",
+//                    "%" + auditor.get(0).getAuditor_id() + "" + "%");
             else
-                modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0' AND status != '3' AND reportno LIKE ?",
+                modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0' AND reportno LIKE ?",
                         "%" + audName + "%");
+
+//            modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0' AND status != '3' AND reportno LIKE ?",
+//                    "%" + audName + "%");
             Log.e("AuditorsCount", modelAuditReports.size() + "");
             if (modelAuditReports.size() > 0) {
                 setTemplateList();
@@ -122,7 +129,8 @@ public class AuditReportFragment extends Fragment {
                 tvNoResult.setVisibility(View.VISIBLE);
             }
         } else {
-            modelAuditReports = ModelAuditReports.listAll(ModelAuditReports.class, "templateid DESC");
+//            modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0' AND status != '3'", new String[]{}, null, "modifieddate DESC", "50");
+            modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0'", new String[]{}, null, "modifieddate DESC", "50");
             setTemplateList();
             tvNoResult.setVisibility(View.GONE);
         }

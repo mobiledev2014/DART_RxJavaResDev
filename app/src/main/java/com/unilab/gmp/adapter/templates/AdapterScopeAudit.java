@@ -76,9 +76,11 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         idList = new ArrayList<>();
         Log.d("SIZE", scopeAudits.size() + "");
         int x = scopeAudits.size();
+        list.add("Select");
+        idList.add("0");
         for (int count = 0; count < x; count++) {
-                list.add(scopeAudits.get(count).getScope_name());
-                idList.add(scopeAudits.get(count).getScope_id());
+            list.add(scopeAudits.get(count).getScope_name());
+            idList.add(scopeAudits.get(count).getScope_id());
         }
 
         adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
@@ -120,6 +122,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
 //        if (TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND auditid = ?", templateModelScopeAudit.get(i).getReport_id(), templateModelScopeAudit.get(i).getId() + "").size() > 0) {
             templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());
             templateModelScopeAuditInterests.get(i).addAll(TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND auditid = ?", templateModelScopeAudit.get(i).getReport_id(), i + ""));// templateModelScopeAudit.get(i).getId() + ""));
+            Log.e("Tessst", templateModelScopeAudit.get(i).getReport_id() + " --- " + templateModelScopeAuditInterests.size());
         } else {
             templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());
         }
@@ -143,10 +146,12 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                templateModelScopeAudit.get(z).setScope_name(widgets.spnTypeAudit.getSelectedItem().toString());
-                templateModelScopeAudit.get(z).setSelected(i);
-                templateModelScopeAudit.get(z).setScope_id(scopeAudits.get(i).getScope_id());
-
+                if (i > 0) {
+                    int index = i - 1;
+                    templateModelScopeAudit.get(z).setScope_name(widgets.spnTypeAudit.getSelectedItem().toString());
+                    templateModelScopeAudit.get(z).setSelected(i);
+                    templateModelScopeAudit.get(z).setScope_id(scopeAudits.get(index).getScope_id());
+                }
             }
 
             @Override
@@ -275,6 +280,28 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         return isCheck;
     }
 
+    public boolean check2() {
+        isCheck = true;
+        Log.e("getWidgets", "getWidgets1");
+
+
+        Set<String> lump = new HashSet<>();
+        for (TemplateModelScopeAudit tmsa : templateModelScopeAudit) {
+
+            if (lump.contains(tmsa.getScope_id())) {
+                isCheck = false;
+                break;
+            }
+            lump.add(tmsa.getScope_id());
+        }
+
+
+        if (!isCheck) {
+            notifyDataSetChanged();
+        }
+        return isCheck;
+    }
+
     boolean duplicates(final List<String> array) {
         Set<String> lump = new HashSet<>();
         for (String i : array) {
@@ -293,13 +320,15 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         TemplateModelScopeAuditInterest.deleteAll(TemplateModelScopeAuditInterest.class, "reportid = ?", report_id);
         int counter = 0;
         for (TemplateModelScopeAudit tmsa : templateModelScopeAudit) {
-            if (!tmsa.getScope_detail().isEmpty()) {
-                tmsa.setReport_id(report_id);
-                tmsa.setAudit_id("" + counter);
-                tmsa.save();
-                if (tmsa.getAdapterScope() != null)
-                    tmsa.getAdapterScope().save(report_id, counter++);
-            }
+            //if (!tmsa.getScope_detail().isEmpty()) {
+            tmsa.setReport_id(report_id);
+            tmsa.setAudit_id("" + counter);
+            tmsa.save();
+            if (tmsa.getAdapterScope() != null)
+                tmsa.getAdapterScope().save(report_id, counter);
+
+            counter++;
+            //}
         }
     }
 

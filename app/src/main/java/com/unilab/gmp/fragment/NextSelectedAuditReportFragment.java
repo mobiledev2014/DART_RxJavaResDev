@@ -425,16 +425,18 @@ public class NextSelectedAuditReportFragment extends Fragment {
         //--- Lead Auditor setting end
 
         //--- Reviewer setting start
-        reviewerModels = ReviewerModel.listAll(ReviewerModel.class);
+        reviewerModels = ReviewerModel.find(ReviewerModel.class, "status > 0");
         int rev = 0;
+
         final List<String> reviewerList = new ArrayList<>();
+        reviewerList.add("Select");
         reviewer_id = report.getReviewer_id();
         for (int x = 0; x < reviewerModels.size(); x++) {
             Log.e("reviewerList", reviewerModels.get(x).getReviewer_id());
             reviewerList.add(reviewerModels.get(x).getFirstname() + " " + reviewerModels.get(x).getMiddlename()
                     + " " + reviewerModels.get(x).getLastname());
             if (reviewerModels.get(x).getReviewer_id().equals(reviewer_id)) {
-                rev = x;
+                rev = x+1;
             }
         }
         ArrayAdapter<String> reviewerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, reviewerList);
@@ -444,9 +446,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
         sTemplateNextReviewerName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                etTemplateNextReviewerPosition.setText(reviewerModels.get(i).getDesignation() + "a");
-                etTemplateNextReviewerDepartment.setText(reviewerModels.get(i).getDepartment());
-                reviewer_id = reviewerModels.get(i).getReviewer_id();
+                int index = 0;
+                if (i>0)
+                    index = i - 1;
+                etTemplateNextReviewerPosition.setText(reviewerModels.get(index).getDesignation() );
+                etTemplateNextReviewerDepartment.setText(reviewerModels.get(index).getDepartment());
+                reviewer_id = reviewerModels.get(index).getReviewer_id();
             }
 
             @Override
@@ -468,15 +473,16 @@ public class NextSelectedAuditReportFragment extends Fragment {
         //--- Reviewer setting end
         //
         // --- Approver setting start
-        approverModels = ApproverModel.listAll(ApproverModel.class);
+        approverModels = ApproverModel.find(ApproverModel.class, "status > 0");
         List<String> approverList = new ArrayList<>();
         int app = 0;
+        approverList.add("Select");
         approver_id = report.getApprover_id();
         for (int x = 0; x < approverModels.size(); x++) {
             approverList.add(approverModels.get(x).getFirstname() + " " + approverModels.get(x).getMiddlename()
                     + " " + approverModels.get(x).getLastname());
             if (approverModels.get(x).getApprover_id().equals(approver_id)) {
-                app = x;
+                app = x+1;
             }
         }
         ArrayAdapter<String> approverAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, approverList);
@@ -486,9 +492,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
         sTemplateNextApproverName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                etTemplateNextApproverPosition.setText(approverModels.get(i).getDesignation());
-                etTemplateNextApproverDepartment.setText(approverModels.get(i).getDepartment());
-                approver_id = approverModels.get(i).getApprover_id();
+                int index = 0;
+                if (i>0)
+                    index = i - 1;
+                etTemplateNextApproverPosition.setText(approverModels.get(index).getDesignation());
+                etTemplateNextApproverDepartment.setText(approverModels.get(index).getDepartment());
+                approver_id = approverModels.get(index).getApprover_id();
             }
 
             @Override
@@ -500,6 +509,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         // --- Audit Scope
         templateModelScopeAudits = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
+
         adapterScopeAudit = new AdapterScopeAudit(templateModelScopeAudits, context, modelTemplates.getCompany_id(), null, this, btnTemplateNextScopeAuditAdd);
         lvTemplateNextScopeAudit.setNestedScrollingEnabled(false);
         lvTemplateNextScopeAudit.setLayoutManager(new LinearLayoutManager(context));
@@ -1075,15 +1085,26 @@ public class NextSelectedAuditReportFragment extends Fragment {
         mar.setAuditor_id(auditorsModels.get(sTemplateNextAuditorLeadName.getSelectedItemPosition()).getAuditor_id());
         mar.setReviewer_id(reviewer_id);
         mar.setApprover_id(approver_id);
+
+        mar.setHead_lead(cbTemplateNextReviewer.isChecked() ? "1" : "0");
+
         mar.setWrap_date(DateTimeUtils.parseDateMonthToDigit(etTemplateNextDateOfWrapUp.getText().toString()));
         mar.setReviewerChecked(modelTemplates.isReviewerChecked());
+
         ModelReportReviewer mrr = new ModelReportReviewer();
         mrr.setReport_id(mar.getReport_id());
-        mrr.setReviewer_id(reviewerModels.get(sTemplateNextReviewerName.getSelectedItemPosition()).getReviewer_id());
+        int rev_index = sTemplateNextReviewerName.getSelectedItemPosition();
+        if (rev_index>0)
+            rev_index -=1;
+        mrr.setReviewer_id(reviewerModels.get(rev_index).getReviewer_id());
         mrr.save();
+
         ModelReportApprover mra = new ModelReportApprover();
         mra.setReport_id(mar.getReport_id());
-        mra.setApprover_id(approverModels.get(sTemplateNextApproverName.getSelectedItemPosition()).getApprover_id());
+        int apprvr_index = sTemplateNextApproverName.getSelectedItemPosition();
+        if (apprvr_index>0)
+            apprvr_index -=1;
+        mra.setApprover_id(approverModels.get(apprvr_index).getApprover_id());
         mra.save();
         mar.setAudit_close_date(DateTimeUtils.parseDateMonthToDigit(
                 etTemplateNextSummaryRecommendationAuditCloseDate.getText().toString()));
@@ -1443,7 +1464,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         if (!adapterScopeAudit.check()) {
             passed = false;
             Log.e("validate", "3");
-            message += "\nYou have entered duplicate scope.";
+            if (!adapterScopeAudit.check2())
+                message += "\nYou have entered duplicate scope.";
         }
         if (!adapterReference.check()) {
             passed = false;
