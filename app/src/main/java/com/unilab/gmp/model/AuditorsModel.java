@@ -24,4 +24,9 @@ public class AuditorsModel extends SugarRecord {
     String email = "";
     String actions;
     String status;
+
+    /*
+    * String reviewer;
+    * String approver;
+    * */
 }

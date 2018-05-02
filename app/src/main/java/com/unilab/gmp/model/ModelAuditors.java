@@ -23,4 +23,9 @@ public class ModelAuditors{
     String update_date;
     String email;
     String status;
+
+    /*
+    * String reviewer;
+    * String approver;
+    * */
 }

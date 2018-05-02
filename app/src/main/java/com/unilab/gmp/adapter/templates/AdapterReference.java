@@ -36,7 +36,8 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
     Context context;
     boolean isCheck = true;
 
-    public AdapterReference() {}
+    public AdapterReference() {
+    }
 
     public AdapterReference(List<TemplateModelReference> templateModelReferences, Context context) {
         this.templateModelReferences = templateModelReferences;
@@ -130,8 +131,11 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
             }
         });
 
-        if (!templateModelReferences.get(i).getValidity().equals(""))
-            widgets.validity.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(i).getValidity()));
+        if (!templateModelReferences.get(i).getValidity().equals("")) {
+            if (!templateModelReferences.get(i).getValidity().equals("0000-00-00")) {
+                widgets.validity.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(i).getValidity()));
+            }
+        }
 
         widgets.validity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,8 +145,11 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
             }
         });
         widgets.validity.setEnabled(Variable.isAuthorized);
-        if (!templateModelReferences.get(i).getIssue_date().equals(""))
-            widgets.issue_date.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(i).getIssue_date()));
+        if (!templateModelReferences.get(i).getIssue_date().equals("")) {
+            if (!templateModelReferences.get(i).getIssue_date().equals("0000-00-00")) {
+                widgets.issue_date.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(i).getIssue_date()));
+            }
+        }
 
         widgets.issue_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,23 +203,6 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
         }
     }
 
-    public class Widgets extends RecyclerView.ViewHolder {
-        EditText certification;
-        EditText body;
-        EditText number;
-        EditText validity;
-        EditText issue_date;
-
-        Widgets(View rowView) {
-            super(rowView);
-            this.certification = (EditText) rowView.findViewById(R.id.et_template_next_license);
-            this.body = (EditText) rowView.findViewById(R.id.et_template_next_issuing_regulation);
-            this.number = (EditText) rowView.findViewById(R.id.et_template_next_license_certificate_num);
-            this.validity = (EditText) rowView.findViewById(R.id.et_template_next_validity);
-            this.issue_date = (EditText) rowView.findViewById(R.id.et_template_next_issue_date);
-        }
-    }
-
     public static class DDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         public String date = "";
@@ -224,7 +214,8 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
         TemplateModelReference tmr;
         boolean valid;
 
-        public DDatePicker() {}
+        public DDatePicker() {
+        }
 
         public DDatePicker(EditText editText, TemplateModelReference tmr, boolean valid) {
             this.editText = editText;
@@ -247,6 +238,23 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
             } else {
                 tmr.setIssue_date(date);
             }
+        }
+    }
+
+    public class Widgets extends RecyclerView.ViewHolder {
+        EditText certification;
+        EditText body;
+        EditText number;
+        EditText validity;
+        EditText issue_date;
+
+        Widgets(View rowView) {
+            super(rowView);
+            this.certification = (EditText) rowView.findViewById(R.id.et_template_next_license);
+            this.body = (EditText) rowView.findViewById(R.id.et_template_next_issuing_regulation);
+            this.number = (EditText) rowView.findViewById(R.id.et_template_next_license_certificate_num);
+            this.validity = (EditText) rowView.findViewById(R.id.et_template_next_validity);
+            this.issue_date = (EditText) rowView.findViewById(R.id.et_template_next_issue_date);
         }
     }
 

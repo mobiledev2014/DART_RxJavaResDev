@@ -21,6 +21,8 @@ public class DateTimeUtils {
 
     public static String parseDateMonthToWord(String date) {
 
+        Log.i("DATE_FORMAT","VALUE : " + date);
+
         String formattedDate = "";
         if (date.equals(""))
             return formattedDate;

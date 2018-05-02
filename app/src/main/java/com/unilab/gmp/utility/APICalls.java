@@ -202,7 +202,9 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 HomeActivity.tvSyncNotifCount.setText(changes + "");
                 HomeActivity.tvSyncNotifCount.setVisibility(View.VISIBLE);
             }*/
-            dialogSyncSuccess("Data has been successfully synced.");
+            if (Variable.showDialog) {
+                dialogSyncSuccess("Data has been successfully synced.");
+            }
             //homeActivity.initializeHome();
         } else {
             Intent intent = new Intent(context, HomeActivity.class);
@@ -404,6 +406,12 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     auditorsModel.setUpdate_date(modelAuditorInfo.getModelAuditors().get(x).getUpdate_date());
                     auditorsModel.setEmail(modelAuditorInfo.getModelAuditors().get(x).getEmail());
                     auditorsModel.setStatus(modelAuditorInfo.getModelAuditors().get(x).getStatus());
+
+                    //tick for reviewer and approver
+                    /*
+                    * auditorsModel.setReviewer(modelAuditorInfo.getModelAuditors().get(x).getReviewer());
+                    * auditorsModel.setApprover(modelAuditorInfo.getModelAuditors().get(x).getApprover());
+                    * */
                     isAuditorExisting(auditorsModel);
                 }
 
@@ -571,7 +579,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                         for (ModelTemplateQuestionDetails mteq : mte.getModelTemplateQuestionDetails()) {
                                             mteq.setElement_id(mte.getElement_id());
                                             mteq.setTemplate_id(mte.getTemplate_id() + "");
-                                            //mteq.setRequired_remarks(mte.getModelTemplateQuestionDetails().get());
+                                            mteq.setRequired_remarks(mteq.getRequired_remarks());
+                                            //Log.i("REMARKS", "REQUIRED : " + mte.getModelTemplateQuestionDetails().get(0).getRequired_remarks());
                                             if (isQuestionIDExisting(mteq)) {
                                                 mteq.save();
                                             }

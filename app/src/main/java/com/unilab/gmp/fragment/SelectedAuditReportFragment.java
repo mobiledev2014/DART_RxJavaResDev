@@ -209,8 +209,9 @@ public class SelectedAuditReportFragment extends Fragment {
 
         if (!checkIfAuthorizedUser()) {
             disableWidgets();
+        } else if (statusCheck().equals("3") || statusCheck().equals("4")){
+            disableWidgets();
         }
-
 
         tvTemplateProductType.setText(modelTemplates.getProductType());
         tvTemplateStandard.setText(modelTemplates.getTemplateName());
@@ -227,6 +228,11 @@ public class SelectedAuditReportFragment extends Fragment {
 
         this.rootView = rootView;
         return rootView;
+    }
+
+    public String statusCheck(){
+        String status = modelAuditReports.getStatus();
+        return status;
     }
 
     private void disableWidgets() {

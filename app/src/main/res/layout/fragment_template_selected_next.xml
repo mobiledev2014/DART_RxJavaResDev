@@ -1678,6 +1678,7 @@
                                         android:textSize="20dp" />
 
                                     <CheckBox
+                                        android:visibility="invisible"
                                         android:id="@+id/cb_template_next_reviewer"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"

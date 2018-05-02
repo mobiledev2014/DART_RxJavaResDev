@@ -32,7 +32,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.adapter.ActivityAdapter;
@@ -329,12 +328,29 @@ public class NextSelectedTemplateFragment extends Fragment {
             personnelMetDelete = 5, elementsRequiringDelete = 6, otherIssuesAuditDelete = 7,
             otherIssuesExecutiveDelete = 8, auditorDelete = 9, reviewerDelete = 10, presentDuringDelete = 11,
             majorChangesDelete = 12;
+    Dialog dialogSuccess;
 
     public NextSelectedTemplateFragment(ModelTemplates modelTemplates, TemplateElementAdapter templateElementAdapter, SelectedTemplateFragment selectedTemplateFragment) {
         this.modelTemplates = modelTemplates;
         this.templateElementAdapter = templateElementAdapter;
         this.selectedTemplateFragment = selectedTemplateFragment;
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (context != null) {
+//            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        }
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        if (context != null) {
+//            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+//        }
+//    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -380,7 +396,11 @@ public class NextSelectedTemplateFragment extends Fragment {
         //auditorsModels = AuditorsModel.listAll(AuditorsModel.class);
         String emailUsed = sharedPref.getStringData("EMAIL");
         Log.i("EMAILUSED", emailUsed);
-        auditorsModels = AuditorsModel.find(AuditorsModel.class, "email = ?", emailUsed);
+        //auditorsModels = AuditorsModel.find(AuditorsModel.class, "email = ?", emailUsed);
+        auditorsModels = AuditorsModel.findWithQuery(AuditorsModel.class,
+                "SELECT * FROM AUDITORS_MODEL WHERE " + "(email = '" + emailUsed + "' AND status = '1')");
+
+        Log.i("EMAILUSED", emailUsed + " account status : " + auditorsModels.get(0).getStatus());
         List<String> scopeAuditList = new ArrayList<>();
         for (int x = 0; x < auditorsModels.size(); x++) {
             scopeAuditList.add(auditorsModels.get(x).getFname() + " " + auditorsModels.get(x).getMname()
@@ -683,22 +703,6 @@ public class NextSelectedTemplateFragment extends Fragment {
         this.rootView = rootView;
         return rootView;
     }
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if (context != null) {
-//            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//        }
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        if (context != null) {
-//            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-//        }
-//    }
 
     @Override
     public void onDestroyView() {
@@ -1350,13 +1354,23 @@ public class NextSelectedTemplateFragment extends Fragment {
     public boolean postData() {
 
         String co_auditor_id = "";
-        List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class,
+                "reportid = ?", report.getReport_id());
         int counter = 0;
         for (TemplateModelAuditors tma : ltma) {
+            Log.i("ltma_size", ":" + ltma.size() + "");
             if (++counter != ltma.size()) {
-                co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "},";
+                if (tma.getTemplate_id() != null) {
+                    Log.i("ltma_size", "if co_auditor :" + tma.getAuditor_id() + "" + " report_id : "
+                            + report.getReport_id() + " template_id : " + tma.getTemplate_id());
+                    co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "},";
+                }
             } else {
-                co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
+                if (tma.getTemplate_id() != null) {
+                    Log.i("ltma_size", "else co_auditor :" + tma.getAuditor_id() + "" + " report_id : "
+                            + report.getReport_id() + " template_id : " + tma.getTemplate_id());
+                    co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
+                }
             }
         }
 
@@ -1490,6 +1504,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 question += ",";
             }
         }
+
         counter = 0;
         String recommendation = "";
         List<TemplateModelSummaryRecommendation> tmsr = TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "reportid = ? AND elementid > 0", report.getReport_id());
@@ -1691,14 +1706,16 @@ public class NextSelectedTemplateFragment extends Fragment {
             @Override
             public void onFailure(Call<ModelAuditReportReply> call, Throwable t) {
                 Log.e("TemplateFragment ", "OnFailure " + t.getMessage());
-                Toast.makeText(context, "FAIL", Toast.LENGTH_SHORT);
+                //Toast.makeText(context, "FAIL", Toast.LENGTH_SHORT);
+                dialogSubmitFailed("Sending Failed." + " " + t.getMessage());
             }
         });
         return true;
     }
 
     public void updateDate(String report_id) {
-        List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class, "templateid = ? AND reportid = ?", modelTemplates.getTemplateID(), report.getReport_id());
+        List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class,
+                "templateid = ? AND reportid = ?", modelTemplates.getTemplateID(), report.getReport_id());
         for (TemplateModelAuditors t : ltma) {
             t.setReport_id(report_id);
             t.save();
@@ -1924,7 +1941,6 @@ public class NextSelectedTemplateFragment extends Fragment {
         dialogSubmitFailed.show();
     }
 
-
     public void dialogDeleteFromListConfirmation(String mess, final int list) {
         if (!dialogDeleteIsShowing) {
             dialogDeleteDateOfAudit = new Dialog(context);
@@ -2073,8 +2089,6 @@ public class NextSelectedTemplateFragment extends Fragment {
         dateStr = dateFormat.format(date);
         return dateStr;
     }
-
-    Dialog dialogSuccess;
 
     public void dialogSuccess(String mess) {
         dialogSuccess = new Dialog(context);

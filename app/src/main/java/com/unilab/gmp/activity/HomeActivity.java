@@ -400,6 +400,7 @@ public class HomeActivity extends AppCompatActivity {
                 dialogSyncConfirmation.dismiss();
                 //check internet connection
                 if (isNetworkConnected()) {
+                    Variable.showDialog = true;
                     new APICalls(context, "Syncing...", true, HomeActivity.this).execute();
                 } else {
                     dialogErrorLogin();

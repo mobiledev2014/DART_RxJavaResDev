@@ -42,6 +42,8 @@ public class StartDatePickerButton extends DialogFragment implements DatePickerD
     Dialog dialogErrorDate;
     Context cont;
 
+    String monthStr, dayStr;
+
     public StartDatePickerButton(Button button, List<ModelDateOfAudit> datesOfAudit, int position, Context context) {
         this.datesOfAudit = datesOfAudit;
         this.button = button;
@@ -60,7 +62,22 @@ public class StartDatePickerButton extends DialogFragment implements DatePickerD
     public void onDateSet(DatePicker view, int year, int month, int day) {
         // TODO Auto-generated method stub
         // Do something with the date chosen by the user
-        date = year + "-" + (month + 1) + "-" + day;
+        //month = month + 1;
+        //date = year + "-" + (month + 1) + "-" + day;
+        Log.i("DATE OF AUDIT : ", year + "-" + (month + 1) + "-" + day);
+        if (month <= 9){
+            monthStr = "0" + (month + 1);
+        } else {
+            monthStr = month + "";
+        }
+
+        if (day <= 9){
+            dayStr = "0" + day;
+        } else {
+            dayStr = day + "";
+        }
+        date = year + "-" + monthStr + "-" + dayStr;
+
         datesOfAudit.get(position).setDateOfAudit(date);
 
         Log.i("DATE OF AUDIT : ", date);
@@ -100,6 +117,7 @@ public class StartDatePickerButton extends DialogFragment implements DatePickerD
 
     public boolean errorDate(String date) {
         boolean result = false;
+        Log.i("CurrentDate : ", getDate() + ", pickDate : " + date);
         date = date.replace("-", "");
         int currentDate = Integer.parseInt(getDate());
 

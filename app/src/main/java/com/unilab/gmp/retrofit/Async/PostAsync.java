@@ -33,6 +33,7 @@ import com.unilab.gmp.utility.APICalls;
 import com.unilab.gmp.utility.DialogUtils;
 import com.unilab.gmp.utility.Glovar;
 import com.unilab.gmp.utility.SharedPreferenceManager;
+import com.unilab.gmp.utility.Variable;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -184,6 +185,7 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
                 Log.e("UserEmail", " EMAIL : " + email + " PASSWORD : " + sharedPref.getStringData("PASSWORD"));
 
                 if (this.action.equals(Glovar.LOGIN)) {
+                    Variable.showDialog = true;
                     new APICalls(context, "Loading...", false, null).execute();
 
                 } else if (this.action.equals(Glovar.POST_AUDIT)) {
@@ -217,10 +219,11 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
     public void onResponse(Call<ResultUser> call, Response<ResultUser> response) {
         try {
             List<ModelUser> result = response.body().getResult();
-            Log.e("TAG", "RESULT : " + result.toString());
+            Log.e("TAG_EMAIL", "RESULT : " + result.toString());
             if (result != null) {
                 dialog.dismiss();
-                if (result.size() > 0) {
+                //if (result.size() > 0) {
+                    Log.e("TAG_EMAIL_2", "RESULT : " + result.toString());
                     // Save to database the retrieved user here.
                     ModelUser mUser = new ModelUser();
                     mUser.setEmp_id(result.get(0).getEmp_id());
@@ -230,13 +233,13 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
                     sharedPref.saveData("EMP_ID", String.valueOf(mUser.getEmp_id()));
 
                     context.startActivity(new Intent(context, HomeActivity.class));
-                }
+                //}
             } else {
                 dialog.dismiss();
                 /*dUtils.DialogWarning("Login error",
                         "There is no internet connection detected. Please check your connection and try again.",
                         MainActivity.orientation);*/
-                Log.i("ERROR", "no internet 1");
+                Log.i("ERROR_TAG_EMAIL", "no internet 1");
                 dialogLoginError("There is no internet connection detected. Please check your connection and try again.");
             }
         } catch (Exception e) {
@@ -274,6 +277,10 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
 
         Button ok = (Button) dialogLoginError.findViewById(R.id.btn_ok);
         TextView msg = (TextView) dialogLoginError.findViewById(R.id.tv_message);
+
+        if (mess.equals("Invalid Email")){
+            mess = "Invalid email address. Please make sure that your email address is correct.";
+        }
 
         msg.setText(mess);
 

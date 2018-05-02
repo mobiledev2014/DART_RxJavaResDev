@@ -10,4 +10,7 @@ public class Variable {
     public static boolean onAudit = false;
     public static boolean onReferenceData = false;
     public static  boolean isAuthorized = true;
+    public static  String checkValue = "";
+    public static  String elementId = "";
+    public static  boolean showDialog = true;
 }

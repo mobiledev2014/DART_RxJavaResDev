@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -81,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         SugarContext.init(this);
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
         loginDialog = new ProgressDialog(context);
         loginDialog.setCanceledOnTouchOutside(false);

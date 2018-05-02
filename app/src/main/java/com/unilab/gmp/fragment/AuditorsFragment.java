@@ -28,6 +28,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static android.icu.text.MessagePattern.ArgType.SELECT;
+import static com.google.common.net.HttpHeaders.FROM;
+
 /**
  * Created by c_rcmiguel on 7/14/2017.
  */

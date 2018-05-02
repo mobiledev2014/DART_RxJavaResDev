@@ -27,6 +27,7 @@ import com.unilab.gmp.model.ModelCategory;
 import com.unilab.gmp.model.ModelClassificationCategory;
 import com.unilab.gmp.model.ModelReportQuestion;
 import com.unilab.gmp.model.ModelTemplateQuestionDetails;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +47,32 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
     String spnCategory = "";
     String report_id;
     String productType;
+    String elementId;
+    String templateId;
+
+    List<String> questionId = new ArrayList<String>();
 
     CheckBox cb;
+    boolean checked, edited, dialogYesIsShowing = false, dialogNoIsShowing = false,
+            dialogYesRequiredIsShowing = false;
+
+    public TemplateElementQuestionAdapter(Context context, List<ModelTemplateQuestionDetails> questionList,
+                                          String report_id, String product_type, String element_id, String template_id) {
+        this.report_id = report_id;
+        this.questionList = questionList;
+        this.context = context;
+        this.notifyDataSetChanged();
+        this.productType = product_type;
+        this.elementId = element_id;
+        this.templateId = template_id;
+
+//        l = ModelTemplateQuestionDetails.find(ModelTemplateQuestionDetails.class, "templateid = ? AND elementid = ?", questionList.get(0).getTemplate_id(), questionList.get(0).getElement_id());
+        inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        //questionId.clear();
+        //checkBoxSetter(element_id, template_id, report_id);
+    }
 
     public CheckBox getCb() {
         return cb;
@@ -57,20 +82,36 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         this.cb = cb;
     }
 
+    public void checkBoxSetter(String element_id, String template_id, String report_id) {
+        List<ModelTemplateQuestionDetails> questionDetailsList = ModelTemplateQuestionDetails.find
+                (ModelTemplateQuestionDetails.class, "templateid = ? AND elementid = ?",
+                        template_id, element_id);
 
-    boolean checked, edited, dialogYesIsShowing = false, dialogNoIsShowing = false,
-            dialogYesRequiredIsShowing = false;
+        for (ModelTemplateQuestionDetails mtqd : questionDetailsList) {
+            questionId.add(mtqd.getQuestion_id());
+        }
 
-    public TemplateElementQuestionAdapter(Context context, List<ModelTemplateQuestionDetails> questionList,
-                                          String report_id, String product_type) {
-        this.report_id = report_id;
-        this.questionList = questionList;
-        this.context = context;
-        this.notifyDataSetChanged();
-        this.productType = product_type;
-//        l = ModelTemplateQuestionDetails.find(ModelTemplateQuestionDetails.class, "templateid = ? AND elementid = ?", questionList.get(0).getTemplate_id(), questionList.get(0).getElement_id());
-        inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        answerGetter(report_id);
+    }
+
+    public void answerGetter(String report_id) {
+        for (String qid : questionId) {
+            Log.i("QUESTION_ID", "QUESTION VALUE : " + qid);
+            List<ModelReportQuestion> reportQuestions = ModelReportQuestion.find(ModelReportQuestion.class,
+                    "questionid = ? AND reportid = ?", qid, report_id);
+
+            boolean check = true;
+            for (ModelReportQuestion q : reportQuestions) {
+                Log.i("QUESTION_ID", "QUESTION VALUE : " + q.getAnswer_id());
+                if (!q.getAnswer_id().equals("4")) {
+                    check = false;
+                }
+            }
+            if (check) {
+                cb.setChecked(true);
+                cb.setText("Not covered");
+            }
+        }
     }
 
     public void setAnswer(String answer, String option, final Dialog dialog) {
@@ -97,40 +138,58 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
     }
 
     public String isChecked() {
+        String checkValue = "";
+        int size = 0;
+        Log.i("checkValue", " : " + elementId + " checkValue : " + templateId);
 
         boolean notcovered = true;
         for (ModelTemplateQuestionDetails mtqd : questionList) {
-            List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
-            if (mrq.size() > 0) {
-                if (!mrq.get(0).getAnswer_id().equals("4") || !mrq.get(0).getNaoption_id().contains("Not covered")) {
+            List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class,
+                    "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
+            for (ModelReportQuestion answerList : mrq) {
+                if (!answerList.getAnswer_id().equals("4")) {
+                    notcovered = false;
+                } /*else {
                     notcovered = false;
                     break;
-                }
-            } else {
-                notcovered = false;
-                break;
+                }*/
             }
         }
-        if (notcovered)
-            return "Not covered";
+        if (notcovered) {
+            //return "Not covered";
+            checkValue = "Not covered";
+            Variable.checkValue = checkValue;
+        }
 
         boolean notapplicable = true;
         for (ModelTemplateQuestionDetails mtqd : questionList) {
-            List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
-            if (mrq.size() > 0) {
-                if (!mrq.get(0).getAnswer_id().equals("3") || !mrq.get(0).getNaoption_id().equals("Not applicable")) {
+            List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class,
+                    "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
+
+            Log.i("count", " : " + mrq.size());
+            size = mrq.size();
+
+            for (ModelReportQuestion answerList : mrq) {
+                if (!answerList.getAnswer_id().equals("3")) {
+                    notapplicable = false;
+                } /*else {
                     notapplicable = false;
                     break;
-                }
-            } else {
-                notapplicable = false;
-                break;
+                }*/
             }
         }
-        if (notapplicable)
-            return "Not applicable";
+        if (notapplicable) {
+            //return "Not applicable";
+            checkValue = "Not applicable";
+            Variable.checkValue = checkValue;
+        }
 
-        return "";
+        if (size <= 0) {
+            notapplicable = false;
+            checkValue = "";
+        }
+
+        return checkValue;
     }
 
     @Override
@@ -159,8 +218,52 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
 
 //        widgets.tvQuestionNumber.setText("Question " + questionNumber + ": ");
 
+        widgets.btnNc.setEnabled(Variable.isAuthorized);
+        widgets.btnNa.setEnabled(Variable.isAuthorized);
+        widgets.btnNo.setEnabled(Variable.isAuthorized);
+        widgets.btnYes.setEnabled(Variable.isAuthorized);
+
         widgets.tvQuestion.setText(questionNumber + ". " + question);
         final List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, questionList.get(z).getQuestion_id());
+
+        Log.i("ELEMENT ID", " : " + elementId + " TEMPLATE ID : " + templateId);
+        /*if (Variable.elementId.equals("")){
+            Variable.elementId = elementId;
+        }
+        if (elementId.equals(Variable.elementId)){
+            Log.i("ELEMENT ID", " : " + elementId + " VARIABLE ID : " + Variable.elementId);
+            List<ModelTemplateQuestionDetails> questionDetailsList = ModelTemplateQuestionDetails.find
+                    (ModelTemplateQuestionDetails.class, "templateid = ? AND elementid = ?",
+                            templateId, elementId);
+
+            for (ModelTemplateQuestionDetails mtqd : questionDetailsList){
+                questionId.add(mtqd.getQuestion_id());
+            }
+
+            for (String qid : questionId){
+                Log.i("QUESTION_ID", "QUESTION VALUE : " + qid);
+                List<ModelReportQuestion> reportQuestions = ModelReportQuestion.find(ModelReportQuestion.class,
+                        "questionid = ? AND reportid = ?", qid, report_id);
+
+                boolean check = true;
+
+                for (ModelReportQuestion q : reportQuestions) {
+                    Log.i("QUESTION_ID", "QUESTION VALUE : " + q.getAnswer_id());
+                    if (!q.getAnswer_id().equals("3")) {
+                        check = false;
+                    }
+                }
+                if (check) {
+                    cb.setChecked(true);
+                    cb.setText("Not applicable");
+                }
+            }
+
+        } else {
+            Variable.elementId = elementId;
+            questionId.clear();
+        }*/
+
 
         if (mrq.size() > 0 && !edited) {
             if (!mrq.get(0).getAnswer_id().isEmpty() && questionList.get(position).getAnswer_id().isEmpty()) {
@@ -219,10 +322,12 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                 public void onClick(View view) {
                     //if (questionList.get(position).getRequired_remarks().equalsIgnoreCase("yes")) {
                     if (questionList.get(position).getRequired_remarks().equalsIgnoreCase("1")) {
+                        Log.i("REMARKS", "REQUIRED : " + questionList.get(position).getRequired_remarks());
                         if (!dialogYesRequiredIsShowing)
                             dialogYesRequired(questionList.get(position).getDefault_yes(), widgets.btnYes,
                                     widgets.btnNo, widgets.btnNa, widgets.btnNc, z, mrq);
                     } else {
+                        Log.i("REMARKS", "REQUIRED : " + questionList.get(position).getRequired_remarks());
                         Log.e("TemplateElementQA", "position : " + position + " yes : " + questionList.get(position).getDefault_yes());
                         if (!dialogYesIsShowing)
                             dialogYes(questionList.get(position).getDefault_yes(), widgets.btnYes,
@@ -248,6 +353,8 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                 widgets.btnNc.setBackgroundResource(R.drawable.yes_button);
 
                 questionList.get(z).setAnswer_id("3");
+                questionList.get(z).setAnswer_details("");
+                questionList.get(z).setCategory_id("");
 
                 boolean check = true;
                 for (ModelTemplateQuestionDetails q : questionList) {
@@ -277,6 +384,8 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                 widgets.btnNc.setBackgroundResource(R.drawable.selected_button);
 
                 questionList.get(z).setAnswer_id("4");
+                questionList.get(z).setAnswer_details("");
+                questionList.get(z).setCategory_id("");
 
                 boolean check = true;
                 for (ModelTemplateQuestionDetails q : questionList) {
@@ -295,6 +404,15 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
 
             }
         });
+    }
+
+    public boolean isNA() {
+        for (ModelTemplateQuestionDetails a : questionList) {
+            if (!a.getAnswer_id().equals("3")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void dialogYes(String defaultText, final Button yes, final Button no, final Button na, final Button nc, final int z, final List<ModelReportQuestion> mrq) {
@@ -330,9 +448,14 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
 
                 questionList.get(z).setAnswer_details(strRemarks);
                 questionList.get(z).setAnswer_id("1");
+                questionList.get(z).setCategory_id("");
                 text = "N/A";
                 //cb.setChecked(false);
                 dialogYesIsShowing = false;
+
+                cb.setChecked(false);
+                cb.setText("N/A");
+
                 dialogYes.dismiss();
             }
         });
@@ -386,6 +509,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
 
                     questionList.get(z).setAnswer_details(strRemarks);
                     questionList.get(z).setAnswer_id("1");
+                    questionList.get(z).setCategory_id("");
                     text = "N/A";
                     dialogYesRequiredIsShowing = false;
 

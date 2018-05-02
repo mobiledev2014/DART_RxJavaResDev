@@ -49,6 +49,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Utils {
+    //public static String pdfPath = System.getenv("EXTERNAL_STORAGE") + "/DART/AuditReports/";
     public static String pdfPath = System.getenv("EXTERNAL_STORAGE") + "/DART/AuditReports/";
     public static Dialog dialogError;
     public static Dialog dialogSelectPdf;
@@ -490,6 +491,7 @@ public class Utils {
         Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
         pdfIntent.setDataAndType(path, "application/pdf");
         pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        pdfIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         try {
             context.startActivity(pdfIntent);

@@ -14,8 +14,8 @@ import android.widget.Spinner;
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.TemplateModelAuditors;
-import com.unilab.gmp.model.TemplateModelScopeAudit;
 import com.unilab.gmp.utility.SharedPreferenceManager;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -71,6 +71,8 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context);
         String email = sharedPreferenceManager.getStringData("EMAIL");
 
+        widgets.name.setEnabled(Variable.isAuthorized);
+
         list.add("Select");
         for (int count = 0; count < x; count++) {
 //            if (auditorsList.get(count).getEmail().equals(email)) {
@@ -78,7 +80,7 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
 //                x--;
 //            }
             if (templateModelAuditors.get(i).getAuditor_id().equals(auditorsList.get(count).getAuditor_id())) {
-                templateModelAuditors.get(i).setSelected(count+1);
+                templateModelAuditors.get(i).setSelected(count + 1);
             }
             list.add(auditorsList.get(count).getFname() + " " + auditorsList.get(count).getLname());
         }
@@ -89,7 +91,7 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int index = 0;
-                if (i>0)
+                if (i > 0)
                     index = i - 1;
                 templateModelAuditors.get(z).setName(widgets.name.getSelectedItem().toString());
                 templateModelAuditors.get(z).setSelected(i);
@@ -97,8 +99,13 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
                 widgets.department.setText(auditorsList.get(index).getDesignation());
                 templateModelAuditors.get(z).setPosition(auditorsList.get(index).getDesignation());
                 templateModelAuditors.get(z).setDepartment(auditorsList.get(index).getDepartment());
-                templateModelAuditors.get(z).setAuditor_id(auditorsList.get(index).getAuditor_id());
-                Log.e("auditor ID", widgets.name.getSelectedItem().toString() + " --- " + templateModelAuditors.get(z).getAuditor_id());
+                if (i == 0) {
+                    templateModelAuditors.get(z).setAuditor_id("0");
+                } else {
+                    templateModelAuditors.get(z).setAuditor_id(auditorsList.get(index).getAuditor_id());
+                }
+                Log.e("auditor ID", widgets.name.getSelectedItem().toString() + " --- " +
+                        " " + i + " sss " + templateModelAuditors.get(z).getAuditor_id());
             }
 
             @Override
@@ -119,7 +126,7 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         for (TemplateModelAuditors t : templateModelAuditors) {
             t.setReport_id(report_id);
             t.save();
-            Log.e("auditor ID", t.getAuditor_id());
+            Log.e("auditorID", "id : " + t.getAuditor_id());
         }
     }
 

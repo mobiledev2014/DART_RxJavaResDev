@@ -30,6 +30,7 @@ import com.unilab.gmp.utility.Variable;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Created by c_jhcanuto on 11/21/2016.
  */
@@ -42,8 +43,9 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
     String productType;
     boolean pick;
     int size = 0;
-    private List<ModelTemplateElements> questionModel;
     String report_id = "";
+    List<String> questionId = new ArrayList<String>();
+    private List<ModelTemplateElements> questionModel;
 
     public TemplateElementAdapter(Context context, List<ModelTemplateElements> questionModel, String report_id, String product_type) {
         this.questionModel = questionModel;
@@ -51,19 +53,24 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
         this.productType = product_type;
         this.notifyDataSetChanged();
         this.report_id = report_id;
+
         templateElementQuestionAdapters = new ArrayList<>();
+
         for (ModelTemplateElements mte : questionModel) {
             mte.setModelTemplateQuestionDetails(ModelTemplateQuestionDetails.find(ModelTemplateQuestionDetails.class,
                     "elementid = ? ", mte.getElement_id()));
-            TemplateElementQuestionAdapter questionList = new TemplateElementQuestionAdapter(context, mte.getModelTemplateQuestionDetails(), report_id, productType);
+            TemplateElementQuestionAdapter questionList = new TemplateElementQuestionAdapter(context,
+                    mte.getModelTemplateQuestionDetails(), report_id, productType, mte.getElement_id(), mte.getTemplate_id());
             templateElementQuestionAdapters.add(questionList);
             size++;
+
+            /*questionId.clear();
+            checkBoxSetter(mte.getElement_id(), mte.getTemplate_id(), report_id);*/
         }
 
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         try {
@@ -122,7 +129,6 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
         final int z = position;
         final String elementNumber;
 
-
         elementNumber = questionModel.get(position).getElement_name();
 
         widgets.tvElementNumber.setText(elementNumber);
@@ -136,8 +142,13 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
         widgets.lvQuestionList.setAdapter(templateElementQuestionAdapters.get(position));
         //widgets.lvQuestionList.setExpanded(true);
 
-        String check = templateElementQuestionAdapters.get(position).isChecked();
+        /*if (templateElementQuestionAdapters.get(position).isNA()) {
+            widgets.cbElementNa.setChecked(true);
+            widgets.cbElementNa.setText("Not applicable");
+        }*/
 
+        String check = templateElementQuestionAdapters.get(position).isChecked();
+        Log.i("RADIO_BUTTON", "VALUE : " + check + " Variable : " + Variable.checkValue);
         if (check.length() > 0) {
             widgets.cbElementNa.setText(check);
             widgets.cbElementNa.setChecked(true);
@@ -173,7 +184,6 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                 }
             }
         });
-
     }
 
     @Override
@@ -230,7 +240,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                         templateElementQuestionAdapters.get(z).notifyDataSetChanged();
                         pick.setText("Not applicable");
                     }
-                }, 2500);
+                }, 1500);
             }
         });
 
@@ -247,7 +257,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                         templateElementQuestionAdapters.get(z).notifyDataSetChanged();
                         pick.setText("Not covered");
                     }
-                }, 2500);
+                }, 1500);
             }
         });
 
