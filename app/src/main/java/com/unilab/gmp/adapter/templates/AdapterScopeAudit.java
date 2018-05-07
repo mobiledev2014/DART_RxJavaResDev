@@ -204,11 +204,11 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
 
         widgets.btnTemplateNextScopeAuditInterestDelete.setEnabled(Variable.isAuthorized);
 
-        if (!isCheck) {
+        /*if (!isCheck) {
             if (templateModelScopeAudit.get(i).getScope_detail().isEmpty()) {
                 widgets.remarks.setError("This field is required");
             }
-        }
+        }*/
         onBind = false;
     }
 
@@ -261,10 +261,10 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
 
         Set<String> lump = new HashSet<>();
         for (TemplateModelScopeAudit tmsa : templateModelScopeAudit) {
-            if (tmsa.getScope_detail().isEmpty()) {
+            /*if (tmsa.getScope_detail().isEmpty()) {
                 isCheck = false;
                 break;
-            }
+            }*/
 
             if (lump.contains(tmsa.getScope_id())) {
                 isCheck = false;

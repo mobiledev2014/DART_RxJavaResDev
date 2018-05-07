@@ -80,7 +80,8 @@
                     android:text="* "
                     android:textColor="#de0000"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:layout_width="match_parent"

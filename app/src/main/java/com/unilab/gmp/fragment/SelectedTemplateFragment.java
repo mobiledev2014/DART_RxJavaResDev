@@ -295,6 +295,8 @@ public class SelectedTemplateFragment extends Fragment {
         lvTemplateElement.setItemAnimator(new DefaultItemAnimator());
 
         lvTemplateElement.setAdapter(templateElementAdapter);
+
+        //lvTemplateElement.addOnScrollListener(new RecyclerView.OnS);
         //lvTemplateElement.setExpanded(true);
 
         lvTemplateElement.setOnTouchListener(new View.OnTouchListener() {

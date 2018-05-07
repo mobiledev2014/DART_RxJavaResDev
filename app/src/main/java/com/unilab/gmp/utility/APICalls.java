@@ -561,6 +561,26 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                             ModelTemplates modelTemplate = new ModelTemplates();
                             if (modelTemplates != null) {
                                 if (modelTemplates.getProductType() != null) {
+
+                                    //get all template id in local db
+                                    List<ModelTemplates> templateList = ModelTemplates.find
+                                            (ModelTemplates.class, "status = '1' OR status = '2' ",
+                                                    new String[]{}, null, "", "");
+                                    //if local db not match with api modified date
+                                    for (ModelTemplates qid : templateList){
+                                        Log.i("TEMPLATE_LIST","ID : " + qid.getTemplateID() + " Modified Date offline : " + qid.getDateUpdated()
+                                        + "ID : " + modelTemplates.getTemplateID() + " Modified Date API : " + modelTemplates.getDateUpdated());
+
+                                        if (qid.getTemplateID().equals(modelTemplates.getTemplateID())){
+                                            if (!qid.getDateUpdated().equals(modelTemplates.getDateUpdated())){
+                                                Log.i("TEMPLATE_LIST","WHEN HERE");
+                                                //delete template
+                                                ModelTemplates.executeQuery("DELETE FROM ModelTemplates " +
+                                                        "WHERE templateID = '" + qid.getTemplateID() + "'");
+                                            }
+                                        }
+                                    }
+
                                     //modelTemplate.setTemplateID(modelTemplates.getTemplateID() + "");
                                     modelTemplate.setTemplateID(templateid);
                                     modelTemplate.setProductType(modelTemplates.getProductType() + "");

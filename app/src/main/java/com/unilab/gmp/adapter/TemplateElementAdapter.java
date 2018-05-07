@@ -140,6 +140,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
         templateElementQuestionAdapters.get(position).setCb(widgets.cbElementNa);
 
         widgets.lvQuestionList.setAdapter(templateElementQuestionAdapters.get(position));
+        widgets.lvQuestionList.setNestedScrollingEnabled(false);
         //widgets.lvQuestionList.setExpanded(true);
 
         /*if (templateElementQuestionAdapters.get(position).isNA()) {

@@ -64,6 +64,7 @@ import com.unilab.gmp.model.ModelReportReviewer;
 import com.unilab.gmp.model.ModelReportSubActivities;
 import com.unilab.gmp.model.ModelSiteDate;
 import com.unilab.gmp.model.ModelTemplateActivities;
+import com.unilab.gmp.model.ModelTemplateQuestionDetails;
 import com.unilab.gmp.model.ModelTemplates;
 import com.unilab.gmp.model.ReviewerModel;
 import com.unilab.gmp.model.TemplateModelAuditors;
@@ -1494,14 +1495,27 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         counter = 0;
         String question = "";
-        List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND answerid > '0'", report.getReport_id());
+        List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class,
+                "reportid = ? AND answerid > '0'", report.getReport_id());
+
+        List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
+                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+        Log.i("QUESTION_FILTER","COUNT : " + questionList.size());
+        Log.i("QUESTION_FILTER","COUNT : " + mrq.size());
+
         for (ModelReportQuestion t : mrq) {
-            //question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + t.getAnswer_id() + ",\"naoption_id\":\"" + t.getNaoption_id() + "\",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id()) + ",\"answer_details\":\"" + t.getAnswer_details() + "\"}";
-            question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" + (t.getAnswer_id().isEmpty() ? "0" : t.getAnswer_id())
-                    + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id())
-                    + ",\"answer_details\":\"" + t.getAnswer_details() + "\",\"na_option\":\"" + t.getNaoption_id() + "\"}";
-            if (++counter != mrq.size()) {
-                question += ",";
+            for (ModelTemplateQuestionDetails qid : questionList) {
+                //Log.i("QUESTION_FILTER", "ID : " + qid.getQuestion_id());
+                Log.i("QUESTION_FILTER", t.getQuestion_id() + " compare to " + qid.getQuestion_id());
+                if (qid.getQuestion_id().equals(t.getQuestion_id())) {
+                    question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" +
+                            (t.getAnswer_id().isEmpty() ? "0" : t.getAnswer_id())
+                            + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id())
+                            + ",\"answer_details\":\"" + t.getAnswer_details() + "\",\"na_option\":\"" + t.getNaoption_id() + "\"}";
+                    if (++counter != questionList.size()) {
+                        question += ",";
+                    }
+                }
             }
         }
 

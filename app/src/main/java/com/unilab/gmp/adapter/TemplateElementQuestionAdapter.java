@@ -227,43 +227,6 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         final List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, questionList.get(z).getQuestion_id());
 
         Log.i("ELEMENT ID", " : " + elementId + " TEMPLATE ID : " + templateId);
-        /*if (Variable.elementId.equals("")){
-            Variable.elementId = elementId;
-        }
-        if (elementId.equals(Variable.elementId)){
-            Log.i("ELEMENT ID", " : " + elementId + " VARIABLE ID : " + Variable.elementId);
-            List<ModelTemplateQuestionDetails> questionDetailsList = ModelTemplateQuestionDetails.find
-                    (ModelTemplateQuestionDetails.class, "templateid = ? AND elementid = ?",
-                            templateId, elementId);
-
-            for (ModelTemplateQuestionDetails mtqd : questionDetailsList){
-                questionId.add(mtqd.getQuestion_id());
-            }
-
-            for (String qid : questionId){
-                Log.i("QUESTION_ID", "QUESTION VALUE : " + qid);
-                List<ModelReportQuestion> reportQuestions = ModelReportQuestion.find(ModelReportQuestion.class,
-                        "questionid = ? AND reportid = ?", qid, report_id);
-
-                boolean check = true;
-
-                for (ModelReportQuestion q : reportQuestions) {
-                    Log.i("QUESTION_ID", "QUESTION VALUE : " + q.getAnswer_id());
-                    if (!q.getAnswer_id().equals("3")) {
-                        check = false;
-                    }
-                }
-                if (check) {
-                    cb.setChecked(true);
-                    cb.setText("Not applicable");
-                }
-            }
-
-        } else {
-            Variable.elementId = elementId;
-            questionId.clear();
-        }*/
-
 
         if (mrq.size() > 0 && !edited) {
             if (!mrq.get(0).getAnswer_id().isEmpty() && questionList.get(position).getAnswer_id().isEmpty()) {
