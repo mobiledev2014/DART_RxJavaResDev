@@ -302,7 +302,8 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                 @Override
                 public void onClick(View view) {
                     if (!dialogNoIsShowing)
-                        dialogNo(widgets.btnYes, widgets.btnNo, widgets.btnNa, widgets.btnNc, z, mrq);
+                        dialogNo(widgets.btnYes, widgets.btnNo, widgets.btnNa, widgets.btnNc, z, mrq,
+                                questionList.get(position).getQuestion_id());
                 }
             });
         }
@@ -497,7 +498,8 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         dialogYes.show();
     }
 
-    public void dialogNo(final Button yes, final Button no, final Button na, final Button nc, final int z, final List<ModelReportQuestion> mrq) {
+    public void dialogNo(final Button yes, final Button no, final Button na, final Button nc,
+                         final int z, final List<ModelReportQuestion> mrq, String question_id) {
         dialogNo = new Dialog(context);
         dialogNo.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialogNo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -510,12 +512,20 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         final Button save = (Button) dialogNo.findViewById(R.id.btn_save);
         Button cancel = (Button) dialogNo.findViewById(R.id.btn_cancel);
 
+        /*Log.i("TEST-ERROR-Q", "SIZE: " + question_id);
+        if (!question_id.equals("")) {
+            List<ModelReportQuestion> questionAnswer = ModelReportQuestion.find(ModelReportQuestion.class,
+                    "reportid = ? AND questionid = ?", report_id, question_id);
+            Log.i("TEST-ERROR-Q", "Q ID: " + question_id + " SEL SIZE: " + questionAnswer.size());
+        }*/
 
         Log.d("TemplateElementQA", productType + "");
 //        List<ModelClassification> modelClassificationList = ModelClassification.find(ModelClassification.class, "classificationname like '%"+ productType +"%'");
-        List<ModelClassificationCategory> modelClassificationCategoryList = ModelClassificationCategory.find(ModelClassificationCategory.class, "classificationname like '%" + productType + "%'");
+        List<ModelClassificationCategory> modelClassificationCategoryList =
+                ModelClassificationCategory.find(ModelClassificationCategory.class,
+                        "classificationname like '%" + productType + "%'");
 
-        Log.d("TemplateElementQA", modelClassificationCategoryList.toString() + " size :" + modelClassificationCategoryList.size());
+        Log.d("TemplateElementQA", modelClassificationCategoryList.get(0).toString() + " size :" + modelClassificationCategoryList.size());
         List<String> categoryId = new ArrayList<>();
         if (modelClassificationCategoryList.size() > 0) {
             for (ModelClassificationCategory mcc : modelClassificationCategoryList) {
@@ -529,16 +539,26 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         List<ModelCategory> categoryList = ModelCategory.find(ModelCategory.class, "status > 0");
         List<String> list = new ArrayList<>();
         final List<String> listid = new ArrayList<>();
-        Log.d("SIZE", categoryList.size() + "");
+        Log.d("TEST-TRAP", categoryList.size() + "");
         int x = categoryList.size();
         int selected = 0;
+        int selCat = 0;
         for (int count = 0; count < x; count++) {
             if (categoryId.indexOf(categoryList.get(count).getCategory_id()) != -1) {
                 list.add(categoryList.get(count).getCategory_name());
+                Log.d("TEST-TRAP", "ID: " + categoryList.get(count).getCategory_id());
                 listid.add(categoryList.get(count).getCategory_id());
-                if (mrq.size() > 0 && questionList.size() < z) {
-                    if (questionList.get(z).getCategory_id().equals(listid.get(count))) {
-                        selected = count;
+                //if (mrq.size() > 0 && questionList.size() < z) {
+                if (mrq.size() >= 0 && questionList.size() > 0) {
+                    Log.i("BUG-I",
+                            "CAT ID: " + questionList.get(z).getCategory_id() +
+                                    " SEL ID: " + listid.get(listid.size() - 1));
+                    //if ()
+                    if (questionList.get(z).getCategory_id().equals(listid.get(listid.size() - 1))) {
+                        Log.i("BUG-I",
+                                "CAT ID: " + questionList.get(z).getCategory_id() +
+                                        " SEL ID: " + listid.get(listid.size() - 1));
+                        selected = listid.size() - 1;
                     }
                 }
             }
@@ -550,6 +570,8 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         //if (mrq.size() > 0) {
         if (questionList.get(z).getAnswer_id().equals("2")) {
             remarks.setText(questionList.get(z).getAnswer_details());
+            //for testing, set spinner item
+            //+ " Selected Category : " + questionList.get(z).getCategory_id() + " Selected : " + selected);
             category.setSelection(selected);
         }
         //}

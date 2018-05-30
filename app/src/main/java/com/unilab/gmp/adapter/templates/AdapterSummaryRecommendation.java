@@ -88,6 +88,7 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
         widgets.element.setAdapter(adapter);
         widgets.element.setSelection(templateModelSummaryRecommendations.get(i).getSelected());
         widgets.element.setEnabled(Variable.isAuthorized);
+
         widgets.element.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -96,7 +97,11 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
                 templateModelSummaryRecommendations.get(z).setElement_id(mte.get(i).getElement_id());
 
                 if (i > 0) {
-                    widgets.remarks.setEnabled(true);
+                    if (Variable.isAuthorized) {
+                        widgets.remarks.setEnabled(true);
+                    } else {
+                        widgets.remarks.setEnabled(Variable.isAuthorized);
+                    }
                 } else {
                     widgets.remarks.setEnabled(false);
                     widgets.remarks.setText("");

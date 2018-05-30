@@ -68,7 +68,11 @@ public class AdapterPreAuditDoc extends RecyclerView.Adapter<AdapterPreAuditDoc.
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                templateModelPreAuditDocs.get(z).setPreaudit(widgets.preaudit.getText().toString());
+                try {
+                    templateModelPreAuditDocs.get(z).setPreaudit(widgets.preaudit.getText().toString());
+                } catch (Exception e){
+
+                }
             }
 
             @Override

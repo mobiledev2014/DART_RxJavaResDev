@@ -55,8 +55,8 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     Dialog dialogDeleteDateOfAudit;
     Button btn_add;
     int simpleMessageDialog = -1, delete = 1;
-    private boolean onBind;
     boolean isDialogOpen = false;
+    private boolean onBind;
 
     public AdapterScopeAudit(List<TemplateModelScopeAudit> templateModelScopeAudit, Context context
             , String company_id, NextSelectedTemplateFragment nextSelectedTemplateFragment,
@@ -76,8 +76,10 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         idList = new ArrayList<>();
         Log.d("SIZE", scopeAudits.size() + "");
         int x = scopeAudits.size();
+
         list.add("Select");
         idList.add("0");
+
         for (int count = 0; count < x; count++) {
             list.add(scopeAudits.get(count).getScope_name());
             idList.add(scopeAudits.get(count).getScope_id());
@@ -136,12 +138,21 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         }
 
         if (templateModelScopeAudit.get(z).getScope_id().isEmpty()) {
-            templateModelScopeAudit.get(z).setScope_id(scopeAudits.get(widgets.spnTypeAudit.getSelectedItemPosition()).getScope_id());
+            //templateModelScopeAudit.get(z).setScope_id(scopeAudits.get(widgets.spnTypeAudit.getSelectedItemPosition()).getScope_id());
+            templateModelScopeAudit.get(z).setScope_id(0 + "");
+            Log.i("SAVED-ITEM", "SCOPE TEST: " + scopeAudits.get(widgets.spnTypeAudit.getSelectedItemPosition()).getScope_id());
+            Log.i("SAVED-ITEM", "SCOPE TEST 2: " + scopeAudits.get(0).getScope_id());
+            Log.i("SAVED-ITEM", "SCOPE TEST POSITION: " + widgets.spnTypeAudit.getSelectedItemPosition());
         } else {
             templateModelScopeAudit.get(z).setSelected(idList.indexOf(templateModelScopeAudit.get(z).getScope_id()));
+            Log.i("SAVED-ITEM", "SCOPE TEST ELSE: " + idList.indexOf(templateModelScopeAudit.get(z).getScope_id()));
+            Log.i("SAVED-ITEM", "SCOPE TEST POSITION ELSE: " + templateModelScopeAudit.get(z).getScope_id());
         }
 
+        //widgets.spnTypeAudit.setSelection(templateModelScopeAudit.get(i).getSelected());
+        Log.i("GET ITEM", "VALUE: " + templateModelScopeAudit.get(i).getSelected());
         widgets.spnTypeAudit.setSelection(templateModelScopeAudit.get(i).getSelected());
+
         widgets.spnTypeAudit.setEnabled(Variable.isAuthorized);
         widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -233,6 +244,10 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
             yes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.i("BUTTON-POSITION", "VALUE : " + z + " SIZE : " + (templateModelScopeAuditInterests.get(z).size() - 1));
+                    Variable.selectedProduct.remove((templateModelScopeAuditInterests.get(z).size() - 1) + "");
+                    Variable.selectedDisposition.remove((templateModelScopeAuditInterests.get(z).size() - 1) + "");
+
                     templateModelScopeAuditInterests.get(z).remove(templateModelScopeAuditInterests.get(z).size() - 1);
                     //templateModelScopeAudit.get(z).getAdapterScope().notifyDataSetChanged();
                     notifyDataSetChanged();
@@ -283,8 +298,6 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     public boolean check2() {
         isCheck = true;
         Log.e("getWidgets", "getWidgets1");
-
-
         Set<String> lump = new HashSet<>();
         for (TemplateModelScopeAudit tmsa : templateModelScopeAudit) {
 
@@ -294,10 +307,76 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
             }
             lump.add(tmsa.getScope_id());
         }
-
-
         if (!isCheck) {
             notifyDataSetChanged();
+        }
+
+        return isCheck;
+    }
+
+    public boolean check4() {
+        isCheck = true;
+
+        for (TemplateModelScopeAudit tmsa : templateModelScopeAudit) {
+            Log.i("SCOPE-COUNT", "" + tmsa.getScope_id());
+            if (tmsa.getScope_id().equals("0")){
+                isCheck = false;
+                break;
+            }
+        }
+
+        return isCheck;
+    }
+
+    public boolean check3() {
+        isCheck = true;
+        if (checkProDis()) {
+            Log.e("DUP-PRO-DISPO", "VALUE : " + checkProDis());
+            isCheck = true;
+        } else {
+            Log.e("DUP-PRO-DISPO", "VALUE : " + checkProDis());
+            isCheck = false;
+        }
+        return isCheck;
+    }
+
+    public boolean checkProDis() {
+        isCheck = true;
+        String temporaryProduct = "xxx";
+        String temporaryDisposition = "xxx";
+
+        Log.i("TEST-PRODUCT", "" + Variable.selectedProduct.get("0"));
+        Log.i("TEST-DISPOSITION", "" + Variable.selectedDisposition.get("0"));
+        Log.i("TEST-SIZE", "" + Variable.selectedProduct.size());
+
+        for (int i = 0; i < Variable.selectedProduct.size(); i++) {
+            Log.i("TEST-PRODUCT IF", "" + temporaryProduct);
+            Log.i("TEST-DISPOSITION IF", "" + temporaryDisposition);
+
+            if (temporaryProduct.equals("xxx")) {
+                temporaryProduct = Variable.selectedProduct.get(i + "");
+                temporaryDisposition = Variable.selectedDisposition.get(i + "");
+
+                Log.i("TEST-PRODUCT IF IF", "" + Variable.selectedProduct.get(i + ""));
+                Log.i("TEST-DISPOSITION IF IF", "" + Variable.selectedDisposition.get(i + ""));
+            } else {
+                Log.i("TEST-PRODUCT ELSE", "" + temporaryProduct);
+                Log.i("TEST-DISPOSITION ELSE", "" + temporaryDisposition);
+
+                for (int j = 0; j < Variable.selectedProduct.size(); j++) {
+                    Log.i("ERROR-TRAP", "" + Variable.selectedDisposition.get(i + ""));
+                    if (j == i) {
+                        continue;
+                    }
+                    if (Variable.selectedProduct.get(i + "").equals(temporaryProduct) &&
+                            Variable.selectedDisposition.get(i + "").equals(temporaryDisposition)) {
+                        isCheck = false;
+                        break;
+                    }
+                }
+            }
+            if (!isCheck)
+                break;
         }
         return isCheck;
     }
@@ -321,6 +400,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         int counter = 0;
         for (TemplateModelScopeAudit tmsa : templateModelScopeAudit) {
             //if (!tmsa.getScope_detail().isEmpty()) {
+            Log.i("SAVED-ITEM", "SCOPE: " + tmsa.getScope_id() + " SIZE: " + templateModelScopeAudit.size() + "\n");
             tmsa.setReport_id(report_id);
             tmsa.setAudit_id("" + counter);
             tmsa.save();
@@ -333,7 +413,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     }
 
 
-    private void addScopeAuditTypeInterest(AdapterScopeAuditInterest adapterScopeAuditInterest, int pos) {
+    public void addScopeAuditTypeInterest(AdapterScopeAuditInterest adapterScopeAuditInterest, int pos) {
         if (adapterScopeAuditInterest.getTypeAuditSize() > templateModelScopeAuditInterests.get(pos).size()) {
             Log.i("ADD", "CLICKED");
             TemplateModelScopeAuditInterest t = new TemplateModelScopeAuditInterest();

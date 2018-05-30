@@ -22,6 +22,7 @@ import com.unilab.gmp.R;
 import com.unilab.gmp.fragment.SelectedTemplateFragment;
 import com.unilab.gmp.model.ModelTemplates;
 import com.unilab.gmp.utility.ProgressDialogUtils;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
 
@@ -92,6 +93,9 @@ public class TemplateAdapter extends BaseAdapter {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            Variable.selectedProduct.clear();
+                            Variable.selectedDisposition.clear();
+                            Variable.report_id = "0";
 
                             FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);

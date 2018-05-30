@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.TemplateModelCompanyBackgroundMajorChanges;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
     Context context;
     boolean isCheck = true;
     int disable = 0;
+    String reportid = "";
+    String status = "";
 
     public AdapterCompanyBackgroundMajorChanges(List<TemplateModelCompanyBackgroundMajorChanges> templateModelCompanyBackgroundMajorChanges, Context context, int disable) {
         this.templateModelCompanyBackgroundMajorChanges = templateModelCompanyBackgroundMajorChanges;
@@ -58,6 +61,9 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
 
     @Override
     public void onBindViewHolder(final Widgets widgets, final int position) {
+        if (Variable.status.equals("3")) {
+            widgets.majorchanges.setEnabled(false);
+        }
         if (templateModelCompanyBackgroundMajorChanges.size() > position) {
             widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges());
             widgets.majorchanges.addTextChangedListener(new TextWatcher() {

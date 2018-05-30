@@ -209,8 +209,12 @@ public class SelectedAuditReportFragment extends Fragment {
 
         if (!checkIfAuthorizedUser()) {
             disableWidgets();
-        } else if (statusCheck().equals("3") || statusCheck().equals("4")){
+            Variable.status = "3";
+        } else if (statusCheck().equals("3") || statusCheck().equals("4")) {
+            Variable.status = "3";
             disableWidgets();
+        } else {
+            Variable.status = "";
         }
 
         tvTemplateProductType.setText(modelTemplates.getProductType());
@@ -230,7 +234,7 @@ public class SelectedAuditReportFragment extends Fragment {
         return rootView;
     }
 
-    public String statusCheck(){
+    public String statusCheck() {
         String status = modelAuditReports.getStatus();
         return status;
     }
@@ -383,22 +387,30 @@ public class SelectedAuditReportFragment extends Fragment {
                 dialogCancelTemplate();
                 break;
             case R.id.btn_save_draft:
-                if (!modelTemplates.getCompany_id().isEmpty())
-                    dialogSaveDraft();
-                else
-                    dialogAnswerAll("Please fill up Name of Site.");
+                if (checkIfAuthorizedUser()) {
+                    if (statusCheck().equals("3") || statusCheck().equals("4")) {
+                        dialogAnswerAll("Report is already for approval.");
+                    } else {
+                        if (!modelTemplates.getCompany_id().isEmpty()) {
+                            dialogSaveDraft();
+                        } else {
+                            dialogAnswerAll("Please fill up Name of Site.");
+                        }
+                    }
+                } else {
+                    dialogAnswerAll("You are not authorized.");
+                }
                 break;
             case R.id.btn_submit:
                 if (validate()) {
                     dialogSubmit("Would you like to proceed?");
-                }
-                else
-                {
+                } else {
                     dialogAnswerAll("Please fill up all required fields.");
                 }
                 break;
         }
     }
+
     public void dialogAnswerAll(String mess) {
         dialogAnswerAll = new Dialog(context);
         dialogAnswerAll.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -420,6 +432,7 @@ public class SelectedAuditReportFragment extends Fragment {
 
         dialogAnswerAll.show();
     }
+
     private void deleteDateOfAudit() {
         if (modelDateOfAudits.size() > 1) {
             dialogDeleteDateConfirmation("Are you sure you want to delete?");
@@ -446,6 +459,22 @@ public class SelectedAuditReportFragment extends Fragment {
             public void onClick(View view) {
                 modelDateOfAudits.remove(modelDateOfAudits.size() - 1);
                 dateOfAuditAdapter.notifyDataSetChanged();
+
+                //for testing
+                /*int x = modelDateOfAudits.size() - 1;
+                Log.i("SAMPLE-DATE", "" + dateOfAuditAdapter.getItem(modelDateOfAudits.size() - 1));
+                Log.i("SAMPLE-DATE", "" + modelDateOfAudits.get(x).getId());
+                int del = (int) (modelDateOfAudits.get(x).getId() + 1);
+                Log.i("SAMPLE-DATE-DEL", "" + del);
+                List<ModelDateOfAudit> dateDel = ModelDateOfAudit.findWithQuery(ModelDateOfAudit.class,
+                        "SELECT date_Of_Audit FROM MODEL_DATE_OF_AUDIT WHERE id = '" + del + "'");
+
+                for (ModelDateOfAudit delDate : dateDel){
+                    Log.i("SAMPLE-DATE-DEL", "" + delDate.getDateOfAudit() + " id : " + delDate.getId());
+                }
+                Log.i("SAMPLE-DATE-DEL", "" + del);
+                ModelTemplates.executeQuery("DELETE FROM MODEL_DATE_OF_AUDIT WHERE id = '" + del + "'");*/
+
                 dialogDeleteDateOfAudit.dismiss();
             }
         });
@@ -660,7 +689,7 @@ public class SelectedAuditReportFragment extends Fragment {
 //            pDialog.dismiss();
 //            return false;
 //        }
-        if (modelTemplates.getCompany_id().isEmpty()|| dateOfAuditAdapter.getItem(0).equals("")) {
+        if (modelTemplates.getCompany_id().isEmpty() || dateOfAuditAdapter.getItem(0).equals("")) {
             /*progress dialog dismiss*/
             pDialog.dismiss();
             return false;

@@ -71,7 +71,11 @@ public class AdapterOthersIssueExecutive extends RecyclerView.Adapter<AdapterOth
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    templateModelOtherIssuesExecutives.get(z).setOther_issues_executive(widgets.otherIssueExecutive.getText().toString());
+                    try {
+                        templateModelOtherIssuesExecutives.get(z).setOther_issues_executive(widgets.otherIssueExecutive.getText().toString());
+                    } catch (Exception e){
+
+                    }
                 }
 
                 @Override

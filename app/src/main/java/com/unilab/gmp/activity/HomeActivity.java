@@ -39,6 +39,8 @@ import com.unilab.gmp.utility.APICalls;
 import com.unilab.gmp.utility.SharedPreferenceManager;
 import com.unilab.gmp.utility.Variable;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -93,6 +95,11 @@ public class HomeActivity extends AppCompatActivity {
 
     public HomeActivity() {
 
+    }
+
+    public static String getTime(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
+        return sdf.format(date);
     }
 
     @Override
@@ -158,6 +165,12 @@ public class HomeActivity extends AppCompatActivity {
         }.start();
     }
 
+    /*@Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        getSupportFragmentManager().beginTransaction().add(R.id.fl_content, selectedTemplateFragment).addToBackStack(null).commit();
+    }*/
+
     public void initializeHome() {
         auditReportFragment = new AuditReportFragment();
         auditorsFragment = new AuditorsFragment();
@@ -182,12 +195,6 @@ public class HomeActivity extends AppCompatActivity {
             Log.e("UserFound", "found");
         }
     }
-
-    /*@Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-        getSupportFragmentManager().beginTransaction().add(R.id.fl_content, selectedTemplateFragment).addToBackStack(null).commit();
-    }*/
 
     @Override
     public void onBackPressed() {
@@ -398,12 +405,20 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialogSyncConfirmation.dismiss();
+
                 //check internet connection
                 if (isNetworkConnected()) {
-                    Variable.showDialog = true;
-                    new APICalls(context, "Syncing...", true, HomeActivity.this).execute();
+                    //if (Variable.session == 0) {
+                        Variable.showDialog = true;
+                        new APICalls(context, "Syncing...", true, HomeActivity.this).execute();
+                        Variable.session++;
+                    /*} else {
+                        Variable.showDialog = true;
+                        new APICallsSession(context, "Syncing...", true, HomeActivity.this).execute();
+                        Variable.session = 0;
+                    }*/
                 } else {
-                    dialogErrorLogin();
+                    dialogErrorLogin("No internet connection. Make sure Wi-Fi or cellular data is turned on, then try again.");
                 }
             }
         });
@@ -429,15 +444,13 @@ public class HomeActivity extends AppCompatActivity {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    public void dialogErrorLogin() {
+    public void dialogErrorLogin(String message) {
         dialogErrorLogin = new Dialog(context);
         dialogErrorLogin.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialogErrorLogin.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogErrorLogin.setCancelable(false);
         dialogErrorLogin.setContentView(R.layout.dialog_error_login);
         dialogErrorLogin.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        String message = "No internet connection. Make sure Wi-Fi or cellular data is turned on, then try again.";
 
         TextView tv_message = (TextView) dialogErrorLogin.findViewById(R.id.tv_message);
         Button ok = (Button) dialogErrorLogin.findViewById(R.id.btn_ok);

@@ -65,10 +65,10 @@ public class StartDatePickerButton extends DialogFragment implements DatePickerD
         //month = month + 1;
         //date = year + "-" + (month + 1) + "-" + day;
         Log.i("DATE OF AUDIT : ", year + "-" + (month + 1) + "-" + day);
-        if (month <= 9){
+        if (month <= 8){
             monthStr = "0" + (month + 1);
         } else {
-            monthStr = month + "";
+            monthStr = (month+1) + "";
         }
 
         if (day <= 9){

@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.orm.SugarContext;
 import com.unilab.gmp.R;
+import com.unilab.gmp.model.ModelAuditReports;
 import com.unilab.gmp.model.ModelUser;
 import com.unilab.gmp.retrofit.Async.PostAsync;
 import com.unilab.gmp.utility.Glovar;
@@ -104,6 +105,13 @@ public class MainActivity extends AppCompatActivity {
             );
         }
 
+
+
+        List<ModelAuditReports> auditReps = ModelAuditReports.findWithQuery(ModelAuditReports.class,
+                "SELECT * FROM MODEL_AUDIT_REPORTS ORDER BY CAST(reportid as INT) ASC", null);
+
+        int size = auditReps.size() + 1;
+        Log.i("AUDIT-REPORT-SIZE", "VALUE : " + size);
         //checkConnectionStatus();
     }
 
@@ -207,6 +215,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        /*FOR TESTING*/
+        /*Intent intent = new Intent(context, HomeActivity.class);
+        startActivity(intent);
+        finish();*/
+        /*------------------------------------------------------------*/
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(btnLogin.getWindowToken(), 0);

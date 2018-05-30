@@ -16,4 +16,5 @@ public class TemplateDetailsModel extends SugarRecord {
     String standard_id;
     String classification_id;
     String status;
+    String modified_date;
 }

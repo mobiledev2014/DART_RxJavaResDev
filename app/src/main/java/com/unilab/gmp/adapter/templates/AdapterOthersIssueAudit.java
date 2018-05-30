@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 
 import com.unilab.gmp.R;
@@ -69,7 +68,11 @@ public class AdapterOthersIssueAudit extends RecyclerView.Adapter<AdapterOthersI
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                templateModelOtherIssuesAudits.get(z).setOther_issues_audit(widgets.otherIssueAudit.getText().toString());
+                try {
+                    templateModelOtherIssuesAudits.get(z).setOther_issues_audit(widgets.otherIssueAudit.getText().toString());
+                } catch (Exception e){
+
+                }
             }
 
             @Override

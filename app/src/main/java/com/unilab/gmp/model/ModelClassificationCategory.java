@@ -15,4 +15,13 @@ public class ModelClassificationCategory extends SugarRecord {
     String category_id;
     String classification_id;
     String classification_name;
+
+    @Override
+    public String toString() {
+        return "ModelClassificationCategory{" +
+                "category_id='" + category_id + '\'' +
+                ", classification_id='" + classification_id + '\'' +
+                ", classification_name='" + classification_name + '\'' +
+                '}';
+    }
 }

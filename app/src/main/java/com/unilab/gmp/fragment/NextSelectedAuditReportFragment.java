@@ -31,7 +31,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.adapter.ActivityAdapter;
@@ -49,6 +48,7 @@ import com.unilab.gmp.adapter.templates.AdapterPreAuditDoc;
 import com.unilab.gmp.adapter.templates.AdapterPresentDuringMeeting;
 import com.unilab.gmp.adapter.templates.AdapterReference;
 import com.unilab.gmp.adapter.templates.AdapterScopeAudit;
+import com.unilab.gmp.adapter.templates.AdapterScopeAuditInterest;
 import com.unilab.gmp.adapter.templates.AdapterSummaryRecommendation;
 import com.unilab.gmp.adapter.templates.AdapterTranslator;
 import com.unilab.gmp.model.ApproverModel;
@@ -296,6 +296,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     List<TemplateModelOtherIssuesExecutive> templateModelOtherIssuesExecutives;
 
     AdapterScopeAudit adapterScopeAudit;
+    AdapterScopeAuditInterest adapterScopeAuditInterest;
     AdapterReference adapterReference;
     AdapterPreAuditDoc adapterPreAuditDoc;
     AdapterPresentDuringMeeting adapterPresentDuringMeeting;
@@ -370,6 +371,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         auditReportFragment = new AuditReportFragment();
         tvTitle.setText("REPORT");
         btnSubmit.setText("SUBMIT");
+
+        Variable.report_id = report.getReport_id();
 
         year = currentTime.get(Calendar.YEAR);
         month = currentTime.get(Calendar.MONTH);
@@ -523,8 +526,17 @@ public class NextSelectedAuditReportFragment extends Fragment {
 //        lvTemplateNextScopeAudit.setExpanded(true);
 //        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
         if (templateModelScopeAudits.size() <= 0) {
+            Log.i("SCOPE_AUDIT_TEST", "IF SIZE : " + templateModelScopeAudits.size());
             addScopeAuditType();
         } else {
+            Log.i("SCOPE_AUDIT_TEST", "ELSE SIZE : " + templateModelScopeAudits.size());
+            List<ModelAuditReports> counter = ModelAuditReports.find(ModelAuditReports.class,
+                    "reportid ='" + report.getReport_id() + "'");
+
+            for (ModelAuditReports x : counter) {
+                Log.i("SCOPE_AUDIT_TEST", " : " + x.toString());
+            }
+
             adapterScopeAudit.notifyDataSetChanged();
         }
 
@@ -892,12 +904,22 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 dialogCancelTemplate();
                 break;
             case R.id.btn_save_draft:
-                if (checkIfAuthorizedUser())
-                    dialogSaveDraft("Are you sure you want to save as draft?");
-                else
+                if (checkIfAuthorizedUser()) {
+                    if (report.getStatus().equals("3") || report.getStatus().equals("4")) {
+                        dialogDeleteFromListConfirmation("Report is already for approval.", simpleMessageDialog);
+                    } else {
+                        dialogSaveDraft("Are you sure you want to save as draft?");
+                    }
+                } else
                     dialogDeleteFromListConfirmation("You are not authorized", simpleMessageDialog);
                 break;
             case R.id.btn_submit:
+                //test
+                for (int k = 0; k < Variable.selectedDisposition.size(); k++) {
+                    Log.i("DISPO-PRO-BUG", "VAL DIS: " + Variable.selectedDisposition.get(k + "")
+                            + " - VAL PRO: " + Variable.selectedProduct.get(k + ""));
+                }
+
                 if (checkIfAuthorizedUser()) {
                     if (report.getStatus().equals("3") || report.getStatus().equals("4")) {
                         dialogDeleteFromListConfirmation("Report is already for approval.", simpleMessageDialog);
@@ -1078,11 +1100,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         if (validate()) {
             if (isNetworkConnected()) {
+                Log.e("validate", "main-if");
+
                 saveReport();
                 sharedPref = new SharedPreferenceManager(context);
                 email = sharedPref.getStringData("EMAIL");
                 String password = sharedPref.getStringData("PASSWORD");
                 Log.i("ERROR", "POSTASYNC 2");
+
                 new PostAsync(context, loginDialog, email, password, Glovar.POST_AUDIT, NextSelectedAuditReportFragment.this, null).execute();
             } else {
                 //dialog if saveReport as draft or self destruct
@@ -1463,6 +1488,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     public boolean validate() {
+        Log.e("validate", "main");
         message = "Please fill up all the required fields.";
         boolean passed = true;
         if (etTemplateNextAuditedArea.getText().toString().equals("")) {
@@ -1480,12 +1506,34 @@ public class NextSelectedAuditReportFragment extends Fragment {
             set_error(etTemplateNextDateOfWrapUp);
             Log.e("validate", "2");
         }
-
         if (!adapterScopeAudit.check()) {
             passed = false;
             Log.e("validate", "3");
-            if (!adapterScopeAudit.check2())
-                message += "\nYou have entered duplicate scope.";
+        }
+        if (!adapterScopeAudit.check2()) {
+            message += "\nYou have entered duplicate scope.";
+            passed = false;
+            Log.e("validate", "3.5");
+        }
+        if (!adapterScopeAudit.check4()) {
+            message += "\nScope of audit is required.";
+            passed = false;
+            Log.e("validate", "3.5.10");
+        }
+        if (!adapterScopeAudit.check3()) {
+            message += "\nYou have entered duplicate product and disposition.";
+            passed = false;
+            Log.e("validate", "3.5.5");
+        }
+        if (Variable.selectedProduct.size() != Variable.selectedDisposition.size()) {
+            message += "\nProduct of interest and disposition are required.";
+            passed = false;
+            Log.e("validate", "3.5.10");
+        }
+        if (Variable.selectedProduct.size() == 0 && Variable.selectedDisposition.size() == 0) {
+            message += "\nProduct of interest and disposition are required.";
+            passed = false;
+            Log.e("validate", "3.5.10");
         }
         if (!adapterReference.check()) {
             passed = false;
@@ -1830,24 +1878,35 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
                 (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
-        Log.i("QUESTION_FILTER","COUNT : " + questionList.size());
-        Log.i("QUESTION_FILTER","COUNT : " + mrq.size());
+        Log.i("QUESTION_FILTER", "QUESTION COUNT : " + questionList.size());
+        Log.i("QUESTION_FILTER", "ANSWER COUNT : " + mrq.size());
+
+        List<String> answers = new ArrayList<>();
 
         for (ModelReportQuestion t : mrq) {
-            for (ModelTemplateQuestionDetails qid : questionList){
-                //Log.i("QUESTION_FILTER", "ID : " + qid.getQuestion_id());
+            for (ModelTemplateQuestionDetails qid : questionList) {
                 Log.i("QUESTION_FILTER", t.getQuestion_id() + " compare to " + qid.getQuestion_id());
-                if (qid.getQuestion_id().equals(t.getQuestion_id())){
+                if (t.getQuestion_id().equals(qid.getQuestion_id())) {
+                    answers.add(t.getQuestion_id());
+                }
+            }
+        }
+
+        //Log.i("LIST OF ANSWERS", "QUESTION ID : " + ans);
+        for (ModelReportQuestion t : mrq) {
+            for (ModelTemplateQuestionDetails qid : questionList) {
+                if (qid.getQuestion_id().equals(t.getQuestion_id())) {
                     question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" +
                             (t.getAnswer_id().isEmpty() ? "0" : t.getAnswer_id())
                             + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id())
                             + ",\"answer_details\":\"" + t.getAnswer_details() + "\",\"na_option\":\"" + t.getNaoption_id() + "\"}";
-                    if (++counter != questionList.size()) {
+                    if (++counter != answers.size()) {
                         question += ",";
                     }
                 }
             }
         }
+
         counter = 0;
         String recommendation = "";
         List<TemplateModelSummaryRecommendation> tmsr = TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "reportid = ? AND elementid > 0", report.getReport_id());
@@ -1931,13 +1990,13 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         String id = "", no = "", version = "0";
         if (!report.getReport_no().contains("GMP-00-")) {
+            Log.i("REPORT-ID", "VALUE : " + report.getReport_id());
+            Log.i("REPORT-NO", "VALUE : " + report.getReport_no());
             Log.i("VERSION CONTROL", "BEFORE : " + report.getVersion());
             id = report.getReport_id();
             no = report.getReport_no();
             version = Integer.parseInt(report.getVersion()) + 1 + "";
             Log.i("VERSION CONTROL", "AFTER : " + version);
-
-
         }
 
         Log.e("Bulk Edit", "token:35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839\n" +
@@ -2014,8 +2073,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
             @Override
             public void onResponse(Call<ModelAuditReportReply> call, Response<ModelAuditReportReply> response) {
                 modelAuditReportReply = response.body();
+
                 if (modelAuditReportReply.getStatus().equals("failed")) {
-                    Toast.makeText(context, modelAuditReportReply.getMessage(), Toast.LENGTH_SHORT);
+                    //Toast.makeText(context, modelAuditReportReply.getMessage(), Toast.LENGTH_SHORT);
+                    Log.e("ERROR-TRAP", "FAILED SENDING " + modelAuditReportReply.getStatus());
+                    if (modelAuditReportReply.getMessage().contains("scope")) {
+                        dialogSubmitFailed("Please fill up all the required fields. " +
+                                "\nProduct of interest and disposition are required.");
+                    }
                 } else {
                     //Log.e("Result post", modelApproverInfo.getMessage());
                     Log.e("Result post", "hey " + modelAuditReportReply.toString());
@@ -2082,7 +2147,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             public void onFailure(Call<ModelAuditReportReply> call, Throwable t) {
                 Log.e("AuditReport ", "OnFailure " + t.getMessage());
                 //Toast.makeText(context, "FAIL", Toast.LENGTH_SHORT);
-                dialogSubmitFailed("Sending Failed." + " " + t.getMessage());
+                dialogSubmitFailed("Sending Failed." + " Connection timeout."/* + t.getMessage()*/);
             }
         });
         return true;
@@ -2366,14 +2431,35 @@ public class NextSelectedAuditReportFragment extends Fragment {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                List<ModelAuditReports> repId = ModelAuditReports.find(ModelAuditReports.class, "reportid ='" + report.getReport_id() + "'", new String[]{}, null, "", "");
+                int versionControl = Integer.parseInt(repId.get(0).getVersion()) + 1;
+
+                Log.i("SESSION", "API 1 : " + repId.size() + " id number : " + repId.get(0).getReport_id() + " status : " + repId.get(0).getVersion());
+                Log.i("NEW STATUS", "API 1 : " + versionControl);
+
+                Log.i("SESSION", "API 1 : " + Variable.session);
+
+                repId.get(0).setVersion(versionControl + "");
+                repId.get(0).save();
+
                 Variable.showDialog = false;
-                new APICalls(context, "Loading...", true, null).execute();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        new APICalls(context, "Loading...", true, null).execute();
+                    }
+                }, 1000);
+
+                List<ModelAuditReports> reportChecker = ModelAuditReports.find(ModelAuditReports.class, "reportid ='" + report.getReport_id() + "'", new String[]{}, null, "", "");
+                Log.i("NEW STATUS DB", "API 1 : " + reportChecker.get(0).getVersion());
 
                 FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 fragmentManager.beginTransaction()
                         .replace(R.id.fl_content, auditReportFragment).addToBackStack(null).commit();
+
+                deleteDraft(report.getReport_id());
 
                 dialogSuccess.dismiss();
             }
@@ -2382,4 +2468,18 @@ public class NextSelectedAuditReportFragment extends Fragment {
         dialogSuccess.show();
     }
 
+    public void deleteDraft(String id) {
+        List<ModelAuditReports> count = ModelAuditReports.find(ModelAuditReports.class,
+                "reportid ='" + id + "'");
+        Log.i("DELETE", "REPORT : " + count.size());
+        if (count.size() > 1) {
+            for (ModelAuditReports mar : count) {
+                if (mar.getReport_no().contains("GMP-00-")) {
+                    Log.i("DELETE", "REPORT : " + mar.toString());
+                    ModelAuditReports.executeQuery("DELETE FROM MODEL_AUDIT_REPORTS WHERE reportno " +
+                            "= '" + mar.getReport_no() + "'");
+                }
+            }
+        }
+    }
 }

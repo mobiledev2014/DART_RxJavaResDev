@@ -48,7 +48,7 @@
                     android:paddingRight="10dp"
                     android:paddingTop="5dp"
                     android:enabled="true"
-                    android:maxLength="500"
+                    android:maxLength="5000"
                     android:focusable="false"
                     android:paddingBottom="5dp"
                     android:scrollbars="vertical"

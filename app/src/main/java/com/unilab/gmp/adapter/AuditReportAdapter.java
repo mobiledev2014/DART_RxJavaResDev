@@ -20,6 +20,7 @@ import com.unilab.gmp.model.ModelAuditReports;
 import com.unilab.gmp.model.ModelCompany;
 import com.unilab.gmp.utility.ProgressDialogUtils;
 import com.unilab.gmp.utility.Utils;
+import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
 
@@ -95,6 +96,11 @@ public class AuditReportAdapter extends BaseAdapter {
                 if (modelAuditReports.get(i).getStatus().equals("5")) {
                     Utils.pdfIfExist(modelAuditReports.get(i).getReport_id(), context);
                 } else {
+                    Variable.selectedProduct.clear();
+                    Variable.selectedDisposition.clear();
+                    Variable.report_id = "0";
+
+
                     //Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
                     ProgressDialogUtils.showSimpleProgressDialog(context,50,"Loading . . .",false);
                     final Handler handler = new Handler();

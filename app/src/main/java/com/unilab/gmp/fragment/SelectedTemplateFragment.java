@@ -370,8 +370,7 @@ public class SelectedTemplateFragment extends Fragment {
             case R.id.btn_submit:
                 if (validate()) {
                     dialogSubmit("Would you like to proceed?");
-                } else
-                {
+                } else {
                     dialogAnswerAll("Please fill up all required fields.");
                 }
                 break;
@@ -515,20 +514,43 @@ public class SelectedTemplateFragment extends Fragment {
 //                    Toast.makeText(context, "Not Saved", Toast.LENGTH_SHORT).show();
 //                }
                 ModelAuditReports mar = new ModelAuditReports();
-                int size = ModelAuditReports.listAll(ModelAuditReports.class).size() + 1;
+
+                List<ModelAuditReports> auditReps = ModelAuditReports.findWithQuery(ModelAuditReports.class,
+                        "SELECT * FROM MODEL_AUDIT_REPORTS ORDER BY CAST(reportid as INT) ASC", null);
+                int size = auditReps.size() + 1;
                 String zero = "";
-                /*if (size < 1000) {
-                    zero = "0";
-                }*/
                 if (size < 100) {
                     zero = "0";
                 }
                 if (size < 10) {
                     zero = "00";
                 }
-                String report_id = zero + size;
+
+                for (ModelAuditReports idChecker : auditReps) {
+                    Log.i("AUDIT-REPORT-SIZE", "VALUE 0 : " + idChecker.getReport_id());
+                }
+
+                int rep_temp = 0;
+                String report_id = "";
+                if (auditReps.size() != 0) {
+                    rep_temp = Integer.valueOf(auditReps.get(auditReps.size() - 1).getReport_id());
+
+                    if (auditReps.size() < 10){
+                        report_id = "00" + String.valueOf(rep_temp + 1);
+                    } else if (auditReps.size() > 9 && auditReps.size() < 100){
+                        report_id = "0" + String.valueOf(rep_temp + 1);
+                    }
+                } else {
+                    report_id = "001";
+                }
+
+                //report_id = String.valueOf(rep_temp + 1);
+                Log.i("AUDIT-REPORT-SIZE", "VALUE 1 : " + rep_temp);
+                Log.i("AUDIT-REPORT-SIZE", "VALUE 2 : " + report_id);
+
+
                 mar.setReport_id(report_id);
-                mar.setReport_no("GMP-" + substr + "-" + zero + size);
+                mar.setReport_no("GMP-" + substr + "-" + report_id);
                 mar.setTemplate_id(modelTemplates.getTemplateID());
                 mar.setCompany_id(modelTemplates.getCompany_id());
                 mar.setAudit_date_1(modelTemplates.getAudit_date_1());
