@@ -133,14 +133,22 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:singleLine="true"
+                android:textSize="20sp">
+
+
             <EditText
                 android:id="@+id/et_template_next_issue_date"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight=".5"
                 android:background="@drawable/template_field"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:gravity="center|left"
                 android:hint="Pick date"
                 android:enabled="true"
@@ -150,6 +158,16 @@
                 android:singleLine="true"
                 android:textSize="20sp"
                 />
+
+                <ImageButton
+                    android:id="@+id/clearIssuedate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:background="@drawable/ic_delete" />
+
+            </FrameLayout>
 
         </LinearLayout><!--issue date-->
 
@@ -168,22 +186,42 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/et_template_next_validity"
+            <FrameLayout
                 android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
                 android:layout_weight=".5"
-                android:background="@drawable/template_field"
-                android:gravity="center|left"
-                android:hint="Pick date"
-                android:enabled="true"
-                android:focusable="false"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:singleLine="true"
-                android:textSize="20sp" />
+                android:textSize="20sp">
+
+
+                <EditText
+                    android:id="@+id/et_template_next_validity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5"
+                    android:background="@drawable/template_field"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:gravity="center|left"
+                    android:hint="Pick date"
+                    android:enabled="true"
+                    android:focusable="false"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:singleLine="true"
+                    android:textSize="20sp"
+                    />
+
+            <ImageButton
+                android:id="@+id/clearValidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="right|center_vertical"
+                android:background="@drawable/ic_delete" />
+
+
+            </FrameLayout>
 
         </LinearLayout><!--validity-->
 

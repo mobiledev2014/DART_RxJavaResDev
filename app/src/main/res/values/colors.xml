@@ -10,4 +10,5 @@
     <color name="dividerColorSub">#a6a4a4</color>
     <color name="checkbox_color">#3360ac</color>
     <color name="disabled_color">#a9a9a9</color>
+    <color name="buttons">#4a93fa</color>
 </resources>

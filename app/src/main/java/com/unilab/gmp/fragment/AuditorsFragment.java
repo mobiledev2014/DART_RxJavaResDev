@@ -28,7 +28,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static android.icu.text.MessagePattern.ArgType.SELECT;
 import static com.google.common.net.HttpHeaders.FROM;
 
 /**
@@ -76,6 +75,11 @@ public class AuditorsFragment extends Fragment {
         //auditorsList = AuditorsModel.listAll(AuditorsModel.class);
         //auditorsList = AuditorsModel.listAll(AuditorsModel.class, "createdate DESC");
         auditorsList = AuditorsModel.find(AuditorsModel.class, "status = '1'", new String[]{}, null, "updatedate DESC", "100");
+
+        for(AuditorsModel i: auditorsList){
+            Log.e("AuditorsFragment", "onCreateView: "+i.getFname() + " " +i.getLname() );
+        }
+
         Log.d("SIZE", auditorsList.size() + "");
         auditorsAdapter = new AuditorsAdapter(context, auditorsList);
         lvAuditList.setAdapter(auditorsAdapter);

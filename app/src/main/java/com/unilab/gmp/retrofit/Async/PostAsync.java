@@ -54,7 +54,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,7 +66,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PostAsync extends AsyncTask<String, String, String> implements Callback<ResultUser> {
     String email, password, action;
-    ProgressDialog dialog;
+    public ProgressDialog dialog;
     DialogUtils dUtils;
     Context context;
     ApiInterface apiInterface;
@@ -77,6 +79,7 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
     TemplateFragment templateFragment;
     AuditReportFragment auditReportFragment;
     boolean loginError = false;
+
 
     public PostAsync(Context context, ProgressDialog dialog, String email, String password,
                      String action, NextSelectedAuditReportFragment nextSelectedAuditReportFragment,
@@ -96,10 +99,19 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .setLenient()
                 .create();
+
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(300, TimeUnit.SECONDS)
+                .writeTimeout(300, TimeUnit.SECONDS)
+                .readTimeout(300, TimeUnit.SECONDS)
+                .build();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://mrdgnsndp.hol.es/")
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
+
         apiInterface = retrofit.create(ApiInterface.class);
         sharedPref = new SharedPreferenceManager(context);
         Log.e("TAG", "CLICK!!! 2 ");
@@ -108,19 +120,26 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        dialog = new ProgressDialog(context);
-        dialog.setMessage("Validating user");
-        dialog.setCancelable(false);
-        dialog.show();
+        if(this.action.equals(Glovar.LOGIN)) {
+            dialog = new ProgressDialog(context);
+            dialog.setMessage("Validating user");
+            dialog.setCancelable(false);
+            dialog.show();
+        }else{
+            dialog = new ProgressDialog(context);
+            dialog.setMessage("Loading");
+            dialog.setCancelable(false);
+            dialog.show();
+        }
     }
 
     @Override
     protected String doInBackground(String... data) {
         // Create a new HttpClient and Post Header
-        dialog.setProgress(1);
+       // dialog.setProgress(1);
         HttpClient httpclient = new DefaultHttpClient();
         InputStream inputStream = null;
-        //HttpPost httppost = new HttpPost("http://ojl.ecomqa.com/azure/pwgrant.php");
+        //HttpPost httppost = new HttpPost("http://sams.webqa.unilab.com.ph/api"); //old api link applied
         HttpPost httppost = new HttpPost("http://sams.webqa.unilab.com.ph/api"); //new api link applied
         httppost.setHeader("Content-type", "application/x-www-form-urlencoded");
         String s = "";
@@ -153,10 +172,12 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
             }
             s = sb.toString();
         } catch (ClientProtocolException e) {
-            Log.e("TAG", "CLICK!!! ClientProtocolException");
+            Log.e("HI", "CLICK!!! ClientProtocolException");
         } catch (IOException e) {
-            Log.e("TAG", "CLICK!!! IOException");
+            Log.e("HI", "CLICK!!! IOException");
             loginError = true;
+        } catch (Exception e){
+            Log.e("HI", "doInBackground: " + e.toString());
         }
 
         return s;
@@ -176,7 +197,7 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
             if (obj.getString("status").equals("success")) {
                 Call<ResultUser> call = apiInterface.getUser(email);
                 call.enqueue(this);
-                dialog.setProgress(2);
+                //  dialog.setProgress(2);
                 Log.e("TAG", "CLICK!!! success" + email + " PASSWORD : " + password);
 
 //                sharedPref.saveData("ID", email);
@@ -186,33 +207,65 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
 
                 if (this.action.equals(Glovar.LOGIN)) {
                     Variable.showDialog = true;
-                    new APICalls(context, "Loading...", false, null).execute();
+                    new APICalls(context, "Loading...", false, null, "login").execute();
 
                 } else if (this.action.equals(Glovar.POST_AUDIT)) {
+                    dialog.dismiss();
                     nextSelectedAuditReportFragment.postData();
                     //dialogSuccess("Successfully submitted.", false);
                 } else if (this.action.equals(Glovar.POST_TEMPLATE)) {
+                    dialog.dismiss();
                     nextSelectedTemplateFragment.postData();
-                    //dialogSuccess("Successfully submitted.", true);
-                }
-            } else {
-                dialog.dismiss();
-                //dUtils.DialogWarning("Login error", "The username/password is invalid.", MainActivity.orientation);
 
+                    //dialogSuccess("Successfully submitted.", false);
+                }
+            }else {
+                //dUtils.DialogWarning("Login error", "The username/password is invalid.", MainActivity.orientation);
                 if (this.action.equals(Glovar.LOGIN)) {
                     Log.i("ERROR", "invalid email");
                     //dialogLoginError("Invalid email address. Please make sure that your email address is correct.");
 //                    dialogLoginError("Email and password do not match.");
                     dialogLoginError(message);
+                    dialog.dismiss();
                 } else {
                     //invalid credentials please re-login to continue
                     dialogPostError("Invalid credentials please re-login to continue.");
+                    dialog.dismiss();
                 }
                 Log.e("TAG", "CLICK!!! fail");
             }
-        } catch (JSONException e) {
+        } catch (JSONException e){
+
             dialog.dismiss();
+
+            dialogLoginError = new Dialog(context);
+            dialogLoginError.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialogLoginError.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogLoginError.setCancelable(false);
+            dialogLoginError.setContentView(R.layout.dialog_error_login);
+            dialogLoginError.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+            Button ok = (Button) dialogLoginError.findViewById(R.id.btn_ok);
+            TextView msg = (TextView) dialogLoginError.findViewById(R.id.tv_message);
+
+            msg.setText("Server is down. Please contact your administrator.");
+
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogLoginError.dismiss();
+                }
+            });
+
+            dialogLoginError.show();
+
+        } catch (Exception e) {
+            Log.e("HI", "onPostExecute: "+ e.toString());
+            if(this.action.equals(Glovar.LOGIN)) {
+                dialog.dismiss();
+            }
         }
+
     }
 
     @Override
@@ -221,49 +274,55 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
             List<ModelUser> result = response.body().getResult();
             Log.e("TAG_EMAIL", "RESULT : " + result.toString());
             if (result != null) {
-                dialog.dismiss();
+
                 //if (result.size() > 0) {
-                    Log.e("TAG_EMAIL_2", "RESULT : " + result.toString());
-                    // Save to database the retrieved user here.
-                    ModelUser mUser = new ModelUser();
-                    mUser.setEmp_id(result.get(0).getEmp_id());
-                    mUser.setEmail(email);
-                    mUser.setPassword(password);
+                Log.e("TAG_EMAIL_2", "RESULT : " + result.toString());
+                // Save to database the retrieved user here.
+                ModelUser mUser = new ModelUser();
+                mUser.setEmp_id(result.get(0).getEmp_id());
+                mUser.setEmail(email);
+                mUser.setPassword(password);
 
-                    sharedPref.saveData("EMP_ID", String.valueOf(mUser.getEmp_id()));
-
-                    context.startActivity(new Intent(context, HomeActivity.class));
+                sharedPref.saveData("EMP_ID", String.valueOf(mUser.getEmp_id()));
+                context.startActivity(new Intent(context, HomeActivity.class));
                 //}
             } else {
                 dialog.dismiss();
                 /*dUtils.DialogWarning("Login error",
                         "There is no internet connection detected. Please check your connection and try again.",
                         MainActivity.orientation);*/
-                Log.i("ERROR_TAG_EMAIL", "no internet 1");
-                dialogLoginError("There is no internet connection detected. Please check your connection and try again.");
+                //Log.i("ERROR_TAG_EMAIL", "no internet 1");
+                //dialogLoginError("There is no internet connection detected. Please check your connection and try again.");
             }
         } catch (Exception e) {
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
+
+
+      /*      if (dialog.isShowing()) {
+             //   dialog.dismiss();
+            }*/
             /*dUtils.DialogWarning("Network error",
                     "Internet connection cannot access the web service, please connect to other network.",
                     MainActivity.orientation);*/
-            Log.i("ERROR", "invalid email 2");
-            //dialogLoginError("Internet connection cannot access the web service, please connect to other network.");
+            Log.i("      ", "invalid email 2");
+            dialogLoginError("Internet connection cannot access the web service, please connect to other network.");
         }
+
 
     }
 
     @Override
     public void onFailure(Call<ResultUser> call, Throwable throwable) {
+        Log.e("HI", "ERROR : " + throwable.toString());
         Log.e("DEBUG", "ERROR : " + throwable.toString());
         Log.e("TAGRename", "CLICK!!!" + throwable.toString());
+        Log.e("TAGRename", "CLICK!!!" + throwable);
         /*dUtils.DialogWarning("Login Error",
                 "There is no internet connection detected. Please check your connection and try again.",
                 MainActivity.orientation);*/
         Log.i("ERROR", "invalid email 3");
-        dialogLoginError("There is no internet connection detected. Please check your connection and try again.");
+
+        //dialogLoginError("There is no internet connection detected. Please check your connection and try again.");
+
         dialog.dismiss();
     }
 
@@ -278,7 +337,7 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
         Button ok = (Button) dialogLoginError.findViewById(R.id.btn_ok);
         TextView msg = (TextView) dialogLoginError.findViewById(R.id.tv_message);
 
-        if (mess.equals("Invalid Email")){
+        if (mess.equals("Invalid Email")) {
             mess = "Invalid email address. Please make sure that your email address is correct.";
         }
 

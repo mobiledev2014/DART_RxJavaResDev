@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -83,6 +86,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -94,6 +99,8 @@ import retrofit2.Response;
 
 public class APICalls extends AsyncTask<String, String, Boolean> {
 
+    private static final String TAG = "APICalls";
+
     int changes = 0;
     int numberoftemplates, templatesdownloaded;
     boolean isdone = false;
@@ -103,10 +110,14 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
     ApiClient apiClient;
     ApiInterface apiInterface;
-    ProgressDialog progressDialog;
+    AlertDialog loginAlert;
+
+    AlertDialog delayLoginAlert;
     Context context;
     String dialogMessage = "";
+    String statusMessage = "";
     SharedPreferenceManager sharedPref;
+    AlertDialog.Builder builder2;
 
     ConfigModel configModel;
     ModelApproverInfo modelApproverInfo;
@@ -130,21 +141,30 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 //    ModelReferenceInfo modelReferenceInfo;
 //
 
-    public APICalls(Context context, String message, Boolean sync, HomeActivity homeActivity) {
+    public APICalls(Context context, String message, Boolean sync, HomeActivity homeActivity, String status) {
         this.context = context;
         this.dialogMessage = message;
         sharedPref = new SharedPreferenceManager(context);
         this.manualSync = sync;
         this.homeActivity = homeActivity;
+        this.statusMessage = status;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage(dialogMessage);
-        progressDialog.show();
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+        builder1.setCancelable(false);
+        builder1.setTitle("Downloading data");
+        builder1.setMessage("Please wait...");
+
+        loginAlert = builder1.create();
+        loginAlert.show();
+
+        builder2 = new AlertDialog.Builder(context);
+        builder2.setCancelable(false);
+        builder2.setTitle("Downloading data");
+        builder2.setMessage("Please wait...");
     }
 
     @Override
@@ -169,12 +189,30 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
     @Override
     protected void onPostExecute(Boolean s) {
         super.onPostExecute(s);
-        progressDialog.dismiss();
+        loginAlert.dismiss();
+
+        final AlertDialog loginAlert2 = builder2.create();
+        loginAlert2.show();
+
+        if (statusMessage.equals("auditReport")){
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loginAlert2.dismiss();
+                    Log.i("lag_audit_report", statusMessage + " : " + "if");
+                }
+            }, 10000);
+        } else {
+            loginAlert2.dismiss();
+            Log.i("lag_audit_report", statusMessage + " : " + "else");
+        }
+
         try {
             Log.i("RESULT", "RESULT_VALUE : " + s + "");
-            Log.i("DIALOG_SHOWING", "1" + progressDialog.isShowing() + " : " + s.toString());
+            Log.i("DIALOG_SHOWING", "1" + loginAlert.isShowing() + " : " + s.toString());
 
-            Log.i("DATE TO SAVE", getDate());
+            Log.i("save_date", getDate());
             sharedPref.saveData("DATE", getDate());
 
             if (changes > 0) {
@@ -183,9 +221,9 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             }
 
             if (manualSync) {
-                Log.i("DIALOG_SHOWING", "2" + progressDialog.isShowing());
-                if (progressDialog.isShowing()) {
-                    progressDialog.dismiss();
+                Log.i("DIALOG_SHOWING", "2" + loginAlert.isShowing());
+                if (loginAlert.isShowing()) {
+                    loginAlert.dismiss();
                 }
 
                 Log.i("New_Template", changes + "");
@@ -203,7 +241,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             }
         } catch (Exception e) {
             Log.i("RESULT", "RESULT_VALUE : " + s + "");
-            progressDialog.dismiss();
+            loginAlert.dismiss();
         }
     }
 
@@ -238,6 +276,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 if (cm.size() > 0) {
                     if (configModel != null) {
                         if (configModel.getApprover() != null) {
+                            Log.i("config_date_debug", "approver" + configModel.getApprover());
                             if (date(cm.get(0).getApprover()).before(date(configModel.getApprover()))) {
                                 cm.get(0).setApprover(configModel.getApprover());
                                 apiApprover();
@@ -245,6 +284,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                         }
 
                         if (configModel.getAuditor() != null) {
+                            Log.i("config_date_debug", "auditor" + configModel.getApprover());
                             if (date(cm.get(0).getAuditor()).before(date(configModel.getAuditor()))) {
                                 cm.get(0).setAuditor(configModel.getAuditor());
                                 apiAuditors();
@@ -252,25 +292,24 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                         }
 
                         if (configModel.getReviewer() != null) {
+                            Log.i("config_date_debug", "reviewer" + configModel.getApprover());
                             if (date(cm.get(0).getReviewer()).before(date(configModel.getReviewer()))) {
+                                Log.e(TAG, "onResponse: Enter get reviewer");
                                 cm.get(0).setReviewer(configModel.getReviewer());
                                 apiReviewer();
                             }
                         }
-                        Log.e("TEST", "DATE SITE : " + cm.get(0).getSite());
-                        Log.e("TEST", "DATE SITE 2 : " + configModel.getSite());
 
                         if (configModel.getSite() != null) {
+                            Log.i("config_date_debug", "site" + configModel.getApprover());
                             if (date(cm.get(0).getSite()).before(date(configModel.getSite()))) {
                                 cm.get(0).setSite(configModel.getSite());
                                 apiSupplier();
                             }
                         }
-//                        if (date(cm.get(0).getApprover()).before(date(configModel.getApprover()))) {
-//                            cm.get(0).setApprover(configModel.getApprover());
-//                        apiTemplateList();
-//                        }
+
                         if (configModel.getCategory() != null) {
+                            Log.i("config_date_debug", "category" + configModel.getApprover());
                             if (date(cm.get(0).getCategory()).before(date(configModel.getCategory()))) {
                                 cm.get(0).setCategory(configModel.getCategory());
                                 apiCategory();
@@ -278,38 +317,47 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                         }
 
                         if (configModel.getProduct() != null) {
+                            Log.i("config_date_debug", "product" + configModel.getApprover());
                             if (date(cm.get(0).getProduct()).before(date(configModel.getProduct()))) {
                                 cm.get(0).setProduct(configModel.getProduct());
                                 apiProduct();
                             }
                         }
                         if (configModel.getType_audit() != null) {
+                            Log.i("config_date_debug", "type audit" + configModel.getApprover());
                             if (date(cm.get(0).getType_audit()).before(date(configModel.getType_audit()))) {
                                 cm.get(0).setType_audit(configModel.getType_audit());
                                 apiTypeAudit();
                             }
                         }
                         if (configModel.getDisposition() != null) {
+                            Log.i("config_date_debug", "disposition" + configModel.getApprover());
                             if (date(cm.get(0).getDisposition()).before(date(configModel.getDisposition()))) {
                                 cm.get(0).setDisposition(configModel.getDisposition());
                                 apiDisposition();
                             }
                         }
                         if (configModel.getDistribution() != null) {
+                            Log.i("config_date_debug", "distribution" + configModel.getApprover());
                             if (date(cm.get(0).getDistribution()).before(date(configModel.getDistribution()))) {
                                 cm.get(0).setDistribution(configModel.getDistribution());
                                 apiDistribution();
                             }
                         }
                         if (configModel.getClassification() != null) {
+                            Log.i("config_date_debug", "classification" + configModel.getApprover());
                             if (date(cm.get(0).getClassification()).before(date(configModel.getClassification()))) {
                                 cm.get(0).setDistribution(configModel.getClassification());
                                 apiClassification();
                             }
                         }
 
-
-                        apiTemplateList();
+                        //for testing only
+                        if (!statusMessage.equals("auditReport")) {
+                            apiTemplateList();
+                        } else {
+                            isdone = true;
+                        }
                         apiAuditReports();
 
                         cm.get(0).save();
@@ -345,14 +393,15 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
     public void apiApprover() {
         //api call for auditors information
-
         Call<ModelApproverInfo> listApprover = apiInterface.getApprover();
         listApprover.enqueue(new Callback<ModelApproverInfo>() {
             @Override
             public void onResponse(Call<ModelApproverInfo> call, Response<ModelApproverInfo> response) {
                 modelApproverInfo = response.body();
+
+
                 ApproverModel.deleteAll(ApproverModel.class);
-                if (modelApproverInfo != null)
+                if (modelApproverInfo != null) {
                     for (int x = 0; x < modelApproverInfo.getApproverModels().size(); x++) {
                         ApproverModel approversModel = new ApproverModel();
                         approversModel.setApprover_id(modelApproverInfo.getApproverModels().get(x).getApprover_id());
@@ -369,22 +418,31 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                         isAppoverExisting(approversModel);
                         Log.e("APICalls ", "Approver " + modelApproverInfo.getApproverModels().get(x).toString());
                     }
+
+
+                }else{
+
+                }
             }
 
             @Override
             public void onFailure(Call<ModelApproverInfo> call, Throwable t) {
                 Log.e("Approver ", "OnFailure " + t.getMessage());
             }
+
+
+
         });
     }
 
     public void apiAuditors() {
-        Call<ModelAuditorInfo> listAuditors = apiInterface.getAuditors();
+        final Call<ModelAuditorInfo> listAuditors = apiInterface.getAuditors();
         listAuditors.enqueue(new Callback<ModelAuditorInfo>() {
             @Override
             public void onResponse(Call<ModelAuditorInfo> call, Response<ModelAuditorInfo> response) {
                 modelAuditorInfo = response.body();
                 AuditorsModel.deleteAll(AuditorsModel.class);
+
                 for (int x = 0; x < modelAuditorInfo.getModelAuditors().size(); x++) {
                     AuditorsModel auditorsModel = new AuditorsModel();
                     auditorsModel.setAuditor_id(modelAuditorInfo.getModelAuditors().get(x).getAuditor_id());
@@ -423,6 +481,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             public void onResponse(Call<ModelReviewerInfo> call, Response<ModelReviewerInfo> response) {
                 modelReviewerInfo = response.body();
                 ReviewerModel.deleteAll(ReviewerModel.class);
+
                 if (modelReviewerInfo != null)
                     if (modelReviewerInfo.getModelReviewers() != null)
                         for (int x = 0; x < modelReviewerInfo.getModelReviewers().size(); x++) {
@@ -440,6 +499,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                             reviewersModel.setStatus(modelReviewerInfo.getModelReviewers().get(x).getStatus());
                             isReviewerExisting(reviewersModel);
                         }
+
                 //Log.e("testing", response.toString() + " Reviewer: " + modelReviewerInfo.getModelReviewers().get(0).getFirstname());
             }
 
@@ -520,7 +580,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
                     isSupplierExisting(modelCompany);
                 }
-
                 //modelSamples.getDateCreated()
             }
 
@@ -545,85 +604,102 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 for (TemplateDetailsModel tdm : templateListModel.getTemplate_list()) {
                     final String templateid = tdm.getTemplate_id();
                     final String templateStatus = tdm.getStatus();
-                    Call<ModelTemplates> listCall = ApiClient.getApiClientTemplate().create(ApiInterface.class).getData(tdm.getTemplate_id() + ".json");
+
+                    Call<ModelTemplates> listCall = ApiClient.getApiClientTemplate().
+                            create(ApiInterface.class).getData(tdm.getTemplate_id() + ".json");
                     listCall.enqueue(new Callback<ModelTemplates>() {
                         @Override
                         public void onResponse(Call<ModelTemplates> call, Response<ModelTemplates> response) {
                             modelTemplates = response.body();
                             ModelTemplates modelTemplate = new ModelTemplates();
-                            if (modelTemplates != null) {
-                                if (modelTemplates.getProductType() != null) {
 
-                                    //get all template id in local db
-                                    List<ModelTemplates> templateList = ModelTemplates.find
-                                            (ModelTemplates.class, "status = '1' OR status = '2' ",
-                                                    new String[]{}, null, "", "");
-                                    //if local db not match with api modified date
-                                    for (ModelTemplates qid : templateList) {
-                                        Log.i("TEMPLATE_LIST", "ID : " + qid.getTemplateID() + " Modified Date offline : " + qid.getDateUpdated()
-                                                + "ID : " + modelTemplates.getTemplateID() + " Modified Date API : " + modelTemplates.getDateUpdated());
+                                if (modelTemplates != null) {
 
-                                        if (qid.getTemplateID().equals(modelTemplates.getTemplateID())) {
-                                            if (!qid.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
-                                                Log.i("TEMPLATE_LIST", "WHEN HERE");
-                                                //delete template
-                                                ModelTemplates.executeQuery("DELETE FROM MODEL_TEMPLATES " +
-                                                        "WHERE template_id = '" + qid.getTemplateID() + "'");
+
+                                    if (modelTemplates.getProductType() != null) {
+
+                                        //get all template id in local db
+                                        List<ModelTemplates> templateList = ModelTemplates.find
+                                                (ModelTemplates.class, "status = '1' OR status = '2'",
+                                                        new String[]{}, null, "", "");
+
+                                        //if local db not match with api modified date
+                                        for (ModelTemplates qid : templateList) {
+                                            Log.i("TEMPLATE_LIST", "ID : " + qid.getTemplateID() + " Modified Date offline : " + qid.getDateUpdated()
+                                                    + "ID : " + modelTemplates.getTemplateID() + " Modified Date API : " + modelTemplates.getDateUpdated());
+
+                                            if (qid.getTemplateID().equals(modelTemplates.getTemplateID())) {
+                                            /*Log.i("modified_date_template1", "local: " +
+                                                    qid.getDateUpdated() + " api: " + modelTemplates.getDateUpdated());*/
+                                                if (!qid.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
+                                                    Log.i("TEMPLATE_LIST", "WHEN HERE");
+
+                                                    //delete template
+                                                    ModelTemplates.executeQuery("DELETE FROM MODEL_TEMPLATES " +
+                                                            "WHERE template_id = '" + qid.getTemplateID() + "'");
+                                                    //test delete all question from element
+                                                    ModelTemplateQuestionDetails.executeQuery("DELETE FROM MODEL_TEMPLATE_QUESTION_DETAILS "
+                                                            + "WHERE templateid = '" + qid.getTemplateID() + "'");
+                                                } else {
+                                                    Log.i("modified_date_template2", "local: " +
+                                                            qid.getDateUpdated() + " api: " + modelTemplates.getDateUpdated());
+                                                }
                                             }
                                         }
-                                    }
 
-                                    //modelTemplate.setTemplateID(modelTemplates.getTemplateID() + "");
-                                    modelTemplate.setTemplateID(templateid);
-                                    modelTemplate.setProductType(modelTemplates.getProductType() + "");
-                                    modelTemplate.setTemplateName(modelTemplates.getTemplateName() + "");
-                                    modelTemplate.setDateCreated(modelTemplates.getDateCreated() + "");
-                                    modelTemplate.setDateUpdated(modelTemplates.getDateUpdated());
-                                    modelTemplate.setModelTemplateElements(modelTemplates.getModelTemplateElements());
-                                    modelTemplate.setModelTemplateActivities(modelTemplates.getModelTemplateActivities());
-                                    modelTemplate.setStatus(templateStatus);
-                                    Log.i("S T A T U S", "value : " + templateStatus + " --- " + modelTemplates.getTemplateName());
-                                    ModelTemplateElements.deleteAll(ModelTemplateElements.class, "templateid = ?", new String[]{templateid});
-                                    for (ModelTemplateElements mte : modelTemplates.getModelTemplateElements()) {
-                                        mte.setTemplate_id(modelTemplates.getTemplateID() + "");
-                                        if (isElementIDExisting(mte))
-                                            mte.save();
-                                        for (ModelTemplateQuestionDetails mteq : mte.getModelTemplateQuestionDetails()) {
-                                            mteq.setElement_id(mte.getElement_id());
-                                            mteq.setTemplate_id(mte.getTemplate_id() + "");
-                                            mteq.setRequired_remarks(mteq.getRequired_remarks());
-                                            Log.i("REMARKS I", "REQUIRED : " + mteq.getRequired_remarks() +
-                                                    " ID : " + templateid + " EXIST: " + isQuestionIDExisting(mteq));
-                                            //Log.i("REMARKS", "REQUIRED : " + mte.getModelTemplateQuestionDetails().get(0).getRequired_remarks());
-                                            if (isQuestionIDExisting(mteq)) {
-                                                Log.i("REMARKS II", "REQUIRED : " + mteq.getRequired_remarks() +
-                                                        " ID : " + templateid);
-                                                mteq.save();
-                                            } else {
-                                                Log.i("REMARKS II", "REQUIRED : " + mteq.getRequired_remarks() +
-                                                        " ID : " + templateid);
-                                                updateElement(mteq);
+                                        //modelTemplate.setTemplateID(modelTemplates.getTemplateID() + "");
+                                        modelTemplate.setTemplateID(templateid);
+                                        modelTemplate.setProductType(modelTemplates.getProductType() + "");
+                                        modelTemplate.setTemplateName(modelTemplates.getTemplateName() + "");
+                                        modelTemplate.setDateCreated(modelTemplates.getDateCreated() + "");
+                                        modelTemplate.setDateUpdated(modelTemplates.getDateUpdated());
+                                        modelTemplate.setModelTemplateElements(modelTemplates.getModelTemplateElements());
+                                        modelTemplate.setModelTemplateActivities(modelTemplates.getModelTemplateActivities());
+                                        modelTemplate.setStatus(templateStatus);
+
+
+                                        Log.i("S T A T U S", "value : " + templateStatus + " --- " + modelTemplates.getTemplateName());
+                                        ModelTemplateElements.deleteAll(ModelTemplateElements.class, "templateid = ?", new String[]{templateid});
+                                        for (ModelTemplateElements mte : modelTemplates.getModelTemplateElements()) {
+                                            mte.setTemplate_id(modelTemplates.getTemplateID() + "");
+                                            if (isElementIDExisting(mte))
+                                                mte.save();
+                                            for (ModelTemplateQuestionDetails mteq : mte.getModelTemplateQuestionDetails()) {
+                                                mteq.setElement_id(mte.getElement_id());
+                                                mteq.setTemplate_id(mte.getTemplate_id() + "");
+                                                mteq.setRequired_remarks(mteq.getRequired_remarks());
+                                                Log.i("REMARKS-I", "REQUIRED : " + mteq.getRequired_remarks() +
+                                                        " ID : " + templateid + " EXIST: " + isQuestionIDExisting(mteq));
+
+                                                if (isQuestionIDExisting(mteq)) {
+                                                    Log.i("REMARKS-II", "REQUIRED : " + mteq.getQuestion_id() +
+                                                            " ID : " + templateid);
+                                                    mteq.save();
+                                                } else {
+                                                    Log.i("REMARKS-III", "REQUIRED : " + mteq.getQuestion_id() + " ID : " + templateid);
+                                                    updateQuestion(mteq);
+                                                }
                                             }
                                         }
-                                    }
 
-                                    for (ModelTemplateActivities mta : modelTemplates.getModelTemplateActivities()) {
-                                        mta.setTemplate_id(modelTemplates.getTemplateID() + "");
-                                        if (isActivityIDExisting(mta)) {
-                                            mta.save();
-                                        }
-                                        for (ModelTemplateSubActivities mtsa : mta.getModelTemplateSubActivities()) {
-                                            mtsa.setTemplate_id(mta.getTemplate_id());
-                                            if (isSubActivityIDExisting(mtsa)) {
-                                                mtsa.save();
+                                        for (ModelTemplateActivities mta : modelTemplates.getModelTemplateActivities()) {
+                                            mta.setTemplate_id(modelTemplates.getTemplateID() + "");
+                                            if (isActivityIDExisting(mta)) {
+                                                mta.save();
+                                            }
+                                            for (ModelTemplateSubActivities mtsa : mta.getModelTemplateSubActivities()) {
+                                                mtsa.setTemplate_id(mta.getTemplate_id());
+                                                if (isSubActivityIDExisting(mtsa)) {
+                                                    mtsa.save();
+                                                }
                                             }
                                         }
-                                    }
 
-                                    isTemplateExisting(modelTemplate);
+                                        isTemplateExisting(modelTemplate);
+                                    }
                                 }
-                            }
-                            Log.e("templatesdownloaded", "templatesdownloaded : " + ++templatesdownloaded);
+                                Log.e("templatesdownloaded", "templatesdownloaded : " + ++templatesdownloaded);
+
                         }
 
                         @Override
@@ -644,12 +720,18 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
     }
 
-    private void updateElement(ModelTemplateQuestionDetails mteq) {
+    private void updateQuestion(ModelTemplateQuestionDetails mteq) {
         String id = mteq.getElement_id();
         Log.i("ARGU-TEMPLATE", "CHECKER E " + id);
         Log.i("ARGU-TEMPLATE", "CHECKER T " + mteq.getTemplate_id());
         Log.i("ARGU-TEMPLATE", "CHECKER Q " + mteq.getQuestion_id());
 
+        //get question list via template id
+        List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
+                (ModelTemplateQuestionDetails.class, "templateid = ?", mteq.getTemplate_id());
+        Log.i("ARGU-TEMPLATE", "QUESTION COUNT DB " + questionList.size());
+
+        //get template question details on local db via element id, template id and question id
         ModelTemplateQuestionDetails template = (ModelTemplateQuestionDetails.find
                 (ModelTemplateQuestionDetails.class, "elementid = ? AND templateid = ? AND questionid = ?",
                         id, mteq.getTemplate_id(), mteq.getQuestion_id())).get(0);
@@ -683,7 +765,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     isCategoryExisting(modelCategory);
                 }
 
-
                 Log.e("testing", response.toString() + " Category: " + modelCategoryInfo.getModelCategories().get(0).getCategory_name());
             }
 
@@ -716,7 +797,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     Log.e("testing", response.toString() + " Product: " + product.getProduct_name());
                     isProductExisting(product);
                 }
-
             }
 
             @Override
@@ -743,8 +823,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     Log.e("testing", response.toString() + " Company: " + typeAuditModel.getScope_name());
                     isTypeAuditExisting(typeAuditModel);
                 }
-
-
             }
 
             @Override
@@ -771,7 +849,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     Log.e("testing", response.toString() + " Disposition: " + modelDisposition.getDisposition_name());
                     isDispositionExisting(modelDisposition);
                 }
-
 
             }
 
@@ -838,7 +915,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     Log.e("testing", response.toString() + " distribution report: " + modelDistribution.getDistribution_name());
                     isDistributionExisting(modelDistribution);
                 }
-
             }
 
             @Override
@@ -1002,14 +1078,14 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     tmsa.setReport_id(report_id);
                     tmsa.setScope_id(msa.getScope_id());
                     tmsa.setScope_detail(msa.getScope_detail());
-                    Log.e("API-SCOPE", "Scope Audit : " + msa.getScope_detail() + " ID: "+ report_id);
+                    Log.e("API-SCOPE", "Scope Audit : " + msa.getScope_detail() + " ID: " + report_id);
                     for (TemplateModelScopeAuditInterest tmsai : msa.getTemplateModelScopeAuditInterests()) {
                         tmsai.setReport_id(report_id);
                         tmsai.setProduct_id(tmsai.getProduct_id());
                         tmsai.setDisposition_id(tmsai.getDisposition_id());
                         tmsai.setAudit_id(counter + "");
                         tmsai.save();
-                        Log.e("API-SCOPE-PRODUCT", "Scope Audit interest : " + tmsai.getProduct_id() + " ID: "+ report_id);
+                        Log.e("API-SCOPE-PRODUCT", "Scope Audit interest : " + tmsai.getProduct_id() + " ID: " + report_id);
                     }
                     counter++;
                     tmsa.save();
@@ -1862,7 +1938,9 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         boolean exists = true;
         String id = modelTemplateElements.getElement_id();
         Log.i("ARGU", "CHECKER " + id);
-        List<ModelTemplateElements> templateList = ModelTemplateElements.find(ModelTemplateElements.class, "elementid = ? AND templateid = ?", id, modelTemplateElements.getTemplate_id());
+        List<ModelTemplateElements> templateList = ModelTemplateElements.find(
+                ModelTemplateElements.class, "elementid = ? AND templateid = ?", id,
+                modelTemplateElements.getTemplate_id());
         int size = templateList.size();
 
         if (size > 0) {
@@ -1940,10 +2018,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
     public String getDate() {
         String dateStr = "";
-
-        /*Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-        dateStr = df.format(c.getTime());*/
 
         DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         Date date = new Date();

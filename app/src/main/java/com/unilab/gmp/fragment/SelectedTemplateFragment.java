@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
 import com.unilab.gmp.adapter.TemplateElementAdapter;
+import com.unilab.gmp.adapter.templates.AdapterScopeAudit;
 import com.unilab.gmp.adapter.templates.DateOfAuditAdapter;
 import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.ModelAuditReports;
@@ -39,7 +41,9 @@ import com.unilab.gmp.model.ModelCompany;
 import com.unilab.gmp.model.ModelDateOfAudit;
 import com.unilab.gmp.model.ModelTemplateElements;
 import com.unilab.gmp.model.ModelTemplates;
+import com.unilab.gmp.model.SupplierAndCompanyInformationModel;
 import com.unilab.gmp.utility.SharedPreferenceManager;
+import com.unilab.gmp.utility.SimpleDividerItemDecoration;
 import com.unilab.gmp.utility.Variable;
 
 import java.text.DateFormat;
@@ -116,59 +120,13 @@ public class SelectedTemplateFragment extends Fragment {
     int useDate;
     String yearGmp = "";
     String substr = "";
+    String indicator = "TEMPLATE";
 
     View rootView;
 
     List<ModelDateOfAudit> modelDateOfAudits;
 
     Dialog dialogDeleteDateOfAudit;
-//    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-//
-//        @Override
-//        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//            // TODO Auto-generated method stub
-//            dateSelected.set(Calendar.YEAR, year);
-//            dateSelected.set(Calendar.MONTH, monthOfYear);
-//            dateSelected.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//            //updateLabel();
-//            String date = DateTimeUtils.parseDate(dateSelected.getTime());
-//            if (useDate == 1) {
-//                if (dateSelected.compareTo(currentTime) > 0) {
-//                    Toast.makeText(context, "Invalid date", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    modelTemplates.setAudit_date_1(date);
-//                    btnTemplateDateFrom.setText(date);
-//                }
-//
-//            } else if (useDate == 2) {
-//                String date_from_str = btnTemplateDateFrom.getText().toString();
-//
-//                if (!date_from_str.equalsIgnoreCase("Date to")) {
-//                    Date dateFrom = null;
-//                    Date dateSelctd = null;
-//                    try {
-//                        dateFrom = DateTimeUtils.parseDate(date_from_str);
-//                        Log.e("DateSelected", dateSelected.getTime().toString());
-//                        dateSelctd = DateTimeUtils.parseDate(date);
-//
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    if (dateSelctd != null) {
-//                        if (dateFrom.compareTo(dateSelctd) > 0) {
-//                            Toast.makeText(context, "Invalid date", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            modelTemplates.setAudit_date_2(date);
-//                            btnTemplateDateTo.setText(date);
-//                        }
-//                    }
-//                } else {
-//                    modelTemplates.setAudit_date_2(date);
-//                    btnTemplateDateTo.setText(date);
-//                }
-//            }
-//        }
-//    };
 
     public SelectedTemplateFragment(ModelTemplates modelTemplates) {
         this.modelTemplates = modelTemplates;
@@ -288,13 +246,22 @@ public class SelectedTemplateFragment extends Fragment {
 //            modelTemplates.getModelTemplateElements().add(modelTemplateElement);
 //        }
         //questionModel = tableDirectory.getDirectory();
-        templateElementAdapter = new TemplateElementAdapter(context, modelTemplates.getModelTemplateElements(), "", modelTemplates.getProductType());
+
+
+
+        templateElementAdapter = new TemplateElementAdapter(context, modelTemplates.getModelTemplateElements(),
+                "", modelTemplates.getProductType(), indicator);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
         lvTemplateElement.setLayoutManager(mLayoutManager);
-        lvTemplateElement.setItemAnimator(new DefaultItemAnimator());
+      //  lvTemplateElement.setItemAnimator(new DefaultItemAnimator());
 
+        lvTemplateElement.setNestedScrollingEnabled(false);
         lvTemplateElement.setAdapter(templateElementAdapter);
+        lvTemplateElement.setHasFixedSize(true);
+        lvTemplateElement.setItemViewCacheSize(20);
+        lvTemplateElement.setDrawingCacheEnabled(true);
+        lvTemplateElement.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         //lvTemplateElement.addOnScrollListener(new RecyclerView.OnS);
         //lvTemplateElement.setExpanded(true);
@@ -434,7 +401,9 @@ public class SelectedTemplateFragment extends Fragment {
             //ProgressDialogUtils.showSimpleProgressDialog(context,"","Loading . . .",false);
             if (nextSelectTemplate == null) {
                 nextSelectTemplate = new NextSelectedTemplateFragment(modelTemplates, templateElementAdapter, this);
+                Variable.isFromBackStack = true;
             }
+
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -443,10 +412,17 @@ public class SelectedTemplateFragment extends Fragment {
                     /*FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.fl_content, nextSelectTemplate, "TemplateSelect")
                             .addToBackStack(null).commit();*/
-                    FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fl_content, nextSelectTemplate).addToBackStack(null).commit();
+                    if(Variable.isFromBackStack) {
+                        if(Variable.isChangedSite){
+                            Variable.isChangedSite = false;
+                            NextSelectedTemplateFragment.siteChanged();
+                        }
+                    }
+                        FragmentManager fragmentManager = getFragmentManager();
+                        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fl_content, nextSelectTemplate).addToBackStack(null).commit();
+
                 }
             }, 700);
         } else {
@@ -532,13 +508,19 @@ public class SelectedTemplateFragment extends Fragment {
 
                 int rep_temp = 0;
                 String report_id = "";
+
+                String crnt = auditReps.get(auditReps.size() - 1).getReport_id();
+                String[] new_id = crnt.split("-");
+
                 if (auditReps.size() != 0) {
-                    rep_temp = Integer.valueOf(auditReps.get(auditReps.size() - 1).getReport_id());
+                    rep_temp = Integer.valueOf(new_id[0]);
 
                     if (auditReps.size() < 10){
                         report_id = "00" + String.valueOf(rep_temp + 1);
                     } else if (auditReps.size() > 9 && auditReps.size() < 100){
                         report_id = "0" + String.valueOf(rep_temp + 1);
+                    } else if (auditReps.size() >= 100){
+                        report_id = String.valueOf(rep_temp + 1);
                     }
                 } else {
                     report_id = "001";
@@ -547,10 +529,13 @@ public class SelectedTemplateFragment extends Fragment {
                 //report_id = String.valueOf(rep_temp + 1);
                 Log.i("AUDIT-REPORT-SIZE", "VALUE 1 : " + rep_temp);
                 Log.i("AUDIT-REPORT-SIZE", "VALUE 2 : " + report_id);
+                report_id = report_id + "-B";
 
+                String crntrepno = report_id;
+                String[] new_repno = crntrepno.split("-");
 
                 mar.setReport_id(report_id);
-                mar.setReport_no("GMP-" + substr + "-" + report_id);
+                mar.setReport_no("GMP-" + substr + "-" + new_repno[0]);
                 mar.setTemplate_id(modelTemplates.getTemplateID());
                 mar.setCompany_id(modelTemplates.getCompany_id());
                 mar.setAudit_date_1(modelTemplates.getAudit_date_1());
@@ -589,6 +574,23 @@ public class SelectedTemplateFragment extends Fragment {
     }
 
     public void setWatcher() {
+/*        etTemplateSite.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    List<ModelCompany> supplierList = ModelCompany.find(ModelCompany.class, "status = '1'");
+                    for(ModelCompany var: supplierList){
+                        Log.e("Supplier List", "onClick: "+ var.getCompany_name());
+                        if(etTemplateSite.getText().toString().equals(var.getCompany_name())){
+                            dialogChangeSite();
+                        }
+                    }
+                }
+                return false;
+            }
+        });*/
+
+
         List<ModelCompany> listSite = ModelCompany.listAll(ModelCompany.class);
         String[] arrListSite = new String[listSite.size()];
         for (int x = 0; x < listSite.size(); x++) {
@@ -606,8 +608,42 @@ public class SelectedTemplateFragment extends Fragment {
                 etTemplateSiteAddressTwo.setText(listSite.get(0).getAddress2() + "/" + listSite.get(0).getAddress3() + ", " + listSite.get(0).getCountry());
                 modelTemplates.setCompany_id(listSite.get(0).getCompany_id());
                 Log.e("testasd", modelTemplates.getCompany_id() + " sad");
+                //dismiss keyboard
             }
         });
+    }
+
+    private void dialogChangeSite(){
+        final Dialog confirm = new Dialog(context);
+        confirm.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        confirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        confirm.setCancelable(false);
+        confirm.setContentView(R.layout.dialog_change_site);
+        confirm.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        final Button yesBtn = (Button) confirm.findViewById(R.id.btn_yes);
+        final Button noBtn = (Button) confirm.findViewById(R.id.btn_no);
+
+        yesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Variable.isChangedSite = true;
+                etTemplateSite.setText("");
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                confirm.cancel();
+            }
+        });
+
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirm.cancel();
+            }
+        });
+
+        confirm.show();
+
     }
 
     public boolean validate() {
@@ -729,7 +765,7 @@ public class SelectedTemplateFragment extends Fragment {
                 else {
                     ModelDateOfAudit doa = new ModelDateOfAudit();
                     doa.setDateOfAudit("");
-//            doa.setTemplate_id(modelTemplates.getTemplateID());
+                    //doa.setTemplate_id(modelTemplates.getTemplateID());
                     modelDateOfAudits.add(doa);
                     dateOfAuditAdapter.notifyDataSetChanged();
                 }

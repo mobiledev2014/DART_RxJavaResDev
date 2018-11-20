@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     public void onBackPressed() {
         dialogCloseConfirmation();
@@ -156,14 +157,6 @@ public class MainActivity extends AppCompatActivity {
         String email = etUsername.getText().toString();
         String password = etPassword.getText().toString();
 
-        if (cbRemember.isChecked()) {
-            sharedPref.saveData("CHECKED", true);
-            sharedPref.saveData("EMAIL", email);
-            sharedPref.saveData("PASSWORD", password);
-        } else {
-            sharedPref.saveData("CHECKED", false);
-        }
-
         boolean fieldsEmpty = false;
         if (email.equals(""))
         {
@@ -175,12 +168,27 @@ public class MainActivity extends AppCompatActivity {
             etPassword.setError("This field is required.");
             fieldsEmpty = true;
         }
+        if(!email.contains("@unilab.com.ph"))
+        {
+            etUsername.setError("Invalid email address. Please make sure that your email address is correct.");
+            fieldsEmpty = true;
+        }
+
         if (!fieldsEmpty) {
             Log.e("TAG", "CLICK!!!" + isInternetAvailable() + " ");
             if (isNetworkConnected()) {
                 Log.e("TAGTRUE", "CLICK!!!" + isNetworkConnected() + " ");
                 Log.i("ERROR", "POSTASYNC 1");
                 //if (isInternetAvailable())
+
+                if (cbRemember.isChecked()) {
+                    sharedPref.saveData("CHECKED", true);
+                    sharedPref.saveData("EMAIL", email);
+                    sharedPref.saveData("PASSWORD", password);
+                } else {
+                    sharedPref.saveData("CHECKED", false);
+                }
+
                     new PostAsync(context, loginDialog, email, password, Glovar.LOGIN, null, null).execute();
                 //else
                     //dialogErrorLogin();
@@ -188,6 +196,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("TAGFALSE", "CLICK!!!" + isNetworkConnected() + " " + email);
                 List<ModelUser> users = ModelUser.find(ModelUser.class, "email = ?", email);
                 boolean found = false;
+
+                String emailSp = sharedPref.getStringData("EMAIL");
+                String passwordSp = sharedPref.getStringData("PASSWORD");
+
 //            List<ModelUser> users = ModelUser.listAll(ModelUser.class);
 //            for (int i = 0; i < users.size(); i++) {
 //                Log.e("ModelUser", "email : " + users.get(i).getEmail() + "");
@@ -197,21 +209,37 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            }
 
+                if (!emailSp.equals(null) && !passwordSp.equals(null) && emailSp != null && passwordSp != null) {
+                    if (emailSp.equals(email) && passwordSp.equals(password)) {
 
-                if (users.size() > 0) {
+                        if (cbRemember.isChecked()) {
+                            sharedPref.saveData("CHECKED", true);
+                        } else {
+                            sharedPref.saveData("CHECKED", false);
+                        }
+
 //            if (found) {
-                    Log.e("Users count", users.size() + " name : " + users.get(0).getEmail());
+//                        Log.e("Users count", users.size() + " name : " + users.get(0).getEmail());
 //                if (users.get(0).getEmail().equals(email)) {
-                    Intent intent = new Intent(context, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
+                        Intent intent = new Intent(context, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
 //                }
-                } else
-                //Toast.makeText(context, "User does not exist.", Toast.LENGTH_SHORT).show();
-                {
-                    Log.e("TAGFALSEELSE", "CLICK!!!" + users.size());
+                    } else
+                    //Toast.makeText(context, "User does not exist.", Toast.LENGTH_SHORT).show();
+                    {
+                        Log.e("TAGFALSEELSE", "CLICK!!!" + users.size());
 
-                    dialogErrorLogin();
+                        if(!sharedPref.getBooleanData("CHECKED")){
+                            dialogErrorLogin("Please check your internet connection.");
+                        }else {
+                            if(!email.equals(emailSp)){
+                                dialogErrorLogin("Please check your internet connection.");
+                            }else {
+                                dialogErrorLogin("Email and password do not match.");
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -252,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void dialogErrorLogin() {
+    public void dialogErrorLogin(String message) {
         dialogErrorLogin = new Dialog(context);
         dialogErrorLogin.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialogErrorLogin.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -260,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
         dialogErrorLogin.setContentView(R.layout.dialog_error_login);
         dialogErrorLogin.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        String message = "No internet connection. Make sure Wi-Fi or cellular data is turned on, then try again.";
+        //String message = "No internet connection. Make sure Wi-Fi or cellular data is turned on, then try again.";
 
         TextView tv_message = (TextView) dialogErrorLogin.findViewById(R.id.tv_message);
         Button ok = (Button) dialogErrorLogin.findViewById(R.id.btn_ok);

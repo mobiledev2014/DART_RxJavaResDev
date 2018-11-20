@@ -30,6 +30,8 @@ import com.unilab.gmp.utility.Variable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.unilab.gmp.utility.Variable.checkValue;
+
 
 /**
  * Created by c_jhcanuto on 11/21/2016.
@@ -44,26 +46,31 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
     boolean pick;
     int size = 0;
     String report_id = "";
+    String indic = "";
     List<String> questionId = new ArrayList<String>();
     private List<ModelTemplateElements> questionModel;
 
-    public TemplateElementAdapter(Context context, List<ModelTemplateElements> questionModel, String report_id, String product_type) {
+    public TemplateElementAdapter(Context context, List<ModelTemplateElements> questionModel,
+                                  String report_id, String product_type, String indicator) {
         this.questionModel = questionModel;
         this.context = context;
         this.productType = product_type;
         this.notifyDataSetChanged();
         this.report_id = report_id;
+        this.indic = indicator;
 
         templateElementQuestionAdapters = new ArrayList<>();
+
 
         for (ModelTemplateElements mte : questionModel) {
             mte.setModelTemplateQuestionDetails(ModelTemplateQuestionDetails.find(ModelTemplateQuestionDetails.class,
                     "elementid = ? ", mte.getElement_id()));
             TemplateElementQuestionAdapter questionList = new TemplateElementQuestionAdapter(context,
-                    mte.getModelTemplateQuestionDetails(), report_id, productType, mte.getElement_id(), mte.getTemplate_id());
+                    mte.getModelTemplateQuestionDetails(), report_id, productType, mte.getElement_id(),
+                    mte.getTemplate_id(), indic);
             templateElementQuestionAdapters.add(questionList);
             size++;
-
+            questionList.notifyDataSetChanged();
             /*questionId.clear();
             checkBoxSetter(mte.getElement_id(), mte.getTemplate_id(), report_id);*/
         }
@@ -115,6 +122,8 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
     }
 
 //    @Override
+
+
 //    public Object getItem(int position) {
 //        return position;
 //    }
@@ -125,7 +134,9 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
     }
 
     @Override
-    public void onBindViewHolder(final Widgets widgets, int position) {
+    public void onBindViewHolder(final Widgets widgets, final int position) {
+
+
         final int z = position;
         final String elementNumber;
 
@@ -148,11 +159,22 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
             widgets.cbElementNa.setText("Not applicable");
         }*/
 
-        String check = templateElementQuestionAdapters.get(position).isChecked();
-        Log.i("RADIO_BUTTON", "VALUE : " + check + " Variable : " + Variable.checkValue);
+        final String check = templateElementQuestionAdapters.get(position).isChecked();
+        //Log.i("RADIO_BUTTON", "VALUE : " + check + " Variable : " + Variable.checkValue);
         if (check.length() > 0) {
+            Log.i("RADIO_BUTTON", "CHECK VALUE : " + check + " Variable : " + checkValue);
             widgets.cbElementNa.setText(check);
             widgets.cbElementNa.setChecked(true);
+        } else {
+            String na = Variable.elementSelect.get(questionModel.get(position).getElement_id());
+            Log.i("RADIO_BUTTON", "CHECK VALUE : " + check + " Variable : " + na);
+            if (na != null) {
+                widgets.cbElementNa.setText(na);
+                widgets.cbElementNa.setChecked(true);
+            } else {
+                widgets.cbElementNa.setText("N/A");
+                widgets.cbElementNa.setChecked(false);
+            }
         }
 
         widgets.cbElementNa.setEnabled(Variable.isAuthorized);
@@ -170,14 +192,15 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                         @Override
                         public void run() {
                             dialog.dismiss();
-                            dialogElementNa(widgets.cbElementNa, z, dialog);
+                            //templateElementQuestionAdapters.get(z).setAnswer("", "", dialog);
+                            dialogElementNa(widgets.cbElementNa, z, dialog, questionModel.get(position).getElement_id());
                         }
                     }, 700);
                 } else {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            //dialog.dismiss();
+                            dialog.dismiss();
                             templateElementQuestionAdapters.get(z).setAnswer("", "", dialog);
                             widgets.cbElementNa.setText("N/A");
                         }
@@ -185,6 +208,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                 }
             }
         });
+
     }
 
     @Override
@@ -214,7 +238,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
         return valid;
     }
 
-    public void dialogElementNa(final CheckBox pick, final int z, final Dialog dialog) {
+    public void dialogElementNa(final CheckBox pick, final int z, final Dialog dialog, final String elementId) {
         final Handler handler = new Handler();
         dialogElementNa = new Dialog(context);
         dialogElementNa.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -226,6 +250,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
         Button na = (Button) dialogElementNa.findViewById(R.id.btn_element_na);
         Button nc = (Button) dialogElementNa.findViewById(R.id.btn_element_nc);
         TextView cancel = (TextView) dialogElementNa.findViewById(R.id.tv_cancel);
+
 
         na.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,6 +265,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                         templateElementQuestionAdapters.get(z).setAnswer("3", "Not applicable", dialog);
                         templateElementQuestionAdapters.get(z).notifyDataSetChanged();
                         pick.setText("Not applicable");
+                        Variable.elementSelect.put(elementId, "Not applicable");
                     }
                 }, 1500);
             }
@@ -257,6 +283,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                         templateElementQuestionAdapters.get(z).setAnswer("4", "Not covered", dialog);
                         templateElementQuestionAdapters.get(z).notifyDataSetChanged();
                         pick.setText("Not covered");
+                        Variable.elementSelect.put(elementId, "Not covered");
                     }
                 }, 1500);
             }
@@ -265,6 +292,8 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //templateElementQuestionAdapters.get(z).setAnswer("", "", dialog);
+                //templateElementQuestionAdapters.get(z).notifyDataSetChanged();
                 pick.setChecked(false);
                 dialogElementNa.dismiss();
             }
@@ -280,6 +309,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
 
         public Widgets(View rowView) {
             super(rowView);
+
             this.tvElementNumber = (TextView) rowView.findViewById(R.id.tv_element_number);
             this.lvQuestionList = (RecyclerView) rowView.findViewById(R.id.lv_question_list);
             this.cbElementNa = (CheckBox) rowView.findViewById(R.id.cb_element_na);

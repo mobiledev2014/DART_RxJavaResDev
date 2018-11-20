@@ -74,11 +74,8 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         widgets.name.setEnabled(Variable.isAuthorized);
 
         list.add("Select");
+
         for (int count = 0; count < x; count++) {
-//            if (auditorsList.get(count).getEmail().equals(email)) {
-//                auditorsList.remove(count);
-//                x--;
-//            }
             if (templateModelAuditors.get(i).getAuditor_id().equals(auditorsList.get(count).getAuditor_id())) {
                 templateModelAuditors.get(i).setSelected(count + 1);
             }
@@ -91,26 +88,37 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int index = 0;
-                if (i > 0)
+                if (i > 0){
                     index = i - 1;
+                }
+
                 templateModelAuditors.get(z).setName(widgets.name.getSelectedItem().toString());
                 templateModelAuditors.get(z).setSelected(i);
-                widgets.position.setText(auditorsList.get(index).getDesignation());
-                widgets.department.setText(auditorsList.get(index).getDesignation());
-                templateModelAuditors.get(z).setPosition(auditorsList.get(index).getDesignation());
-                templateModelAuditors.get(z).setDepartment(auditorsList.get(index).getDepartment());
+
+                if (widgets.name.getSelectedItem().toString().equals("Select")){
+                    widgets.department.setText("Select");
+                    widgets.position.setText("Select");
+                } else {
+                    widgets.position.setText(auditorsList.get(index).getDesignation());
+                    widgets.department.setText(auditorsList.get(index).getDepartment());
+                    templateModelAuditors.get(z).setPosition(auditorsList.get(index).getDesignation());
+                    templateModelAuditors.get(z).setDepartment(auditorsList.get(index).getDepartment());
+                }
+
                 if (i == 0) {
                     templateModelAuditors.get(z).setAuditor_id("0");
                 } else {
                     templateModelAuditors.get(z).setAuditor_id(auditorsList.get(index).getAuditor_id());
                 }
+
                 Log.e("auditor ID", widgets.name.getSelectedItem().toString() + " --- " +
                         " " + i + " sss " + templateModelAuditors.get(z).getAuditor_id());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                Log.e("auditor ID", widgets.name.getSelectedItem().toString() + " --- " +
+                        " " + "sample" + " sss " + templateModelAuditors.get(z).getAuditor_id());
             }
         });
 

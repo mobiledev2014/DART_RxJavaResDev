@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -172,7 +173,9 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         });
 
 //        templateModelScopeAudit.get(i).setEtremarks(widgets.remarks);
-        widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail());
+        //widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail().replace("&lt;br&gt;", "\n").replace("&#8718;","▪").replace("\"","&#34;"));
+        //widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail().replace("&lt;br&gt;", "\n").replace("&#8718;","▪").replace("\"","&#34;"));
+        widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail().replace("&lt;br&gt;", "\n").replace("\"","&#34;"));
         widgets.remarks.setEnabled(Variable.isAuthorized);
         widgets.remarks.addTextChangedListener(new TextWatcher() {
             @Override
@@ -189,6 +192,20 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
             @Override
             public void afterTextChanged(Editable editable) {
 
+            }
+        });
+
+        widgets.remarks.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (widgets.remarks.hasFocus()) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    switch (event.getAction() & MotionEvent.ACTION_MASK){
+                        case MotionEvent.ACTION_SCROLL:
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            return true;
+                    }
+                }
+                return false;
             }
         });
 

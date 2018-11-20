@@ -410,7 +410,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (isNetworkConnected()) {
                     //if (Variable.session == 0) {
                         Variable.showDialog = true;
-                        new APICalls(context, "Syncing...", true, HomeActivity.this).execute();
+                        new APICalls(context, "Syncing...", true, HomeActivity.this, "forceSync").execute();
                         Variable.session++;
                     /*} else {
                         Variable.showDialog = true;

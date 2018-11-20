@@ -73,6 +73,13 @@ public class ApproverFragment extends Fragment {
 
         approverModel = new ApproverModel();
         approverList = ApproverModel.find(ApproverModel.class, "status = '1'", new String[]{}, null, "updatedate DESC", "100");
+
+        for(ApproverModel i: approverList){
+
+            Log.e("ApproverFragment",i.getFirstname() + " " + i.getLastname());
+        }
+
+
         Log.d("SIZE", approverList.size() + "");
         approverAdapter = new ApproverAdapter(context, approverList);
         lvApproverList.setAdapter(approverAdapter);

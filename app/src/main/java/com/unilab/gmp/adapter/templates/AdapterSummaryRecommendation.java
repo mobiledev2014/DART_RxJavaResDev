@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -115,7 +116,30 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
             }
         });
 
-        widgets.remarks.setText(templateModelSummaryRecommendations.get(i).getRemarks());
+        widgets.remarks.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (widgets.remarks.hasFocus()) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    switch (event.getAction() & MotionEvent.ACTION_MASK){
+                        case MotionEvent.ACTION_SCROLL:
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+
+        Log.e("GET REMARKS", "onBindViewHolder: "+templateModelSummaryRecommendations.get(i).getRemarks());
+
+        if(templateModelSummaryRecommendations.get(i).getRemarks() != null) {
+       //     widgets.remarks.setText(templateModelSummaryRecommendations.get(i).getRemarks().replace("&lt;br&gt;", "\n").replace("&#8718;", "▪").replace("&#34;", "\""));
+            widgets.remarks.setText(templateModelSummaryRecommendations.get(i).getRemarks().replace("&lt;br&gt;", "\n").replace("&#34;", "\""));
+        }else{
+            widgets.remarks.setText(templateModelSummaryRecommendations.get(i).getRemarks());
+        }
+
         widgets.remarks.setEnabled(Variable.isAuthorized);
         widgets.remarks.addTextChangedListener(new TextWatcher() {
             @Override
@@ -125,7 +149,8 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                templateModelSummaryRecommendations.get(z).setRemarks(widgets.remarks.getText().toString());
+            //    templateModelSummaryRecommendations.get(z).setRemarks(widgets.remarks.getText().toString().replaceAll("[\r\n]+", "&lt;br&gt;").replace("▪","&#8718;").replace("\"","&#34;"));
+                templateModelSummaryRecommendations.get(z).setRemarks(widgets.remarks.getText().toString().replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"","&#34;"));
             }
 
             @Override

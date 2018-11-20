@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +22,7 @@ import com.unilab.gmp.model.ModelTemplates;
 import com.unilab.gmp.utility.SharedPreferenceManager;
 import com.unilab.gmp.utility.Variable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,6 +35,8 @@ import butterknife.Unbinder;
  */
 
 public class TemplateFragment extends Fragment {
+
+    private static final String TAG = "TemplateFragment";
 
     Unbinder unbinder;
     Context context;
@@ -58,6 +60,7 @@ public class TemplateFragment extends Fragment {
     TextView tvNoResult;
 
     List<ModelTemplates> templateList;
+    List<ModelTemplates> templateTotalCount;
 
     TemplateAdapter templateAdapter;
 
@@ -80,8 +83,26 @@ public class TemplateFragment extends Fragment {
         handler = new Handler();
 
 //        templateList = ModelTemplates.listAll(ModelTemplates.class, "date_Created DESC");
-        templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2' ",
+        templateTotalCount = ModelTemplates.listAll(ModelTemplates.class);
+        Log.i("ALL_TEMPLATES" , "" + templateTotalCount.size());
+
+        templateList = ModelTemplates.find(ModelTemplates.class, null,
+                new String[]{}, null, "date_Created DESC", null);
+
+
+        for(ModelTemplates i: templateList){
+            Log.e(TAG, "onCreateView: ID: "+i.getTemplateID() + "No Status: " +i.getStatus());
+        }
+
+        templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2'",
                 new String[]{}, null, "date_Created DESC", "50");
+
+
+        for(ModelTemplates i: templateList){
+            Log.e(TAG, "onCreateView: ID: "+i.getTemplateID() + " Status: " +i.getStatus());
+        }
+
+
         templateAdapter = new TemplateAdapter(context, templateList);
         lvTemplateList.setAdapter(templateAdapter);
         tvTemplateCount.setText(templateList.size() + " Total Record(s)");
@@ -123,9 +144,17 @@ public class TemplateFragment extends Fragment {
                     "(product_Type LIKE '%" + audName + "%' OR " +
                     "template_Name LIKE '%" + audName + "%' OR " +
                     "date_Updated LIKE '%" + audName + "%') AND " +
-                    "(status = '1' OR status = '2') " +
+                    "(status = '2' OR status = '1') " +
                     "ORDER BY date_Created DESC");
+
+            for(ModelTemplates e: templateList){
+                Log.e(TAG, "searchTemplate: "+e.getTemplateID() );
+                if(e.getTemplateID().equals("2")) {
+                    Log.e(TAG, "searchTemplate: Status 2: " + e.getStatus());
+                }
+            }
             Log.e("AuditorsCount", templateList.size() + "");
+
             if (templateList.size() > 0) {
                 setTemplateList();
                 tvNoResult.setVisibility(View.GONE);
@@ -135,7 +164,7 @@ public class TemplateFragment extends Fragment {
             }
             //pDialog.dismiss();
         } else {
-            templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2' ",
+            templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2'",
                     new String[]{}, null, "date_Created DESC", "50");
             setTemplateList();
             tvNoResult.setVisibility(View.GONE);

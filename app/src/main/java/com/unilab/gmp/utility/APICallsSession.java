@@ -569,69 +569,76 @@ public class APICallsSession extends AsyncTask<String, String, Boolean> {
                         public void onResponse(Call<ModelTemplates> call, Response<ModelTemplates> response) {
                             modelTemplates = response.body();
                             ModelTemplates modelTemplate = new ModelTemplates();
+
+                            if (templateStatus == "3") {
+
+                            } else {
                             if (modelTemplates != null) {
-                                if (modelTemplates.getProductType() != null) {
 
-                                    //get all template id in local db
-                                    List<ModelTemplates> templateList = ModelTemplates.find
-                                            (ModelTemplates.class, "status = '1' OR status = '2' ",
-                                                    new String[]{}, null, "", "");
-                                    //if local db not match with api modified date
-                                    for (ModelTemplates qid : templateList) {
-                                        Log.i("TEMPLATE_LIST", "ID : " + qid.getTemplateID() + " Modified Date offline : " + qid.getDateUpdated()
-                                                + "ID : " + modelTemplates.getTemplateID() + " Modified Date API : " + modelTemplates.getDateUpdated());
+                                    if (modelTemplates.getProductType() != null) {
 
-                                        if (qid.getTemplateID().equals(modelTemplates.getTemplateID())) {
-                                            if (!qid.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
-                                                Log.i("TEMPLATE_LIST", "WHEN HERE");
-                                                //delete template
-                                                ModelTemplates.executeQuery("DELETE FROM MODEL_TEMPLATES " +
-                                                        "WHERE template_id = '" + qid.getTemplateID() + "'");
+                                        //get all template id in local db
+                                        List<ModelTemplates> templateList = ModelTemplates.find
+                                                (ModelTemplates.class, "status = '1' OR status = '2'",
+                                                        new String[]{}, null, "", "");
+                                        //if local db not match with api modified date
+                                        for (ModelTemplates qid : templateList) {
+                                            Log.i("TEMPLATE_LIST", "ID : " + qid.getTemplateID() + " Modified Date offline : " + qid.getDateUpdated()
+                                                    + "ID : " + modelTemplates.getTemplateID() + " Modified Date API : " + modelTemplates.getDateUpdated());
+
+                                            if (qid.getTemplateID().equals(modelTemplates.getTemplateID())) {
+                                                if (!qid.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
+                                                    Log.i("TEMPLATE_LIST", "WHEN HERE");
+                                                    //delete template
+                                                    ModelTemplates.executeQuery("DELETE FROM MODEL_TEMPLATES " +
+                                                            "WHERE template_id = '" + qid.getTemplateID() + "'");
+                                                }
                                             }
                                         }
-                                    }
 
-                                    //modelTemplate.setTemplateID(modelTemplates.getTemplateID() + "");
-                                    modelTemplate.setTemplateID(templateid);
-                                    modelTemplate.setProductType(modelTemplates.getProductType() + "");
-                                    modelTemplate.setTemplateName(modelTemplates.getTemplateName() + "");
-                                    modelTemplate.setDateCreated(modelTemplates.getDateCreated() + "");
-                                    modelTemplate.setDateUpdated(modelTemplates.getDateUpdated());
-                                    modelTemplate.setModelTemplateElements(modelTemplates.getModelTemplateElements());
-                                    modelTemplate.setModelTemplateActivities(modelTemplates.getModelTemplateActivities());
-                                    modelTemplate.setStatus(templateStatus);
-                                    Log.i("S T A T U S", "value : " + templateStatus + " --- " + modelTemplates.getTemplateName());
-                                    ModelTemplateElements.deleteAll(ModelTemplateElements.class, "templateid = ?", new String[]{templateid});
 
-                                    for (ModelTemplateElements mte : modelTemplates.getModelTemplateElements()) {
-                                        mte.setTemplate_id(modelTemplates.getTemplateID() + "");
-                                        if (isElementIDExisting(mte))
-                                            mte.save();
-                                        for (ModelTemplateQuestionDetails mteq : mte.getModelTemplateQuestionDetails()) {
-                                            mteq.setElement_id(mte.getElement_id());
-                                            mteq.setTemplate_id(mte.getTemplate_id() + "");
-                                            mteq.setRequired_remarks(mteq.getRequired_remarks());
-                                            //Log.i("REMARKS", "REQUIRED : " + mte.getModelTemplateQuestionDetails().get(0).getRequired_remarks());
-                                            if (isQuestionIDExisting(mteq)) {
-                                                mteq.save();
+                                        //modelTemplate.setTemplateID(modelTemplates.getTemplateID() + "");
+                                        modelTemplate.setTemplateID(templateid);
+                                        modelTemplate.setProductType(modelTemplates.getProductType() + "");
+                                        modelTemplate.setTemplateName(modelTemplates.getTemplateName() + "");
+                                        modelTemplate.setDateCreated(modelTemplates.getDateCreated() + "");
+                                        modelTemplate.setDateUpdated(modelTemplates.getDateUpdated());
+                                        modelTemplate.setModelTemplateElements(modelTemplates.getModelTemplateElements());
+                                        modelTemplate.setModelTemplateActivities(modelTemplates.getModelTemplateActivities());
+                                        modelTemplate.setStatus(templateStatus);
+                                        Log.i("S T A T U S", "value : " + templateStatus + " --- " + modelTemplates.getTemplateName());
+                                        ModelTemplateElements.deleteAll(ModelTemplateElements.class, "templateid = ?", new String[]{templateid});
+
+                                        for (ModelTemplateElements mte : modelTemplates.getModelTemplateElements()) {
+                                            mte.setTemplate_id(modelTemplates.getTemplateID() + "");
+                                            if (isElementIDExisting(mte))
+                                                mte.save();
+                                            for (ModelTemplateQuestionDetails mteq : mte.getModelTemplateQuestionDetails()) {
+                                                mteq.setElement_id(mte.getElement_id());
+                                                mteq.setTemplate_id(mte.getTemplate_id() + "");
+                                                mteq.setRequired_remarks(mteq.getRequired_remarks());
+                                                //Log.i("REMARKS", "REQUIRED : " + mte.getModelTemplateQuestionDetails().get(0).getRequired_remarks());
+                                                if (isQuestionIDExisting(mteq)) {
+                                                    mteq.save();
+                                                }
                                             }
                                         }
-                                    }
 
-                                    for (ModelTemplateActivities mta : modelTemplates.getModelTemplateActivities()) {
-                                        mta.setTemplate_id(modelTemplates.getTemplateID() + "");
-                                        if (isActivityIDExisting(mta)) {
-                                            mta.save();
-                                        }
-                                        for (ModelTemplateSubActivities mtsa : mta.getModelTemplateSubActivities()) {
-                                            mtsa.setTemplate_id(mta.getTemplate_id());
-                                            if (isSubActivityIDExisting(mtsa)) {
-                                                mtsa.save();
+                                        for (ModelTemplateActivities mta : modelTemplates.getModelTemplateActivities()) {
+                                            mta.setTemplate_id(modelTemplates.getTemplateID() + "");
+                                            if (isActivityIDExisting(mta)) {
+                                                mta.save();
+                                            }
+                                            for (ModelTemplateSubActivities mtsa : mta.getModelTemplateSubActivities()) {
+                                                mtsa.setTemplate_id(mta.getTemplate_id());
+                                                if (isSubActivityIDExisting(mtsa)) {
+                                                    mtsa.save();
+                                                }
                                             }
                                         }
-                                    }
 
-                                    isTemplateExisting(modelTemplate);
+                                        isTemplateExisting(modelTemplate);
+                                    }
                                 }
                             }
                             Log.e("templatesdownloaded", "templatesdownloaded : " + ++templatesdownloaded);

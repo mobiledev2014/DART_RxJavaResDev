@@ -62,10 +62,22 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
     @Override
     public void onBindViewHolder(final Widgets widgets, final int position) {
         if (Variable.status.equals("3")) {
-            widgets.majorchanges.setEnabled(false);
+            int disabled_color = context.getResources().getColor(R.color.disabled_color);
+            widgets.majorchanges.setKeyListener( null );
+            widgets.majorchanges.setFocusable( false );
+            widgets.majorchanges.setCursorVisible(false);
+            widgets.majorchanges.setTextColor(disabled_color);
         }
+
         if (templateModelCompanyBackgroundMajorChanges.size() > position) {
-            widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges());
+
+            if(templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges() != null) {
+            //    widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges().replace("&lt;br&gt;", "\n").replace("s&#0149;","▪").replace("&#34;","\""));
+                widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges().replace("&lt;br&gt;", "\n").replace("&#34;","\""));
+            }else{
+                widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges());
+            }
+
             widgets.majorchanges.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -77,7 +89,6 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
                     if (position < templateModelCompanyBackgroundMajorChanges.size())
                         templateModelCompanyBackgroundMajorChanges.get(position).setMajorchanges(charSequence.toString());
                 }
-
                 @Override
                 public void afterTextChanged(Editable editable) {
 
@@ -91,7 +102,12 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
         }
 
         if (disable > position) {
-            widgets.majorchanges.setEnabled(false);
+            int disabled_color = context.getResources().getColor(R.color.disabled_color);
+
+            widgets.majorchanges.setKeyListener( null );
+            widgets.majorchanges.setFocusable( false );
+            widgets.majorchanges.setCursorVisible(false);
+            widgets.majorchanges.setTextColor(disabled_color);
         }
 
     }
@@ -116,12 +132,15 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
         TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
         int i = 0;
         for (TemplateModelCompanyBackgroundMajorChanges t : templateModelCompanyBackgroundMajorChanges) {
+
             if (i++ >= disable && !t.getMajorchanges().isEmpty()) {
                 t.setReport_id(report_id);
                 t.setCompany_id(company_id);
+
                 t.save();
             }
         }
+
     }
 
     public class Widgets extends RecyclerView.ViewHolder {

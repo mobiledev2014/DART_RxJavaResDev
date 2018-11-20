@@ -16,8 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.unilab.gmp.R;
+import com.unilab.gmp.adapter.TemplateElementAdapter;
 import com.unilab.gmp.model.TemplateModelReference;
 import com.unilab.gmp.utility.DateTimeUtils;
 import com.unilab.gmp.utility.Variable;
@@ -151,6 +153,14 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
             }
         }
 
+        widgets.clearvaliditydateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                widgets.validity.setText("");
+                templateModelReferences.get(z).setValidity("");
+            }
+        });
+
         widgets.issue_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,6 +173,14 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
 //        }
+
+        widgets.clearissuedateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                widgets.issue_date.setText("");
+                templateModelReferences.get(z).setIssue_date("");
+            }
+        });
 
         if (!isCheck) {
             if (templateModelReferences.get(i).getCertification().isEmpty()) {
@@ -198,6 +216,9 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
                             t.getValidity().isEmpty()
                     )
                 continue;
+
+            Log.e("Issue Date Value", "save: Issue Date Value : "+t.getIssue_date());
+
             t.setReport_id(report_id);
             t.save();
         }
@@ -247,6 +268,8 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
         EditText number;
         EditText validity;
         EditText issue_date;
+        ImageButton clearissuedateBtn;
+        ImageButton clearvaliditydateBtn;
 
         Widgets(View rowView) {
             super(rowView);
@@ -255,6 +278,8 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
             this.number = (EditText) rowView.findViewById(R.id.et_template_next_license_certificate_num);
             this.validity = (EditText) rowView.findViewById(R.id.et_template_next_validity);
             this.issue_date = (EditText) rowView.findViewById(R.id.et_template_next_issue_date);
+            this.clearissuedateBtn = (ImageButton) rowView.findViewById(R.id.clearIssuedate);
+            this.clearvaliditydateBtn = (ImageButton) rowView.findViewById(R.id.clearValidity);
         }
     }
 

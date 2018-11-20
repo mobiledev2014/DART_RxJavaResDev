@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class TemplateAdapter extends BaseAdapter {
     Dialog dialogViewApprover;
     ModelTemplates modelTemplate;
 
+    private static final String TAG = "TemplateAdapter";
 
     public TemplateAdapter(Context context, List<ModelTemplates> modelTemplates) {
         this.context = context;
@@ -63,59 +65,61 @@ public class TemplateAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View rowView, ViewGroup viewGroup) {
         Widgets widgets;
-            widgets = new Widgets();
+        widgets = new Widgets();
 
-            rowView = inflater.inflate(R.layout.custom_listview_template, null);
+        rowView = inflater.inflate(R.layout.custom_listview_template, null);
 
-            widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.ll_row_view);
-            if (position % 2 == 0)
-                widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
-            else
-                widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
 
-            widgets.product_type = (TextView) rowView.findViewById(R.id.tv_template_type);
-            widgets.stand_ref = (TextView) rowView.findViewById(R.id.tv_template_stand);
-            widgets.date_modified = (TextView) rowView.findViewById(R.id.tv_template_date_modified);
-            widgets.useTemplate = (Button) rowView.findViewById(R.id.btn_use_template);
 
-            modelTemplate = modelTemplates.get(position);
-            widgets.product_type.setText(modelTemplate.getProductType());
-            widgets.stand_ref.setText(modelTemplate.getTemplateName());
-            widgets.date_modified.setText(modelTemplate.getDateUpdated());
+        widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.ll_row_view);
+        if (position % 2 == 0)
+            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
+        else
+            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
 
-            final ModelTemplates template = modelTemplate;
+        widgets.product_type = (TextView) rowView.findViewById(R.id.tv_template_type);
+        widgets.stand_ref = (TextView) rowView.findViewById(R.id.tv_template_stand);
+        widgets.date_modified = (TextView) rowView.findViewById(R.id.tv_template_date_modified);
+        widgets.useTemplate = (Button) rowView.findViewById(R.id.btn_use_template);
 
-            widgets.useTemplate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ProgressDialogUtils.showSimpleProgressDialog(context,50,"Loading . . .",false);
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Variable.selectedProduct.clear();
-                            Variable.selectedDisposition.clear();
-                            Variable.report_id = "0";
+        modelTemplate = modelTemplates.get(position);
+        widgets.product_type.setText(modelTemplate.getProductType());
+        widgets.stand_ref.setText(modelTemplate.getTemplateName());
+        widgets.date_modified.setText(modelTemplate.getDateUpdated());
 
-                            FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                            fragmentManager.beginTransaction()
-                                    .replace(R.id.fl_content, new SelectedTemplateFragment(template)).addToBackStack(null).commit();
-                            //Toast.makeText(context, "Use this template", Toast.LENGTH_SHORT).show();
-                            template.setStatus("2");
-                            template.save();
-                            ProgressDialogUtils.removeSimpleProgressDialog();
-                        }
-                    }, 700);
-                }
-            });
+        final ModelTemplates template = modelTemplate;
 
-            if (modelTemplate.getStatus().equals("1")) {
-                //widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.template_new));
-                widgets.product_type.setTypeface(Typeface.DEFAULT_BOLD);
-                widgets.stand_ref.setTypeface(Typeface.DEFAULT_BOLD);
-                widgets.date_modified.setTypeface(Typeface.DEFAULT_BOLD);
+        widgets.useTemplate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProgressDialogUtils.showSimpleProgressDialog(context, 50, "Loading . . .", false);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Variable.selectedProduct.clear();
+                        Variable.selectedDisposition.clear();
+                        Variable.elementSelect.clear();
+                        Variable.report_id = "0";
+
+                        FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fl_content, new SelectedTemplateFragment(template)).addToBackStack(null).commit();
+                        template.setStatus("2");
+                        template.save();
+                        ProgressDialogUtils.removeSimpleProgressDialog();
+                    }
+                }, 700);
             }
+        });
+
+        if (modelTemplate.getStatus().equals("1")) {
+            //widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.template_new));
+            widgets.product_type.setTypeface(Typeface.DEFAULT_BOLD);
+            widgets.stand_ref.setTypeface(Typeface.DEFAULT_BOLD);
+            widgets.date_modified.setTypeface(Typeface.DEFAULT_BOLD);
+        }
 
         return rowView;
     }

@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -39,7 +40,9 @@ import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.ModelAuditReports;
 import com.unilab.gmp.model.ModelCompany;
 import com.unilab.gmp.model.ModelDateOfAudit;
+import com.unilab.gmp.model.ModelReportQuestion;
 import com.unilab.gmp.model.ModelTemplateElements;
+import com.unilab.gmp.model.ModelTemplateQuestionDetails;
 import com.unilab.gmp.model.ModelTemplates;
 import com.unilab.gmp.model.TemplateModelAuditors;
 import com.unilab.gmp.utility.DateTimeUtils;
@@ -119,6 +122,7 @@ public class SelectedAuditReportFragment extends Fragment {
     Calendar dateSelected = Calendar.getInstance();
     Calendar currentTime = Calendar.getInstance();
     int useDate;
+    String indicator = "AUDITREPORT";
 
     Dialog dialogAnswerAll;
     View rootView;
@@ -225,12 +229,53 @@ public class SelectedAuditReportFragment extends Fragment {
         auditReportFragment = new AuditReportFragment();
 
         lvTemplateElement = (RecyclerView) rootView.findViewById(R.id.lv_template_element);
+
         lvTemplateAuditDate = (ExpandableHeightListView) rootView.findViewById(R.id.lv_template_audit_date);
         setWidgets();
         setWatcher();
         setText();
 
         this.rootView = rootView;
+
+
+        int counter = 0;
+        String question = "";
+        List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class,
+                "reportid = ? AND answerid > '0'", modelAuditReports.getReport_id());
+
+        List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
+                (ModelTemplateQuestionDetails.class, "templateid = ?", modelAuditReports.getTemplate_id());
+        Log.i("QUESTION_FILTER", "QUESTION COUNT : " + questionList.size());
+        Log.i("QUESTION_FILTER", "ANSWER COUNT : " + mrq.size());
+
+        List<String> answers = new ArrayList<>();
+
+        for (ModelReportQuestion t : mrq) {
+            for (ModelTemplateQuestionDetails qid : questionList) {
+                Log.i("QUESTION_FILTER", t.getQuestion_id() + " compare to " + qid.getQuestion_id());
+                if (t.getQuestion_id().equals(qid.getQuestion_id())) {
+                    answers.add(t.getQuestion_id());
+                }
+            }
+        }
+
+        //Log.i("LIST OF ANSWERS", "QUESTION ID : " + ans);
+        for (ModelReportQuestion t : mrq) {
+            for (ModelTemplateQuestionDetails qid : questionList) {
+                if (qid.getQuestion_id().equals(t.getQuestion_id())) {
+                    question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" +
+                            (t.getAnswer_id().isEmpty() ? "0" : t.getAnswer_id())
+                            + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id())
+                            + ",\"answer_details\":\"" + t.getAnswer_details() + "\",\"na_option\":\"" + t.getNaoption_id() + "\"}";
+                    if (++counter != answers.size()) {
+                        question += ",";
+                    }
+                }
+            }
+        }
+
+        Log.e("Log ito", question);
+
         return rootView;
     }
 
@@ -315,12 +360,13 @@ public class SelectedAuditReportFragment extends Fragment {
 //        }
         //questionModel = tableDirectory.getDirectory();
         templateElementAdapter = new TemplateElementAdapter(context, modelTemplates.getModelTemplateElements()
-                , modelAuditReports.getReport_id(), modelTemplates.getProductType());
+                , modelAuditReports.getReport_id(), modelTemplates.getProductType(), indicator);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
         lvTemplateElement.setLayoutManager(mLayoutManager);
         lvTemplateElement.setItemAnimator(new DefaultItemAnimator());
 
+        templateElementAdapter.notifyDataSetChanged();
         lvTemplateElement.setAdapter(templateElementAdapter);
 //        lvTemplateElement.setExpanded(true);
 
@@ -505,12 +551,21 @@ public class SelectedAuditReportFragment extends Fragment {
             //ProgressDialogUtils.showSimpleProgressDialog(context,"","Loading . . .",false);
             if (nextSelectAuditReport == null) {
                 nextSelectAuditReport = new NextSelectedAuditReportFragment(modelTemplates, modelAuditReports, templateElementAdapter, this);
+                Variable.isFromBackStack = true;
             }
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     // Do something after 5s = 5000ms
+
+                    if(Variable.isFromBackStack) {
+                        if(Variable.isChangedSite){
+                            Variable.isChangedSite = false;
+                            NextSelectedAuditReportFragment.siteChanged();
+                        }
+                    }
+
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     fragmentManager.beginTransaction()
@@ -662,6 +717,23 @@ public class SelectedAuditReportFragment extends Fragment {
     }
 
     public void setWatcher() {
+
+/*        etTemplateSite.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    List<ModelCompany> supplierList = ModelCompany.find(ModelCompany.class, "status = '1'");
+                    for(ModelCompany var: supplierList){
+                        Log.e("Supplier List", "onClick: "+ var.getCompany_name());
+                        if(etTemplateSite.getText().toString().equals(var.getCompany_name())){
+                            dialogChangeSite();
+                        }
+                    }
+                }
+                return false;
+            }
+        });*/
+
         List<ModelCompany> listSite = ModelCompany.listAll(ModelCompany.class);
         String[] arrListSite = new String[listSite.size()];
         for (int x = 0; x < listSite.size(); x++) {
@@ -681,6 +753,39 @@ public class SelectedAuditReportFragment extends Fragment {
                 Log.e("testasd", modelTemplates.getCompany_id() + " sad");
             }
         });
+    }
+
+    private void dialogChangeSite(){
+        final Dialog confirm = new Dialog(context);
+        confirm.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        confirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        confirm.setCancelable(false);
+        confirm.setContentView(R.layout.dialog_change_site);
+        confirm.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        final Button yesBtn = (Button) confirm.findViewById(R.id.btn_yes);
+        final Button noBtn = (Button) confirm.findViewById(R.id.btn_no);
+
+        yesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Variable.isChangedSite = true;
+                etTemplateSite.setText("");
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                confirm.cancel();
+            }
+        });
+
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirm.cancel();
+            }
+        });
+
+        confirm.show();
+
     }
 
     public boolean validate() {

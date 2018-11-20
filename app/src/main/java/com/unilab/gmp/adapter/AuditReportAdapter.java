@@ -98,6 +98,7 @@ public class AuditReportAdapter extends BaseAdapter {
                 } else {
                     Variable.selectedProduct.clear();
                     Variable.selectedDisposition.clear();
+                    Variable.elementSelect.clear();
                     Variable.report_id = "0";
 
 

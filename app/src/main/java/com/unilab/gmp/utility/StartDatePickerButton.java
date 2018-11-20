@@ -85,6 +85,9 @@ public class StartDatePickerButton extends DialogFragment implements DatePickerD
         if (errorDate(date)) {
             button.setText(DateTimeUtils.parseDateMonthToWord(date));
         } else {
+
+
+            datesOfAudit.get(position).setDateOfAudit("");
             dialogErrorDate();
         }
         //updateStartDateDisplay();

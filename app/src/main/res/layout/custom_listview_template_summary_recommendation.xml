@@ -60,16 +60,18 @@
             <EditText
                 android:id="@+id/et_template_next_summary_recommendation_remarks"
                 android:layout_width="0dp"
-                android:layout_height="35dp"
+                android:layout_height="175dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight=".5"
                 android:background="@drawable/template_field"
-                android:gravity="center|left"
+                android:gravity="top|left"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
                 android:singleLine="true"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 

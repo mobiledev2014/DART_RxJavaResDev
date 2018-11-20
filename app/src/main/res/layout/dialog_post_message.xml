@@ -7,14 +7,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
         android:background="@drawable/dialog_background"
         android:orientation="vertical"
         android:paddingTop="30dp"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
-        android:paddingBottom="10dp"><!--@drawable/dialog_background-->
+        android:paddingBottom="10dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"><!--@drawable/dialog_background-->
 
         <LinearLayout
             android:layout_width="match_parent"

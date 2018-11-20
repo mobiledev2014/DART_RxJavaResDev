@@ -1,6 +1,7 @@
 package com.unilab.gmp.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -32,6 +34,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.adapter.ActivityAdapter;
@@ -116,9 +119,10 @@ import static com.unilab.gmp.activity.HomeActivity.pDialog;
 @SuppressLint("ValidFragment")
 public class NextSelectedTemplateFragment extends Fragment {
 
-    public AdapterScopeAudit adapterScopeAudit;
+    private static final String TAG = "NextSelectedTemplateFra";
+    public static AdapterScopeAudit adapterScopeAudit;
     Unbinder unbinder;
-    Context context;
+    static Context context;
 
 
     @BindView(R.id.scrl_main)
@@ -133,12 +137,10 @@ public class NextSelectedTemplateFragment extends Fragment {
     RecyclerView lvTemplateNextActivitiesCarried;
     @BindView(R.id.et_template_next_activity_carried)
     EditText etTemplateNextActivityCarried;
-    @BindView(R.id.btn_template_next_scope_audit_add)
-    Button btnTemplateNextScopeAuditAdd;
+    public static Button btnTemplateNextScopeAuditAdd;
     @BindView(R.id.btn_template_next_scope_audit_delete)
     Button btnTemplateNextScopeAuditDelete;
-    @BindView(R.id.lv_template_next_scope_audit)
-    RecyclerView lvTemplateNextScopeAudit;
+    public static RecyclerView lvTemplateNextScopeAudit;
     @BindView(R.id.btn_template_next_reference_add)
     Button btnTemplateNextReferenceAdd;
     @BindView(R.id.btn_template_next_reference_delete)
@@ -161,7 +163,6 @@ public class NextSelectedTemplateFragment extends Fragment {
     Button btnTemplateNextPresentCloseUpAdd;
     @BindView(R.id.btn_template_next_present_close_up_delete)
     Button btnTemplateNextPresentCloseUpDelete;
-    @BindView(R.id.lv_template_next_present_during_meeting)
     RecyclerView lvTemplateNextPresentDuringMeeting;
     @BindView(R.id.btn_template_next_personnel_inspection_add)
     Button btnTemplateNextPersonnelInspectionAdd;
@@ -189,18 +190,15 @@ public class NextSelectedTemplateFragment extends Fragment {
     EditText etTemplateNextSummaryRecommendationOtherIssuesAudit;
     @BindView(R.id.et_template_next_summary_recommendation_other_issues_executive)
     EditText etTemplateNextSummaryRecommendationOtherIssuesExecutive;*/
-    @BindView(R.id.et_template_next_company_background_history)
-    EditText etTemplateNextCompanyBackgroundHistory;
-    @BindView(R.id.lv_template_next_company_background_name)
-    RecyclerView lvTemplateNextCompanyBackgroundName;
+    static EditText etTemplateNextCompanyBackgroundHistory;
+    static RecyclerView lvTemplateNextCompanyBackgroundName;
     @BindView(R.id.ll_template_next_company_background_name)
     LinearLayout llTemplateNextCompanyBackgroundName;
     @BindView(R.id.btn_template_next_company_background_inspector_name_add)
     Button btnTemplateNextCompanyBackgroundInspectorNameAdd;
     @BindView(R.id.btn_template_next_company_background_inspector_name_delete)
     Button btnTemplateNextCompanyBackgroundInspectorNameDelete;
-    @BindView(R.id.lv_template_next_company_background_major_changes)
-    RecyclerView lvTemplateNextCompanyBackgroundMajorChanges;
+    static RecyclerView lvTemplateNextCompanyBackgroundMajorChanges;
     @BindView(R.id.ll_template_next_company_background_major_changes)
     LinearLayout llTemplateNextCompanyBackgroundMajorChanges;
     @BindView(R.id.btn_template_next_company_background_major_changes_add)
@@ -272,11 +270,11 @@ public class NextSelectedTemplateFragment extends Fragment {
     Dialog dialogErrorDate;
 
     TemplateFragment templateFragment;
-    ModelTemplates modelTemplates;
+    static ModelTemplates modelTemplates;
     ActivityAdapter activityAdapter;
     TemplateElementAdapter templateElementAdapter;
     List<ModelTemplateActivities> modelTemplateActivities;
-    List<TemplateModelScopeAudit> templateModelScopeAudits;
+    static List<TemplateModelScopeAudit> templateModelScopeAudits;
     //    List<TemplateModelScopeAuditInterest> templateModelScopeAuditInterests;
     List<TemplateModelReference> templateModelReferences;
     List<TemplateModelPreAuditDoc> templateModelPreAuditDocs;
@@ -285,8 +283,8 @@ public class NextSelectedTemplateFragment extends Fragment {
     List<TemplateModelDistributionList> templateModelDistributionLists;
     List<TemplateModelDistributionOthers> templateModelDistributionOthers;
     List<TemplateModelSummaryRecommendation> templateModelSummaryRecommendations;
-    List<TemplateModelCompanyBackgroundName> templateModelCompanyBackgroundNames;
-    List<TemplateModelCompanyBackgroundMajorChanges> templateModelCompanyBackgroundMajorChanges;
+    static List<TemplateModelCompanyBackgroundName> templateModelCompanyBackgroundNames;
+    static List<TemplateModelCompanyBackgroundMajorChanges> templateModelCompanyBackgroundMajorChanges;
     List<TemplateModelAuditors> templateModelAuditorses;
     List<TemplateModelTranslator> templateModelTranslators;
     List<TemplateModelOtherIssuesAudit> templateModelOtherIssuesAudits;
@@ -300,12 +298,14 @@ public class NextSelectedTemplateFragment extends Fragment {
     AdapterDistributionList adapterDistributionList;
     AdapterDistributionOthers adapterDistributionOthers;
     AdapterSummaryRecommendation adapterSummaryRecommendation;
-    AdapterCompanyBackgroundName adapterCompanyBackgroundName;
-    AdapterCompanyBackgroundMajorChanges adapterCompanyBackgroundMajorChanges;
+    static  AdapterCompanyBackgroundName adapterCompanyBackgroundName;
+    static AdapterCompanyBackgroundMajorChanges adapterCompanyBackgroundMajorChanges;
     AdapterAuditors adapterAuditors;
     AdapterTranslator adapterTranslator;
     AdapterOthersIssueAudit adapterOthersIssueAudit;
     AdapterOthersIssueExecutive adapterOthersIssueExecutive;
+
+    static NextSelectedTemplateFragment fragment;
 
     List<AuditorsModel> auditorsModels;
     List<ReviewerModel> reviewerModels;
@@ -319,12 +319,12 @@ public class NextSelectedTemplateFragment extends Fragment {
     String reviewer_id = "", approver_id = "";
     SelectedTemplateFragment selectedTemplateFragment;
     View rootView;
-    int sitemajorchangescount = 0;
+    static int sitemajorchangescount = 0;
     String message = "";
 
     Dialog dialogDeleteDateOfAudit;
-    boolean dialogDeleteIsShowing = false;
-    int simpleMessageDialog = -1, distributionDelete = 0, translatorDelete = 1,
+    static boolean dialogDeleteIsShowing = false;
+    static int simpleMessageDialog = -1, distributionDelete = 0, translatorDelete = 1,
             preAuditDocDelete = 2, distributionOthersDelete = 3, typeOfAuditDelete = 4,
             personnelMetDelete = 5, elementsRequiringDelete = 6, otherIssuesAuditDelete = 7,
             otherIssuesExecutiveDelete = 8, auditorDelete = 9, reviewerDelete = 10, presentDuringDelete = 11,
@@ -353,10 +353,15 @@ public class NextSelectedTemplateFragment extends Fragment {
 //        }
 //    }
 
+
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+
+        fragment = this;
 
         if (this.rootView != null) {
             ButterKnife.bind(this, this.rootView);
@@ -375,7 +380,14 @@ public class NextSelectedTemplateFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
         context = getActivity();
 
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        lvTemplateNextScopeAudit = (RecyclerView) rootView.findViewById(R.id.lv_template_next_scope_audit);
+        btnTemplateNextScopeAuditAdd = (Button) rootView.findViewById(R.id.btn_template_next_scope_audit_add);
+        lvTemplateNextCompanyBackgroundName = (RecyclerView) rootView.findViewById(R.id.lv_template_next_company_background_name);
+        lvTemplateNextCompanyBackgroundMajorChanges = (RecyclerView) rootView.findViewById(R.id.lv_template_next_company_background_major_changes);
+        etTemplateNextCompanyBackgroundHistory = (EditText) rootView.findViewById(R.id.et_template_next_company_background_history);
+        lvTemplateNextPresentDuringMeeting = (RecyclerView) rootView.findViewById(R.id.lv_template_next_present_during_meeting);
+
+                getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         sharedPref = new SharedPreferenceManager(context);
 
         Variable.menu = true;
@@ -448,19 +460,21 @@ public class NextSelectedTemplateFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int index = 0;
-                if (i > 0)
+                if (i > 0) {
                     index = i - 1;
-                etTemplateNextReviewerPosition.setText(reviewerModels.get(index).getDesignation());
-                etTemplateNextReviewerDepartment.setText(reviewerModels.get(index).getDepartment());
+                }
+
                 if (!sTemplateNextReviewerName.getSelectedItem().toString().equals("Select")) {
                     reviewer_id = reviewerModels.get(index).getReviewer_id();
+                    etTemplateNextReviewerPosition.setText(reviewerModels.get(index).getDesignation());
+                    etTemplateNextReviewerDepartment.setText(reviewerModels.get(index).getDepartment());
                 } else {
                     reviewer_id = "0";
-                    /*etTemplateNextReviewerPosition.setText("-");
-                    etTemplateNextReviewerDepartment.setText("-");*/
+                    etTemplateNextReviewerPosition.setText("Select");
+                    etTemplateNextReviewerDepartment.setText("Select");
                 }
-                Log.i("SAVED-REVIEWER", "ON-SELECTED: " + reviewerModels.get(index).getReviewer_id());
-                Log.i("SAVED-REVIEWER", "ON-SELECTED NAME: " + sTemplateNextReviewerName.getSelectedItem().toString());
+//                Log.i("SAVED-REVIEWER", "ON-SELECTED: " + reviewerModels.get(index).getReviewer_id());
+ //               Log.i("SAVED-REVIEWER", "ON-SELECTED NAME: " + sTemplateNextReviewerName.getSelectedItem().toString());
             }
 
             @Override
@@ -498,16 +512,18 @@ public class NextSelectedTemplateFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int index = 0;
-                if (i > 0)
+                if (i > 0) {
                     index = i - 1;
-                etTemplateNextApproverPosition.setText(approverModels.get(index).getDesignation());
-                etTemplateNextApproverDepartment.setText(approverModels.get(index).getDepartment());
+                }
+
                 if (!sTemplateNextApproverName.getSelectedItem().toString().equals("Select")) {
                     approver_id = approverModels.get(index).getApprover_id();
+                    etTemplateNextApproverPosition.setText(approverModels.get(index).getDesignation());
+                    etTemplateNextApproverDepartment.setText(approverModels.get(index).getDepartment());
                 } else {
                     approver_id = "0";
-                    /*etTemplateNextApproverPosition.setText("-");
-                    etTemplateNextApproverDepartment.setText("-");*/
+                    etTemplateNextApproverPosition.setText("Select");
+                    etTemplateNextApproverDepartment.setText("Select");
                 }
                 Log.i("SAVED-APPROVER", "ON-SELECTED: " + approverModels.get(index).getApprover_id());
                 Log.i("SAVED-APPROVER", "ON-SELECTED NAME: " + sTemplateNextApproverName.getSelectedItem().toString());
@@ -519,6 +535,21 @@ public class NextSelectedTemplateFragment extends Fragment {
             }
         });
         //--- Approver setting end
+
+
+     /*   if(Variable.isChangedSite){
+            Log.e(TAG, "onCreateView: Company Select "+modelTemplates.getCompany_id());
+        }else{
+            Log.e(TAG, "onCreateView: Company Select "+modelTemplates.getCompany_id());
+        }*/
+
+       /* if(Variable.isChangedSite){
+           Toast.makeText(getActivity(),"ISCHANGED", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(getActivity(),"ELSE ME", Toast.LENGTH_LONG).show();
+        }*/
+
+        //Toast.makeText(getActivity(),"test", Toast.LENGTH_LONG).show();
 
         // --- Audit Scope
         templateModelScopeAudits = new ArrayList<>();
@@ -603,6 +634,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         if (templateModelPersonelMetDurings.size() <= 0) {
             addPersonelMet();
         }
+
         // --- Distribution List
         templateModelDistributionLists = new ArrayList<>();
         adapterDistributionList = new AdapterDistributionList(templateModelDistributionLists, context);
@@ -720,6 +752,70 @@ public class NextSelectedTemplateFragment extends Fragment {
         }, 500);
         this.rootView = rootView;
         return rootView;
+    }
+
+    public static void siteChanged(){
+        try {
+            etTemplateNextCompanyBackgroundHistory.post(new Runnable() {
+                @Override
+                public void run() {
+                    List<ModelCompany> mc = ModelCompany.find(ModelCompany.class, "companyid = ?", modelTemplates.getCompany_id());
+                    if (mc.size() > 0) {
+                        etTemplateNextCompanyBackgroundHistory.setText(mc.get(0).getBackground());
+                    }
+                }
+            });
+
+            templateModelScopeAudits = new ArrayList<>();
+            adapterScopeAudit = new AdapterScopeAudit(templateModelScopeAudits, context, modelTemplates.getCompany_id(), fragment, null, btnTemplateNextScopeAuditAdd);
+            lvTemplateNextScopeAudit.setNestedScrollingEnabled(false);
+            lvTemplateNextScopeAudit.setLayoutManager(new LinearLayoutManager(context));
+            lvTemplateNextScopeAudit.setItemAnimator(new DefaultItemAnimator());
+            lvTemplateNextScopeAudit.setAdapter(adapterScopeAudit);
+            lvTemplateNextScopeAudit.addItemDecoration(new SimpleDividerItemDecoration(context));
+            if (templateModelScopeAudits.size() <= 0) {
+                addScopeAuditType();
+            }
+
+            templateModelCompanyBackgroundNames = new ArrayList<>();
+            templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", modelTemplates.getCompany_id()));
+            adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(templateModelCompanyBackgroundNames, context, templateModelCompanyBackgroundNames.size());
+            lvTemplateNextCompanyBackgroundName.setLayoutManager(new LinearLayoutManager(context));
+            lvTemplateNextCompanyBackgroundName.setItemAnimator(new DefaultItemAnimator());
+            lvTemplateNextCompanyBackgroundName.setAdapter(adapterCompanyBackgroundName);
+//        lvTemplateNextCompanyBackgroundName.setExpanded(true);
+            if (templateModelCompanyBackgroundNames.size() <= 0) {
+                addBackgroundName();
+            }
+
+            templateModelCompanyBackgroundMajorChanges = new ArrayList<>();
+
+            sitemajorchangescount = TemplateModelCompanyBackgroundMajorChanges
+                    .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", modelTemplates.getCompany_id()).size();
+            templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges
+                    .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", modelTemplates.getCompany_id()));
+            adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context, sitemajorchangescount);//templateModelCompanyBackgroundMajorChanges.size());
+            lvTemplateNextCompanyBackgroundMajorChanges.setLayoutManager(new LinearLayoutManager(context));
+            lvTemplateNextCompanyBackgroundMajorChanges.setItemAnimator(new DefaultItemAnimator());
+            lvTemplateNextCompanyBackgroundMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
+//        lvTemplateNextCompanyBackgroundMajorChanges.setExpanded(true);
+            if (templateModelCompanyBackgroundMajorChanges.size() <= 0) {
+                addMajorChanges();
+            }
+
+
+/*        List<ModelCompany> mc = ModelCompany.find(ModelCompany.class, "companyid = ?", modelTemplates.getCompany_id());
+        etTemplateNextCompanyBackgroundHistory.setText("");
+        Log.e(TAG, "siteChanged: Company Background ako "+mc.get(0).getBackground());
+        if (mc.size() > 0) {
+            Log.e(TAG, "siteChanged: Company Background ako If Condition ");
+            Log.e(TAG, "siteChanged: Company Background ako Loob : "+mc.get(0).getBackground());
+
+        }*/
+        }catch (Exception e){
+            Log.e(TAG, "siteChanged: "+e.toString());
+        }
+
     }
 
     @Override
@@ -945,7 +1041,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     private void analyzeInputs() {
-        ProgressDialog loginDialog = new ProgressDialog(context);
+        final ProgressDialog loginDialog = new ProgressDialog(context);
         loginDialog.setCanceledOnTouchOutside(false);
         loginDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         loginDialog.setMax(2);
@@ -954,11 +1050,13 @@ public class NextSelectedTemplateFragment extends Fragment {
             if (isNetworkConnected()) {
                 saveReport();
 
-                String email = sharedPref.getStringData("EMAIL");
-                String password = sharedPref.getStringData("PASSWORD");
+                final String email = sharedPref.getStringData("EMAIL");
+                final String password = sharedPref.getStringData("PASSWORD");
 
                 Log.i("ERROR", "POSTASYNC 3");
+
                 new PostAsync(context, loginDialog, email, password, Glovar.POST_TEMPLATE, null, NextSelectedTemplateFragment.this).execute();
+
                 //Toast.makeText(context, "True", Toast.LENGTH_SHORT).show();
 //                postData();
             } else {
@@ -996,13 +1094,19 @@ public class NextSelectedTemplateFragment extends Fragment {
         String report_id = String.valueOf(rep_temp + 1);*/
         int rep_temp = 0;
         String report_id = "";
-        if (auditReps.size() != 0) {
-            rep_temp = Integer.valueOf(auditReps.get(auditReps.size() - 1).getReport_id());
 
-            if (auditReps.size() < 10){
+        String crnt = auditReps.get(auditReps.size() - 1).getReport_id();
+        String[] new_id = crnt.split("-");
+
+        if (auditReps.size() != 0) {
+            rep_temp = Integer.valueOf(new_id[0]);
+
+            if (auditReps.size() < 10) {
                 report_id = "00" + String.valueOf(rep_temp + 1);
-            } else if (auditReps.size() > 9 && auditReps.size() < 100){
+            } else if (auditReps.size() > 9 && auditReps.size() < 100) {
                 report_id = "0" + String.valueOf(rep_temp + 1);
+            } else if (auditReps.size() >= 100) {
+                report_id = String.valueOf(rep_temp + 1);
             }
         } else {
             report_id = "001";
@@ -1011,10 +1115,13 @@ public class NextSelectedTemplateFragment extends Fragment {
         //report_id = String.valueOf(rep_temp + 1);
         Log.i("AUDIT-REPORT-SIZE", "VALUE 1 : " + rep_temp);
         Log.i("AUDIT-REPORT-SIZE", "VALUE 2 : " + report_id);
+        report_id = report_id + "-B";
 
+        String crntrepno = report_id;
+        String[] new_repno = crntrepno.split("-");
 
         mar.setReport_id(report_id);
-        mar.setReport_no("GMP-00-" + report_id);
+        mar.setReport_no("GMP-00-" + new_repno[0]);
         mar.setStatus("1");
         mar.setTemplate_id(modelTemplates.getTemplateID());
         mar.setCompany_id(modelTemplates.getCompany_id());
@@ -1034,8 +1141,9 @@ public class NextSelectedTemplateFragment extends Fragment {
         ModelReportReviewer mrr = new ModelReportReviewer();
         mrr.setReport_id(report_id);
         int rev_index = sTemplateNextReviewerName.getSelectedItemPosition();
-        if (rev_index > 0)
+        if (rev_index > 0) {
             rev_index -= 1;
+        }
         mrr.setReviewer_id(reviewerModels.get(rev_index).getReviewer_id());
         mrr.save();
 
@@ -1106,7 +1214,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             dialogDeleteFromListConfirmation("You've reached the maximum number of 20", simpleMessageDialog);
     }
 
-    private void addScopeAuditType() {
+    private static void addScopeAuditType() {
         //if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
         if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
             Log.i("SIZE LOG", adapterScopeAudit.getTypeAuditSize() + " > " + templateModelScopeAudits.size());
@@ -1115,8 +1223,9 @@ public class NextSelectedTemplateFragment extends Fragment {
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelScopeAudits.add(t);
             adapterScopeAudit.notifyItemInserted(templateModelScopeAudits.size() - 1);
-        } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of " + adapterScopeAudit.getTypeAuditSize(), simpleMessageDialog);
+        } else{
+            staticDialog("You've reached the maximum number of " + adapterScopeAudit.getTypeAuditSize(), simpleMessageDialog);
+        }
     }
 
     private void addReference() {
@@ -1146,7 +1255,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelPresentDuringMeetings.add(t);
             adapterPresentDuringMeeting.notifyItemInserted(templateModelPresentDuringMeetings.size() - 1);
         } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 30", simpleMessageDialog);
+            staticDialog("You've reached the maximum number of 30", simpleMessageDialog);
     }
 
     private void addPersonelMet() {
@@ -1156,7 +1265,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelPersonelMetDurings.add(t);
             adapterPersonelMetDuring.notifyItemInserted(templateModelPersonelMetDurings.size() - 1);
         } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 30", simpleMessageDialog);
+            staticDialog("You've reached the maximum number of 30", simpleMessageDialog);
     }
 
     private void addDistribution() {
@@ -1192,7 +1301,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
     }
 
-    private void addBackgroundName() {//disabled
+    private static void addBackgroundName() {//disabled
         if (4 > templateModelCompanyBackgroundNames.size()) {
             TemplateModelCompanyBackgroundName t = new TemplateModelCompanyBackgroundName();
             t.setTemplate_id(modelTemplates.getTemplateID());
@@ -1201,14 +1310,14 @@ public class NextSelectedTemplateFragment extends Fragment {
         }
     }
 
-    private void addMajorChanges() {
+    private static void addMajorChanges() {
         if (20 > templateModelCompanyBackgroundMajorChanges.size()) {
             TemplateModelCompanyBackgroundMajorChanges t = new TemplateModelCompanyBackgroundMajorChanges();
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelCompanyBackgroundMajorChanges.add(t);
             adapterCompanyBackgroundMajorChanges.notifyItemInserted(templateModelCompanyBackgroundMajorChanges.size() - 1);
         } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of 20", simpleMessageDialog);
+            staticDialog("You've reached the maximum number of 20", simpleMessageDialog);
 
     }
 
@@ -1294,6 +1403,9 @@ public class NextSelectedTemplateFragment extends Fragment {
             passed = false;
             set_error(etTemplateNextDateOfWrapUp);
         }
+
+
+
 //        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().equals("")) {
 //            passed = false;
 //            set_error(etTemplateNextSummaryRecommendationOtherIssuesAudit);
@@ -1307,20 +1419,21 @@ public class NextSelectedTemplateFragment extends Fragment {
         if (!adapterScopeAudit.check()) {
             passed = false;
             if (!adapterScopeAudit.check2())
-                message += "\nYou have entered duplicate scope.";
+
+                message = "You have entered duplicate scope.";
         }
         if (!adapterScopeAudit.check4()) {
-            message += "\nScope of audit is required.";
+            message = "Scope of audit is required.";
             passed = false;
             Log.e("validate", "3.5.10");
         }
         if (!adapterScopeAudit.check3()) {
-            message += "\nYou have entered duplicate product and disposition.";
+            message = "You have entered duplicate product and disposition.";
             passed = false;
             Log.e("validate", "3.5.5");
         }
         if (Variable.selectedProduct.size() != Variable.selectedDisposition.size()) {
-            message += "\nProduct of interest and disposition are required.";
+            message = "Product of interest and disposition are required.";
             passed = false;
             Log.e("validate", "3.5.10");
         }
@@ -1477,7 +1590,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 }
             }
 
-            new_scope += "{\"scope_id\":" + t.getScope_id() + ",\"scope_remarks\":\"" + t.getScope_detail() + "\",\"scope_product\":[" + scope_product + "]}";
+            new_scope += "{\"scope_id\":" + t.getScope_id() + ",\"scope_remarks\":\"" + t.getScope_detail().replace("\n", "&lt;br&gt;").replace("\"","&#34;") + "\",\"scope_product\":[" + scope_product + "]}";
             if (++counter != tmsa2.size()) {
                 new_scope += ",";
             }
@@ -1507,13 +1620,18 @@ public class NextSelectedTemplateFragment extends Fragment {
         counter = 0;
         String inspection = "";
         List<TemplateModelCompanyBackgroundMajorChanges> tmc = TemplateModelCompanyBackgroundMajorChanges.find(
-                TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id());
+                TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", report.getReport_id());
+
         for (TemplateModelCompanyBackgroundMajorChanges t : tmc) {
-            inspection += "{\"changes\":\"" + t.getMajorchanges() + "\"}";
+         //   inspection += "{\"changes\":\"" + t.getMajorchanges().replaceAll("[\r\n]+", "&lt;br&gt;").replace("▪","s&#0149;").replace("\"","&#34;") + "\"}";
+            inspection += "{\"changes\":\"" + t.getMajorchanges().replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"","&#34;") + "\"}";
             if (++counter != tmc.size()) {
                 inspection += ",";
             }
         }
+
+        Log.e(TAG, "postData: Inspection : "+inspection);
+
         counter = 0;
         String inspector = "";
         List<TemplateModelCompanyBackgroundName> tmn = TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "reportid = ?", report.getReport_id());
@@ -1557,24 +1675,28 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         counter = 0;
         String question = "";
+
+        //answer count
         List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class,
                 "reportid = ? AND answerid > '0'", report.getReport_id());
 
+        //question count
         List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
                 (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+
         Log.i("QUESTION_FILTER", "COUNT : " + questionList.size());
         Log.i("QUESTION_FILTER", "COUNT : " + mrq.size());
 
-        for (ModelReportQuestion t : mrq) {
-            for (ModelTemplateQuestionDetails qid : questionList) {
-                //Log.i("QUESTION_FILTER", "ID : " + qid.getQuestion_id());
+        for (ModelReportQuestion t : mrq) { //answer loop
+            for (ModelTemplateQuestionDetails qid : questionList) { //question loop
                 Log.i("QUESTION_FILTER", t.getQuestion_id() + " compare to " + qid.getQuestion_id());
+
                 if (qid.getQuestion_id().equals(t.getQuestion_id())) {
                     question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" +
                             (t.getAnswer_id().isEmpty() ? "0" : t.getAnswer_id())
                             + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id())
                             + ",\"answer_details\":\"" + t.getAnswer_details() + "\",\"na_option\":\"" + t.getNaoption_id() + "\"}";
-                    if (++counter != questionList.size()) {
+                    if (++counter != mrq.size()) {
                         question += ",";
                     }
                 }
@@ -1661,7 +1783,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         Log.e("Bulk Edit", "token:35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839\n" +
                 "cmdEvent:postInput\n" +
-                "report_id:\n" +
+/*                "report_id:\n" +
                 "report_no:\n" +
                 "company_id:" + report.getCompany_id() + "\n" +
                 "other_activities:" + report.getOther_activities() + "\n" +
@@ -1683,7 +1805,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "references:[" + references + "]\n" +
                 "inspection:[" + inspection + "]\n" +
                 "inspector:[" + inspector + "]\n" +
-                "personnel:[" + personnel + "]\n" +
+                "personnel:[" + personnel + "]\n" +*/
                 "activities:[" + activities + "]\n" +
                 "question:[" + question + "]\n" +
                 "recommendation:[" + recommendation + "]\n" +
@@ -1695,66 +1817,118 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "head_lead:" + report.getHead_lead() + "");
 
         apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
-        Call<ModelAuditReportReply> modelAuditReportReplyCall = apiInterface.sendAuditReports(
-                "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839",
-                "postInput",
-                "",//report_id
-                "",//report_no
-                report.getCompany_id(),
-                report.getOther_activities(),
-                "[" + auditdate + "]",
-                report.getTemplate_id(),
-                report.getAuditor_id(),
-                "[" + issue + "]",
-                "[" + issuex + "]",
-                report.getAudited_areas(),
-                report.getAreas_to_consider(),
-                report.getWrap_date(),
-                "[" + translators + "]",
-                "[" + co_auditor_id + "]",
-                report.getReviewer_id(),
-                report.getApprover_id(),
-                "[" + new_scope + "]",
-                //"[" + disposition + "]",
-                "[" + pre_audit_documents + "]",
-                "[" + references + "]",
-                "[" + inspection + "]",
-                "[" + inspector + "]",
-                "[" + personnel + "]",
-                "[" + activities + "]",
-                "[" + question + "]",
-                "[" + recommendation + "]",
-                "[" + distribution + "]",
-                "[" + present_during_meeting + "]",
-                // "0",//"status",
-                "0",//"version"
-                "[" + otherdistribution + "]",
-                report.getHead_lead()
-        );
-        modelAuditReportReplyCall.enqueue(new Callback<ModelAuditReportReply>() {
+
+        final String finalAuditdate = auditdate;
+        final String finalIssue = issue;
+        final String finalIssuex = issuex;
+        final String finalTranslators = translators;
+        final String finalCo_auditor_id = co_auditor_id;
+        final String finalNew_scope = new_scope;
+        final String finalPre_audit_documents = pre_audit_documents;
+        final String finalReferences = references;
+        final String finalInspection = inspection;
+        final String finalInspector = inspector;
+        final String finalPersonnel = personnel;
+        final String finalActivities = activities;
+        final String finalQuestion = question;
+        final String finalRecommendation = recommendation;
+        final String finalDistribution = distribution;
+        final String finalPresent_during_meeting = present_during_meeting;
+        final String finalOtherdistribution = otherdistribution;
+
+        class Loader extends AsyncTask<Void, Void, String> {
+            ProgressDialog progressDialog;
             @Override
-            public void onResponse(Call<ModelAuditReportReply> call, Response<ModelAuditReportReply> response) {
-                ModelAuditReportReply modelAuditReportReply;
-                modelAuditReportReply = response.body();
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressDialog = new ProgressDialog(context);
+                progressDialog.setMessage("Loading");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+            }
 
-                if (modelAuditReportReply.getMessage().contains("scope")){
-                    Log.e("ERROR-TRAP", "FAILED SENDING " + modelAuditReportReply.getStatus());
-                    if (modelAuditReportReply.getMessage().contains("scope")) {
-                        dialogSubmitFailed("Please fill up all the required fields. " +
-                                "\nProduct of interest and disposition are required.");
-                    }
-                } else {
+            @Override
+            protected String doInBackground(Void... params) {
+                Call<ModelAuditReportReply> modelAuditReportReplyCall = apiInterface.sendAuditReports(
+                        "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839",
+                        "postInput",
+                        "",//report_id
+                        "",//report_no
+                        report.getCompany_id(),
+                        report.getOther_activities(),
+                        "[" + finalAuditdate + "]",
+                        report.getTemplate_id(),
+                        report.getAuditor_id(),
+                        "[" + finalIssue + "]",
+                        "[" + finalIssuex + "]",
+                        report.getAudited_areas(),
+                        report.getAreas_to_consider(),
+                        report.getWrap_date(),
+                        "[" + finalTranslators + "]",
+                        "[" + finalCo_auditor_id + "]",
+                        report.getReviewer_id(),
+                        report.getApprover_id(),
+                        "[" + finalNew_scope + "]",
+                        //"[" + disposition + "]",
+                        "[" + finalPre_audit_documents + "]",
+                        "[" + finalReferences + "]",
+                        "[" + finalInspection + "]",
+                        "[" + finalInspector + "]",
+                        "[" + finalPersonnel + "]",
+                        "[" + finalActivities + "]",
+                        "[" + finalQuestion + "]",
+                        "[" + finalRecommendation + "]",
+                        "[" + finalDistribution + "]",
+                        "[" + finalPresent_during_meeting + "]",
+                        // "0",//"status",
+                        "0",//"version"
+                        "[" + finalOtherdistribution + "]",
+                        report.getHead_lead()
+                );
 
-                    //Log.e("Result post", modelApproverInfo.getMessage());
-                    Log.e("Result post", modelAuditReportReply.toString() + "");
-                    updateDate(modelAuditReportReply.getReport_id());
-                    report.setReport_id(modelAuditReportReply.getReport_id());
-                    report.setReport_no(modelAuditReportReply.getReport_no());
-                    report.setStatus(modelAuditReportReply.getStatus());
-                    report.setModified_date(getDate());
-                    report.save();
 
-                    // send to co_auditors
+                modelAuditReportReplyCall.enqueue(new Callback<ModelAuditReportReply>() {
+                    @Override
+                    public void onResponse(Call<ModelAuditReportReply> call, Response<ModelAuditReportReply> response) {
+
+                        if(response.isSuccessful()){
+                            Log.e(TAG, "onResponse: Success!!" );
+                        }else{
+                            response.code();
+                        }
+
+                        ModelAuditReportReply modelAuditReportReply;
+                        modelAuditReportReply = response.body();
+
+                        if (modelAuditReportReply.getMessage().contains("scope")) {
+                            Log.e("ERROR-TRAP", "FAILED SENDING " + modelAuditReportReply.getStatus());
+                            if (modelAuditReportReply.getMessage().contains("scope")) {
+                                progressDialog.dismiss();
+                                dialogSubmitFailed("Please fill up all the required fields. " +
+                                        "\nProduct of interest and disposition are required.");
+                            }
+
+                        } else {
+
+                            if (modelAuditReportReply.getMessage().contains("Successfully")) {
+                                //Log.e("Result post", modelApproverInfo.getMessage());
+                                Log.e("Result post", modelAuditReportReply.toString() + "");
+                                updateDate(modelAuditReportReply.getReport_id());
+                                report.setReport_id(modelAuditReportReply.getReport_id());
+                                report.setReport_no(modelAuditReportReply.getReport_no());
+                                report.setStatus(modelAuditReportReply.getStatus());
+                                report.setModified_date(getDate());
+                                report.save();
+
+                                 dialogSuccess("Successfully submitted!");
+
+                                progressDialog.dismiss();
+
+                   /*     PostAsync postAsync = new PostAsync();
+                        postAsync.dialog.dismiss();*/
+
+
+                                // send to co_auditors
 //                apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
 //                List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class,
 //                        "reportid = ?", report.getReport_id());
@@ -1784,17 +1958,42 @@ public class NextSelectedTemplateFragment extends Fragment {
 //
 //                }
 
-                    dialogSuccess("Successfully submitted.");
-                }
+                                //dialogSuccess("Successfully submitted.");
+                            } else {
+                                Log.e("Result post", modelAuditReportReply.toString() + "");
+                                dialogSuccess("Sending failed.");
+                                progressDialog.dismiss();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ModelAuditReportReply> call, Throwable t) {
+                        Log.e("TemplateFragment ", "OnFailure " + t.getMessage());
+                        Log.e("TemplateFragment", "onFailure: "+call.toString());
+                        //Toast.makeText(context, "FAIL", Toast.LENGTH_SHORT);
+                        dialogSubmitFailed("Sending Failed." + " Connection timeout."/* + t.getMessage()*/);
+                        progressDialog.dismiss();
+                    }
+                });
+
+                return null;
             }
 
             @Override
-            public void onFailure(Call<ModelAuditReportReply> call, Throwable t) {
-                Log.e("TemplateFragment ", "OnFailure " + t.getMessage());
-                //Toast.makeText(context, "FAIL", Toast.LENGTH_SHORT);
-                dialogSubmitFailed("Sending Failed." + " Connection timeout."/* + t.getMessage()*/);
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
             }
-        });
+
+        }
+
+        Loader loader = new Loader();
+        loader.execute();
+
+
+
+
+
         return true;
     }
 
@@ -1985,6 +2184,8 @@ public class NextSelectedTemplateFragment extends Fragment {
         Button yes = (Button) dialogSubmit.findViewById(R.id.btn_yes);
         Button no = (Button) dialogSubmit.findViewById(R.id.btn_no);
 
+        dialogSubmit.show();
+
         msg.setText(mess);
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2001,7 +2202,6 @@ public class NextSelectedTemplateFragment extends Fragment {
             }
         });
 
-        dialogSubmit.show();
     }
 
     public void dialogSubmitFailed(String mess) {
@@ -2024,6 +2224,58 @@ public class NextSelectedTemplateFragment extends Fragment {
         });
 
         dialogSubmitFailed.show();
+    }
+
+    public static void staticDialog(String mess, final int list) {
+        if (!dialogDeleteIsShowing) {
+            final Dialog dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_exit_confirmation);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.dialog_exit_confirmation);
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+            TextView msg = (TextView) dialog.findViewById(R.id.tv_message);
+            Button yes = (Button) dialog.findViewById(R.id.btn_yes);
+            Button no = (Button) dialog.findViewById(R.id.btn_no);
+
+            msg.setText(mess);
+
+            if (list == list) {
+                yes.setVisibility(View.GONE);
+                no.setText("Close");
+            }
+
+            yes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (list == 4) {
+                        templateModelScopeAudits.remove(templateModelScopeAudits.size() - 1);
+                        adapterScopeAudit.notifyItemRemoved(templateModelScopeAudits.size());
+                    }
+
+                    dialogDeleteIsShowing = false;
+                    dialog.dismiss();
+                }
+            });
+
+            no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogDeleteIsShowing = false;
+                    dialog.dismiss();
+                }
+            });
+
+
+            dialogDeleteIsShowing = true;
+            dialog.show();
+        }
+
     }
 
     public void dialogDeleteFromListConfirmation(String mess, final int list) {
@@ -2176,31 +2428,31 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     public void dialogSuccess(String mess) {
-        dialogSuccess = new Dialog(context);
-        dialogSuccess.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialogSuccess.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogSuccess.setCancelable(false);
-        dialogSuccess.setContentView(R.layout.dialog_error_login);
-        dialogSuccess.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            dialogSuccess = new Dialog(context);
+            dialogSuccess.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialogSuccess.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogSuccess.setCancelable(false);
+            dialogSuccess.setContentView(R.layout.dialog_error_login);
+            dialogSuccess.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        TextView msg = (TextView) dialogSuccess.findViewById(R.id.tv_message);
-        Button ok = (Button) dialogSuccess.findViewById(R.id.btn_ok);
+            TextView msg = (TextView) dialogSuccess.findViewById(R.id.tv_message);
+            Button ok = (Button) dialogSuccess.findViewById(R.id.btn_ok);
 
-        msg.setText(mess);
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+            msg.setText(mess);
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
 
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fl_content, templateFragment).addToBackStack(null).commit();
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fl_content, templateFragment).addToBackStack(null).commit();
 
-                dialogSuccess.dismiss();
-            }
-        });
+                    dialogSuccess.dismiss();
+                }
+            });
 
-        dialogSuccess.show();
-    }
+            dialogSuccess.show();
+        }
 
 }
