@@ -47,7 +47,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
     int size = 0;
     String report_id = "";
     String indic = "";
-    List<String> questionId = new ArrayList<String>();
+    List<String> questionId = new ArrayList<>();
     private List<ModelTemplateElements> questionModel;
 
     public TemplateElementAdapter(Context context, List<ModelTemplateElements> questionModel,
@@ -134,10 +134,8 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
     }
 
     @Override
-    public void onBindViewHolder(final Widgets widgets, final int position) {
+    public void onBindViewHolder(final Widgets widgets, int position) {
 
-
-        final int z = position;
         final String elementNumber;
 
         elementNumber = questionModel.get(position).getElement_name();
@@ -193,7 +191,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                         public void run() {
                             dialog.dismiss();
                             //templateElementQuestionAdapters.get(z).setAnswer("", "", dialog);
-                            dialogElementNa(widgets.cbElementNa, z, dialog, questionModel.get(position).getElement_id());
+                            dialogElementNa(widgets.cbElementNa, widgets.getAdapterPosition() , dialog, questionModel.get(widgets.getAdapterPosition()).getElement_id());
                         }
                     }, 700);
                 } else {
@@ -201,7 +199,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                         @Override
                         public void run() {
                             dialog.dismiss();
-                            templateElementQuestionAdapters.get(z).setAnswer("", "", dialog);
+                            templateElementQuestionAdapters.get(widgets.getAdapterPosition()).setAnswer("", "", dialog);
                             widgets.cbElementNa.setText("N/A");
                         }
                     }, 700);

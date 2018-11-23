@@ -565,6 +565,7 @@ public class SelectedAuditReportFragment extends Fragment {
                             NextSelectedAuditReportFragment.siteChanged();
                         }
                     }
+                    templateElementAdapter.save("TEMPData");
 
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);

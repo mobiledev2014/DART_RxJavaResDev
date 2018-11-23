@@ -535,8 +535,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         // --- Audit Scope
         templateModelScopeAudits = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
 
-        if(Variable.isChangedSite){
-            Log.e("Scope Audit", "onCreateView: Scope Audit"+templateModelScopeAudits.get(0).getScope_name() );
+        if (Variable.isChangedSite) {
+            Log.e("Scope Audit", "onCreateView: Scope Audit" + templateModelScopeAudits.get(0).getScope_name());
         }
 
         adapterScopeAudit = new AdapterScopeAudit(templateModelScopeAudits, context, modelTemplates.getCompany_id(), null, this, btnTemplateNextScopeAuditAdd);
@@ -785,7 +785,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         int counter = 0;
         String question = "";
         List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class,
-                "reportid = ? AND answerid > '0'", report.getReport_id());
+                "reportid = ? AND answerid > '0'", "TEMPData");
 
         List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
                 (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
@@ -807,6 +807,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         for (ModelReportQuestion t : mrq) {
             for (ModelTemplateQuestionDetails qid : questionList) {
                 if (qid.getQuestion_id().equals(t.getQuestion_id())) {
+                    qid.setAnswer_id(t.getAnswer_id());
+                    qid.setAnswer_details(t.getAnswer_details());
                     question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" +
                             (t.getAnswer_id().isEmpty() ? "0" : t.getAnswer_id())
                             + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id())
@@ -818,12 +820,121 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
         }
 
-        Log.e("Log ito", question);
+        Log.e("Log ito", "counter : " + counter + " questions: " + question);
+
+        counter = 0;
+        question = "";
+        List<ModelReportQuestion> mrq2 = ModelReportQuestion.find(ModelReportQuestion.class,
+                "reportid = ? AND answerid > '0'", report.getReport_id());
+
+        List<ModelTemplateQuestionDetails> questionList2 = ModelTemplateQuestionDetails.find
+                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+        Log.i("QUESTION_FILTER", "QUESTION COUNT : " + questionList2.size());
+        Log.i("QUESTION_FILTER", "ANSWER COUNT : " + mrq.size());
+
+        List<String> answers2 = new ArrayList<>();
+
+        for (ModelReportQuestion t : mrq2) {
+            for (ModelTemplateQuestionDetails qid : questionList2) {
+                Log.i("QUESTION_FILTER", t.getQuestion_id() + " compare to " + qid.getQuestion_id());
+                if (t.getQuestion_id().equals(qid.getQuestion_id())) {
+                    answers2.add(t.getQuestion_id());
+                }
+            }
+        }
+
+        //Log.i("LIST OF ANSWERS", "QUESTION ID : " + ans);
+        for (ModelReportQuestion t : mrq2) {
+            for (ModelTemplateQuestionDetails qid : questionList2) {
+                if (qid.getQuestion_id().equals(t.getQuestion_id())) {
+                    qid.setAnswer_id(t.getAnswer_id());
+                    question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" +
+                            (t.getAnswer_id().isEmpty() ? "0" : t.getAnswer_id())
+                            + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id())
+                            + ",\"answer_details\":\"" + t.getAnswer_details() + "\",\"na_option\":\"" + t.getNaoption_id() + "\"}";
+                    if (++counter != answers2.size()) {
+                        question += ",";
+                    }
+                }
+            }
+        }
+
+        Log.e("Log ito", "counter : " + counter + " questions: " + question);
+
+        int bilang = 1;
+        boolean id_found = false;
+        for (ModelTemplateQuestionDetails temp_answers : questionList) {
+            for (ModelReportQuestion t : mrq2) {
+                for (ModelTemplateQuestionDetails original_answers : questionList2) {
+                    if (temp_answers.getQuestion_id().equals(original_answers.getQuestion_id())) {
+                        if (!temp_answers.getAnswer_id().equals(original_answers.getAnswer_id())) {
+
+//                        Log.e("Log ito",
+//                                "Bilang:"+ (bilang++) +
+//                                " Q_id:"+temp_answers.getQuestion_id() +
+//                                " A_id:"+temp_answers.getAnswer_id() + "_May bago_"+original_answers.getAnswer_id());
+
+                            //set temp data to variables for sending
+                            if (!temp_answers.getAnswer_id().equals("")) {
+                                original_answers.setAnswer_id(temp_answers.getAnswer_id());
+                                original_answers.setAnswer_details(temp_answers.getAnswer_details());
+//                                t.setReport_id(report.getReport_id());
+                                original_answers.setQuestion_id(temp_answers.getQuestion_id());
+                                original_answers.setNaoption_id(temp_answers.getNaoption_id());
+                                original_answers.setCategory_id(temp_answers.getCategory_id());
+                                Log.e("Log ito A",
+                                        "Bilang:" + (bilang++) +
+                                                " Q_id:" + original_answers.getQuestion_id() +
+                                                " A_id:" + original_answers.getAnswer_id()+
+                                                " A_details : " + temp_answers.getAnswer_details());
+                            } else {
+                                Log.e("Log ito B",
+                                        "Bilang:" + (bilang++) +
+                                                " Q_id:" + original_answers.getQuestion_id() +
+                                                " A_id:" + original_answers.getAnswer_id());
+                            }
+                            id_found = true;
+                            break;
+                        } else {
+//                        Log.e("Log ito",
+//                                "Bilang:"+ (bilang++) +
+//                                        " Q_id:"+temp_answers.getQuestion_id() +
+//                                        " A_id:"+temp_answers.getAnswer_id() + "_walang pagbabago_"+original_answers.getAnswer_id());
+
+
+                            Log.e("Log ito C",
+                                    "Bilang:" + (bilang++) +
+                                            " Q_id:" + original_answers.getQuestion_id() +
+                                            " A_id:" + original_answers.getAnswer_id());
+                        }
+                    }
+                }
+                if (id_found) break;
+            }
+//            Log.e("Log ito", temp_answers.getQuestion_id() + "_bilang _"+ (bilang++));
+        }
+
+        question = questionList.size() + " ";
+        for (ModelReportQuestion t : mrq2) {
+            for (ModelTemplateQuestionDetails qid : questionList2) {
+                if (qid.getQuestion_id().equals(t.getQuestion_id())) {
+                    question += "{\"question_id\":" + qid.getQuestion_id() + ",\"answer_id\":" +
+                            (qid.getAnswer_id().isEmpty() ? "0" : qid.getAnswer_id())
+                            + ",\"category_id\":" + (qid.getCategory_id().isEmpty() ? null : qid.getCategory_id())
+                            + ",\"answer_details\":\"" + qid.getAnswer_details() + "\",\"na_option\":\"" + qid.getNaoption_id() + "\"}";
+                    if (++counter != answers2.size()) {
+                        question += ",";
+                    }
+                }
+            }
+        }
+        Log.e("Log ito", "onCreateView: " + question);
+
 
         return rootView;
     }
 
-    public static void siteChanged(){
+    public static void siteChanged() {
         try {
             etTemplateNextCompanyBackgroundHistory.post(new Runnable() {
                 @Override
@@ -873,8 +984,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
 
 
-        }catch (Exception e){
-            Log.e("EXCEPTION", "siteChanged: "+e.toString());
+        } catch (Exception e) {
+            Log.e("EXCEPTION", "siteChanged: " + e.toString());
         }
     }
 
@@ -1299,7 +1410,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         adapterCompanyBackgroundName.save(mar.getReport_id());
         adapterPersonelMetDuring.save(mar.getReport_id());
         activityAdapter.save(mar.getReport_id());
-        templateElementAdapter.save(mar.getReport_id());
+        saveLocalQuestion();
+//        templateElementAdapter.save(mar.getReport_id());
         adapterOthersIssueAudit.save(mar.getReport_id());
         adapterOthersIssueExecutive.save(mar.getReport_id());
 
@@ -1320,6 +1432,108 @@ public class NextSelectedAuditReportFragment extends Fragment {
         mar.setModified_date(getDate());
         mar.save();
         report = mar;
+    }
+
+    public void saveLocalQuestion() {
+        List<ModelReportQuestion> tempQuestions = ModelReportQuestion.find(ModelReportQuestion.class,
+                "reportid = ? AND answerid > '0'", "TEMPData");
+
+        List<ModelTemplateQuestionDetails> tempAnswers = ModelTemplateQuestionDetails.find
+                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+
+        List<String> answers = new ArrayList<>();
+
+        for (ModelReportQuestion t : tempQuestions) {
+            for (ModelTemplateQuestionDetails qid : tempAnswers) {
+                if (t.getQuestion_id().equals(qid.getQuestion_id())) {
+                    answers.add(t.getQuestion_id());
+                }
+            }
+        }
+
+        for (ModelReportQuestion t : tempQuestions) {
+            for (ModelTemplateQuestionDetails qid : tempAnswers) {
+                if (qid.getQuestion_id().equals(t.getQuestion_id())) {
+                    qid.setAnswer_id(t.getAnswer_id());
+                    qid.setNaoption_id(t.getNaoption_id());
+                    qid.setCategory_id(t.getCategory_id());
+                    qid.setAnswer_details(t.getAnswer_details());
+                }
+            }
+        }
+
+        List<ModelReportQuestion> questions = ModelReportQuestion.find(ModelReportQuestion.class,
+                "reportid = ? AND answerid > '0'", report.getReport_id());
+
+        List<ModelTemplateQuestionDetails> answerList = ModelTemplateQuestionDetails.find
+                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+
+        List<String> answers2 = new ArrayList<>();
+
+        for (ModelReportQuestion t : questions) {
+            for (ModelTemplateQuestionDetails qid : answerList) {
+                if (t.getQuestion_id().equals(qid.getQuestion_id())) {
+                    answers2.add(t.getQuestion_id());
+                }
+            }
+        }
+        for (ModelReportQuestion t : questions) {
+            for (ModelTemplateQuestionDetails qid : answerList) {
+                if (qid.getQuestion_id().equals(t.getQuestion_id())) {
+                    qid.setAnswer_id(t.getAnswer_id());
+                }
+            }
+        }
+
+        boolean id_found = false;
+        for (ModelTemplateQuestionDetails temp_answers : tempAnswers) {
+            for (ModelReportQuestion question : questions) {
+                for (ModelTemplateQuestionDetails original_answers : answerList) {
+                    if (temp_answers.getQuestion_id().equals(original_answers.getQuestion_id())) {
+                        if (!temp_answers.getAnswer_id().equals(original_answers.getAnswer_id())) {
+                            //set temp data to variables for sending
+                            if (!temp_answers.getAnswer_id().equals("")) {
+                                original_answers.setAnswer_id(temp_answers.getAnswer_id());
+                                original_answers.setNaoption_id(temp_answers.getNaoption_id());
+                                original_answers.setCategory_id(temp_answers.getCategory_id());
+                                original_answers.setAnswer_details(temp_answers.getAnswer_details());
+                            }
+
+                            break;
+                        }
+                    }
+                }
+                if (id_found)break;
+            }
+        }
+
+        save(report.getReport_id(), answerList, questions);
+    }
+
+    public void save(String report_id, List<ModelTemplateQuestionDetails> answerList,List<ModelReportQuestion> questionList) {
+
+            for (ModelTemplateQuestionDetails mtqd : answerList) {
+                List<ModelReportQuestion> lmrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
+                if (lmrq.size() > 0) {
+                    lmrq.get(0).setReport_id(report_id);
+                    lmrq.get(0).setQuestion_id(mtqd.getQuestion_id());
+                    lmrq.get(0).setAnswer_id(mtqd.getAnswer_id());
+                    lmrq.get(0).setNaoption_id(mtqd.getNaoption_id());
+                    lmrq.get(0).setCategory_id(mtqd.getCategory_id());
+                    lmrq.get(0).setAnswer_details(mtqd.getAnswer_details());
+                    lmrq.get(0).save();
+                } else {
+                    ModelReportQuestion mrq = new ModelReportQuestion();
+                    mrq.setReport_id(report_id);
+                    mrq.setQuestion_id(mtqd.getQuestion_id());
+                    mrq.setAnswer_id(mtqd.getAnswer_id());
+                    mrq.setNaoption_id(mtqd.getNaoption_id());
+                    mrq.setCategory_id(mtqd.getCategory_id());
+                    mrq.setAnswer_details(mtqd.getAnswer_details());
+                    mrq.save();
+                }
+            }
+
     }
 
     public static void staticDialog(String mess, final int list) {
@@ -1668,7 +1882,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
 
-
     public void set_error(EditText editText) {
         editText.setError("This field is required");
     }
@@ -1697,7 +1910,6 @@ public class NextSelectedAuditReportFragment extends Fragment {
             passed = false;
             Log.e("validate", "3");
         }
-
 
 
         if (!adapterScopeAudit.check2()) {
@@ -1985,7 +2197,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                     scope_product += ",";
                 }
             }
-            new_scope += "{\"scope_id\":" + t.getScope_id() + ",\"scope_remarks\":\"" + t.getScope_detail().replace("\n", "&lt;br&gt;").replace("\"","&#34;") + "\",\"scope_product\":[" + scope_product + "]}";
+            new_scope += "{\"scope_id\":" + t.getScope_id() + ",\"scope_remarks\":\"" + t.getScope_detail().replace("\n", "&lt;br&gt;").replace("\"", "&#34;") + "\",\"scope_product\":[" + scope_product + "]}";
             if (++counter != tmsa2.size()) {
                 new_scope += ",";
             }
@@ -2016,15 +2228,15 @@ public class NextSelectedAuditReportFragment extends Fragment {
         String inspection = "";
         List<TemplateModelCompanyBackgroundMajorChanges> tmc = TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id());
         for (TemplateModelCompanyBackgroundMajorChanges t : tmc) {
-           // inspection += "{\"changes\":\"" + t.getMajorchanges().replaceAll("[\r\n]+", "&lt;br&gt;").replace("▪","&#8718;").replace("\"","&#34;") + "\"}";
+            // inspection += "{\"changes\":\"" + t.getMajorchanges().replaceAll("[\r\n]+", "&lt;br&gt;").replace("▪","&#8718;").replace("\"","&#34;") + "\"}";
 
-            Log.e("Audit", "postData: Major Changes : "+t.getMajorchanges());
-            inspection += "{\"changes\":\"" + t.getMajorchanges().replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"","&#34;") + "\"}";
+            Log.e("Audit", "postData: Major Changes : " + t.getMajorchanges());
+            inspection += "{\"changes\":\"" + t.getMajorchanges().replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"", "&#34;") + "\"}";
             if (++counter != tmc.size()) {
                 inspection += ",";
             }
         }
-        Log.e("Audit", "postData: Inspection : "+inspection);
+        Log.e("Audit", "postData: Inspection : " + inspection);
 
         counter = 0;
         String inspector = "";
@@ -2063,16 +2275,18 @@ public class NextSelectedAuditReportFragment extends Fragment {
                         if (m_counter++ > 0) {
                             sub_activities += ",";
                         }
-                        Log.e("counternew", "postData: counternew 1 "+sub_activity_counter);
+                        Log.e("counternew", "postData: counternew 1 " + sub_activity_counter);
                         sub_activities += "{\"sub_item_id\":" + sub_activity.getSub_item_id() + "}";
                     }
                 }
-                Log.e("counternew", "postData: counternew 2 "+sub_activity_counter);
+                Log.e("counternew", "postData: counternew 2 " + sub_activity_counter);
                 String activity_id = t.getActivity_id();
 
 
-                if (subactivity_list.size()==0)activities += "{\"activity_id\":\"" + activity_id + "\"}";
-                else if (sub_activity_counter>0)activities += "{\"activity_id\":\"" + activity_id + "\",\"sub_activities\":[" + sub_activities + "]}";
+                if (subactivity_list.size() == 0)
+                    activities += "{\"activity_id\":\"" + activity_id + "\"}";
+                else if (sub_activity_counter > 0)
+                    activities += "{\"activity_id\":\"" + activity_id + "\",\"sub_activities\":[" + sub_activities + "]}";
             }
         }
 
@@ -2112,7 +2326,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
         }
 
-        Log.e("Log ito", "postData: "+ question);
+        Log.e("Log ito", "postData: " + question);
 
         counter = 0;
         String recommendation = "";
@@ -2266,8 +2480,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             @Override
             protected String doInBackground(Void... params) {
 
-                Log.e("inspection", "doInBackground: "+finalInspection);
-                
+                Log.e("inspection", "doInBackground: " + finalInspection);
+
                 apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
                 Call<ModelAuditReportReply> modelAuditReportReplyCall = apiInterface.sendAuditReports(
                         "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839",
@@ -2304,7 +2518,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                         report.getHead_lead()
                 );
 
-                Log.e("inspection 2", "doInBackground: "+finalInspection);
+                Log.e("inspection 2", "doInBackground: " + finalInspection);
 
                 modelAuditReportReplyCall.enqueue(new Callback<ModelAuditReportReply>() {
                     @Override
@@ -2319,12 +2533,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
                                 progressDialog.dismiss();
                                 dialogSubmitFailed("Please fill up all the required fields. " +
                                         "\nProduct of interest and disposition are required.");
-                            } else if (modelAuditReportReply.getMessage().contains("already for approval")){
+                            } else if (modelAuditReportReply.getMessage().contains("already for approval")) {
                                 progressDialog.dismiss();
                                 dialogSubmitFailed("Report is already for approval.");
-                            }else{
+                            } else {
                                 progressDialog.dismiss();
-                                Log.e("Fail Response", "onResponse: "+response.body());
+                                Log.e("Fail Response", "onResponse: " + response.body());
                                 dialogSubmitFailed("Failed submitting report. Please try again.");
                             }
                         } else {

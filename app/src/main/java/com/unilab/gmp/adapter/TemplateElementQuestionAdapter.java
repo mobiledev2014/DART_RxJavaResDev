@@ -54,7 +54,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
     String templateId;
     String indic = "";
 
-    List<String> questionId = new ArrayList<String>();
+    List<String> questionId = new ArrayList<>();
 
     CheckBox cb;
     boolean checked, edited, dialogYesIsShowing = false, dialogNoIsShowing = false,
@@ -561,11 +561,13 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
 
     public void dialogYes(String defaultText, final Button yes, final Button no, final Button na, final Button nc, final int z, final List<ModelReportQuestion> mrq) {
         dialogYes = new Dialog(context);
-        dialogYes.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialogYes.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        if(dialogYes.getWindow() != null){
+            dialogYes.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialogYes.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogYes.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        }
         dialogYes.setCancelable(false);
         dialogYes.setContentView(R.layout.dialog_yes_answer);
-        dialogYes.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         TextView default_text = (TextView) dialogYes.findViewById(R.id.tv_default_answer);
         final EditText remarks = (EditText) dialogYes.findViewById(R.id.et_remarks);
