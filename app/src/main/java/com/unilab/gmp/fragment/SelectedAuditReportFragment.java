@@ -592,11 +592,19 @@ public class SelectedAuditReportFragment extends Fragment {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fl_content, auditReportFragment).addToBackStack(null).commit();
-                dialogCancelTemplate.dismiss();
+
+                List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+
+                if(modelReportQuestion.size() > 0) {
+                    ModelReportQuestion.delete(ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData"));
+                }
+
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fl_content, auditReportFragment).addToBackStack(null).commit();
+                    dialogCancelTemplate.dismiss();
+
             }
         });
 
@@ -627,11 +635,14 @@ public class SelectedAuditReportFragment extends Fragment {
             public void onClick(View view) {
                 ModelAuditReports mar = ModelAuditReports.find(ModelAuditReports.class, "reportid = ?", modelAuditReports.getReport_id()).get(0);
 
+
                 mar.setTemplate_id(modelTemplates.getTemplateID());
                 mar.setCompany_id(modelTemplates.getCompany_id());
                 mar.setAudit_date_1(modelTemplates.getAudit_date_1());
                 mar.setAudit_date_2(modelTemplates.getAudit_date_2());
-                templateElementAdapter.save(mar.getReport_id());
+                templateElementAdapter.save("TEMPData");
+                saveLocalQuestion();
+                //templateElementAdapter.save(mar.getReport_id());
                 mar.setModified_date(getDate());
                 mar.save();
                 dialogSucSaveDraft("Update successful.");
@@ -647,6 +658,141 @@ public class SelectedAuditReportFragment extends Fragment {
         });
 
         dialogSaveDraft.show();
+    }
+
+    public void saveLocalQuestion() {
+        List<ModelReportQuestion> tempQuestions = ModelReportQuestion.find(ModelReportQuestion.class,
+                "reportid = ? AND answerid > '0'", "TEMPData");
+
+        List<ModelTemplateQuestionDetails> tempAnswers = ModelTemplateQuestionDetails.find
+                (ModelTemplateQuestionDetails.class, "templateid = ?", modelTemplates.getTemplateID());
+
+        List<String> answers = new ArrayList<>();
+
+        for (ModelReportQuestion t : tempQuestions) {
+            for (ModelTemplateQuestionDetails qid : tempAnswers) {
+                if (t.getQuestion_id().equals(qid.getQuestion_id())) {
+                    answers.add(t.getQuestion_id());
+                }
+            }
+        }
+
+        for (ModelReportQuestion t : tempQuestions) {
+            for (ModelTemplateQuestionDetails qid : tempAnswers) {
+                if (qid.getQuestion_id().equals(t.getQuestion_id())) {
+                    qid.setAnswer_id(t.getAnswer_id());
+                    qid.setNaoption_id(t.getNaoption_id());
+                    qid.setCategory_id(t.getCategory_id());
+                    qid.setAnswer_details(t.getAnswer_details());
+                }
+            }
+        }
+
+        List<ModelReportQuestion> questions = ModelReportQuestion.find(ModelReportQuestion.class,
+                "reportid = ? AND answerid > '0'", modelAuditReports.getReport_id());
+
+        List<ModelTemplateQuestionDetails> answerList = ModelTemplateQuestionDetails.find
+                (ModelTemplateQuestionDetails.class, "templateid = ?", modelTemplates.getTemplateID());
+
+        List<String> answers2 = new ArrayList<>();
+
+        for (ModelReportQuestion t : questions) {
+            for (ModelTemplateQuestionDetails qid : answerList) {
+                if (t.getQuestion_id().equals(qid.getQuestion_id())) {
+                    answers2.add(t.getQuestion_id());
+                }
+            }
+        }
+        for (ModelReportQuestion t : questions) {
+            for (ModelTemplateQuestionDetails qid : answerList) {
+                if (qid.getQuestion_id().equals(t.getQuestion_id())) {
+                    qid.setAnswer_id(t.getAnswer_id());
+                    qid.setNaoption_id(t.getNaoption_id());
+                    qid.setCategory_id(t.getCategory_id());
+                    qid.setAnswer_details(t.getAnswer_details());
+                }
+            }
+        }
+
+        boolean id_found = false;
+        for (ModelTemplateQuestionDetails temp_answers : tempAnswers) {
+            for (ModelReportQuestion question : questions) {
+                for (ModelTemplateQuestionDetails original_answers : answerList) {
+                    if (temp_answers.getQuestion_id().equals(original_answers.getQuestion_id())) {
+                        if (!temp_answers.getAnswer_id().equals(original_answers.getAnswer_id()) || !temp_answers.getAnswer_details().equals(original_answers.getAnswer_details()) || !temp_answers.getCategory_id().equals(original_answers.getCategory_id())) {
+                            //set temp data to variables for sending
+                            if (!temp_answers.getAnswer_id().equals("")) {
+                                original_answers.setAnswer_id(temp_answers.getAnswer_id());
+                                original_answers.setNaoption_id(temp_answers.getNaoption_id());
+                                original_answers.setCategory_id(temp_answers.getCategory_id());
+                                original_answers.setAnswer_details(temp_answers.getAnswer_details());
+                            }
+
+                            break;
+                        }
+                    }
+                }
+                if (id_found)break;
+            }
+        }
+
+        int counter = 0;
+        String question = answerList.size() + " ";
+        for (ModelReportQuestion t : questions) {
+            for (ModelTemplateQuestionDetails qid : answerList) {
+                if (qid.getQuestion_id().equals(t.getQuestion_id())) {
+                    question += "{\"question_id\":" + qid.getQuestion_id() + ",\"answer_id\":" +
+                            (qid.getAnswer_id().isEmpty() ? "0" : qid.getAnswer_id())
+                            + ",\"category_id\":" + (qid.getCategory_id().isEmpty() ? null : qid.getCategory_id())
+                            + ",\"answer_details\":\"" + qid.getAnswer_details() + "\",\"na_option\":\"" + qid.getNaoption_id() + "\"}";
+                    if (++counter != answers2.size()) {
+                        question += ",";
+                    }
+                }
+            }
+        }
+
+        Log.e("Log ito", "onCreateView: " + question);
+
+        save(modelAuditReports.getReport_id(), answerList, questions);
+    }
+
+    public void save(String report_id, List<ModelTemplateQuestionDetails> answerList,List<ModelReportQuestion> questionList) {
+
+        for (ModelTemplateQuestionDetails mtqd : answerList) {
+            List<ModelReportQuestion> lmrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
+            if (lmrq.size() > 0) {
+                lmrq.get(0).setReport_id(report_id);
+                lmrq.get(0).setQuestion_id(mtqd.getQuestion_id());
+                lmrq.get(0).setAnswer_id(mtqd.getAnswer_id());
+                lmrq.get(0).setNaoption_id(mtqd.getNaoption_id());
+                lmrq.get(0).setCategory_id(mtqd.getCategory_id());
+                lmrq.get(0).setAnswer_details(mtqd.getAnswer_details());
+                lmrq.get(0).save();
+            } else {
+                ModelReportQuestion mrq = new ModelReportQuestion();
+                mrq.setReport_id(report_id);
+                mrq.setQuestion_id(mtqd.getQuestion_id());
+                mrq.setAnswer_id(mtqd.getAnswer_id());
+                mrq.setNaoption_id(mtqd.getNaoption_id());
+                mrq.setCategory_id(mtqd.getCategory_id());
+                mrq.setAnswer_details(mtqd.getAnswer_details());
+                mrq.save();
+            }
+/*                mtqd.setQuestion_id(mtqd.getQuestion_id());
+                mtqd.setAnswer_id(mtqd.getAnswer_id());
+                mtqd.setNaoption_id(mtqd.getNaoption_id());
+                mtqd.setCategory_id(mtqd.getCategory_id());
+                mtqd.setAnswer_details(mtqd.getAnswer_details());
+                mtqd.save();*/
+        }
+
+        List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+
+        if(modelReportQuestion.size() > 0) {
+            ModelReportQuestion.delete(ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData"));
+        }
+
     }
 
     public String getDate() {

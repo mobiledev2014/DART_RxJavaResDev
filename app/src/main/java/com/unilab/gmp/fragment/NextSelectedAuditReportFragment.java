@@ -848,6 +848,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
             for (ModelTemplateQuestionDetails qid : questionList2) {
                 if (qid.getQuestion_id().equals(t.getQuestion_id())) {
                     qid.setAnswer_id(t.getAnswer_id());
+                    qid.setAnswer_details(t.getAnswer_details());
+                    qid.setQuestion_id(t.getQuestion_id());
+                    qid.setNaoption_id(t.getNaoption_id());
+                    qid.setCategory_id(t.getCategory_id());
                     question += "{\"question_id\":" + t.getQuestion_id() + ",\"answer_id\":" +
                             (t.getAnswer_id().isEmpty() ? "0" : t.getAnswer_id())
                             + ",\"category_id\":" + (t.getCategory_id().isEmpty() ? null : t.getCategory_id())
@@ -1481,6 +1485,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
             for (ModelTemplateQuestionDetails qid : answerList) {
                 if (qid.getQuestion_id().equals(t.getQuestion_id())) {
                     qid.setAnswer_id(t.getAnswer_id());
+                    qid.setNaoption_id(t.getNaoption_id());
+                    qid.setCategory_id(t.getCategory_id());
+                    qid.setAnswer_details(t.getAnswer_details());
                 }
             }
         }
@@ -1490,7 +1497,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             for (ModelReportQuestion question : questions) {
                 for (ModelTemplateQuestionDetails original_answers : answerList) {
                     if (temp_answers.getQuestion_id().equals(original_answers.getQuestion_id())) {
-                        if (!temp_answers.getAnswer_id().equals(original_answers.getAnswer_id())) {
+                        if (!temp_answers.getAnswer_id().equals(original_answers.getAnswer_id()) || !temp_answers.getAnswer_details().equals(original_answers.getAnswer_details()) || !temp_answers.getCategory_id().equals(original_answers.getCategory_id())) {
                             //set temp data to variables for sending
                             if (!temp_answers.getAnswer_id().equals("")) {
                                 original_answers.setAnswer_id(temp_answers.getAnswer_id());
@@ -1512,6 +1519,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
     public void save(String report_id, List<ModelTemplateQuestionDetails> answerList,List<ModelReportQuestion> questionList) {
 
+
             for (ModelTemplateQuestionDetails mtqd : answerList) {
                 List<ModelReportQuestion> lmrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
                 if (lmrq.size() > 0) {
@@ -1532,13 +1540,19 @@ public class NextSelectedAuditReportFragment extends Fragment {
                     mrq.setAnswer_details(mtqd.getAnswer_details());
                     mrq.save();
                 }
-                mtqd.setQuestion_id(mtqd.getQuestion_id());
+/*                mtqd.setQuestion_id(mtqd.getQuestion_id());
                 mtqd.setAnswer_id(mtqd.getAnswer_id());
                 mtqd.setNaoption_id(mtqd.getNaoption_id());
                 mtqd.setCategory_id(mtqd.getCategory_id());
                 mtqd.setAnswer_details(mtqd.getAnswer_details());
-                mtqd.save();
+                mtqd.save();*/
             }
+
+        List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+
+        if(modelReportQuestion.size() > 0) {
+            ModelReportQuestion.delete(ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData"));
+        }
 
     }
 
@@ -1756,11 +1770,17 @@ public class NextSelectedAuditReportFragment extends Fragment {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fl_content, auditReportFragment).addToBackStack(null).commit();
-                dialogCancelTemplate.dismiss();
+                    List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+
+                    if(modelReportQuestion.size() > 0) {
+                        ModelReportQuestion.delete(ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData"));
+                    }
+
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fl_content, auditReportFragment).addToBackStack(null).commit();
+                    dialogCancelTemplate.dismiss();
             }
         });
 
