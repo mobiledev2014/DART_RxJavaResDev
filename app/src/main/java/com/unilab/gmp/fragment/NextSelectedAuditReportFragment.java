@@ -1532,6 +1532,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
                     mrq.setAnswer_details(mtqd.getAnswer_details());
                     mrq.save();
                 }
+                mtqd.setQuestion_id(mtqd.getQuestion_id());
+                mtqd.setAnswer_id(mtqd.getAnswer_id());
+                mtqd.setNaoption_id(mtqd.getNaoption_id());
+                mtqd.setCategory_id(mtqd.getCategory_id());
+                mtqd.setAnswer_details(mtqd.getAnswer_details());
+                mtqd.save();
             }
 
     }
