@@ -1783,7 +1783,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         Log.e("Bulk Edit", "token:35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839\n" +
                 "cmdEvent:postInput\n" +
-/*                "report_id:\n" +
+                "report_id:\n" +
                 "report_no:\n" +
                 "company_id:" + report.getCompany_id() + "\n" +
                 "other_activities:" + report.getOther_activities() + "\n" +
@@ -1805,7 +1805,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "references:[" + references + "]\n" +
                 "inspection:[" + inspection + "]\n" +
                 "inspector:[" + inspector + "]\n" +
-                "personnel:[" + personnel + "]\n" +*/
+                "personnel:[" + personnel + "]\n" +
                 "activities:[" + activities + "]\n" +
                 "question:[" + question + "]\n" +
                 "recommendation:[" + recommendation + "]\n" +

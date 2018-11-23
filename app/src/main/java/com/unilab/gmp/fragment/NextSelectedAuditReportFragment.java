@@ -2447,7 +2447,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
 
         Log.e("Bulk Edit", "token:35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839\n" +
-/*                "cmdEvent:postInput\n" +
+                "cmdEvent:postInput\n" +
                 "report_id:" + id + "\n" +
                 "report_no:" + no + "\n" +
                 "company_id:" + report.getCompany_id() + "\n" +
@@ -2467,7 +2467,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 "scope:[" + new_scope + "]\n" +
                 "pre_audit_documents:[" + pre_audit_documents + "]\n" +
                 "references:[" + references + "]\n" +
-                "inspection:[" + inspection + "]\n" +*/
+                "inspection:[" + inspection + "]\n" +
                 "inspector:[" + inspector + "]\n" +
                 "personnel:[" + personnel + "]\n" +
                 "activities:[" + activities + "]\n" +
