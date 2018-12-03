@@ -12,11 +12,14 @@ import android.widget.Spinner;
 
 import com.unilab.gmp.R;
 import com.unilab.gmp.model.ModelDistribution;
+import com.unilab.gmp.model.TemplateModelAuditors;
 import com.unilab.gmp.model.TemplateModelDistributionList;
 import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by c_jhcanuto on 8/24/2017.
@@ -119,6 +122,25 @@ public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistrib
 //        } else {
 //            widgets = (Widgets) rowView.getTag();
 //        }
+    }
+
+    public boolean check() {
+        boolean isCheck = true;
+        Set<String> lump = new HashSet<>();
+        for (TemplateModelDistributionList tmsa : templateModelDistributionLists) {
+
+            if (lump.contains(tmsa.getDistribution_id())) {
+                isCheck = false;
+                break;
+            }
+            lump.add(tmsa.getDistribution_id());
+        }
+
+
+        if (!isCheck) {
+            notifyDataSetChanged();
+        }
+        return isCheck;
     }
 
     public void save(String report_id) {

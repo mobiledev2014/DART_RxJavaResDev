@@ -1465,8 +1465,15 @@ public class NextSelectedTemplateFragment extends Fragment {
         if (!adapterAuditors.check()) {
             passed = false;
             Log.e("validate", "12");
-            message += "\nYou have entered duplicate co-auditor.";
+            message = "\nYou have entered duplicate co-auditor.";
         }
+
+/*        if (!adapterDistributionList.check()) {
+            passed = false;
+            Log.e("validate", "12");
+            message = "\nYou have a duplicate Distribution List.";
+        }*/
+
 
         return passed;
 

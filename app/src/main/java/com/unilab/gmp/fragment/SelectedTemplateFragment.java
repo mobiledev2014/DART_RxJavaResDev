@@ -1,6 +1,7 @@
 package com.unilab.gmp.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -14,6 +15,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -338,7 +341,14 @@ public class SelectedTemplateFragment extends Fragment {
                 if (validate()) {
                     dialogSubmit("Would you like to proceed?");
                 } else {
-                    dialogAnswerAll("Please fill up all required fields.");
+
+                    List<ModelCompany> listSite = ModelCompany.find(ModelCompany.class, "companyname = ?", etTemplateSite.getText().toString());
+
+                    if(listSite.size() == 0){
+                        dialogAnswerAll("Please input a valid site.");
+                    }else {
+                        dialogAnswerAll("Please fill up all required fields.");
+                    }
                 }
                 break;
         }
@@ -590,6 +600,27 @@ public class SelectedTemplateFragment extends Fragment {
             }
         });*/
 
+        etTemplateSite.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(etTemplateSite.getText().equals("")){
+                    modelTemplates.setCompany_id("");
+                    etTemplateSiteAddressOne.setText("");
+                    etTemplateSiteAddressTwo.setText("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
 
         List<ModelCompany> listSite = ModelCompany.listAll(ModelCompany.class);
         String[] arrListSite = new String[listSite.size()];
@@ -607,10 +638,26 @@ public class SelectedTemplateFragment extends Fragment {
                 etTemplateSiteAddressOne.setText(listSite.get(0).getAddress1());
                 etTemplateSiteAddressTwo.setText(listSite.get(0).getAddress2() + "/" + listSite.get(0).getAddress3() + ", " + listSite.get(0).getCountry());
                 modelTemplates.setCompany_id(listSite.get(0).getCompany_id());
+
+                etTemplateSite.setCursorVisible(false);
+                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                hideKeyboard(getActivity());
+
                 Log.e("testasd", modelTemplates.getCompany_id() + " sad");
                 //dismiss keyboard
             }
         });
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void dialogChangeSite(){
@@ -627,8 +674,11 @@ public class SelectedTemplateFragment extends Fragment {
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                modelTemplates.setCompany_id("");
                 Variable.isChangedSite = true;
                 etTemplateSite.setText("");
+                etTemplateSiteAddressOne.setText("");
+                etTemplateSiteAddressTwo.setText("");
                 InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 confirm.cancel();
