@@ -58,6 +58,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     int simpleMessageDialog = -1, delete = 1;
     boolean isDialogOpen = false;
     private boolean onBind;
+    boolean clicked = false;
 
     public AdapterScopeAudit(List<TemplateModelScopeAudit> templateModelScopeAudit, Context context
             , String company_id, NextSelectedTemplateFragment nextSelectedTemplateFragment,
@@ -123,9 +124,9 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         widgets.spnTypeAudit.setEnabled(Variable.isAuthorized);
         if (templateModelScopeAuditInterests.size() < templateModelScopeAudit.size()) {
 //        if (TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND auditid = ?", templateModelScopeAudit.get(i).getReport_id(), templateModelScopeAudit.get(i).getId() + "").size() > 0) {
-            templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());
-            templateModelScopeAuditInterests.get(i).addAll(TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND auditid = ?", templateModelScopeAudit.get(i).getReport_id(), i + ""));// templateModelScopeAudit.get(i).getId() + ""));
-            Log.e("Tessst", templateModelScopeAudit.get(i).getReport_id() + " --- " + templateModelScopeAuditInterests.size());
+                templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());
+                templateModelScopeAuditInterests.get(i).addAll(TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND auditid = ?", templateModelScopeAudit.get(i).getReport_id(), i + ""));// templateModelScopeAudit.get(i).getId() + ""));
+                Log.e("Tessst", templateModelScopeAudit.get(i).getReport_id() + " --- " + templateModelScopeAuditInterests.size());
         } else {
             templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());
         }
@@ -175,6 +176,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
 //        templateModelScopeAudit.get(i).setEtremarks(widgets.remarks);
         //widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail().replace("&lt;br&gt;", "\n").replace("&#8718;","▪").replace("\"","&#34;"));
         //widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail().replace("&lt;br&gt;", "\n").replace("&#8718;","▪").replace("\"","&#34;"));
+
         widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail().replace("&lt;br&gt;", "\n").replace("&#34;","\""));
         widgets.remarks.setEnabled(Variable.isAuthorized);
         widgets.remarks.addTextChangedListener(new TextWatcher() {
@@ -212,7 +214,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         widgets.btnTemplateNextScopeAuditInterestAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                clicked = true;
                 addScopeAuditTypeInterest(templateModelScopeAudit.get(z).getAdapterScope(), z);
                 //Toast.makeText(context, "Product of interest add:" + templateModelScopeAuditInterests.size(), Toast.LENGTH_SHORT).show();
 //                getView(z, null, viewGroup);
@@ -225,7 +227,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
             public void onClick(View view) {
                 //Toast.makeText(context, "Product of interest delete", Toast.LENGTH_SHORT).show();
                 if (templateModelScopeAuditInterests.get(z).size() > 1) {
-                    dialogDeleteDateConfirmation("Are you sure you want to delete?", z, delete);
+                    dialogInterestdelete("Are you sure you want to delete?", z, delete,templateModelScopeAudit.get(z).getAdapterScope());
                 }
             }
         });
@@ -268,6 +270,54 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
                     templateModelScopeAuditInterests.get(z).remove(templateModelScopeAuditInterests.get(z).size() - 1);
                     //templateModelScopeAudit.get(z).getAdapterScope().notifyDataSetChanged();
                     notifyDataSetChanged();
+                    isDialogOpen = false;
+                    dialogDeleteDateOfAudit.dismiss();
+                }
+            });
+
+            no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isDialogOpen = false;
+                    dialogDeleteDateOfAudit.dismiss();
+                }
+            });
+
+            isDialogOpen = true;
+            dialogDeleteDateOfAudit.show();
+        }
+    }
+
+    public void dialogInterestdelete(String mess, final int z, int action,final AdapterScopeAuditInterest adapterScopeAuditInterest) {
+        if (!isDialogOpen) {
+            dialogDeleteDateOfAudit = new Dialog(context);
+            dialogDeleteDateOfAudit.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialogDeleteDateOfAudit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogDeleteDateOfAudit.setCancelable(false);
+            dialogDeleteDateOfAudit.setContentView(R.layout.dialog_exit_confirmation);
+            dialogDeleteDateOfAudit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+            TextView msg = (TextView) dialogDeleteDateOfAudit.findViewById(R.id.tv_message);
+            Button yes = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_yes);
+            Button no = (Button) dialogDeleteDateOfAudit.findViewById(R.id.btn_no);
+
+            msg.setText(mess);
+            if (action == simpleMessageDialog) {
+                yes.setVisibility(View.GONE);
+                no.setText("Close");
+            }
+            yes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.i("BUTTON-POSITION", "VALUE : " + z + " SIZE : " + (templateModelScopeAuditInterests.get(z).size() - 1));
+                    Variable.selectedProduct.remove((templateModelScopeAuditInterests.get(z).size() - 1) + "");
+                    Variable.selectedDisposition.remove((templateModelScopeAuditInterests.get(z).size() - 1) + "");
+
+                    templateModelScopeAuditInterests.get(z).remove(templateModelScopeAuditInterests.get(z).size() - 1);
+                    //templateModelScopeAudit.get(z).getAdapterScope().notifyDataSetChanged();
+
+                    adapterScopeAuditInterest.notifyDataSetChanged();
+
                     isDialogOpen = false;
                     dialogDeleteDateOfAudit.dismiss();
                 }
@@ -432,14 +482,29 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
 
     public void addScopeAuditTypeInterest(AdapterScopeAuditInterest adapterScopeAuditInterest, int pos) {
         if (adapterScopeAuditInterest.getTypeAuditSize() > templateModelScopeAuditInterests.get(pos).size()) {
+
+            if (clicked) {
+
+            }
+
             Log.i("ADD", "CLICKED");
+
             TemplateModelScopeAuditInterest t = new TemplateModelScopeAuditInterest();
             t.setTemplate_id(companyId);
+
             templateModelScopeAuditInterests.get(pos).add(t);
+
+            Log.e("I am here", "addScopeAuditTypeInterest: I am here "+templateModelScopeAudit.get(0).getScope_detail());
+
             // adapterScope.notifyDataSetChanged();
             if (!onBind) {
-                notifyDataSetChanged();
+                if(clicked){
+                    adapterScopeAuditInterest.notifyDataSetChanged();
+                }else{
+                    notifyDataSetChanged();
+                }
             }
+
         } else {
             if (adapterScopeAuditInterest.getTypeAuditSize() > 0)
                 dialogDeleteDateConfirmation("You've reached the maximum number of "
