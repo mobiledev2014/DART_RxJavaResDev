@@ -41,7 +41,7 @@ import java.util.Set;
  */
 
 public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Widgets> {
-    List<List<TemplateModelScopeAuditInterest>> templateModelScopeAuditInterests;
+    static List<List<TemplateModelScopeAuditInterest>> templateModelScopeAuditInterests;
     List<TemplateModelScopeAudit> templateModelScopeAudit;
     LayoutInflater inflater;
     Context context;
@@ -310,10 +310,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
                 @Override
                 public void onClick(View view) {
                     Log.i("BUTTON-POSITION", "VALUE : " + z + " SIZE : " + (templateModelScopeAuditInterests.get(z).size() - 1));
-                    Variable.selectedProduct.remove((templateModelScopeAuditInterests.get(z).size() - 1) + "");
-                    Variable.selectedDisposition.remove((templateModelScopeAuditInterests.get(z).size() - 1) + "");
-
-                    templateModelScopeAuditInterests.get(z).remove(templateModelScopeAuditInterests.get(z).size() - 1);
+                    deleteScopeAuditInterest(z);
                     //templateModelScopeAudit.get(z).getAdapterScope().notifyDataSetChanged();
 
                     adapterScopeAuditInterest.notifyDataSetChanged();
@@ -334,6 +331,19 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
             isDialogOpen = true;
             dialogDeleteDateOfAudit.show();
         }
+    }
+
+    public static void deleteScopeAuditInterest(int z) {
+        Variable.selectedProduct.remove((templateModelScopeAuditInterests.get(z).size() - 1) + "");
+        Variable.selectedDisposition.remove((templateModelScopeAuditInterests.get(z).size() - 1) + "");
+
+        templateModelScopeAuditInterests.get(z).remove(templateModelScopeAuditInterests.get(z).size() - 1);
+    }
+
+    public static void deleteAllScopeAuditInterest(int z) {
+        Variable.selectedProduct.clear();
+        Variable.selectedDisposition.clear();
+        templateModelScopeAuditInterests.get(z).clear();
     }
 
     public boolean check() {
@@ -482,10 +492,6 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
 
     public void addScopeAuditTypeInterest(AdapterScopeAuditInterest adapterScopeAuditInterest, int pos) {
         if (adapterScopeAuditInterest.getTypeAuditSize() > templateModelScopeAuditInterests.get(pos).size()) {
-
-            if (clicked) {
-
-            }
 
             Log.i("ADD", "CLICKED");
 

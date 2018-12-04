@@ -2854,6 +2854,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                     if (list == typeOfAuditDelete) {
                         templateModelScopeAudits.remove(templateModelScopeAudits.size() - 1);
                         adapterScopeAudit.notifyItemRemoved(templateModelScopeAudits.size());
+                        AdapterScopeAudit.deleteAllScopeAuditInterest(templateModelScopeAudits.size());
                     }
 
                     if (list == personnelMetDelete) {

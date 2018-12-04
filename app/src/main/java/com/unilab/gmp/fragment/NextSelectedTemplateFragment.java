@@ -52,6 +52,7 @@ import com.unilab.gmp.adapter.templates.AdapterPreAuditDoc;
 import com.unilab.gmp.adapter.templates.AdapterPresentDuringMeeting;
 import com.unilab.gmp.adapter.templates.AdapterReference;
 import com.unilab.gmp.adapter.templates.AdapterScopeAudit;
+import com.unilab.gmp.adapter.templates.AdapterScopeAuditInterest;
 import com.unilab.gmp.adapter.templates.AdapterSummaryRecommendation;
 import com.unilab.gmp.adapter.templates.AdapterTranslator;
 import com.unilab.gmp.model.ApproverModel;
@@ -2308,6 +2309,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             yes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     if (list == distributionDelete) {
                         templateModelDistributionLists.remove(templateModelDistributionLists.size() - 1);
                         adapterDistributionList.notifyItemRemoved(templateModelDistributionLists.size());
@@ -2333,6 +2335,8 @@ public class NextSelectedTemplateFragment extends Fragment {
 
                     }
 
+
+
                     if (list == distributionOthersDelete) {
                         if (templateModelDistributionOthers.size() > 1) {
                             templateModelDistributionOthers.remove(templateModelDistributionOthers.size() - 1);
@@ -2346,6 +2350,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                     if (list == typeOfAuditDelete) {
                         templateModelScopeAudits.remove(templateModelScopeAudits.size() - 1);
                         adapterScopeAudit.notifyItemRemoved(templateModelScopeAudits.size());
+                        AdapterScopeAudit.deleteAllScopeAuditInterest(templateModelScopeAudits.size());
                     }
 
                     if (list == personnelMetDelete) {
