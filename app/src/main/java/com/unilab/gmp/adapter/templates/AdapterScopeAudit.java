@@ -32,6 +32,7 @@ import com.unilab.gmp.model.TemplateModelScopeAuditInterest;
 import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -343,6 +344,8 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     public static void deleteAllScopeAuditInterest(int z) {
         Variable.selectedProduct.clear();
         Variable.selectedDisposition.clear();
+        Variable.selectedProduct = new HashMap<String, String>();
+        Variable.selectedDisposition = new HashMap<String, String>();
         templateModelScopeAuditInterests.get(z).clear();
     }
 

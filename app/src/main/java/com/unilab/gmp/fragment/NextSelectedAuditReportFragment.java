@@ -1960,7 +1960,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             passed = false;
             Log.e("validate", "3.5.10");
         }
-        if (Variable.selectedProduct.size() == 0 && Variable.selectedDisposition.size() == 0) {
+        if (Variable.selectedProduct.size() == 0 && Variable.selectedDisposition.size() == 0 && !Variable.selectedProduct.isEmpty() && !Variable.selectedDisposition.isEmpty()) {
             message = "Product of interest and disposition are required.";
             passed = false;
             Log.e("validate", "3.5.10");
@@ -2003,6 +2003,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
             Log.e("validate", "12");
             message = "You have entered duplicate co-auditor.";
         }
+
+/*        if (!adapterDistributionList.check()) {
+            passed = false;
+            Log.e("validate", "12");
+            message = "\nYou have a duplicate Distribution List.";
+        }*/
 
         return passed;
 

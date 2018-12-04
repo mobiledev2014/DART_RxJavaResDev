@@ -1433,7 +1433,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             passed = false;
             Log.e("validate", "3.5.5");
         }
-        if (Variable.selectedProduct.size() != Variable.selectedDisposition.size()) {
+        if (Variable.selectedProduct.size() != Variable.selectedDisposition.size()  && !Variable.selectedProduct.isEmpty() && !Variable.selectedDisposition.isEmpty()) {
             message = "Product of interest and disposition are required.";
             passed = false;
             Log.e("validate", "3.5.10");
@@ -1469,11 +1469,11 @@ public class NextSelectedTemplateFragment extends Fragment {
             message = "\nYou have entered duplicate co-auditor.";
         }
 
-        if (!adapterDistributionList.check()) {
+/*        if (!adapterDistributionList.check()) {
             passed = false;
             Log.e("validate", "12");
             message = "\nYou have a duplicate Distribution List.";
-        }
+        }*/
 
 
         return passed;
