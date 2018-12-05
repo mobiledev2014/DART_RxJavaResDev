@@ -47,6 +47,7 @@ import com.unilab.gmp.model.ModelTemplates;
 import com.unilab.gmp.model.SupplierAndCompanyInformationModel;
 import com.unilab.gmp.utility.SharedPreferenceManager;
 import com.unilab.gmp.utility.SimpleDividerItemDecoration;
+import com.unilab.gmp.utility.Utils;
 import com.unilab.gmp.utility.Variable;
 
 import java.text.DateFormat;
@@ -584,7 +585,7 @@ public class SelectedTemplateFragment extends Fragment {
     }
 
     public void setWatcher() {
-/*        etTemplateSite.setOnTouchListener(new View.OnTouchListener() {
+        etTemplateSite.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -598,7 +599,7 @@ public class SelectedTemplateFragment extends Fragment {
                 }
                 return false;
             }
-        });*/
+        });
 
         etTemplateSite.addTextChangedListener(new TextWatcher() {
             @Override
@@ -622,7 +623,7 @@ public class SelectedTemplateFragment extends Fragment {
         });
 
 
-        List<ModelCompany> listSite = ModelCompany.listAll(ModelCompany.class);
+        List<ModelCompany> listSite = ModelCompany.find(ModelCompany.class, "status = '1'");
         String[] arrListSite = new String[listSite.size()];
         for (int x = 0; x < listSite.size(); x++) {
             arrListSite[x] = listSite.get(x).getCompany_name();
@@ -641,23 +642,12 @@ public class SelectedTemplateFragment extends Fragment {
 
                 etTemplateSite.setCursorVisible(false);
                 getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                hideKeyboard(getActivity());
+                Utils.hideKeyboard(getActivity());
 
                 Log.e("testasd", modelTemplates.getCompany_id() + " sad");
                 //dismiss keyboard
             }
         });
-    }
-
-    public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void dialogChangeSite(){
@@ -719,11 +709,12 @@ public class SelectedTemplateFragment extends Fragment {
             pDialog.dismiss();
             noAnswer = true;
         }
-        if (dateOfAuditAdapter.getItem(0).equals("")) {
+
+        if (dateOfAuditAdapter.validateDates()) {
             pDialog.dismiss();
             noAnswer = true;
-
         }
+
         return noAnswer;
     }
 

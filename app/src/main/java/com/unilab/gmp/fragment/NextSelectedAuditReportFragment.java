@@ -1631,13 +1631,13 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     private static void addScopeAuditType() {
-        if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
+        if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size() || templateModelScopeAudits.size() < 10) {
             TemplateModelScopeAudit t = new TemplateModelScopeAudit();
             t.setScope_detail("");
             templateModelScopeAudits.add(t);
             adapterScopeAudit.notifyItemInserted(templateModelScopeAudits.size() - 1);
         } else
-            staticDialog("You've reached the maximum number of " + adapterScopeAudit.getTypeAuditSize(), simpleMessageDialog);
+            staticDialog("You've reached the maximum number of " + templateModelScopeAudits.size(), simpleMessageDialog);
     }
 
     private void addReference() {
@@ -1932,6 +1932,16 @@ public class NextSelectedAuditReportFragment extends Fragment {
             Log.e("validate", "2");
         }
 
+        if (sTemplateNextReviewerName.getSelectedItemPosition() == 0) {
+            passed = false;
+            message = "Please fill up all the required fields.";
+        }
+
+        if (sTemplateNextApproverName.getSelectedItemPosition() == 0) {
+            passed = false;
+            message = "Please fill up all the required fields.";
+        }
+
         if (!adapterScopeAudit.check()) {
             passed = false;
             Log.e("validate", "3");
@@ -2004,11 +2014,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
             message = "You have entered duplicate co-auditor.";
         }
 
-/*        if (!adapterDistributionList.check()) {
+        if (!adapterDistributionList.check()) {
             passed = false;
             Log.e("validate", "12");
             message = "\nYou have a duplicate Distribution List.";
-        }*/
+        }
 
         return passed;
 

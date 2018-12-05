@@ -39,6 +39,15 @@ public class DateOfAuditAdapter extends BaseAdapter {
         return datesOfAudit.size();
     }
 
+    public boolean validateDates(){
+        boolean valid = true;
+        for (ModelDateOfAudit dateOfAudit: datesOfAudit) {
+            if (dateOfAudit.getDateOfAudit().equals(""))
+                valid = false;
+        }
+        return valid;
+    }
+
     @Override
     public Object getItem(int i) {
         return datesOfAudit.get(i).getDateOfAudit();

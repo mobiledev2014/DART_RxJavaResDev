@@ -15,6 +15,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -47,6 +49,7 @@ import com.unilab.gmp.model.ModelTemplates;
 import com.unilab.gmp.model.TemplateModelAuditors;
 import com.unilab.gmp.utility.DateTimeUtils;
 import com.unilab.gmp.utility.SharedPreferenceManager;
+import com.unilab.gmp.utility.Utils;
 import com.unilab.gmp.utility.Variable;
 
 import java.text.DateFormat;
@@ -865,7 +868,7 @@ public class SelectedAuditReportFragment extends Fragment {
 
     public void setWatcher() {
 
-/*        etTemplateSite.setOnTouchListener(new View.OnTouchListener() {
+        etTemplateSite.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -879,9 +882,30 @@ public class SelectedAuditReportFragment extends Fragment {
                 }
                 return false;
             }
-        });*/
+        });
 
-        List<ModelCompany> listSite = ModelCompany.listAll(ModelCompany.class);
+        etTemplateSite.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(etTemplateSite.getText().equals("")){
+                    modelTemplates.setCompany_id("");
+                    etTemplateSiteAddressOne.setText("");
+                    etTemplateSiteAddressTwo.setText("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        List<ModelCompany> listSite = ModelCompany.find(ModelCompany.class, "status = '1'");
         String[] arrListSite = new String[listSite.size()];
         for (int x = 0; x < listSite.size(); x++) {
             arrListSite[x] = listSite.get(x).getCompany_name();
@@ -897,10 +921,17 @@ public class SelectedAuditReportFragment extends Fragment {
                 etTemplateSiteAddressOne.setText(listSite.get(0).getAddress1());
                 etTemplateSiteAddressTwo.setText(listSite.get(0).getAddress2() + "/" + listSite.get(0).getAddress3() + ", " + listSite.get(0).getCountry());
                 modelTemplates.setCompany_id(listSite.get(0).getCompany_id());
+
+                etTemplateSite.setCursorVisible(false);
+                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                Utils.hideKeyboard(getActivity());
+
                 Log.e("testasd", modelTemplates.getCompany_id() + " sad");
             }
         });
     }
+
+
 
     private void dialogChangeSite(){
         final Dialog confirm = new Dialog(context);
@@ -916,8 +947,11 @@ public class SelectedAuditReportFragment extends Fragment {
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                modelTemplates.setCompany_id("");
                 Variable.isChangedSite = true;
                 etTemplateSite.setText("");
+                etTemplateSiteAddressOne.setText("");
+                etTemplateSiteAddressTwo.setText("");
                 InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 confirm.cancel();

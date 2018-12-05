@@ -494,7 +494,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
 
 
     public void addScopeAuditTypeInterest(AdapterScopeAuditInterest adapterScopeAuditInterest, int pos) {
-        if (adapterScopeAuditInterest.getTypeAuditSize() > templateModelScopeAuditInterests.get(pos).size()) {
+        if (adapterScopeAuditInterest.getTypeAuditSize() > templateModelScopeAuditInterests.get(pos).size() || templateModelScopeAuditInterests.get(pos).size() < 30) {
 
             Log.i("ADD", "CLICKED");
 

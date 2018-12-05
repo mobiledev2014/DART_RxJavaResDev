@@ -1217,7 +1217,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
     private static void addScopeAuditType() {
         //if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
-        if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
+        if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size() || templateModelScopeAudits.size() < 10) {
             Log.i("SIZE LOG", adapterScopeAudit.getTypeAuditSize() + " > " + templateModelScopeAudits.size());
             TemplateModelScopeAudit t = new TemplateModelScopeAudit();
             t.setScope_detail("");
@@ -1225,7 +1225,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelScopeAudits.add(t);
             adapterScopeAudit.notifyItemInserted(templateModelScopeAudits.size() - 1);
         } else{
-            staticDialog("You've reached the maximum number of " + adapterScopeAudit.getTypeAuditSize(), simpleMessageDialog);
+            staticDialog("You've reached the maximum number of " + templateModelScopeAudits.size(), simpleMessageDialog);
         }
     }
 
@@ -1323,7 +1323,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     private void addAuditors() {
-        if (adapterAuditors.getAuditorSize() > templateModelAuditorses.size()) {
+        if (adapterAuditors.getAuditorSize() > templateModelAuditorses.size() || templateModelAuditorses.size() < 20) {
             TemplateModelAuditors t = new TemplateModelAuditors();
             t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelAuditorses.add(t);
@@ -1405,6 +1405,17 @@ public class NextSelectedTemplateFragment extends Fragment {
             set_error(etTemplateNextDateOfWrapUp);
         }
 
+        if (sTemplateNextReviewerName.getSelectedItemPosition() == 0) {
+            passed = false;
+            message = "Please fill up all the required fields.";
+        }
+
+        if (sTemplateNextApproverName.getSelectedItemPosition() == 0) {
+            passed = false;
+            message = "Please fill up all the required fields.";
+        }
+
+
 
 
 //        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().equals("")) {
@@ -1420,7 +1431,6 @@ public class NextSelectedTemplateFragment extends Fragment {
         if (!adapterScopeAudit.check()) {
             passed = false;
             if (!adapterScopeAudit.check2())
-
                 message = "You have entered duplicate scope.";
         }
         if (!adapterScopeAudit.check4()) {
@@ -1469,11 +1479,11 @@ public class NextSelectedTemplateFragment extends Fragment {
             message = "\nYou have entered duplicate co-auditor.";
         }
 
-/*        if (!adapterDistributionList.check()) {
+        if (!adapterDistributionList.check()) {
             passed = false;
             Log.e("validate", "12");
             message = "\nYou have a duplicate Distribution List.";
-        }*/
+        }
 
 
         return passed;
