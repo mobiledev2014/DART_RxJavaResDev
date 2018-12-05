@@ -1217,7 +1217,7 @@ public class NextSelectedTemplateFragment extends Fragment {
 
     private void addScopeAuditType() {
         //if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
-        if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size() || templateModelScopeAudits.size() < 10) {
+        if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size() && templateModelScopeAudits.size() < 10) {
             Log.i("SIZE LOG", adapterScopeAudit.getTypeAuditSize() + " > " + templateModelScopeAudits.size());
             TemplateModelScopeAudit t = new TemplateModelScopeAudit();
             t.setScope_detail("");
@@ -1225,7 +1225,11 @@ public class NextSelectedTemplateFragment extends Fragment {
             templateModelScopeAudits.add(t);
             adapterScopeAudit.notifyItemInserted(templateModelScopeAudits.size() - 1);
         } else{
-            dialogDeleteFromListConfirmation("You've reached the maximum number of " + templateModelScopeAudits.size(), simpleMessageDialog);
+            if(templateModelScopeAudits.size() == 10){
+                dialogDeleteFromListConfirmation("You've reached the maximum number of " + templateModelScopeAudits.size(), simpleMessageDialog);
+            }else{
+                dialogDeleteFromListConfirmation("You've reached the maximum number of " + adapterScopeAudit.getTypeAuditSize(), simpleMessageDialog);
+            }
         }
     }
 
