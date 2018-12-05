@@ -424,10 +424,10 @@ public class SelectedTemplateFragment extends Fragment {
                     fragmentManager.beginTransaction().replace(R.id.fl_content, nextSelectTemplate, "TemplateSelect")
                             .addToBackStack(null).commit();*/
                     if(Variable.isFromBackStack) {
-                        if(Variable.isChangedSite){
+           /*             if(Variable.isChangedSite){
                             Variable.isChangedSite = false;
                             NextSelectedTemplateFragment.siteChanged();
-                        }
+                        }*/
                     }
                         FragmentManager fragmentManager = getFragmentManager();
                         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -585,7 +585,7 @@ public class SelectedTemplateFragment extends Fragment {
     }
 
     public void setWatcher() {
-        etTemplateSite.setOnTouchListener(new View.OnTouchListener() {
+       /* etTemplateSite.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -620,7 +620,7 @@ public class SelectedTemplateFragment extends Fragment {
             public void afterTextChanged(Editable s) {
 
             }
-        });
+        });*/
 
 
         List<ModelCompany> listSite = ModelCompany.find(ModelCompany.class, "status = '1'");
@@ -640,9 +640,7 @@ public class SelectedTemplateFragment extends Fragment {
                 etTemplateSiteAddressTwo.setText(listSite.get(0).getAddress2() + "/" + listSite.get(0).getAddress3() + ", " + listSite.get(0).getCountry());
                 modelTemplates.setCompany_id(listSite.get(0).getCompany_id());
 
-                etTemplateSite.setCursorVisible(false);
-                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                Utils.hideKeyboard(getActivity());
+                etTemplateSite.setEnabled(false);
 
                 Log.e("testasd", modelTemplates.getCompany_id() + " sad");
                 //dismiss keyboard
@@ -650,7 +648,7 @@ public class SelectedTemplateFragment extends Fragment {
         });
     }
 
-    private void dialogChangeSite(){
+/*    private void dialogChangeSite(){
         final Dialog confirm = new Dialog(context);
         confirm.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         confirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -684,7 +682,7 @@ public class SelectedTemplateFragment extends Fragment {
 
         confirm.show();
 
-    }
+    }*/
 
     public boolean validate() {
 //        if (!templateElementAdapter.validate()) {
@@ -692,14 +690,20 @@ public class SelectedTemplateFragment extends Fragment {
 //            return false;
 //        }
         Log.e("validate", "date of audit : " + dateOfAuditAdapter.getItem(0));
-        if (modelTemplates.getCompany_id().isEmpty() || dateOfAuditAdapter.getItem(0).equals("")) {
+        boolean validate = true;
+        for(int i = 0; i < dateOfAuditAdapter.getCount(); i++){
+            if(dateOfAuditAdapter.getItem(i).equals("")){
+                validate = false;
+            }
+        }
+
+        if (modelTemplates.getCompany_id().isEmpty()) {
 //            if (modelTemplates.getCompany_id().isEmpty() || modelTemplates.getAudit_date_1().isEmpty() ||
 //                    modelTemplates.getAudit_date_2().isEmpty())
             pDialog.dismiss();
-            return false;
-
+            validate = false;
         }
-        return true;
+        return validate;
     }
 
     public boolean validateDraft() {

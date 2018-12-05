@@ -143,6 +143,7 @@ public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistrib
         return isCheck;
     }
 
+
     public void save(String report_id) {
         TemplateModelDistributionList.deleteAll(TemplateModelDistributionList.class, "reportid = ?", report_id);
         for (TemplateModelDistributionList t : templateModelDistributionLists) {

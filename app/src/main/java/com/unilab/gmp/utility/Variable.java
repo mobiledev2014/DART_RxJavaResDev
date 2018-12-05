@@ -12,7 +12,7 @@ public class Variable {
     public static boolean onAudit = false;
     public static boolean onReferenceData = false;
     public static boolean isAuthorized = true;
-    public static boolean isChangedSite = false;
+   // public static boolean isChangedSite = false;
     public static boolean isFromBackStack = false;
     public static String checkValue = "";
     public static String elementId = "";

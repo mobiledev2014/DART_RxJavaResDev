@@ -563,10 +563,10 @@ public class SelectedAuditReportFragment extends Fragment {
                     // Do something after 5s = 5000ms
 
                     if(Variable.isFromBackStack) {
-                        if(Variable.isChangedSite){
+              /*          if(Variable.isChangedSite){
                             Variable.isChangedSite = false;
                             NextSelectedAuditReportFragment.siteChanged();
-                        }
+                        }*/
                     }
                     templateElementAdapter.save("TEMPData");
 
@@ -868,7 +868,9 @@ public class SelectedAuditReportFragment extends Fragment {
 
     public void setWatcher() {
 
-        etTemplateSite.setOnTouchListener(new View.OnTouchListener() {
+        etTemplateSite.setEnabled(false);
+
+/*        etTemplateSite.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -928,12 +930,12 @@ public class SelectedAuditReportFragment extends Fragment {
 
                 Log.e("testasd", modelTemplates.getCompany_id() + " sad");
             }
-        });
+        });*/
     }
 
 
 
-    private void dialogChangeSite(){
+/*    private void dialogChangeSite(){
         final Dialog confirm = new Dialog(context);
         confirm.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         confirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -967,7 +969,7 @@ public class SelectedAuditReportFragment extends Fragment {
 
         confirm.show();
 
-    }
+    }*/
 
     public boolean validate() {
 //        if (!templateElementAdapter.validate()) {
@@ -975,12 +977,21 @@ public class SelectedAuditReportFragment extends Fragment {
 //            pDialog.dismiss();
 //            return false;
 //        }
-        if (modelTemplates.getCompany_id().isEmpty() || dateOfAuditAdapter.getItem(0).equals("")) {
-            /*progress dialog dismiss*/
-            pDialog.dismiss();
-            return false;
+        Log.e("validate", "date of audit : " + dateOfAuditAdapter.getItem(0));
+        boolean validate = true;
+        for(int i = 0; i < dateOfAuditAdapter.getCount(); i++){
+            if(dateOfAuditAdapter.getItem(i).equals("")){
+                validate = false;
+            }
         }
-        return true;
+
+        if (modelTemplates.getCompany_id().isEmpty()) {
+//            if (modelTemplates.getCompany_id().isEmpty() || modelTemplates.getAudit_date_1().isEmpty() ||
+//                    modelTemplates.getAudit_date_2().isEmpty())
+            pDialog.dismiss();
+            validate = false;
+        }
+        return validate;
     }
 
     private void addDateOfAudit() {

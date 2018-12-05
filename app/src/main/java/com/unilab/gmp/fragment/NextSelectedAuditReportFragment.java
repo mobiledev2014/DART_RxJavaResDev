@@ -120,9 +120,9 @@ import static com.unilab.gmp.activity.HomeActivity.pDialog;
 public class NextSelectedAuditReportFragment extends Fragment {
 
     Unbinder unbinder;
-    static Context context;
+    Context context;
     String email;
-    static NextSelectedAuditReportFragment fragment;
+    NextSelectedAuditReportFragment fragment;
 
     @BindView(R.id.scrl_main)
     NestedScrollView scrlMain;
@@ -136,10 +136,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
     RecyclerView lvTemplateNextActivitiesCarried;
     @BindView(R.id.et_template_next_activity_carried)
     EditText etTemplateNextActivityCarried;
-    static Button btnTemplateNextScopeAuditAdd;
+    Button btnTemplateNextScopeAuditAdd;
     @BindView(R.id.btn_template_next_scope_audit_delete)
     Button btnTemplateNextScopeAuditDelete;
-    static RecyclerView lvTemplateNextScopeAudit;
+    RecyclerView lvTemplateNextScopeAudit;
     @BindView(R.id.btn_template_next_reference_add)
     Button btnTemplateNextReferenceAdd;
     @BindView(R.id.btn_template_next_reference_delete)
@@ -186,15 +186,15 @@ public class NextSelectedAuditReportFragment extends Fragment {
     RecyclerView lvTemplateNextSummaryRecommendation;
     @BindView(R.id.et_template_next_summary_recommendation_audit_close_date)
     EditText etTemplateNextSummaryRecommendationAuditCloseDate;
-    static EditText etTemplateNextCompanyBackgroundHistory;
-    static RecyclerView lvTemplateNextCompanyBackgroundName;
+    EditText etTemplateNextCompanyBackgroundHistory;
+    RecyclerView lvTemplateNextCompanyBackgroundName;
     @BindView(R.id.ll_template_next_company_background_name)
     LinearLayout llTemplateNextCompanyBackgroundName;
     @BindView(R.id.btn_template_next_company_background_inspector_name_add)
     Button btnTemplateNextCompanyBackgroundInspectorNameAdd;
     @BindView(R.id.btn_template_next_company_background_inspector_name_delete)
     Button btnTemplateNextCompanyBackgroundInspectorNameDelete;
-    static RecyclerView lvTemplateNextCompanyBackgroundMajorChanges;
+    RecyclerView lvTemplateNextCompanyBackgroundMajorChanges;
     @BindView(R.id.ll_template_next_company_background_major_changes)
     LinearLayout llTemplateNextCompanyBackgroundMajorChanges;
     @BindView(R.id.btn_template_next_company_background_major_changes_add)
@@ -273,11 +273,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
     TemplateFragment templateFragment;
     AuditReportFragment auditReportFragment;
 
-    static ModelTemplates modelTemplates;
+    ModelTemplates modelTemplates;
     ActivityAdapter activityAdapter;
     TemplateElementAdapter templateElementAdapter;
 
-    static List<TemplateModelScopeAudit> templateModelScopeAudits;
+    List<TemplateModelScopeAudit> templateModelScopeAudits;
     List<TemplateModelReference> templateModelReferences;
     List<TemplateModelPreAuditDoc> templateModelPreAuditDocs;
     List<TemplateModelPresentDuringMeeting> templateModelPresentDuringMeetings;
@@ -285,14 +285,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
     List<TemplateModelDistributionList> templateModelDistributionLists;
     List<TemplateModelDistributionOthers> templateModelDistributionOthers;
     List<TemplateModelSummaryRecommendation> templateModelSummaryRecommendations;
-    static List<TemplateModelCompanyBackgroundName> templateModelCompanyBackgroundNames;
-    static List<TemplateModelCompanyBackgroundMajorChanges> templateModelCompanyBackgroundMajorChanges;
+    List<TemplateModelCompanyBackgroundName> templateModelCompanyBackgroundNames;
+    List<TemplateModelCompanyBackgroundMajorChanges> templateModelCompanyBackgroundMajorChanges;
     List<TemplateModelAuditors> templateModelAuditorses;
     List<TemplateModelTranslator> templateModelTranslators;
     List<TemplateModelOtherIssuesAudit> templateModelOtherIssuesAudits;
     List<TemplateModelOtherIssuesExecutive> templateModelOtherIssuesExecutives;
 
-    static AdapterScopeAudit adapterScopeAudit;
+    AdapterScopeAudit adapterScopeAudit;
     AdapterScopeAuditInterest adapterScopeAuditInterest;
     AdapterReference adapterReference;
     AdapterPreAuditDoc adapterPreAuditDoc;
@@ -301,8 +301,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
     AdapterDistributionList adapterDistributionList;
     AdapterDistributionOthers adapterDistributionOthers;
     AdapterSummaryRecommendation adapterSummaryRecommendation;
-    static AdapterCompanyBackgroundName adapterCompanyBackgroundName;
-    static AdapterCompanyBackgroundMajorChanges adapterCompanyBackgroundMajorChanges;
+    AdapterCompanyBackgroundName adapterCompanyBackgroundName;
+    AdapterCompanyBackgroundMajorChanges adapterCompanyBackgroundMajorChanges;
     AdapterAuditors adapterAuditors;
     AdapterTranslator adapterTranslator;
     AdapterOthersIssueAudit adapterOthersIssueAudit;
@@ -315,7 +315,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
     int year, month, day;
     Calendar currentTime = Calendar.getInstance();
-    static ModelAuditReports report;
+    ModelAuditReports report;
 
     ApiInterface apiInterface;
     SharedPreferenceManager sharedPref;
@@ -325,13 +325,13 @@ public class NextSelectedAuditReportFragment extends Fragment {
     SelectedAuditReportFragment selectedAuditReportFragment;
     View rootView;
     Dialog dialogDeleteDateOfAudit;
-    static int simpleMessageDialog = -1, distributionDelete = 0, translatorDelete = 1,
+    int simpleMessageDialog = -1, distributionDelete = 0, translatorDelete = 1,
             preAuditDocDelete = 2, distributionOthersDelete = 3, typeOfAuditDelete = 4,
             personnelMetDelete = 5, elementsRequiringDelete = 6, otherIssuesAuditDelete = 7, otherIssuesExecutiveDelete = 8, auditorDelete = 9, reviewerDelete = 10, presentDuringDelete = 11,
             majorChangesDelete = 12;
-    static boolean dialogDeleteIsShowing = false;
+    boolean dialogDeleteIsShowing = false;
 
-    static int sitemajorchangescount = 0;
+    int sitemajorchangescount = 0;
     Dialog dialogSuccess;
 
     public NextSelectedAuditReportFragment(ModelTemplates modelTemplates, ModelAuditReports report,
@@ -535,9 +535,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
         // --- Audit Scope
         templateModelScopeAudits = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
 
-        if (Variable.isChangedSite) {
+/*        if (Variable.isChangedSite) {
             Log.e("Scope Audit", "onCreateView: Scope Audit" + templateModelScopeAudits.get(0).getScope_name());
-        }
+        }*/
 
         adapterScopeAudit = new AdapterScopeAudit(templateModelScopeAudits, context, modelTemplates.getCompany_id(), null, this, btnTemplateNextScopeAuditAdd);
         lvTemplateNextScopeAudit.setNestedScrollingEnabled(false);
@@ -938,7 +938,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         return rootView;
     }
 
-    public static void siteChanged() {
+   /* public static void siteChanged() {
         try {
             etTemplateNextCompanyBackgroundHistory.post(new Runnable() {
                 @Override
@@ -991,7 +991,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         } catch (Exception e) {
             Log.e("EXCEPTION", "siteChanged: " + e.toString());
         }
-    }
+    }*/
 
 //    @Override
 //    public void onResume() {
@@ -1556,7 +1556,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
     }
 
-    public static void staticDialog(String mess, final int list) {
+/*    public static void staticDialog(String mess, final int list) {
         if (!dialogDeleteIsShowing) {
             final Dialog dialog = new Dialog(context);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1606,7 +1606,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             dialog.show();
         }
 
-    }
+    }*/
 
     private void addOtherIssuesAudit() {
         if (20 > templateModelOtherIssuesAudits.size()) {
@@ -1630,14 +1630,14 @@ public class NextSelectedAuditReportFragment extends Fragment {
             dialogDeleteFromListConfirmation("You've reached the maximum number of 20", simpleMessageDialog);
     }
 
-    private static void addScopeAuditType() {
+    private void addScopeAuditType() {
         if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size() || templateModelScopeAudits.size() < 10) {
             TemplateModelScopeAudit t = new TemplateModelScopeAudit();
             t.setScope_detail("");
             templateModelScopeAudits.add(t);
             adapterScopeAudit.notifyItemInserted(templateModelScopeAudits.size() - 1);
         } else
-            staticDialog("You've reached the maximum number of " + templateModelScopeAudits.size(), simpleMessageDialog);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of " + templateModelScopeAudits.size(), simpleMessageDialog);
     }
 
     private void addReference() {
@@ -1673,7 +1673,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             templateModelPersonelMetDurings.add(t);
             adapterPersonelMetDuring.notifyItemInserted(templateModelPersonelMetDurings.size() - 1);
         } else
-            staticDialog("You've reached the maximum number of 30", simpleMessageDialog);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 30", simpleMessageDialog);
     }
 
     private void addDistribution() {
@@ -1707,7 +1707,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
     }
 
-    private static void addBackgroundName() {//disabled na
+    private void addBackgroundName() {//disabled na
         if (4 > templateModelCompanyBackgroundNames.size()) {
             TemplateModelCompanyBackgroundName t = new TemplateModelCompanyBackgroundName();
             templateModelCompanyBackgroundNames.add(t);
@@ -1715,18 +1715,18 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
     }
 
-    private static void addMajorChanges() {
+    private void addMajorChanges() {
         if (20 > templateModelCompanyBackgroundMajorChanges.size()) {
             TemplateModelCompanyBackgroundMajorChanges t = new TemplateModelCompanyBackgroundMajorChanges();
             templateModelCompanyBackgroundMajorChanges.add(t);
 
             adapterCompanyBackgroundMajorChanges.notifyItemInserted(templateModelCompanyBackgroundMajorChanges.size() - 1);
         } else
-            staticDialog("You've reached the maximum number of 20", simpleMessageDialog);
+            dialogDeleteFromListConfirmation("You've reached the maximum number of 20", simpleMessageDialog);
     }
 
     private void addAuditors() {
-        if (adapterAuditors.getAuditorSize() > templateModelAuditorses.size()) {
+        if (adapterAuditors.getAuditorSize() > templateModelAuditorses.size() || templateModelAuditorses.size() < 10) {
             TemplateModelAuditors t = new TemplateModelAuditors();
             templateModelAuditorses.add(t);
             adapterAuditors.notifyItemInserted(templateModelAuditorses.size() - 1);
@@ -1945,6 +1945,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
         if (!adapterScopeAudit.check()) {
             passed = false;
             Log.e("validate", "3");
+        }
+
+        if (templateModelDistributionLists.get(0).getDistribution() == "Select") {
+            passed = false;
+            message = "Please fill up all the required fields.";
         }
 
 
