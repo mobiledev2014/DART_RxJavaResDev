@@ -915,7 +915,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 }
                 if (id_found) break;
             }
-//            Log.e("Log ito", temp_answers.getQuestion_id() + "_bilang _"+ (bilang++));
+            Log.e("Log ito", temp_answers.getQuestion_id() + "_bilang _"+ (bilang++));
         }
 
         question = questionList.size() + " ";
@@ -1551,7 +1551,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
 
         if(modelReportQuestion.size() > 0) {
-            ModelReportQuestion.delete(ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData"));
+            ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", "TEMPData");
         }
 
     }
@@ -1726,14 +1726,20 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     private void addAuditors() {
-        if (adapterAuditors.getAuditorSize() > templateModelAuditorses.size() || templateModelAuditorses.size() < 10) {
+        if (adapterAuditors.getAuditorSize() > templateModelAuditorses.size() && templateModelAuditorses.size() < 10) {
             TemplateModelAuditors t = new TemplateModelAuditors();
             templateModelAuditorses.add(t);
             adapterAuditors.notifyItemInserted(templateModelAuditorses.size() - 1);
-        } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of "
-                    + adapterAuditors.getAuditorSize(), simpleMessageDialog);
+        } else {
 
+            if (templateModelAuditorses.size() == 10) {
+                dialogDeleteFromListConfirmation("You've reached the maximum number of "
+                        + templateModelAuditorses.size(), simpleMessageDialog);
+            } else {
+                dialogDeleteFromListConfirmation("You've reached the maximum number of "
+                        + adapterAuditors.getAuditorSize(), simpleMessageDialog);
+            }
+        }
     }
 
     private void addTranslator() {
@@ -1773,7 +1779,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                     List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
 
                     if(modelReportQuestion.size() > 0) {
-                        ModelReportQuestion.delete(ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData"));
+                        ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", "TEMPData");
                     }
 
                     FragmentManager fragmentManager = getFragmentManager();

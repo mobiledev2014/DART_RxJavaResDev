@@ -121,126 +121,131 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         onBind = true;
         final int z = i;
 
-        widgets.spnTypeAudit.setAdapter(adapter);
-        widgets.spnTypeAudit.setEnabled(Variable.isAuthorized);
-        if (templateModelScopeAuditInterests.size() < templateModelScopeAudit.size()) {
+        try {
+
+            widgets.spnTypeAudit.setAdapter(adapter);
+            widgets.spnTypeAudit.setEnabled(Variable.isAuthorized);
+            if (templateModelScopeAuditInterests.size() < templateModelScopeAudit.size()) {
 //        if (TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND auditid = ?", templateModelScopeAudit.get(i).getReport_id(), templateModelScopeAudit.get(i).getId() + "").size() > 0) {
                 templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());
                 templateModelScopeAuditInterests.get(i).addAll(TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND auditid = ?", templateModelScopeAudit.get(i).getReport_id(), i + ""));// templateModelScopeAudit.get(i).getId() + ""));
                 Log.e("Tessst", templateModelScopeAudit.get(i).getReport_id() + " --- " + templateModelScopeAuditInterests.size());
-        } else {
-            templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());
-        }
-        templateModelScopeAudit.get(i).setAdapterScope(new AdapterScopeAuditInterest(templateModelScopeAuditInterests.get(i), context, companyId));
-        widgets.lvTemplateNextScopeAuditInterest.setAdapter(templateModelScopeAudit.get(i).getAdapterScope());
-        widgets.lvTemplateNextScopeAuditInterest.setExpanded(true);
-        widgets.lvTemplateNextScopeAuditInterest.setEnabled(Variable.isAuthorized);
+            } else {
+                templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());
+            }
+            templateModelScopeAudit.get(i).setAdapterScope(new AdapterScopeAuditInterest(templateModelScopeAuditInterests.get(i), context, companyId));
+            widgets.lvTemplateNextScopeAuditInterest.setAdapter(templateModelScopeAudit.get(i).getAdapterScope());
+            widgets.lvTemplateNextScopeAuditInterest.setExpanded(true);
+            widgets.lvTemplateNextScopeAuditInterest.setEnabled(Variable.isAuthorized);
 
-        if (templateModelScopeAuditInterests.get(i).size() == 0) {
-            addScopeAuditTypeInterest(templateModelScopeAudit.get(i).getAdapterScope(), i);
-        }
-
-        if (templateModelScopeAudit.get(z).getScope_id().isEmpty()) {
-            //templateModelScopeAudit.get(z).setScope_id(scopeAudits.get(widgets.spnTypeAudit.getSelectedItemPosition()).getScope_id());
-            templateModelScopeAudit.get(z).setScope_id(0 + "");
-            Log.i("SAVED-ITEM", "SCOPE TEST: " + scopeAudits.get(widgets.spnTypeAudit.getSelectedItemPosition()).getScope_id());
-            Log.i("SAVED-ITEM", "SCOPE TEST 2: " + scopeAudits.get(0).getScope_id());
-            Log.i("SAVED-ITEM", "SCOPE TEST POSITION: " + widgets.spnTypeAudit.getSelectedItemPosition());
-        } else {
-            templateModelScopeAudit.get(z).setSelected(idList.indexOf(templateModelScopeAudit.get(z).getScope_id()));
-            Log.i("SAVED-ITEM", "SCOPE TEST ELSE: " + idList.indexOf(templateModelScopeAudit.get(z).getScope_id()));
-            Log.i("SAVED-ITEM", "SCOPE TEST POSITION ELSE: " + templateModelScopeAudit.get(z).getScope_id());
-        }
-
-        //widgets.spnTypeAudit.setSelection(templateModelScopeAudit.get(i).getSelected());
-        Log.i("GET ITEM", "VALUE: " + templateModelScopeAudit.get(i).getSelected());
-        widgets.spnTypeAudit.setSelection(templateModelScopeAudit.get(i).getSelected());
-
-        widgets.spnTypeAudit.setEnabled(Variable.isAuthorized);
-        widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i > 0) {
-                    int index = i - 1;
-                    templateModelScopeAudit.get(z).setScope_name(widgets.spnTypeAudit.getSelectedItem().toString());
-                    templateModelScopeAudit.get(z).setSelected(i);
-                    templateModelScopeAudit.get(z).setScope_id(scopeAudits.get(index).getScope_id());
-                }
+            if (templateModelScopeAuditInterests.get(i).size() == 0) {
+                addScopeAuditTypeInterest(templateModelScopeAudit.get(i).getAdapterScope(), i);
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-//        templateModelScopeAudit.get(i).setEtremarks(widgets.remarks);
-        //widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail().replace("&lt;br&gt;", "\n").replace("&#8718;","▪").replace("\"","&#34;"));
-        //widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail().replace("&lt;br&gt;", "\n").replace("&#8718;","▪").replace("\"","&#34;"));
-
-        widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail().replace("&lt;br&gt;", "\n").replace("&#34;","\""));
-        widgets.remarks.setEnabled(Variable.isAuthorized);
-        widgets.remarks.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            if (templateModelScopeAudit.get(z).getScope_id().isEmpty()) {
+                //templateModelScopeAudit.get(z).setScope_id(scopeAudits.get(widgets.spnTypeAudit.getSelectedItemPosition()).getScope_id());
+                templateModelScopeAudit.get(z).setScope_id(0 + "");
+                Log.i("SAVED-ITEM", "SCOPE TEST: " + scopeAudits.get(widgets.spnTypeAudit.getSelectedItemPosition()).getScope_id());
+                Log.i("SAVED-ITEM", "SCOPE TEST 2: " + scopeAudits.get(0).getScope_id());
+                Log.i("SAVED-ITEM", "SCOPE TEST POSITION: " + widgets.spnTypeAudit.getSelectedItemPosition());
+            } else {
+                templateModelScopeAudit.get(z).setSelected(idList.indexOf(templateModelScopeAudit.get(z).getScope_id()));
+                Log.i("SAVED-ITEM", "SCOPE TEST ELSE: " + idList.indexOf(templateModelScopeAudit.get(z).getScope_id()));
+                Log.i("SAVED-ITEM", "SCOPE TEST POSITION ELSE: " + templateModelScopeAudit.get(z).getScope_id());
             }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (z < templateModelScopeAudit.size())
-                    templateModelScopeAudit.get(z).setScope_detail(widgets.remarks.getText().toString());
-            }
+            //widgets.spnTypeAudit.setSelection(templateModelScopeAudit.get(i).getSelected());
+            Log.i("GET ITEM", "VALUE: " + templateModelScopeAudit.get(i).getSelected());
+            widgets.spnTypeAudit.setSelection(templateModelScopeAudit.get(i).getSelected());
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        widgets.remarks.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                if (widgets.remarks.hasFocus()) {
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                    switch (event.getAction() & MotionEvent.ACTION_MASK){
-                        case MotionEvent.ACTION_SCROLL:
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            return true;
+            widgets.spnTypeAudit.setEnabled(Variable.isAuthorized);
+            widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    if (i > 0) {
+                        int index = i - 1;
+                        templateModelScopeAudit.get(z).setScope_name(widgets.spnTypeAudit.getSelectedItem().toString());
+                        templateModelScopeAudit.get(z).setSelected(i);
+                        templateModelScopeAudit.get(z).setScope_id(scopeAudits.get(index).getScope_id());
                     }
                 }
-                return false;
-            }
-        });
 
-        widgets.btnTemplateNextScopeAuditInterestAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clicked = true;
-                addScopeAuditTypeInterest(templateModelScopeAudit.get(z).getAdapterScope(), z);
-                //Toast.makeText(context, "Product of interest add:" + templateModelScopeAuditInterests.size(), Toast.LENGTH_SHORT).show();
-//                getView(z, null, viewGroup);
-            }
-        });
-        widgets.btnTemplateNextScopeAuditInterestAdd.setEnabled(Variable.isAuthorized);
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-        widgets.btnTemplateNextScopeAuditInterestDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Toast.makeText(context, "Product of interest delete", Toast.LENGTH_SHORT).show();
-                if (templateModelScopeAuditInterests.get(z).size() > 1) {
-                    dialogInterestdelete("Are you sure you want to delete?", z, delete,templateModelScopeAudit.get(z).getAdapterScope());
                 }
-            }
-        });
+            });
 
-        widgets.btnTemplateNextScopeAuditInterestDelete.setEnabled(Variable.isAuthorized);
+//        templateModelScopeAudit.get(i).setEtremarks(widgets.remarks);
+            //widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail().replace("&lt;br&gt;", "\n").replace("&#8718;","▪").replace("\"","&#34;"));
+            //widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail().replace("&lt;br&gt;", "\n").replace("&#8718;","▪").replace("\"","&#34;"));
+
+            widgets.remarks.setText(templateModelScopeAudit.get(i).getScope_detail().replace("&lt;br&gt;", "\n").replace("&#34;", "\""));
+            widgets.remarks.setEnabled(Variable.isAuthorized);
+            widgets.remarks.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (z < templateModelScopeAudit.size())
+                        templateModelScopeAudit.get(z).setScope_detail(widgets.remarks.getText().toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+
+            widgets.remarks.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (widgets.remarks.hasFocus()) {
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                            case MotionEvent.ACTION_SCROLL:
+                                v.getParent().requestDisallowInterceptTouchEvent(false);
+                                return true;
+                        }
+                    }
+                    return false;
+                }
+            });
+
+            widgets.btnTemplateNextScopeAuditInterestAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clicked = true;
+                    addScopeAuditTypeInterest(templateModelScopeAudit.get(z).getAdapterScope(), z);
+                    //Toast.makeText(context, "Product of interest add:" + templateModelScopeAuditInterests.size(), Toast.LENGTH_SHORT).show();
+//                getView(z, null, viewGroup);
+                }
+            });
+            widgets.btnTemplateNextScopeAuditInterestAdd.setEnabled(Variable.isAuthorized);
+
+            widgets.btnTemplateNextScopeAuditInterestDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Toast.makeText(context, "Product of interest delete", Toast.LENGTH_SHORT).show();
+                    if (templateModelScopeAuditInterests.get(z).size() > 1) {
+                        dialogInterestdelete("Are you sure you want to delete?", z, delete, templateModelScopeAudit.get(z).getAdapterScope());
+                    }
+                }
+            });
+
+            widgets.btnTemplateNextScopeAuditInterestDelete.setEnabled(Variable.isAuthorized);
 
         /*if (!isCheck) {
             if (templateModelScopeAudit.get(i).getScope_detail().isEmpty()) {
                 widgets.remarks.setError("This field is required");
             }
         }*/
-        onBind = false;
+            onBind = false;
+        }catch (Exception e){
+
+        }
     }
 
     public void dialogDeleteDateConfirmation(String mess, final int z, int action) {
@@ -494,7 +499,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
 
 
     public void addScopeAuditTypeInterest(AdapterScopeAuditInterest adapterScopeAuditInterest, int pos) {
-        if (adapterScopeAuditInterest.getTypeAuditSize() > templateModelScopeAuditInterests.get(pos).size() || templateModelScopeAuditInterests.get(pos).size() < 30) {
+        if (adapterScopeAuditInterest.getTypeAuditSize() > templateModelScopeAuditInterests.get(pos).size() && templateModelScopeAuditInterests.get(pos).size() < 30) {
 
             Log.i("ADD", "CLICKED");
 
@@ -515,9 +520,14 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
             }
 
         } else {
-            if (adapterScopeAuditInterest.getTypeAuditSize() > 0)
+
+            if(templateModelScopeAuditInterests.get(pos).size() == 30){
+                dialogDeleteDateConfirmation("You've reached the maximum number of "
+                        + templateModelScopeAuditInterests.get(pos).size(), 0, simpleMessageDialog);
+            }else{
                 dialogDeleteDateConfirmation("You've reached the maximum number of "
                         + adapterScopeAuditInterest.getTypeAuditSize(), 0, simpleMessageDialog);
+            }
         }
     }
 

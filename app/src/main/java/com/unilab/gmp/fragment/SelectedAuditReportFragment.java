@@ -562,13 +562,28 @@ public class SelectedAuditReportFragment extends Fragment {
                 public void run() {
                     // Do something after 5s = 5000ms
 
-                    if(Variable.isFromBackStack) {
+                    if (Variable.isFromBackStack) {
               /*          if(Variable.isChangedSite){
                             Variable.isChangedSite = false;
                             NextSelectedAuditReportFragment.siteChanged();
                         }*/
                     }
-                    templateElementAdapter.save("TEMPData");
+
+                    List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+
+                    if (modelReportQuestion.size() > 0) {
+                        ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+                    }
+
+                    List<ModelReportQuestion> question_list = ModelReportQuestion.find(ModelReportQuestion.class,
+                            "reportid = ? AND answerid > '0'"
+                            , modelAuditReports.getReport_id());
+                    if (question_list.size() > 0) {
+                        templateElementAdapter.save("TEMPData");
+                    } else {
+
+                        templateElementAdapter.save(modelAuditReports.getReport_id());
+                    }
 
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -598,15 +613,15 @@ public class SelectedAuditReportFragment extends Fragment {
 
                 List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
 
-                if(modelReportQuestion.size() > 0) {
-                    ModelReportQuestion.delete(ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData"));
+                if (modelReportQuestion.size() > 0) {
+                    ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", "TEMPData");
                 }
 
-                    FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fl_content, auditReportFragment).addToBackStack(null).commit();
-                    dialogCancelTemplate.dismiss();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fl_content, auditReportFragment).addToBackStack(null).commit();
+                dialogCancelTemplate.dismiss();
 
             }
         });
@@ -643,7 +658,7 @@ public class SelectedAuditReportFragment extends Fragment {
                 mar.setCompany_id(modelTemplates.getCompany_id());
                 mar.setAudit_date_1(modelTemplates.getAudit_date_1());
                 mar.setAudit_date_2(modelTemplates.getAudit_date_2());
-                templateElementAdapter.save("TEMPData");
+                templateElementAdapter.save(mar.getReport_id());
                 saveLocalQuestion();
                 //templateElementAdapter.save(mar.getReport_id());
                 mar.setModified_date(getDate());
@@ -735,7 +750,7 @@ public class SelectedAuditReportFragment extends Fragment {
                         }
                     }
                 }
-                if (id_found)break;
+                if (id_found) break;
             }
         }
 
@@ -760,7 +775,7 @@ public class SelectedAuditReportFragment extends Fragment {
         save(modelAuditReports.getReport_id(), answerList, questions);
     }
 
-    public void save(String report_id, List<ModelTemplateQuestionDetails> answerList,List<ModelReportQuestion> questionList) {
+    public void save(String report_id, List<ModelTemplateQuestionDetails> answerList, List<ModelReportQuestion> questionList) {
 
         for (ModelTemplateQuestionDetails mtqd : answerList) {
             List<ModelReportQuestion> lmrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
@@ -792,8 +807,8 @@ public class SelectedAuditReportFragment extends Fragment {
 
         List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
 
-        if(modelReportQuestion.size() > 0) {
-            ModelReportQuestion.delete(ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData"));
+        if (modelReportQuestion.size() > 0) {
+            ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", "TEMPData");
         }
 
     }
@@ -979,8 +994,8 @@ public class SelectedAuditReportFragment extends Fragment {
 //        }
         Log.e("validate", "date of audit : " + dateOfAuditAdapter.getItem(0));
         boolean validate = true;
-        for(int i = 0; i < dateOfAuditAdapter.getCount(); i++){
-            if(dateOfAuditAdapter.getItem(i).equals("")){
+        for (int i = 0; i < dateOfAuditAdapter.getCount(); i++) {
+            if (dateOfAuditAdapter.getItem(i).equals("")) {
                 validate = false;
             }
         }

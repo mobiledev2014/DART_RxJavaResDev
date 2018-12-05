@@ -1323,14 +1323,20 @@ public class NextSelectedTemplateFragment extends Fragment {
     }
 
     private void addAuditors() {
-        if (adapterAuditors.getAuditorSize() > templateModelAuditorses.size() || templateModelAuditorses.size() < 10) {
+        if (adapterAuditors.getAuditorSize() > templateModelAuditorses.size() && templateModelAuditorses.size() < 10) {
             TemplateModelAuditors t = new TemplateModelAuditors();
-            t.setTemplate_id(modelTemplates.getTemplateID());
             templateModelAuditorses.add(t);
             adapterAuditors.notifyItemInserted(templateModelAuditorses.size() - 1);
-        } else
-            dialogDeleteFromListConfirmation("You've reached the maximum number of "
-                    + adapterAuditors.getAuditorSize(), simpleMessageDialog);
+        } else {
+
+            if (templateModelAuditorses.size() == 10) {
+                dialogDeleteFromListConfirmation("You've reached the maximum number of "
+                        + templateModelAuditorses.size(), simpleMessageDialog);
+            } else {
+                dialogDeleteFromListConfirmation("You've reached the maximum number of "
+                        + adapterAuditors.getAuditorSize(), simpleMessageDialog);
+            }
+        }
     }
 
     private void addTranslator() {
