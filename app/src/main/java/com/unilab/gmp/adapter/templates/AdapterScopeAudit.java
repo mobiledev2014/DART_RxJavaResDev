@@ -60,6 +60,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     boolean isDialogOpen = false;
     private boolean onBind;
     boolean clicked = false;
+    boolean valid = true;
 
     public AdapterScopeAudit(List<TemplateModelScopeAudit> templateModelScopeAudit, Context context
             , String company_id, NextSelectedTemplateFragment nextSelectedTemplateFragment,
@@ -121,8 +122,6 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         onBind = true;
         final int z = i;
 
-        try {
-
             widgets.spnTypeAudit.setAdapter(adapter);
             widgets.spnTypeAudit.setEnabled(Variable.isAuthorized);
             if (templateModelScopeAuditInterests.size() < templateModelScopeAudit.size()) {
@@ -162,6 +161,11 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
             widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    if(i == 0){
+                        valid = false;
+                    }
+
                     if (i > 0) {
                         int index = i - 1;
                         templateModelScopeAudit.get(z).setScope_name(widgets.spnTypeAudit.getSelectedItem().toString());
@@ -243,9 +247,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
             }
         }*/
             onBind = false;
-        }catch (Exception e){
 
-        }
     }
 
     public void dialogDeleteDateConfirmation(String mess, final int z, int action) {
@@ -402,14 +404,19 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     public boolean check4() {
         isCheck = true;
 
-        for (TemplateModelScopeAudit tmsa : templateModelScopeAudit) {
-            Log.i("SCOPE-COUNT", "" + tmsa.getScope_id());
-            if (tmsa.getScope_id().equals("0")){
-                isCheck = false;
-                break;
+        if(valid) {
+            for (TemplateModelScopeAudit tmsa : templateModelScopeAudit) {
+                Log.i("SCOPE-COUNT", "" + tmsa.getScope_id());
+                if (tmsa.getScope_id().equals("0")) {
+                    isCheck = false;
+                    break;
+                }
             }
+            valid = true;
+        }else {
+            valid = true;
+            return false;
         }
-
         return isCheck;
     }
 

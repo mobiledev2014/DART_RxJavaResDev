@@ -37,6 +37,8 @@ public class AdapterScopeAuditInterest extends BaseAdapter {
     List<String> idList;
     String position = "";
 
+    private static final String TAG = "AdapterScopeAuditIntere";
+    
     public AdapterScopeAuditInterest(List<TemplateModelScopeAuditInterest> templateModelScopeAuditInterests, Context context, String company_id) {
         this.templateModelScopeAuditInterests = templateModelScopeAuditInterests;
         this.context = context;
@@ -96,6 +98,7 @@ public class AdapterScopeAuditInterest extends BaseAdapter {
 //        if (rowView == null) {
 
         rowView = inflater.inflate(R.layout.custom_listview_template_scope_audit_interest, null);
+
         widgets = new Widgets(rowView);
         widgets.spnDisposition.setAdapter(adapterDispo);
         widgets.spnDisposition.setEnabled(Variable.isAuthorized);
