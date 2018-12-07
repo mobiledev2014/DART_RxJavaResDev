@@ -1652,7 +1652,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         counter = 0;
         String inspection = "";
         List<TemplateModelCompanyBackgroundMajorChanges> tmc = TemplateModelCompanyBackgroundMajorChanges.find(
-                TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", report.getReport_id());
+                TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id());
 
         for (TemplateModelCompanyBackgroundMajorChanges t : tmc) {
          //   inspection += "{\"changes\":\"" + t.getMajorchanges().replaceAll("[\r\n]+", "&lt;br&gt;").replace("▪","s&#0149;").replace("\"","&#34;") + "\"}";
