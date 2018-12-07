@@ -217,7 +217,7 @@ public class SelectedAuditReportFragment extends Fragment {
         if (!checkIfAuthorizedUser()) {
             disableWidgets();
             Variable.status = "3";
-        } else if (statusCheck().equals("3") || statusCheck().equals("4") || statusCheck().equals("6") || statusCheck().equals("7")) {
+        } else if (statusCheck().equals("3") || statusCheck().equals("4")) {
             Variable.status = "3";
             disableWidgets();
         } else {
