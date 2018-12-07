@@ -1562,22 +1562,21 @@ public class NextSelectedTemplateFragment extends Fragment {
     public boolean postData() {
 
         String co_auditor_id = "";
-        List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class,
-                "reportid = ?", report.getReport_id());
+        List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class, "reportid = ?", report.getReport_id());
         int counter = 0;
         for (TemplateModelAuditors tma : ltma) {
-            Log.i("ltma_size", ":" + ltma.size() + "");
+            Log.i("ltma_size", ":" + ltma.size() + " Auditor id: "+ tma.getAuditor_id() + " Template Id: "+tma.getTemplate_id());
             if (++counter != ltma.size()) {
-                if (tma.getTemplate_id() != null) {
-                    Log.i("ltma_size", "if co_auditor :" + tma.getAuditor_id() + "" + " report_id : "
-                            + report.getReport_id() + " template_id : " + tma.getTemplate_id());
-                    co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "},";
+                if (tma.getAuditor_id() != null) {
+//                    co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "},";
+                    co_auditor_id = new StringBuilder().append(co_auditor_id).append("{\"auditor_id\": " + tma.getAuditor_id() + "},").toString();
+                 //   Log.i("ltma_size", "if co_auditor :" + tma.getAuditor_id() + "" + " report_id : " + report.getReport_id() + " template_id : " + tma.getTemplate_id());
                 }
             } else {
-                if (tma.getTemplate_id() != null) {
-                    Log.i("ltma_size", "else co_auditor :" + tma.getAuditor_id() + "" + " report_id : "
-                            + report.getReport_id() + " template_id : " + tma.getTemplate_id());
-                    co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
+                if (tma.getAuditor_id() != null) {
+                    co_auditor_id = new StringBuilder().append(co_auditor_id).append("{\"auditor_id\": " + tma.getAuditor_id() + "}").toString();
+                   // co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
+              //      Log.i("ltma_size", "else co_auditor :" + tma.getAuditor_id() + "" + " report_id : " + report.getReport_id() + " template_id : " + tma.getTemplate_id());
                 }
             }
         }
