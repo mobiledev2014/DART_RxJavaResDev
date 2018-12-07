@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.unilab.gmp.R;
@@ -161,22 +162,22 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
             widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    if(i == 0){
-                        valid = false;
-                    }
-
                     if (i > 0) {
                         int index = i - 1;
                         templateModelScopeAudit.get(z).setScope_name(widgets.spnTypeAudit.getSelectedItem().toString());
                         templateModelScopeAudit.get(z).setSelected(i);
                         templateModelScopeAudit.get(z).setScope_id(scopeAudits.get(index).getScope_id());
+                        valid = true;
                     }
+
+                    if (i==0){
+                        valid = false;
+                    }
+
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-
                 }
             });
 
@@ -404,7 +405,9 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
     public boolean check4() {
         isCheck = true;
 
-        if(valid) {
+        if(!valid){
+            return false;
+        }
             for (TemplateModelScopeAudit tmsa : templateModelScopeAudit) {
                 Log.i("SCOPE-COUNT", "" + tmsa.getScope_id());
                 if (tmsa.getScope_id().equals("0")) {
@@ -412,11 +415,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
                     break;
                 }
             }
-            valid = true;
-        }else {
-            valid = true;
-            return false;
-        }
+
         return isCheck;
     }
 
