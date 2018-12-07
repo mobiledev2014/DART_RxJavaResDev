@@ -2053,6 +2053,12 @@ public class NextSelectedTemplateFragment extends Fragment {
             t.save();
         }
 
+        List<TemplateModelAuditors> templateModelAuditors = TemplateModelAuditors.find(TemplateModelAuditors.class, "reportid = ?", report.getReport_id());
+        for (TemplateModelAuditors t : templateModelAuditors) {
+            t.setReport_id(report_id);
+            t.save();
+        }
+
         List<TemplateModelReference> tmr = TemplateModelReference.find(TemplateModelReference.class, "reportid = ?", report.getReport_id());
         for (TemplateModelReference t : tmr) {
             t.setReport_id(report_id);
