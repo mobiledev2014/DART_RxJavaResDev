@@ -658,7 +658,7 @@ public class SelectedAuditReportFragment extends Fragment {
                 mar.setCompany_id(modelTemplates.getCompany_id());
                 mar.setAudit_date_1(modelTemplates.getAudit_date_1());
                 mar.setAudit_date_2(modelTemplates.getAudit_date_2());
-                templateElementAdapter.save(mar.getReport_id());
+                templateElementAdapter.save("TEMPData");
                 saveLocalQuestion();
                 //templateElementAdapter.save(mar.getReport_id());
                 mar.setModified_date(getDate());
