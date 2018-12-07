@@ -42,6 +42,18 @@ public class ModelAuditReports extends SugarRecord {
     String create_date;
     String modified_date = "";
 
+    /**
+     * Audit Report statuses
+     *  0 - Draft
+     *  1 - Co-Auditors Review
+     *  2 - Reviewed by Co-Auditor
+     *  3 - Submitted to Department Head (Editing is Disabled)
+     *  4 - Submitted to Division Head (Editing is Disabled)
+     *  5 - Approved by Division Head (Viewing is PDF)
+     *  6 - Returned by Department Head
+     *  7 - Returned by Division Head
+     *  -1 - Archived
+     */
     String status = "0";
     String version = "0";
     String head_lead;
