@@ -363,6 +363,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         fragment = this;
 
+        etTemplateNextDateOfWrapUp.setLongClickable(false);
+
         etTemplateNextCompanyBackgroundHistory = (EditText) rootView.findViewById(R.id.et_template_next_company_background_history);
         btnTemplateNextScopeAuditAdd = (Button) rootView.findViewById(R.id.btn_template_next_scope_audit_add);
         lvTemplateNextScopeAudit = (RecyclerView) rootView.findViewById(R.id.lv_template_next_scope_audit);

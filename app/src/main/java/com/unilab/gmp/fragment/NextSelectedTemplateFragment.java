@@ -381,6 +381,8 @@ public class NextSelectedTemplateFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
         context = getActivity();
 
+        etTemplateNextDateOfWrapUp.setLongClickable(false);
+
         lvTemplateNextScopeAudit = (RecyclerView) rootView.findViewById(R.id.lv_template_next_scope_audit);
         btnTemplateNextScopeAuditAdd = (Button) rootView.findViewById(R.id.btn_template_next_scope_audit_add);
         lvTemplateNextCompanyBackgroundName = (RecyclerView) rootView.findViewById(R.id.lv_template_next_company_background_name);

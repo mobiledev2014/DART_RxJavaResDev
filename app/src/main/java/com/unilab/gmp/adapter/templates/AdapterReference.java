@@ -73,6 +73,9 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
     public void onBindViewHolder(final Widgets widgets, int i) {
         final int z = i;
 
+        widgets.issue_date.setLongClickable(false);
+        widgets.validity.setLongClickable(false);
+
         widgets.certification.setText(templateModelReferences.get(i).getCertification());
         widgets.certification.setEnabled(Variable.isAuthorized);
         widgets.certification.addTextChangedListener(new TextWatcher() {
