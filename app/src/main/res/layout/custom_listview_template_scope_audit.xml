@@ -151,7 +151,7 @@
         <!--android:layout_height="wrap_content"-->
         <!--android:padding="3dp">-->
 
-        <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/lv_template_next_scope_audit_interest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

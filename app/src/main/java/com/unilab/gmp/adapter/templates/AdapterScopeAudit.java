@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,6 +32,7 @@ import com.unilab.gmp.model.ModelDisposition;
 import com.unilab.gmp.model.ModelTypeAudit;
 import com.unilab.gmp.model.TemplateModelScopeAudit;
 import com.unilab.gmp.model.TemplateModelScopeAuditInterest;
+import com.unilab.gmp.utility.SimpleDividerItemDecoration;
 import com.unilab.gmp.utility.Variable;
 
 import java.util.ArrayList;
@@ -43,6 +46,9 @@ import java.util.Set;
  */
 
 public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Widgets> {
+
+    private static final String TAG = "AdapterScopeAudit";
+    
     static List<List<TemplateModelScopeAuditInterest>> templateModelScopeAuditInterests;
     List<TemplateModelScopeAudit> templateModelScopeAudit;
     LayoutInflater inflater;
@@ -134,9 +140,14 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
                 templateModelScopeAuditInterests.add(new ArrayList<TemplateModelScopeAuditInterest>());
             }
             templateModelScopeAudit.get(i).setAdapterScope(new AdapterScopeAuditInterest(templateModelScopeAuditInterests.get(i), context, companyId));
+/*            widgets.lvTemplateNextScopeAuditInterest.setAdapter(templateModelScopeAudit.get(i).getAdapterScope());
+            //widgets.lvTemplateNextScopeAuditInterest.setExpanded(true);
+            widgets.lvTemplateNextScopeAuditInterest.setEnabled(Variable.isAuthorized);*/
+
+            widgets.lvTemplateNextScopeAuditInterest.setLayoutManager(new LinearLayoutManager(context));
+            widgets.lvTemplateNextScopeAuditInterest.setItemAnimator(new DefaultItemAnimator());
             widgets.lvTemplateNextScopeAuditInterest.setAdapter(templateModelScopeAudit.get(i).getAdapterScope());
-            widgets.lvTemplateNextScopeAuditInterest.setExpanded(true);
-            widgets.lvTemplateNextScopeAuditInterest.setEnabled(Variable.isAuthorized);
+            widgets.lvTemplateNextScopeAuditInterest.addItemDecoration(new SimpleDividerItemDecoration(context));
 
             if (templateModelScopeAuditInterests.get(i).size() == 0) {
                 addScopeAuditTypeInterest(templateModelScopeAudit.get(i).getAdapterScope(), i);
@@ -459,8 +470,7 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
                     if (j == i) {
                         continue;
                     }
-                    if (Variable.selectedProduct.get(i + "").equals(temporaryProduct) &&
-                            Variable.selectedDisposition.get(i + "").equals(temporaryDisposition)) {
+                    if (Variable.selectedProduct.get(i + "").equals(temporaryProduct) && Variable.selectedDisposition.get(i + "").equals(temporaryDisposition)) {
                         isCheck = false;
                         break;
                     }
@@ -537,13 +547,13 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         }
     }
 
-    public class Widgets extends RecyclerView.ViewHolder {
+    public class Widgets extends RecyclerView.ViewHolder{
         EditText remarks;
         Spinner spnTypeAudit;
         Spinner disposition;
         Button btnTemplateNextScopeAuditInterestAdd;
         Button btnTemplateNextScopeAuditInterestDelete;
-        ExpandableHeightListView lvTemplateNextScopeAuditInterest;
+        RecyclerView lvTemplateNextScopeAuditInterest;
 
         public Widgets(View rowView) {
             super(rowView);
@@ -552,8 +562,10 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
             this.disposition = (Spinner) rowView.findViewById(R.id.s_template_next_summary_recommendation_disposition);
             this.btnTemplateNextScopeAuditInterestAdd = (Button) rowView.findViewById(R.id.btn_template_next_scope_audit_interest_add);
             this.btnTemplateNextScopeAuditInterestDelete = (Button) rowView.findViewById(R.id.btn_template_next_scope_audit_interest_delete);
-            this.lvTemplateNextScopeAuditInterest = (ExpandableHeightListView) rowView.findViewById(R.id.lv_template_next_scope_audit_interest);
+            this.lvTemplateNextScopeAuditInterest = (RecyclerView) rowView.findViewById(R.id.lv_template_next_scope_audit_interest);
         }
+
+
     }
 
 //    public class Test extends AsyncTask<String, String, Boolean> {
