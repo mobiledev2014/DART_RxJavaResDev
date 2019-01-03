@@ -60,7 +60,7 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
     }
 
     @Override
-    public void onBindViewHolder(final Widgets widgets, final int position) {
+    public void onBindViewHolder(final Widgets widgets,int position) {
         if (Variable.status.equals("3")) {
             int disabled_color = context.getResources().getColor(R.color.disabled_color);
             widgets.majorchanges.setKeyListener( null );
@@ -69,13 +69,13 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
             widgets.majorchanges.setTextColor(disabled_color);
         }
 
-        if (templateModelCompanyBackgroundMajorChanges.size() > position) {
+        if (templateModelCompanyBackgroundMajorChanges.size() > widgets.getAdapterPosition()) {
 
-            if(templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges() != null) {
+            if(templateModelCompanyBackgroundMajorChanges.get(widgets.getAdapterPosition()).getMajorchanges() != null) {
             //    widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges().replace("&lt;br&gt;", "\n").replace("s&#0149;","▪").replace("&#34;","\""));
-                widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges().replace("&lt;br&gt;", "\n").replace("&#34;","\""));
+                widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(widgets.getAdapterPosition()).getMajorchanges().replace("&lt;br&gt;", "\n").replace("&#34;","\""));
             }else{
-                widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges());
+                widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(widgets.getAdapterPosition()).getMajorchanges());
             }
 
             widgets.majorchanges.addTextChangedListener(new TextWatcher() {
@@ -85,9 +85,10 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
                 }
 
                 @Override
+
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (position < templateModelCompanyBackgroundMajorChanges.size())
-                        templateModelCompanyBackgroundMajorChanges.get(position).setMajorchanges(charSequence.toString());
+                    if (widgets.getAdapterPosition() < templateModelCompanyBackgroundMajorChanges.size())
+                        templateModelCompanyBackgroundMajorChanges.get(widgets.getAdapterPosition()).setMajorchanges(charSequence.toString());
                 }
                 @Override
                 public void afterTextChanged(Editable editable) {
@@ -96,7 +97,8 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
             });
         }
         if (!isCheck) {
-            if (templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges().isEmpty()) {
+            if (templateModelCompanyBackgroundMajorChanges.get(widgets.getAdapterPosition()).getMajorchanges().isEmpty()) {
+                isCheck = true;
                 widgets.majorchanges.setError("This field is required");
             }
         }

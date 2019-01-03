@@ -55,13 +55,11 @@ public class AdapterOthersIssueExecutive extends RecyclerView.Adapter<AdapterOth
     }
 
     @Override
-    public void onBindViewHolder(final Widgets widgets, int i) {
-        if (templateModelOtherIssuesExecutives.size() > i) {
-            final int z = i;
-
+    public void onBindViewHolder(final Widgets widgets, int position) {
+        if (templateModelOtherIssuesExecutives.size() > widgets.getAdapterPosition()) {
 //            List<ModelDistribution> distributionList = ModelDistribution.listAll(ModelDistribution.class);
 
-            widgets.otherIssueExecutive.setText(templateModelOtherIssuesExecutives.get(i).getOther_issues_executive());
+            widgets.otherIssueExecutive.setText(templateModelOtherIssuesExecutives.get(widgets.getAdapterPosition()).getOther_issues_executive());
             widgets.otherIssueExecutive.setEnabled(Variable.isAuthorized);
             widgets.otherIssueExecutive.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -72,7 +70,7 @@ public class AdapterOthersIssueExecutive extends RecyclerView.Adapter<AdapterOth
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
-                        templateModelOtherIssuesExecutives.get(z).setOther_issues_executive(widgets.otherIssueExecutive.getText().toString());
+                        templateModelOtherIssuesExecutives.get(widgets.getAdapterPosition()).setOther_issues_executive(widgets.otherIssueExecutive.getText().toString());
                     } catch (Exception e){
 
                     }
@@ -88,7 +86,8 @@ public class AdapterOthersIssueExecutive extends RecyclerView.Adapter<AdapterOth
 //            widgets = (Widgets) rowView.getTag();
 //        }
             if (!isCheck) {
-                if (templateModelOtherIssuesExecutives.get(i).getOther_issues_executive().isEmpty()) {
+                if (templateModelOtherIssuesExecutives.get(widgets.getAdapterPosition()).getOther_issues_executive().isEmpty()) {
+                    isCheck = true;
                     widgets.otherIssueExecutive.setError("This field is required");
                 }
             }

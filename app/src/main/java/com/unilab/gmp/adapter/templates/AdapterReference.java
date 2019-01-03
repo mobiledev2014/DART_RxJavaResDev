@@ -70,13 +70,11 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
     }
 
     @Override
-    public void onBindViewHolder(final Widgets widgets, int i) {
-        final int z = i;
-
+    public void onBindViewHolder(final Widgets widgets, int position) {
         widgets.issue_date.setLongClickable(false);
         widgets.validity.setLongClickable(false);
 
-        widgets.certification.setText(templateModelReferences.get(i).getCertification());
+        widgets.certification.setText(templateModelReferences.get(widgets.getAdapterPosition()).getCertification());
         widgets.certification.setEnabled(Variable.isAuthorized);
         widgets.certification.addTextChangedListener(new TextWatcher() {
             @Override
@@ -86,8 +84,8 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (z < templateModelReferences.size())
-                    templateModelReferences.get(z).setCertification(widgets.certification.getText().toString());
+                if (widgets.getAdapterPosition() < templateModelReferences.size())
+                    templateModelReferences.get(widgets.getAdapterPosition()).setCertification(widgets.certification.getText().toString());
             }
 
             @Override
@@ -96,7 +94,7 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
             }
         });
 
-        widgets.body.setText(templateModelReferences.get(i).getBody());
+        widgets.body.setText(templateModelReferences.get(widgets.getAdapterPosition()).getBody());
         widgets.body.setEnabled(Variable.isAuthorized);
         widgets.body.addTextChangedListener(new TextWatcher() {
             @Override
@@ -106,8 +104,8 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (z < templateModelReferences.size())
-                    templateModelReferences.get(z).setBody(widgets.body.getText().toString());
+                if (widgets.getAdapterPosition() < templateModelReferences.size())
+                    templateModelReferences.get(widgets.getAdapterPosition()).setBody(widgets.body.getText().toString());
             }
 
             @Override
@@ -116,7 +114,7 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
             }
         });
 
-        widgets.number.setText(templateModelReferences.get(i).getNumber());
+        widgets.number.setText(templateModelReferences.get(widgets.getAdapterPosition()).getNumber());
         widgets.number.setEnabled(Variable.isAuthorized);
         widgets.number.addTextChangedListener(new TextWatcher() {
             @Override
@@ -126,8 +124,8 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (z < templateModelReferences.size())
-                    templateModelReferences.get(z).setNumber(widgets.number.getText().toString());
+                if (widgets.getAdapterPosition() < templateModelReferences.size())
+                    templateModelReferences.get(widgets.getAdapterPosition()).setNumber(widgets.number.getText().toString());
             }
 
             @Override
@@ -136,23 +134,23 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
             }
         });
 
-        if (!templateModelReferences.get(i).getValidity().equals("")) {
-            if (!templateModelReferences.get(i).getValidity().equals("0000-00-00")) {
-                widgets.validity.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(i).getValidity()));
+        if (!templateModelReferences.get(widgets.getAdapterPosition()).getValidity().equals("")) {
+            if (!templateModelReferences.get(widgets.getAdapterPosition()).getValidity().equals("0000-00-00")) {
+                widgets.validity.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(widgets.getAdapterPosition()).getValidity()));
             }
         }
 
         widgets.validity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DDatePicker datePicker = new DDatePicker(widgets.validity, templateModelReferences.get(z), true);
+                DDatePicker datePicker = new DDatePicker(widgets.validity, templateModelReferences.get(widgets.getAdapterPosition()), true);
                 datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "datePicker");
             }
         });
         widgets.validity.setEnabled(Variable.isAuthorized);
-        if (!templateModelReferences.get(i).getIssue_date().equals("")) {
-            if (!templateModelReferences.get(i).getIssue_date().equals("0000-00-00")) {
-                widgets.issue_date.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(i).getIssue_date()));
+        if (!templateModelReferences.get(widgets.getAdapterPosition()).getIssue_date().equals("")) {
+            if (!templateModelReferences.get(widgets.getAdapterPosition()).getIssue_date().equals("0000-00-00")) {
+                widgets.issue_date.setText(DateTimeUtils.parseDateMonthToWord(templateModelReferences.get(widgets.getAdapterPosition()).getIssue_date()));
             }
         }
 
@@ -160,14 +158,14 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
             @Override
             public void onClick(View v) {
                 widgets.validity.setText("");
-                templateModelReferences.get(z).setValidity("");
+                templateModelReferences.get(widgets.getAdapterPosition()).setValidity("");
             }
         });
 
         widgets.issue_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DDatePicker datePicker = new DDatePicker(widgets.issue_date, templateModelReferences.get(z), false);
+                DDatePicker datePicker = new DDatePicker(widgets.issue_date, templateModelReferences.get(widgets.getAdapterPosition()), false);
                 datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "datePicker");
             }
         });
@@ -181,12 +179,13 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
             @Override
             public void onClick(View v) {
                 widgets.issue_date.setText("");
-                templateModelReferences.get(z).setIssue_date("");
+                templateModelReferences.get(widgets.getAdapterPosition()).setIssue_date("");
             }
         });
 
         if (!isCheck) {
-            if (templateModelReferences.get(i).getCertification().isEmpty()) {
+            if (templateModelReferences.get(widgets.getAdapterPosition()).getCertification().isEmpty()) {
+                isCheck = true;
                 widgets.certification.setError("This field is required");
             }
         }

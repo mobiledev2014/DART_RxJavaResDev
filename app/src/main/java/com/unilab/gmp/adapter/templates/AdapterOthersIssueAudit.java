@@ -55,10 +55,9 @@ public class AdapterOthersIssueAudit extends RecyclerView.Adapter<AdapterOthersI
     }
 
     @Override
-    public void onBindViewHolder(final Widgets widgets, int i) {
-        final int z = i;
+    public void onBindViewHolder(final Widgets widgets, int position) {
 
-        widgets.otherIssueAudit.setText(templateModelOtherIssuesAudits.get(i).getOther_issues_audit());
+        widgets.otherIssueAudit.setText(templateModelOtherIssuesAudits.get(widgets.getAdapterPosition()).getOther_issues_audit());
         widgets.otherIssueAudit.setEnabled(Variable.isAuthorized);
         widgets.otherIssueAudit.addTextChangedListener(new TextWatcher() {
             @Override
@@ -69,7 +68,7 @@ public class AdapterOthersIssueAudit extends RecyclerView.Adapter<AdapterOthersI
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    templateModelOtherIssuesAudits.get(z).setOther_issues_audit(widgets.otherIssueAudit.getText().toString());
+                    templateModelOtherIssuesAudits.get(widgets.getAdapterPosition()).setOther_issues_audit(widgets.otherIssueAudit.getText().toString());
                 } catch (Exception e){
 
                 }
@@ -85,7 +84,8 @@ public class AdapterOthersIssueAudit extends RecyclerView.Adapter<AdapterOthersI
 //            widgets = (Widgets) rowView.getTag();
 //        }
         if (!isCheck) {
-            if (templateModelOtherIssuesAudits.get(i).getOther_issues_audit().isEmpty()) {
+            if (templateModelOtherIssuesAudits.get(widgets.getAdapterPosition()).getOther_issues_audit().isEmpty()) {
+                isCheck = true;
                 widgets.otherIssueAudit.setError("This field is required");
             }
         }

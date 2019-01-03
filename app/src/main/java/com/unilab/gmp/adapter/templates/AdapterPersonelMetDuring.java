@@ -51,10 +51,8 @@ public class AdapterPersonelMetDuring extends RecyclerView.Adapter<AdapterPerson
     }
 
     @Override
-    public void onBindViewHolder(final Widgets widgets, int i) {
-        final int z = i;
-
-        widgets.name.setText(templateModelPersonelMetDurings.get(i).getName());
+    public void onBindViewHolder(final Widgets widgets, int position) {
+        widgets.name.setText(templateModelPersonelMetDurings.get(widgets.getAdapterPosition()).getName());
         widgets.name.setEnabled(Variable.isAuthorized);
         widgets.name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -64,7 +62,7 @@ public class AdapterPersonelMetDuring extends RecyclerView.Adapter<AdapterPerson
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                templateModelPersonelMetDurings.get(z).setName(widgets.name.getText().toString());
+                templateModelPersonelMetDurings.get(widgets.getAdapterPosition()).setName(widgets.name.getText().toString());
             }
 
             @Override
@@ -73,7 +71,7 @@ public class AdapterPersonelMetDuring extends RecyclerView.Adapter<AdapterPerson
             }
         });
 
-        widgets.position.setText(templateModelPersonelMetDurings.get(i).getPosition());
+        widgets.position.setText(templateModelPersonelMetDurings.get(widgets.getAdapterPosition()).getPosition());
         widgets.position.setEnabled(Variable.isAuthorized);
         widgets.position.addTextChangedListener(new TextWatcher() {
             @Override
@@ -83,7 +81,7 @@ public class AdapterPersonelMetDuring extends RecyclerView.Adapter<AdapterPerson
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                templateModelPersonelMetDurings.get(z).setPosition(widgets.position.getText().toString());
+                templateModelPersonelMetDurings.get(widgets.getAdapterPosition()).setPosition(widgets.position.getText().toString());
             }
 
             @Override
@@ -98,7 +96,8 @@ public class AdapterPersonelMetDuring extends RecyclerView.Adapter<AdapterPerson
 //        }
 
         if (!isCheck) {
-            if (templateModelPersonelMetDurings.get(i).getName().isEmpty()) {
+            if (templateModelPersonelMetDurings.get(widgets.getAdapterPosition()).getName().isEmpty()) {
+                isCheck = true;
                 widgets.name.setError("This field is required");
             }
         }

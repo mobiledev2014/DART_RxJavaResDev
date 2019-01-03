@@ -67,35 +67,33 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
     }
 
     @Override
-    public void onBindViewHolder(final Widgets widgets, int i) {
-        final int z = i;
-
+    public void onBindViewHolder(final Widgets widgets, int position) {
         List<String> list = new ArrayList<>();
 //        list.add("Select element");
         Log.d("SIZE", mte.size() + "");
         int x = mte.size();
         for (int count = 0; count < x; count++) {
-            if (templateModelSummaryRecommendations.get(i).getElement_id().equals(mte.get(count).getElement_id())) {
-                templateModelSummaryRecommendations.get(i).setSelected(count);
+            if (templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getElement_id().equals(mte.get(count).getElement_id())) {
+                templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setSelected(count);
             }
             list.add(mte.get(count).getElement_name());
         }
 
-        if (templateModelSummaryRecommendations.get(i).getElement_id().isEmpty()) {
-            templateModelSummaryRecommendations.get(i).setElement_id(mte.get(0).getElement_id());
+        if (templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getElement_id().isEmpty()) {
+            templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setElement_id(mte.get(0).getElement_id());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
         widgets.element.setAdapter(adapter);
-        widgets.element.setSelection(templateModelSummaryRecommendations.get(i).getSelected());
+        widgets.element.setSelection(templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getSelected());
         widgets.element.setEnabled(Variable.isAuthorized);
 
         widgets.element.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                templateModelSummaryRecommendations.get(z).setElement(widgets.element.getSelectedItem().toString());
-                templateModelSummaryRecommendations.get(z).setSelected(i);
-                templateModelSummaryRecommendations.get(z).setElement_id(mte.get(i).getElement_id());
+                templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setElement(widgets.element.getSelectedItem().toString());
+                templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setSelected(i);
+                templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setElement_id(mte.get(i).getElement_id());
 
                 if (i > 0) {
                     if (Variable.isAuthorized) {
@@ -131,13 +129,13 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
         });
 
 
-        Log.e("GET REMARKS", "onBindViewHolder: "+templateModelSummaryRecommendations.get(i).getRemarks());
+        Log.e("GET REMARKS", "onBindViewHolder: "+templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getRemarks());
 
-        if(templateModelSummaryRecommendations.get(i).getRemarks() != null) {
+        if(templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getRemarks() != null) {
        //     widgets.remarks.setText(templateModelSummaryRecommendations.get(i).getRemarks().replace("&lt;br&gt;", "\n").replace("&#8718;", "▪").replace("&#34;", "\""));
-            widgets.remarks.setText(templateModelSummaryRecommendations.get(i).getRemarks().replace("&lt;br&gt;", "\n").replace("&#34;", "\""));
+            widgets.remarks.setText(templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getRemarks().replace("&lt;br&gt;", "\n").replace("&#34;", "\""));
         }else{
-            widgets.remarks.setText(templateModelSummaryRecommendations.get(i).getRemarks());
+            widgets.remarks.setText(templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getRemarks());
         }
 
         widgets.remarks.setEnabled(Variable.isAuthorized);
@@ -150,7 +148,7 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             //    templateModelSummaryRecommendations.get(z).setRemarks(widgets.remarks.getText().toString().replaceAll("[\r\n]+", "&lt;br&gt;").replace("▪","&#8718;").replace("\"","&#34;"));
-                templateModelSummaryRecommendations.get(z).setRemarks(widgets.remarks.getText().toString().replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"","&#34;"));
+                templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setRemarks(widgets.remarks.getText().toString().replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"","&#34;"));
             }
 
             @Override

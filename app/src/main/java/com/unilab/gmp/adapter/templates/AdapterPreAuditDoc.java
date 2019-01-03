@@ -55,10 +55,8 @@ public class AdapterPreAuditDoc extends RecyclerView.Adapter<AdapterPreAuditDoc.
     }
 
     @Override
-    public void onBindViewHolder(final Widgets widgets, int i) {
-        final int z = i;
-
-        widgets.preaudit.setText(templateModelPreAuditDocs.get(z).getPreaudit());
+    public void onBindViewHolder(final Widgets widgets, int position) {
+        widgets.preaudit.setText(templateModelPreAuditDocs.get(widgets.getAdapterPosition()).getPreaudit());
         widgets.preaudit.setEnabled(Variable.isAuthorized);
         widgets.preaudit.addTextChangedListener(new TextWatcher() {
             @Override
@@ -69,7 +67,7 @@ public class AdapterPreAuditDoc extends RecyclerView.Adapter<AdapterPreAuditDoc.
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
-                    templateModelPreAuditDocs.get(z).setPreaudit(widgets.preaudit.getText().toString());
+                    templateModelPreAuditDocs.get(widgets.getAdapterPosition()).setPreaudit(widgets.preaudit.getText().toString());
                 } catch (Exception e){
 
                 }
@@ -85,7 +83,8 @@ public class AdapterPreAuditDoc extends RecyclerView.Adapter<AdapterPreAuditDoc.
 //            widgets = (Widgets) rowView.getTag();
 //        }
         if (!isCheck) {
-            if (templateModelPreAuditDocs.get(z).getPreaudit().isEmpty()) {
+            if (templateModelPreAuditDocs.get(widgets.getAdapterPosition()).getPreaudit().isEmpty()) {
+                isCheck = true;
                 widgets.preaudit.setError("This field is required");
             }
         }

@@ -65,12 +65,11 @@ public class AdapterPresentDuringMeeting extends RecyclerView.Adapter<AdapterPre
     }
 
     @Override
-    public void onBindViewHolder(final Widgets widgets, int i) {
-        if (templateModelPresentDuringMeetings.size() > i) {
-            final int z = i;
-            widgets.name.setText(templateModelPresentDuringMeetings.get(i).getName());
+    public void onBindViewHolder(final Widgets widgets, int position) {
+        if (templateModelPresentDuringMeetings.size() > widgets.getAdapterPosition()) {
+            widgets.name.setText(templateModelPresentDuringMeetings.get(widgets.getAdapterPosition()).getName());
             widgets.name.setEnabled(Variable.isAuthorized);
-            widgets.position.setText(templateModelPresentDuringMeetings.get(i).getPosition());
+            widgets.position.setText(templateModelPresentDuringMeetings.get(widgets.getAdapterPosition()).getPosition());
             widgets.position.setEnabled(Variable.isAuthorized);
             widgets.name.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -80,8 +79,8 @@ public class AdapterPresentDuringMeeting extends RecyclerView.Adapter<AdapterPre
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (z < templateModelPresentDuringMeetings.size())
-                    templateModelPresentDuringMeetings.get(z).setName(widgets.name.getText().toString());
+                    if (widgets.getAdapterPosition() < templateModelPresentDuringMeetings.size())
+                    templateModelPresentDuringMeetings.get(widgets.getAdapterPosition()).setName(widgets.name.getText().toString());
                 }
 
                 @Override
@@ -98,8 +97,8 @@ public class AdapterPresentDuringMeeting extends RecyclerView.Adapter<AdapterPre
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (z < templateModelPresentDuringMeetings.size())
-                    templateModelPresentDuringMeetings.get(z).setPosition(widgets.position.getText().toString());
+                    if (widgets.getAdapterPosition() < templateModelPresentDuringMeetings.size())
+                    templateModelPresentDuringMeetings.get(widgets.getAdapterPosition()).setPosition(widgets.position.getText().toString());
                 }
 
                 @Override
@@ -108,7 +107,8 @@ public class AdapterPresentDuringMeeting extends RecyclerView.Adapter<AdapterPre
                 }
             });
             if (!isCheck) {
-                if (templateModelPresentDuringMeetings.get(i).getName().isEmpty()) {
+                if (templateModelPresentDuringMeetings.get(widgets.getAdapterPosition()).getName().isEmpty()) {
+                    isCheck = true;
                     widgets.name.setError("This field is required");
                 }
             }

@@ -56,9 +56,9 @@ public class AdapterTranslator extends RecyclerView.Adapter<AdapterTranslator.Wi
     }
 
     @Override
-    public void onBindViewHolder(Widgets widgets, final int position) {
+    public void onBindViewHolder(final Widgets widgets, int position) {
         if (templateModelTranslators.size() > position) {
-            widgets.translator.setText(templateModelTranslators.get(position).getTranslator());
+            widgets.translator.setText(templateModelTranslators.get(widgets.getAdapterPosition()).getTranslator());
             widgets.translator.setEnabled(Variable.isAuthorized);
             widgets.translator.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -68,8 +68,8 @@ public class AdapterTranslator extends RecyclerView.Adapter<AdapterTranslator.Wi
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (position < templateModelTranslators.size())
-                        templateModelTranslators.get(position).setTranslator(charSequence.toString());
+                    if (widgets.getAdapterPosition() < templateModelTranslators.size())
+                        templateModelTranslators.get(widgets.getAdapterPosition()).setTranslator(charSequence.toString());
                 }
 
                 @Override
@@ -78,7 +78,8 @@ public class AdapterTranslator extends RecyclerView.Adapter<AdapterTranslator.Wi
                 }
             });
             if (!isCheck) {
-                if (templateModelTranslators.get(position).getTranslator().isEmpty()) {
+                if (templateModelTranslators.get(widgets.getAdapterPosition()).getTranslator().isEmpty()) {
+                    isCheck = true;
                     widgets.translator.setError("This field is required");
                 }
             }
