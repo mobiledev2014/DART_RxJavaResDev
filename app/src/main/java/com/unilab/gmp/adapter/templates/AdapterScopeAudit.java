@@ -445,29 +445,46 @@ public class AdapterScopeAudit extends RecyclerView.Adapter<AdapterScopeAudit.Wi
         String temporaryProduct = "xxx";
         String temporaryDisposition = "xxx";
 
-        Log.i("TEST-PRODUCT", "" + Variable.selectedProduct.get("0"));
-        Log.i("TEST-DISPOSITION", "" + Variable.selectedDisposition.get("0"));
-        Log.i("TEST-SIZE", "" + Variable.selectedProduct.size());
+
+        Log.e("Selected Product ", "" + Variable.selectedProduct);
+
+
+        Log.e("TEST-PRODUCT", "" + Variable.selectedProduct.get("0"));
+        Log.e("TEST-DISPOSITION", "" + Variable.selectedDisposition.get("0"));
+        Log.e("TEST-SIZE", "" + Variable.selectedProduct.size());
 
         for (int i = 0; i < Variable.selectedProduct.size(); i++) {
-            Log.i("TEST-PRODUCT IF", "" + temporaryProduct);
-            Log.i("TEST-DISPOSITION IF", "" + temporaryDisposition);
+            Log.e("TEST-PRODUCT IF", "" + temporaryProduct);
+            Log.e("TEST-DISPOSITION IF", "" + temporaryDisposition);
 
             if (temporaryProduct.equals("xxx")) {
                 temporaryProduct = Variable.selectedProduct.get(i + "");
                 temporaryDisposition = Variable.selectedDisposition.get(i + "");
 
-                Log.i("TEST-PRODUCT IF IF", "" + Variable.selectedProduct.get(i + ""));
-                Log.i("TEST-DISPOSITION IF IF", "" + Variable.selectedDisposition.get(i + ""));
+                Log.e("TEST-PRODUCT IF IF", "" + Variable.selectedProduct.get(i + ""));
+                Log.e("TEST-DISPOSITION IF IF", "" + Variable.selectedDisposition.get(i + ""));
             } else {
-                Log.i("TEST-PRODUCT ELSE", "" + temporaryProduct);
-                Log.i("TEST-DISPOSITION ELSE", "" + temporaryDisposition);
+                Log.e("TEST-PRODUCT ELSE", "" + temporaryProduct);
+                Log.e("TEST-DISPOSITION ELSE", "" + temporaryDisposition);
 
                 for (int j = 0; j < Variable.selectedProduct.size(); j++) {
-                    Log.i("ERROR-TRAP", "" + Variable.selectedDisposition.get(i + ""));
+
                     if (j == i) {
                         continue;
                     }
+
+                    temporaryProduct = Variable.selectedProduct.get(j + "");
+                    temporaryDisposition = Variable.selectedDisposition.get(j + "");
+
+                    Log.e("ERROR-TRAP", "" + Variable.selectedDisposition.get(i + ""));
+
+                    Log.e("Temporary Product", "" + Variable.selectedProduct.get(i + "") + " " + i);
+                    Log.e("Temporary Disposition", "" + Variable.selectedDisposition.get(i + "") + " " + i);
+
+                    Log.e("Selected Product", "" + Variable.selectedProduct.get(i + "") + " " + i);
+                    Log.e("Selected Disposition", "" + Variable.selectedDisposition.get(i + "") + " " + i);
+
+
                     if (Variable.selectedProduct.get(i + "").equals(temporaryProduct) && Variable.selectedDisposition.get(i + "").equals(temporaryDisposition)) {
                         isCheck = false;
                         break;
