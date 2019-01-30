@@ -1962,67 +1962,77 @@ public class NextSelectedAuditReportFragment extends Fragment {
             Log.e("validate", "3");
         }
 
-        if (templateModelDistributionLists.get(0).getDistribution() == "Select") {
-            passed = false;
-            message = "Please fill up all the required fields.";
+        for (TemplateModelAuditors tma : templateModelAuditorses) {
+            if (tma.getAuditor_id() == "0") {
+                templateModelAuditorses.remove(tma.getPosition());
+            }
         }
 
-
         if (!adapterScopeAudit.check2()) {
-
-
             message = "You have entered duplicate scope.";
             passed = false;
             Log.e("validate", "3.5");
         }
+
         if (!adapterScopeAudit.check4()) {
             message = "Scope of audit is required.";
             passed = false;
             Log.e("validate", "3.5.10");
         }
+
         if (!adapterScopeAudit.check3()) {
             message = "You have entered duplicate product and disposition.";
             passed = false;
             Log.e("validate", "3.5.5");
         }
+
         if (Variable.selectedProduct.size() != Variable.selectedDisposition.size()) {
             message = "Product of interest and disposition are required.";
             passed = false;
             Log.e("validate", "3.5.10");
         }
+
         if (Variable.selectedProduct.size() == 0 && Variable.selectedDisposition.size() == 0 && !Variable.selectedProduct.isEmpty() && !Variable.selectedDisposition.isEmpty()) {
             message = "Product of interest and disposition are required.";
             passed = false;
             Log.e("validate", "3.5.10");
         }
+
         if (!adapterReference.check()) {
             passed = false;
             Log.e("validate", "4");
         }
+
         if (!adapterPreAuditDoc.check()) {
             passed = false;
             Log.e("validate", "5");
         }
+
         if (!adapterPresentDuringMeeting.check()) {
             passed = false;
             Log.e("validate", "6");
         }
+
         if (!adapterPersonelMetDuring.check()) {
             passed = false;
             Log.e("validate", "7");
         }
+
         if (!adapterCompanyBackgroundMajorChanges.check()) {
             passed = false;
             Log.e("validate", "8");
         }
+
         if (!adapterTranslator.check()) {
             passed = false;
             Log.e("validate", "9");
         }
+
         if (!adapterOthersIssueAudit.check()) {
             passed = false;
             Log.e("validate", "10");
         }
+
         if (!adapterOthersIssueExecutive.check()) {
             passed = false;
             Log.e("validate", "11");
@@ -2210,11 +2220,15 @@ public class NextSelectedAuditReportFragment extends Fragment {
             if (++counter != ltma.size()) {
                 Log.i("ltma_size", "if co_auditor :" + tma.getAuditor_id() + "" + " report_id : "
                         + report.getReport_id() + " template_id : " + tma.getTemplate_id());
-                co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "},";
+                if(!tma.getAuditor_id().equals("0")) {
+                    co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "},";
+                }
             } else {
                 Log.i("ltma_size", "else co_auditor :" + tma.getAuditor_id() + "" + " report_id : "
                         + report.getReport_id() + " template_id : " + tma.getTemplate_id());
-                co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
+                if(!tma.getAuditor_id().equals("0")) {
+                    co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
+                }
             }
         }
 

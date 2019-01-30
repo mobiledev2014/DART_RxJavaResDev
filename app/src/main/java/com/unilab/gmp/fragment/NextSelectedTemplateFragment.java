@@ -1427,12 +1427,12 @@ public class NextSelectedTemplateFragment extends Fragment {
             message = "Please fill up all the required fields.";
         }
 
-        if (templateModelDistributionLists.get(0).getDistribution() == "Select") {
-            passed = false;
-            message = "Please fill up all the required fields.";
+        for (TemplateModelDistributionList tmsa : templateModelDistributionLists) {
+            if (tmsa.getDistribution() == "Select") {
+                passed = false;
+                message = "Please fill up all the required fields.";
+            }
         }
-
-
 
 //        if (etTemplateNextSummaryRecommendationOtherIssuesAudit.getText().toString().equals("")) {
 //            passed = false;
@@ -1570,15 +1570,19 @@ public class NextSelectedTemplateFragment extends Fragment {
             Log.i("ltma_size", ":" + ltma.size() + " Auditor id: "+ tma.getAuditor_id() + " Template Id: "+tma.getTemplate_id());
             if (++counter != ltma.size()) {
                 if (tma.getAuditor_id() != null) {
+                    if(!tma.getAuditor_id().equals("0")) {
 //                    co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "},";
-                    co_auditor_id = new StringBuilder().append(co_auditor_id).append("{\"auditor_id\": " + tma.getAuditor_id() + "},").toString();
-                 //   Log.i("ltma_size", "if co_auditor :" + tma.getAuditor_id() + "" + " report_id : " + report.getReport_id() + " template_id : " + tma.getTemplate_id());
+                        co_auditor_id = new StringBuilder().append(co_auditor_id).append("{\"auditor_id\": " + tma.getAuditor_id() + "},").toString();
+                        //   Log.i("ltma_size", "if co_auditor :" + tma.getAuditor_id() + "" + " report_id : " + report.getReport_id() + " template_id : " + tma.getTemplate_id());
+                    }
                 }
             } else {
                 if (tma.getAuditor_id() != null) {
-                    co_auditor_id = new StringBuilder().append(co_auditor_id).append("{\"auditor_id\": " + tma.getAuditor_id() + "}").toString();
-                   // co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
-              //      Log.i("ltma_size", "else co_auditor :" + tma.getAuditor_id() + "" + " report_id : " + report.getReport_id() + " template_id : " + tma.getTemplate_id());
+                    if(!tma.getAuditor_id().equals("0")) {
+                        co_auditor_id = new StringBuilder().append(co_auditor_id).append("{\"auditor_id\": " + tma.getAuditor_id() + "}").toString();
+                        // co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
+                        //      Log.i("ltma_size", "else co_auditor :" + tma.getAuditor_id() + "" + " report_id : " + report.getReport_id() + " template_id : " + tma.getTemplate_id());
+                    }
                 }
             }
         }
