@@ -1962,9 +1962,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
             Log.e("validate", "3");
         }
 
-        for (TemplateModelAuditors tma : templateModelAuditorses) {
-            if (tma.getAuditor_id() == "0") {
-                templateModelAuditorses.remove(tma.getPosition());
+        for (TemplateModelDistributionList tmsa : templateModelDistributionLists) {
+            if (tmsa.getDistribution() == "Select") {
+                passed = false;
+                message = "Please fill up all the required fields.";
             }
         }
 
@@ -2047,7 +2048,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         if (!adapterDistributionList.check()) {
             passed = false;
             Log.e("validate", "12");
-            message = "\nYou have a duplicate Distribution List.";
+            message = "You have a duplicate Distribution List.";
         }
 
         return passed;
@@ -2230,6 +2231,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
                     co_auditor_id += "{\"auditor_id\": " + tma.getAuditor_id() + "}";
                 }
             }
+        }
+
+        Log.e("Hello ", "postData: "+co_auditor_id + " Last character: "+co_auditor_id.substring(co_auditor_id.length() - 1).equals(","));
+
+        if(co_auditor_id.substring(co_auditor_id.length() - 1).equals(",")){
+            co_auditor_id = co_auditor_id.substring(0, co_auditor_id.length() - 1);
         }
 
         // need to discuss this shit

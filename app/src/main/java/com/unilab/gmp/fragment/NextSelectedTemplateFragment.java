@@ -1447,6 +1447,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         if (!adapterScopeAudit.check()) {
             passed = false;
             if (!adapterScopeAudit.check2())
+                passed = false;
                 message = "You have entered duplicate scope.";
         }
         if (!adapterScopeAudit.check4()) {
@@ -1492,13 +1493,13 @@ public class NextSelectedTemplateFragment extends Fragment {
         if (!adapterAuditors.check()) {
             passed = false;
             Log.e("validate", "12");
-            message = "\nYou have entered duplicate co-auditor.";
+            message = "You have entered duplicate co-auditor.";
         }
 
         if (!adapterDistributionList.check()) {
             passed = false;
             Log.e("validate", "12");
-            message = "\nYou have a duplicate Distribution List.";
+            message = "You have a duplicate Distribution List.";
         }
 
 
@@ -1585,6 +1586,12 @@ public class NextSelectedTemplateFragment extends Fragment {
                     }
                 }
             }
+        }
+
+        Log.e("Hello ", "postData: "+co_auditor_id + " Last character: "+co_auditor_id.substring(co_auditor_id.length() - 1).equals(","));
+
+        if(co_auditor_id.substring(co_auditor_id.length() - 1).equals(",")){
+            co_auditor_id = co_auditor_id.substring(0, co_auditor_id.length() - 1);
         }
 
         // need to discuss this shit
@@ -1929,7 +1936,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                     public void onResponse(Call<ModelAuditReportReply> call, Response<ModelAuditReportReply> response) {
 
                         if(response.isSuccessful()){
-                            Log.e(TAG, "onResponse: Success!!" );
+                            Log.e(TAG, "onResponse: Success!!");
                         }else{
                             response.code();
                         }
@@ -2059,7 +2066,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             t.save();
         }
 
-        List<TemplateModelAuditors> templateModelAuditors = TemplateModelAuditors.find(TemplateModelAuditors.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelAuditors> templateModelAuditors = TemplateModelAuditors.find(TemplateModelAuditors.class, "reportid = ? AND auditorid != 0", report.getReport_id());
         for (TemplateModelAuditors t : templateModelAuditors) {
             t.setReport_id(report_id);
             t.save();
