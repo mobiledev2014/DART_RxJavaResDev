@@ -1450,6 +1450,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 passed = false;
                 message = "You have entered duplicate scope.";
         }
+
         if (!adapterScopeAudit.check4()) {
             message = "Scope of audit is required.";
             passed = false;
@@ -1586,6 +1587,10 @@ public class NextSelectedTemplateFragment extends Fragment {
                     }
                 }
             }
+        }
+
+        if(co_auditor_id.equals("")){
+           co_auditor_id = "{}";
         }
 
         Log.e("Hello ", "postData: "+co_auditor_id + " Last character: "+co_auditor_id.substring(co_auditor_id.length() - 1).equals(","));

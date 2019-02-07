@@ -2233,6 +2233,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
         }
 
+
+        if(co_auditor_id.equals("")){
+            co_auditor_id = "{}";
+        }
+
         Log.e("Hello ", "postData: "+co_auditor_id + " Last character: "+co_auditor_id.substring(co_auditor_id.length() - 1).equals(","));
 
         if(co_auditor_id.substring(co_auditor_id.length() - 1).equals(",")){
