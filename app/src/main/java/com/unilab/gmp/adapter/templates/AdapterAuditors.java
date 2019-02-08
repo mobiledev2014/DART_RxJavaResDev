@@ -88,14 +88,14 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int index = 0;
-                if (i > 0){
+                if (i > 0) {
                     index = i - 1;
                 }
 
                 templateModelAuditors.get(z).setName(widgets.name.getSelectedItem().toString());
                 templateModelAuditors.get(z).setSelected(i);
 
-                if (widgets.name.getSelectedItem().toString().equals("Select")){
+                if (widgets.name.getSelectedItem().toString().equals("Select")) {
                     widgets.department.setText("Select");
                     widgets.position.setText("Select");
                 } else {
@@ -142,12 +142,13 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         boolean isCheck = true;
         Set<String> lump = new HashSet<>();
         for (TemplateModelAuditors tmsa : templateModelAuditors) {
-
-            if (lump.contains(tmsa.getAuditor_id())) {
-                isCheck = false;
-                break;
+            if (!tmsa.getAuditor_id().equals("0")) {
+                if (lump.contains(tmsa.getAuditor_id())) {
+                    isCheck = false;
+                    break;
+                }
+                lump.add(tmsa.getAuditor_id());
             }
-            lump.add(tmsa.getAuditor_id());
         }
 
 
