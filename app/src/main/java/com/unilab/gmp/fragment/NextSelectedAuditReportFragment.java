@@ -278,6 +278,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
     TemplateElementAdapter templateElementAdapter;
 
     List<TemplateModelScopeAudit> templateModelScopeAudits;
+    List<TemplateModelScopeAuditInterest> templateModelScopeAuditsInterest;
     List<TemplateModelReference> templateModelReferences;
     List<TemplateModelPreAuditDoc> templateModelPreAuditDocs;
     List<TemplateModelPresentDuringMeeting> templateModelPresentDuringMeetings;
@@ -537,6 +538,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
         // --- Audit Scope
         templateModelScopeAudits = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
 
+        templateModelScopeAuditsInterest = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ?", report.getReport_id());
+
+
 /*        if (Variable.isChangedSite) {
             Log.e("Scope Audit", "onCreateView: Scope Audit" + templateModelScopeAudits.get(0).getScope_name());
         }*/
@@ -547,6 +551,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextScopeAudit.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextScopeAudit.setAdapter(adapterScopeAudit);
         lvTemplateNextScopeAudit.addItemDecoration(new SimpleDividerItemDecoration(context));
+
+        adapterScopeAuditInterest = new AdapterScopeAuditInterest(templateModelScopeAuditsInterest, context, modelTemplates.getCompany_id());
+
 //        lvTemplateNextScopeAudit.setExpanded(true);
 //        templateModelScopeAudits.addAll(TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id()));
         if (templateModelScopeAudits.size() <= 0) {
@@ -1985,6 +1992,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
             message = "You have entered duplicate product and disposition.";
             passed = false;
             Log.e("validate", "3.5.5");
+        }
+
+        if (!adapterScopeAuditInterest.checkProdofInterestAndDisposition()) {
+            message = "Product of interest and disposition are required.";
+            passed = false;
         }
 
         if (Variable.selectedProduct.size() != Variable.selectedDisposition.size()) {

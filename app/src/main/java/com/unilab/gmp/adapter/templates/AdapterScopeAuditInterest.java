@@ -40,6 +40,7 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
     String position = "";
 
     private static final String TAG = "AdapterScopeAuditIntere";
+    private static boolean isCheck = true;
     
     public AdapterScopeAuditInterest(List<TemplateModelScopeAuditInterest> templateModelScopeAuditInterests, Context context, String company_id) {
         this.templateModelScopeAuditInterests = templateModelScopeAuditInterests;
@@ -316,10 +317,12 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
                    // Toast.makeText(context, "Position : " + position + " Adapter Position: " + widgets.getAdapterPosition()
                    //         , Toast.LENGTH_SHORT).show();
                     if (position <= 0) {
+                        isCheck = false;
                         templateModelScopeAuditInterests.get(adapter_position).setDisposition("");
                         templateModelScopeAuditInterests.get(adapter_position).setSelected2(0);
                         templateModelScopeAuditInterests.get(adapter_position).setDisposition_id("");
                     } else {
+                        isCheck = true;
                         templateModelScopeAuditInterests.get(adapter_position).setDisposition(parent.getSelectedItem().toString());
                         templateModelScopeAuditInterests.get(adapter_position).setSelected2(position);
                         templateModelScopeAuditInterests.get(adapter_position).setDisposition_id(modelDispositions.get(position - 1).getDisposition_id());
@@ -340,8 +343,6 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
         });
     }
 
-
-
     private void selectProductofInterest(final Widgets widgets){
         widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -351,10 +352,12 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
                    // Toast.makeText(context, "Position : " + position + " Adapter Position: " + widgets.getAdapterPosition()
                    //         , Toast.LENGTH_SHORT).show();
                     if (position <= 0) {
+                        isCheck = false;
                         templateModelScopeAuditInterests.get(adapter_position).setProduct_name("");
                         templateModelScopeAuditInterests.get(adapter_position).setSelected(0);
                         templateModelScopeAuditInterests.get(adapter_position).setProduct_id("");
                     } else {
+                        isCheck = true;
                         templateModelScopeAuditInterests.get(adapter_position).setProduct_name(parent.getSelectedItem().toString());
                         templateModelScopeAuditInterests.get(adapter_position).setSelected(position);
                         templateModelScopeAuditInterests.get(adapter_position).setProduct_id(modelProducts.get(position - 1).getProduct_id());
@@ -372,6 +375,10 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
 
             }
         });
+    }
+
+     public static boolean  checkProdofInterestAndDisposition(){
+        return isCheck;
     }
 
     @Override

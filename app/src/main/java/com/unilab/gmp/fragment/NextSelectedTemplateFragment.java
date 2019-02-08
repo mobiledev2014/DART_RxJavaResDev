@@ -276,7 +276,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     TemplateElementAdapter templateElementAdapter;
     List<ModelTemplateActivities> modelTemplateActivities;
     List<TemplateModelScopeAudit> templateModelScopeAudits;
-    //    List<TemplateModelScopeAuditInterest> templateModelScopeAuditInterests;
+    List<TemplateModelScopeAuditInterest> templateModelScopeAuditInterests;
     List<TemplateModelReference> templateModelReferences;
     List<TemplateModelPreAuditDoc> templateModelPreAuditDocs;
     List<TemplateModelPresentDuringMeeting> templateModelPresentDuringMeetings;
@@ -291,7 +291,7 @@ public class NextSelectedTemplateFragment extends Fragment {
     List<TemplateModelOtherIssuesAudit> templateModelOtherIssuesAudits;
     List<TemplateModelOtherIssuesExecutive> templateModelOtherIssuesExecutives;
 
-    //AdapterScopeAuditInterest adapterScope;
+    AdapterScopeAuditInterest adapterScopeAuditInterest;
     AdapterReference adapterReference;
     AdapterPreAuditDoc adapterPreAuditDoc;
     AdapterPresentDuringMeeting adapterPresentDuringMeeting;
@@ -565,6 +565,11 @@ public class NextSelectedTemplateFragment extends Fragment {
         if (templateModelScopeAudits.size() <= 0) {
             addScopeAuditType();
         }
+
+
+        templateModelScopeAuditInterests = new ArrayList<>();
+        adapterScopeAuditInterest = new AdapterScopeAuditInterest(templateModelScopeAuditInterests, context, modelTemplates.getCompany_id());
+
 
         // --- Other issues Audit
         templateModelOtherIssuesAudits = new ArrayList<>();
@@ -1461,6 +1466,12 @@ public class NextSelectedTemplateFragment extends Fragment {
             passed = false;
             Log.e("validate", "3.5.5");
         }
+
+        if (!adapterScopeAuditInterest.checkProdofInterestAndDisposition()) {
+            message = "Product of interest and disposition are required.";
+            passed = false;
+        }
+
         if (Variable.selectedProduct.size() != Variable.selectedDisposition.size()  && !Variable.selectedProduct.isEmpty() && !Variable.selectedDisposition.isEmpty()) {
             message = "Product of interest and disposition are required.";
             passed = false;
