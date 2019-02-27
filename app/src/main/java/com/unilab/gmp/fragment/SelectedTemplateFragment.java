@@ -520,21 +520,25 @@ public class SelectedTemplateFragment extends Fragment {
                 int rep_temp = 0;
                 String report_id = "";
 
-                String crnt = auditReps.get(auditReps.size() - 1).getReport_id();
-                String[] new_id = crnt.split("-");
-
-                if (auditReps.size() != 0) {
-                    rep_temp = Integer.valueOf(new_id[0]);
-
-                    if (auditReps.size() < 10){
-                        report_id = "00" + String.valueOf(rep_temp + 1);
-                    } else if (auditReps.size() > 9 && auditReps.size() < 100){
-                        report_id = "0" + String.valueOf(rep_temp + 1);
-                    } else if (auditReps.size() >= 100){
-                        report_id = String.valueOf(rep_temp + 1);
-                    }
-                } else {
+                if (auditReps.size() == 0 || auditReps == null) {
                     report_id = "001";
+                } else {
+                    String crnt = auditReps.get(auditReps.size() - 1).getReport_id();
+                    String[] new_id = crnt.split("-");
+
+                    if (auditReps.size() != 0) {
+                        rep_temp = Integer.valueOf(new_id[0]);
+
+                        if (auditReps.size() < 10) {
+                            report_id = "00" + String.valueOf(rep_temp + 1);
+                        } else if (auditReps.size() > 9 && auditReps.size() < 100) {
+                            report_id = "0" + String.valueOf(rep_temp + 1);
+                        } else if (auditReps.size() >= 100) {
+                            report_id = String.valueOf(rep_temp + 1);
+                        }
+                    } else {
+                        report_id = "001";
+                    }
                 }
 
                 //report_id = String.valueOf(rep_temp + 1);
