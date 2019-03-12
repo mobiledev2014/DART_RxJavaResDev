@@ -329,10 +329,12 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (status.equals("CLOSE")) {
                     finish();
+                    dialogCloseConfirmation.dismiss();
                 } else {
                     Intent intent = new Intent(context, MainActivity.class);
                     startActivity(intent);
                     finish();
+                    dialogCloseConfirmation.dismiss();
                 }
             }
         });
