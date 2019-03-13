@@ -101,9 +101,9 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
                 .create();
 
         final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(300, TimeUnit.SECONDS)
-                .writeTimeout(300, TimeUnit.SECONDS)
-                .readTimeout(300, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.MINUTES)
+                .writeTimeout(60, TimeUnit.MINUTES)
+                .readTimeout(60, TimeUnit.MINUTES)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
