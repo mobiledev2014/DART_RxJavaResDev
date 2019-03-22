@@ -1228,18 +1228,21 @@ public class NextSelectedTemplateFragment extends Fragment {
 
     private void addScopeAuditType() {
         //if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size()) {
-        if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size() && templateModelScopeAudits.size() < 10) {
-            Log.i("SIZE LOG", adapterScopeAudit.getTypeAuditSize() + " > " + templateModelScopeAudits.size());
-            TemplateModelScopeAudit t = new TemplateModelScopeAudit();
-            t.setScope_detail("");
-            t.setTemplate_id(modelTemplates.getTemplateID());
-            templateModelScopeAudits.add(t);
-            adapterScopeAudit.notifyItemInserted(templateModelScopeAudits.size() - 1);
-        } else{
-            if(templateModelScopeAudits.size() == 10){
-                dialogDeleteFromListConfirmation("You've reached the maximum number of " + templateModelScopeAudits.size(), simpleMessageDialog);
-            }else{
-                dialogDeleteFromListConfirmation("You've reached the maximum number of " + adapterScopeAudit.getTypeAuditSize(), simpleMessageDialog);
+
+        if(adapterScopeAudit.getTypeAuditSize() != 0 && templateModelScopeAudits.size() != 10) {
+            if (adapterScopeAudit.getTypeAuditSize() > templateModelScopeAudits.size() && templateModelScopeAudits.size() < 10) {
+                Log.i("SIZE LOG", adapterScopeAudit.getTypeAuditSize() + " > " + templateModelScopeAudits.size());
+                TemplateModelScopeAudit t = new TemplateModelScopeAudit();
+                t.setScope_detail("");
+                t.setTemplate_id(modelTemplates.getTemplateID());
+                templateModelScopeAudits.add(t);
+                adapterScopeAudit.notifyItemInserted(templateModelScopeAudits.size() - 1);
+            } else {
+                if (templateModelScopeAudits.size() == 10) {
+                    dialogDeleteFromListConfirmation("You've reached the maximum number of " + templateModelScopeAudits.size(), simpleMessageDialog);
+                } else {
+                    dialogDeleteFromListConfirmation("You've reached the maximum number of " + adapterScopeAudit.getTypeAuditSize(), simpleMessageDialog);
+                }
             }
         }
     }
@@ -1605,7 +1608,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         }
 
         if(co_auditor_id.equals("")){
-           co_auditor_id = "{}";
+           co_auditor_id = "{\"auditor_id\": \"\"}";
         }
 
         Log.e("Hello ", "postData: "+co_auditor_id + " Last character: "+co_auditor_id.substring(co_auditor_id.length() - 1).equals(","));
@@ -1737,6 +1740,10 @@ public class NextSelectedTemplateFragment extends Fragment {
             }
         }
 
+        if(activities.substring(0 ,1).equals(",")){
+            activities = activities.substring(1);
+        }
+
         counter = 0;
         String question = "";
 
@@ -1845,7 +1852,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             }
         }
 
-        Log.e("Bulk Edit", "token:35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839\n" +
+        Log.e("Bulk Edit", "token:4a49c8ee0612249d64b8f737cf52800c13687016 \n" +
                 "cmdEvent:postInput\n" +
                 "report_id:\n" +
                 "report_no:\n" +
@@ -1914,7 +1921,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             @Override
             protected String doInBackground(Void... params) {
                 Call<ModelAuditReportReply> modelAuditReportReplyCall = apiInterface.sendAuditReports(
-                        "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839",
+                        "4a49c8ee0612249d64b8f737cf52800c13687016",
                         "postInput",
                         "",//report_id
                         "",//report_no
@@ -1955,44 +1962,45 @@ public class NextSelectedTemplateFragment extends Fragment {
                     @Override
                     public void onResponse(Call<ModelAuditReportReply> call, Response<ModelAuditReportReply> response) {
 
-                        if(response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             Log.e(TAG, "onResponse: Success!!");
-                        }else{
-                            response.code();
+                        } else {
+                            Log.e(TAG, "onResponse: Fail ako : "+response.errorBody() + " " + response.raw() );
                         }
 
                         ModelAuditReportReply modelAuditReportReply;
                         modelAuditReportReply = response.body();
 
-                        if (modelAuditReportReply.getMessage().contains("scope")) {
-                            Log.e("ERROR-TRAP", "FAILED SENDING " + modelAuditReportReply.getStatus());
+                        if (modelAuditReportReply != null) {
                             if (modelAuditReportReply.getMessage().contains("scope")) {
-                                progressDialog.dismiss();
-                                dialogSubmitFailed("Please fill up all the required fields. " +
-                                        "\nProduct of interest and disposition are required.");
-                            }
+                                Log.e("ERROR-TRAP", "FAILED SENDING " + modelAuditReportReply.getStatus());
+                                if (modelAuditReportReply.getMessage().contains("scope")) {
+                                    progressDialog.dismiss();
+                                    dialogSubmitFailed("Please fill up all the required fields. " +
+                                            "\nProduct of interest and disposition are required.");
+                                }
 
-                        } else {
+                            } else {
 
-                            if (modelAuditReportReply.getMessage().contains("Successfully")) {
-                                //Log.e("Result post", modelApproverInfo.getMessage());
-                                Log.e("Result post", modelAuditReportReply.toString() + "");
-                                updateDate(modelAuditReportReply.getReport_id());
-                                report.setReport_id(modelAuditReportReply.getReport_id());
-                                report.setReport_no(modelAuditReportReply.getReport_no());
-                                report.setStatus(modelAuditReportReply.getStatus());
-                                report.setModified_date(getDate());
-                                report.save();
+                                if (modelAuditReportReply.getMessage().contains("Successfully")) {
+                                    //Log.e("Result post", modelApproverInfo.getMessage());
+                                    Log.e("Result post", modelAuditReportReply.toString() + "");
+                                    updateDate(modelAuditReportReply.getReport_id());
+                                    report.setReport_id(modelAuditReportReply.getReport_id());
+                                    report.setReport_no(modelAuditReportReply.getReport_no());
+                                    report.setStatus(modelAuditReportReply.getStatus());
+                                    report.setModified_date(getDate());
+                                    report.save();
 
-                                 dialogSuccess("Successfully submitted!");
+                                    dialogSuccess("Successfully submitted!");
 
-                                progressDialog.dismiss();
+                                    progressDialog.dismiss();
 
                    /*     PostAsync postAsync = new PostAsync();
                         postAsync.dialog.dismiss();*/
 
 
-                                // send to co_auditors
+                                    // send to co_auditors
 //                apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
 //                List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class,
 //                        "reportid = ?", report.getReport_id());
@@ -2022,11 +2030,12 @@ public class NextSelectedTemplateFragment extends Fragment {
 //
 //                }
 
-                                //dialogSuccess("Successfully submitted.");
-                            } else {
-                                Log.e("Result post", modelAuditReportReply.toString() + "");
-                                dialogSuccess("Sending failed.");
-                                progressDialog.dismiss();
+                                    //dialogSuccess("Successfully submitted.");
+                                } else {
+                                    Log.e("Result post", modelAuditReportReply.toString() + "");
+                                    dialogSuccess("Sending failed.");
+                                    progressDialog.dismiss();
+                                }
                             }
                         }
                     }

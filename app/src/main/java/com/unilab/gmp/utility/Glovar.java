@@ -30,7 +30,7 @@ public class Glovar {
     // public static String URL = "http://biomedisojl.unilab.com.ph/";
     // public static String URL = "http://ojl.ecomqa.com";
     public static String URL = "http://mrdgnsndp.hol.es/";
-    public static final String token = "49cd537e47f8f6c036818d92c1c79ef08c9f97cd";
+    public static final String token = "4a49c8ee0612249d64b8f737cf52800c13687016";
 
     public static FragmentManager fManager;
 

@@ -467,13 +467,13 @@ public class Utils {
                 String executive_report = "Executive_Report";
 
                 DownloadFile downloadFileAnnexure = new DownloadFile(context, id, annexure);
-                downloadFileAnnexure.execute("http://sams.webqa.unilab.com.ph/json/export/approved/" + id + "/Annexure.pdf");
+                downloadFileAnnexure.execute("http://sams.unilab.com.ph/json/export/approved/" + id + "/Annexure.pdf");
 
                 DownloadFile downloadFileAudit_Report = new DownloadFile(context, id, audit_report);
-                downloadFileAudit_Report.execute("http://sams.webqa.unilab.com.ph/json/export/approved/" + id + "/Audit_Report.pdf");
+                downloadFileAudit_Report.execute("http://sams.unilab.com.ph/json/export/approved/" + id + "/Audit_Report.pdf");
 
                 DownloadFile downloadFileExecutive_Report = new DownloadFile(context, id, executive_report);
-                downloadFileExecutive_Report.execute("http://sams.webqa.unilab.com.ph/json/export/approved/" + id + "/Executive_Report.pdf");
+                downloadFileExecutive_Report.execute("http://sams.unilab.com.ph/json/export/approved/" + id + "/Executive_Report.pdf");
 
                 //after download openPdf
             } else {

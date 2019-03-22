@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -106,13 +108,13 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
                 .readTimeout(300, TimeUnit.SECONDS)
                 .build();
 
-        Retrofit retrofit = new Retrofit.Builder()
+/*        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://mrdgnsndp.hol.es/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
+                .build();*/
 
-        apiInterface = retrofit.create(ApiInterface.class);
+       // apiInterface = retrofit.create(ApiInterface.class);
         sharedPref = new SharedPreferenceManager(context);
         Log.e("TAG", "CLICK!!! 2 ");
     }
@@ -139,8 +141,8 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
        // dialog.setProgress(1);
         HttpClient httpclient = new DefaultHttpClient();
         InputStream inputStream = null;
-        //HttpPost httppost = new HttpPost("http://sams.webqa.unilab.com.ph/api"); //old api link applied
-        HttpPost httppost = new HttpPost("http://sams.webqa.unilab.com.ph/api"); //new api link applied
+        //HttpPost httppost = new HttpPost("http://sams.unilab.com.ph/api"); //old api link applied
+        HttpPost httppost = new HttpPost("http://sams.unilab.com.ph/api"); //new api link applied
         httppost.setHeader("Content-type", "application/x-www-form-urlencoded");
         String s = "";
         try {
@@ -148,7 +150,7 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
                     1);
             nameValuePairs.add(new BasicNameValuePair("token",
-                    "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839"));
+                    "4a49c8ee0612249d64b8f737cf52800c13687016"));
             nameValuePairs.add(new BasicNameValuePair("cmdEvent",
                     "authenticate"));
             nameValuePairs.add(new BasicNameValuePair("email",
@@ -195,8 +197,8 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
             Log.e("TAG", "RESULT LOG IN : " + obj.getString("status") + " Result : " + result);
             String message = obj.getString("message");
             if (obj.getString("status").equals("success")) {
-                Call<ResultUser> call = apiInterface.getUser(email);
-                call.enqueue(this);
+/*                Call<ResultUser> call = apiInterface.getUser(email);
+                call.enqueue(this);*/
                 //  dialog.setProgress(2);
                 Log.e("TAG", "CLICK!!! success" + email + " PASSWORD : " + password);
 
@@ -310,6 +312,7 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onFailure(Call<ResultUser> call, Throwable throwable) {
         Log.e("HI", "ERROR : " + throwable.toString());
@@ -322,8 +325,13 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
         Log.i("ERROR", "invalid email 3");
 
         //dialogLoginError("There is no internet connection detected. Please check your connection and try again.");
+        Activity activity = dialog.getOwnerActivity();
+        if(activity != null && !activity.isFinishing() && dialog != null){
+            if(dialog.isShowing()){
+                dialog.dismiss();
+            }
+        }
 
-        dialog.dismiss();
     }
 
     public void dialogLoginError(String mess) {

@@ -2247,7 +2247,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
 
         if(co_auditor_id.equals("")){
-            co_auditor_id = "{}";
+            co_auditor_id = "{\"auditor_id\": \"\"}";
         }
 
         Log.e("Hello ", "postData: "+co_auditor_id + " Last character: "+co_auditor_id.substring(co_auditor_id.length() - 1).equals(","));
@@ -2390,6 +2390,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
         }
 
+        if(activities.substring(0 ,1).equals(",")){
+            activities = activities.substring(1);
+        }
+
         counter = 0;
         String question = "";
         List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class,
@@ -2520,7 +2524,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             Log.i("VERSION CONTROL", "AFTER : " + version);
         }
 
-        Log.e("Bulk Edit", "token:35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839\n" +
+        Log.e("Bulk Edit", "token:4a49c8ee0612249d64b8f737cf52800c13687016\n" +
                 "cmdEvent:postInput\n" +
                 "report_id:" + id + "\n" +
                 "report_no:" + no + "\n" +
@@ -2584,7 +2588,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
                 apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
                 Call<ModelAuditReportReply> modelAuditReportReplyCall = apiInterface.sendAuditReports(
-                        "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839",
+                        "4a49c8ee0612249d64b8f737cf52800c13687016",
                         "postInput",
                         finalId,//report_id
                         finalNo,//report_no
@@ -2689,13 +2693,13 @@ public class NextSelectedAuditReportFragment extends Fragment {
                                 if (coEmail.size() != 0) {
                                     if (coEmail.get(0).getEmail().equals(email)) {
 //                            Log.e("Email", coEmail.get(0).getEmail());
-                                        Log.e("Email Bulk Edit", "token:35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839\n" +
+                                        Log.e("Email Bulk Edit", "token:4a49c8ee0612249d64b8f737cf52800c13687016\n" +
                                                 "cmdEvent:EmailtoLead\n" +
                                                 "report_id:" + report.getReport_id() + "\n" +
                                                 "co_auditor_email:" + coEmail.get(0).getEmail() + "\n" +
                                                 "co_auditor_name:" + tma.getName());
                                         Call<ModelAuditReportReply> emailsending = apiInterface.sendToCoAuditors(
-                                                "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839",
+                                                "4a49c8ee0612249d64b8f737cf52800c13687016",
                                                 "EmailtoLead",
                                                 report.getReport_id(),
                                                 coEmail.get(0).getEmail(),
