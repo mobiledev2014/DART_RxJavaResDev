@@ -141,8 +141,8 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
        // dialog.setProgress(1);
         HttpClient httpclient = new DefaultHttpClient();
         InputStream inputStream = null;
-        //HttpPost httppost = new HttpPost("http://sams.unilab.com.ph/api"); //old api link applied
-        HttpPost httppost = new HttpPost("http://sams.unilab.com.ph/api"); //new api link applied
+        //HttpPost httppost = new HttpPost("https://sams.unilab.com.ph/api"); //old api link applied
+        HttpPost httppost = new HttpPost("https://sams.unilab.com.ph/api"); //new api link applied
         httppost.setHeader("Content-type", "application/x-www-form-urlencoded");
         String s = "";
         try {
@@ -239,6 +239,12 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
         } catch (JSONException e){
 
             dialog.dismiss();
+
+            if(!dialogLoginError.equals(null)){
+                if(dialogLoginError.isShowing()){
+                    dialogLoginError.dismiss();
+                }
+            }
 
             dialogLoginError = new Dialog(context);
             dialogLoginError.getWindow().requestFeature(Window.FEATURE_NO_TITLE);

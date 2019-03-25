@@ -13,11 +13,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by c_jhcanuto on 8/11/2017.
  */
 public class ApiClient {
-    public static final String BASE_URL_AUDIT_REPORT = "http://sams.unilab.com.ph/json/audit_report/";
-    public static final String BASE_URL_TEMPLATE = "http://sams.unilab.com.ph/json/template/";
-    public static final String BASE_URL = "http://sams.unilab.com.ph/json/data_maintenance/"; // new api
-    public static final String BASE_URL_POST = "http://sams.unilab.com.ph/";
-    public static final String CONFIG_URL = "http://sams.unilab.com.ph/json/";
+    public static final String BASE_URL_AUDIT_REPORT = "https://sams.unilab.com.ph/json/audit_report/";
+    public static final String BASE_URL_TEMPLATE = "https://sams.unilab.com.ph/json/template/";
+    public static final String BASE_URL = "https://sams.unilab.com.ph/json/data_maintenance/"; // new api
+    public static final String BASE_URL_POST = "https://sams.unilab.com.ph/";
+    public static final String CONFIG_URL = "https://sams.unilab.com.ph/json/";
 
 //    public static final String BASE_URL_AUDIT_REPORT = "http://13.250.208.116/json/audit_report/";
 //    public static final String BASE_URL_TEMPLATE = "http://13.250.208.116/json/template/";

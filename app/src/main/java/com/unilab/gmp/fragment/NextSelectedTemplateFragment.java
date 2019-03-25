@@ -1740,8 +1740,10 @@ public class NextSelectedTemplateFragment extends Fragment {
             }
         }
 
-        if(activities.substring(0 ,1).equals(",")){
-            activities = activities.substring(1);
+        if (activities.length()>0) {
+            if (activities.substring(0, 1).equals(",")) {
+                activities = activities.substring(1);
+            }
         }
 
         counter = 0;
