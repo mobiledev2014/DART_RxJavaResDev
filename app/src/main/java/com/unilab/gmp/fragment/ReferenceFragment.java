@@ -22,7 +22,6 @@ import butterknife.Unbinder;
  */
 
 public class ReferenceFragment extends Fragment {
-
     Unbinder unbinder;
     Context context;
     @BindView(R.id.tv_sync_date)
@@ -34,8 +33,6 @@ public class ReferenceFragment extends Fragment {
     @BindView(R.id.tv_supplier_count)
     TextView tvAuditReportCount;
 
-    //ReferenceTable referenceTable;
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_reference, container, false);
         ButterKnife.bind(this, rootView);
@@ -44,41 +41,6 @@ public class ReferenceFragment extends Fragment {
         //referenceTable = new ReferenceTable(context);
 
         Variable.menu = true;
-
-//        ArrayList<ReferenceModel> referenceModels = new ArrayList<>();
-//
-//        ReferenceModel ReferenceModel = new ReferenceModel();
-//        ReferenceModel.setName_of_site("Robert Baratheon");
-//        ReferenceModel.setName_of_license("Sample License");
-//        ReferenceModel.setDate_modified("Sample Date");
-//
-//        ReferenceModel ReferenceModel2 = new ReferenceModel();
-//        ReferenceModel2.setName_of_site("Robert Baratheon");
-//        ReferenceModel2.setName_of_license("Sample License");
-//        ReferenceModel2.setDate_modified("Sample Date");
-//
-//        ReferenceModel ReferenceModel3 = new ReferenceModel();
-//        ReferenceModel3.setName_of_site("Robert Baratheon");
-//        ReferenceModel3.setName_of_license("Sample License");
-//        ReferenceModel3.setDate_modified("Sample Date");
-//
-//        ReferenceModel ReferenceModel4 = new ReferenceModel();
-//        ReferenceModel4.setName_of_site("Robert Baratheon");
-//        ReferenceModel4.setName_of_license("Sample License");
-//        ReferenceModel4.setDate_modified("Sample Date");
-//
-//        referenceModels.add(ReferenceModel);
-//        referenceModels.add(ReferenceModel2);
-//        referenceModels.add(ReferenceModel3);
-//        referenceModels.add(ReferenceModel4);
-
-        //ArrayList<ReferenceModel> referenceModels = referenceTable.getReferences();
-
-        //ReferenceAdapter referenceAdapter = new ReferenceAdapter(context, referenceModels);
-        //lvReferenceList.setAdapter(referenceAdapter);
-
-        //tvAuditReportCount.setText(referenceAdapter.getCount()+" Total Record(s)");
-
         return rootView;
     }
 

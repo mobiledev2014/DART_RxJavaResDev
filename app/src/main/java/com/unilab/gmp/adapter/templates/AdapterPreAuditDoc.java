@@ -37,11 +37,6 @@ public class AdapterPreAuditDoc extends RecyclerView.Adapter<AdapterPreAuditDoc.
         return templateModelPreAuditDocs.size();
     }
 
-//    @Override
-//    public Object getItem(int i) {
-//        return templateModelPreAuditDocs.get(i);
-//    }
-
     @Override
     public long getItemId(int i) {
         return i;
@@ -49,9 +44,9 @@ public class AdapterPreAuditDoc extends RecyclerView.Adapter<AdapterPreAuditDoc.
 
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_listview_template_pre_audit_doc, parent, false);
-        return new Widgets(v);
+        return new Widgets(view);
     }
 
     @Override
@@ -68,7 +63,7 @@ public class AdapterPreAuditDoc extends RecyclerView.Adapter<AdapterPreAuditDoc.
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
                     templateModelPreAuditDocs.get(widgets.getAdapterPosition()).setPreaudit(widgets.preaudit.getText().toString());
-                } catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
@@ -78,10 +73,6 @@ public class AdapterPreAuditDoc extends RecyclerView.Adapter<AdapterPreAuditDoc.
 
             }
         });
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
         if (!isCheck) {
             if (templateModelPreAuditDocs.get(widgets.getAdapterPosition()).getPreaudit().isEmpty()) {
                 isCheck = true;
@@ -93,9 +84,9 @@ public class AdapterPreAuditDoc extends RecyclerView.Adapter<AdapterPreAuditDoc.
     public boolean check() {
         isCheck = true;
         Log.e("getWidgets", "getWidgets1 pre audit");
-        for (TemplateModelPreAuditDoc tmsa : templateModelPreAuditDocs) {
+        for (TemplateModelPreAuditDoc templateModelPreAuditDoc : templateModelPreAuditDocs) {
             Log.e("getWidgets", "getWidgets2 pre audit");
-            if (tmsa.getPreaudit().isEmpty()) {
+            if (templateModelPreAuditDoc.getPreaudit().isEmpty()) {
                 isCheck = false;
                 break;
             }
@@ -108,11 +99,11 @@ public class AdapterPreAuditDoc extends RecyclerView.Adapter<AdapterPreAuditDoc.
 
     public void save(String report_id) {
         TemplateModelPreAuditDoc.deleteAll(TemplateModelPreAuditDoc.class, "reportid = ?", report_id);
-        for (TemplateModelPreAuditDoc t : templateModelPreAuditDocs) {
-            if (t.getPreaudit().isEmpty())
+        for (TemplateModelPreAuditDoc templateModelPreAuditDoc : templateModelPreAuditDocs) {
+            if (templateModelPreAuditDoc.getPreaudit().isEmpty())
                 continue;
-            t.setReport_id(report_id);
-            t.save();
+            templateModelPreAuditDoc.setReport_id(report_id);
+            templateModelPreAuditDoc.save();
         }
     }
 

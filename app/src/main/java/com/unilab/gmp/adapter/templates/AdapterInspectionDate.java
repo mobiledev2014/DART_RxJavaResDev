@@ -24,8 +24,6 @@ public class AdapterInspectionDate extends RecyclerView.Adapter<AdapterInspectio
     List<ModelSiteDate> siteDates;
     LayoutInflater inflater;
 
-    Calendar dateSelected = Calendar.getInstance();
-
     public AdapterInspectionDate(Context context, List<ModelSiteDate> siteDates) {
         this.context = context;
         this.siteDates = siteDates;
@@ -37,18 +35,13 @@ public class AdapterInspectionDate extends RecyclerView.Adapter<AdapterInspectio
         return siteDates.size();
     }
 
-//    @Override
-//    public Object getItem(int i) {
-//        return siteDates.get(i).getInspection_date();
-//    }
-
     @Override
     public long getItemId(int i) {
         return i;
     }
 
 
-    public class Widgets extends RecyclerView.ViewHolder{
+    public class Widgets extends RecyclerView.ViewHolder {
         EditText etInspectionDate;
 
         Widgets(View rowView) {
@@ -56,19 +49,18 @@ public class AdapterInspectionDate extends RecyclerView.Adapter<AdapterInspectio
             this.etInspectionDate = (EditText) rowView.findViewById(R.id.et_template_next_company_background_inspection_date);
         }
     }
+
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.custom_listview_template_inspection_date,parent, false);
+                .inflate(R.layout.custom_listview_template_inspection_date, parent, false);
         return new Widgets(v);
     }
+
     @Override
     public void onBindViewHolder(Widgets widgets, int position) {
         if (!siteDates.get(position).getInspection_date().isEmpty()) {
             widgets.etInspectionDate.setText(DateTimeUtils.parseDateMonthToWord(siteDates.get(position).getInspection_date()));
         }
-
     }
-
-
 }

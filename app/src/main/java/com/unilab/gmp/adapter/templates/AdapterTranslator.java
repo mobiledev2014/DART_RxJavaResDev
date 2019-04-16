@@ -38,21 +38,16 @@ public class AdapterTranslator extends RecyclerView.Adapter<AdapterTranslator.Wi
         return templateModelTranslators.size();
     }
 
-//    @Override
-//    public Object getItem(int i) {
-//        return templateModelTranslators.get(i);
-//    }
-
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int id) {
+        return id;
     }
 
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_listview_template_translator, parent, false);
-        return new Widgets(v);
+        return new Widgets(view);
     }
 
     @Override
@@ -106,12 +101,12 @@ public class AdapterTranslator extends RecyclerView.Adapter<AdapterTranslator.Wi
         String translator = "";
         TemplateModelTranslator.deleteAll(TemplateModelTranslator.class, "reportid = ?", report_id);
         int counter = 1;
-        for (TemplateModelTranslator t : templateModelTranslators) {
-            if (t.getTranslator().isEmpty())
+        for (TemplateModelTranslator templateModelTranslator : templateModelTranslators) {
+            if (templateModelTranslator.getTranslator().isEmpty())
                 continue;
-            t.setReport_id(report_id);
-            t.save();
-            translator += t.getTranslator();
+            templateModelTranslator.setReport_id(report_id);
+            templateModelTranslator.save();
+            translator += templateModelTranslator.getTranslator();
             if (counter++ != templateModelTranslators.size()) {
                 translator += "\n";
             }

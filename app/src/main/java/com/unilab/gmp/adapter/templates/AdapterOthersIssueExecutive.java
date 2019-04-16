@@ -37,11 +37,6 @@ public class AdapterOthersIssueExecutive extends RecyclerView.Adapter<AdapterOth
         return templateModelOtherIssuesExecutives.size();
     }
 
-//    @Override
-//    public Object getItem(int i) {
-//        return templateModelOtherIssuesExecutives.get(i);
-//    }
-
     @Override
     public long getItemId(int i) {
         return i;
@@ -49,16 +44,14 @@ public class AdapterOthersIssueExecutive extends RecyclerView.Adapter<AdapterOth
 
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_listview_template_other_issue_executive, parent, false);
-        return new Widgets(v);
+        return new Widgets(view);
     }
 
     @Override
     public void onBindViewHolder(final Widgets widgets, int position) {
         if (templateModelOtherIssuesExecutives.size() > widgets.getAdapterPosition()) {
-//            List<ModelDistribution> distributionList = ModelDistribution.listAll(ModelDistribution.class);
-
             widgets.otherIssueExecutive.setText(templateModelOtherIssuesExecutives.get(widgets.getAdapterPosition()).getOther_issues_executive());
             widgets.otherIssueExecutive.setEnabled(Variable.isAuthorized);
             widgets.otherIssueExecutive.addTextChangedListener(new TextWatcher() {
@@ -81,10 +74,6 @@ public class AdapterOthersIssueExecutive extends RecyclerView.Adapter<AdapterOth
 
                 }
             });
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
             if (!isCheck) {
                 if (templateModelOtherIssuesExecutives.get(widgets.getAdapterPosition()).getOther_issues_executive().isEmpty()) {
                     isCheck = true;

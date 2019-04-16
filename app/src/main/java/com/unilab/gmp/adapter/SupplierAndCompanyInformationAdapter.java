@@ -64,19 +64,18 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
-        return i;
+    public Object getItem(int item) {
+        return item;
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int id) {
+        return id;
     }
 
     @Override
     public View getView(int position, View rowView, ViewGroup viewGroup) {
         Widgets widgets;
-//        if (rowView == null) {
         widgets = new Widgets();
         rowView = inflater.inflate(R.layout.custom_listview_supplier, null);
 
@@ -98,7 +97,6 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
         final String company_id = supplierModel.getCompany_id();
         final String background = supplierModel.getBackground();
 
-        //widgets.address.setText(address1 + ", " + address3 + ", " + address4);
         widgets.date_modified.setText(supplierModel.getUpdate_date());
 
         widgets.name_of_site.setText(company_name);
@@ -106,18 +104,12 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
         widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(context, "View supplier info and products", Toast.LENGTH_SHORT).show();
-
                 dialogViewSupplier(company_id,
                         company_name,
                         address1 + ", " + address3 + ", " + address4,
                         background);
             }
         });
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
         return rowView;
     }
 
@@ -158,7 +150,6 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
             lvPreviousDate.setItemAnimator(new DefaultItemAnimator());
 
             lvPreviousDate.setAdapter(adapterInspectionDate);
-//        lvPreviousDate.setExpanded(true);
 
             adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(inspectorList, context, 100);
 
@@ -166,15 +157,12 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
             lvInspector.setItemAnimator(new DefaultItemAnimator());
 
             lvInspector.setAdapter(adapterCompanyBackgroundName);
-//        lvInspector.setExpanded(true);
-
             adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(majorChangesList, context, 100);
 
             lvMajorChanges.setLayoutManager(new LinearLayoutManager(context));
             lvMajorChanges.setItemAnimator(new DefaultItemAnimator());
 
             lvMajorChanges.setAdapter(adapterCompanyBackgroundMajorChanges);
-//        lvMajorChanges.setExpanded(true);
 
             done.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -190,7 +178,7 @@ public class SupplierAndCompanyInformationAdapter extends BaseAdapter {
     }
 
     public class Widgets {
-        TextView name_of_site, date_modified;// date_modified;
+        TextView name_of_site, date_modified;
         LinearLayout rowBackground;
         Button viewInfo;
     }

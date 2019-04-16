@@ -25,7 +25,6 @@ import butterknife.Unbinder;
 public class HomeFragment extends Fragment {
 
     Unbinder unbinder;
-
     @BindView(R.id.iv_template)
     ImageView ivTemplate;
     @BindView(R.id.iv_report)

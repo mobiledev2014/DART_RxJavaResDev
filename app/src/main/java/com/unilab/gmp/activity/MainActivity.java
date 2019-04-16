@@ -65,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferenceManager sharedPref;
 
-    CountDownTimer countDownTimer;
-
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -79,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = this;
         orientation = getResources().getConfiguration().orientation;
-//        DatabaseHelper.createDatabase(context, new AppDb());
         ButterKnife.bind(this);
 
         SugarContext.init(this);
@@ -105,29 +102,11 @@ public class MainActivity extends AppCompatActivity {
             );
         }
 
-
-
         List<ModelAuditReports> auditReps = ModelAuditReports.findWithQuery(ModelAuditReports.class,
                 "SELECT * FROM MODEL_AUDIT_REPORTS ORDER BY CAST(reportid as INT) ASC", null);
 
         int size = auditReps.size() + 1;
         Log.i("AUDIT-REPORT-SIZE", "VALUE : " + size);
-        //checkConnectionStatus();
-    }
-
-    private void checkConnectionStatus() {
-        countDownTimer = new CountDownTimer(2000, 1000) {
-            @Override
-            public void onTick(long l) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                onlineIndicator(isNetworkConnected());
-                checkConnectionStatus();
-            }
-        }.start();
     }
 
     public void getCredentials() {
@@ -150,26 +129,19 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_login)
     public void onViewClicked() {
-//        Intent intent = new Intent(context, HomeActivity.class);
-//        startActivity(intent);
-//        finish();
-
         String email = etUsername.getText().toString();
         String password = etPassword.getText().toString();
 
         boolean fieldsEmpty = false;
-        if (email.equals(""))
-        {
+        if (email.equals("")) {
             etUsername.setError("This field is required.");
             fieldsEmpty = true;
         }
-        if (password.equals(""))
-        {
+        if (password.equals("")) {
             etPassword.setError("This field is required.");
             fieldsEmpty = true;
         }
-        if(!email.contains("@unilab.com.ph"))
-        {
+        if (!email.contains("@unilab.com.ph")) {
             etUsername.setError("Invalid email address. Please make sure that your email address is correct.");
             fieldsEmpty = true;
         }
@@ -179,8 +151,6 @@ public class MainActivity extends AppCompatActivity {
             if (isNetworkConnected()) {
                 Log.e("TAGTRUE", "CLICK!!!" + isNetworkConnected() + " ");
                 Log.i("ERROR", "POSTASYNC 1");
-                //if (isInternetAvailable())
-
                 if (cbRemember.isChecked()) {
                     sharedPref.saveData("CHECKED", true);
                     sharedPref.saveData("EMAIL", email);
@@ -188,26 +158,13 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     sharedPref.saveData("CHECKED", false);
                 }
-
-                    new PostAsync(context, loginDialog, email, password, Glovar.LOGIN, null, null).execute();
-                //else
-                    //dialogErrorLogin();
+                new PostAsync(context, loginDialog, email, password, Glovar.LOGIN, null, null).execute();
             } else {
                 Log.e("TAGFALSE", "CLICK!!!" + isNetworkConnected() + " " + email);
                 List<ModelUser> users = ModelUser.find(ModelUser.class, "email = ?", email);
-                boolean found = false;
 
                 String emailSp = sharedPref.getStringData("EMAIL");
                 String passwordSp = sharedPref.getStringData("PASSWORD");
-
-//            List<ModelUser> users = ModelUser.listAll(ModelUser.class);
-//            for (int i = 0; i < users.size(); i++) {
-//                Log.e("ModelUser", "email : " + users.get(i).getEmail() + "");
-//                if (users.get(i).getEmail().equals(email))
-//                {
-//                    found = true;
-//                }
-//            }
 
                 if (!emailSp.equals(null) && !passwordSp.equals(null) && emailSp != null && passwordSp != null) {
                     if (emailSp.equals(email) && passwordSp.equals(password)) {
@@ -218,24 +175,18 @@ public class MainActivity extends AppCompatActivity {
                             sharedPref.saveData("CHECKED", false);
                         }
 
-//            if (found) {
-//                        Log.e("Users count", users.size() + " name : " + users.get(0).getEmail());
-//                if (users.get(0).getEmail().equals(email)) {
                         Intent intent = new Intent(context, HomeActivity.class);
                         startActivity(intent);
                         finish();
-//                }
-                    } else
-                    //Toast.makeText(context, "User does not exist.", Toast.LENGTH_SHORT).show();
-                    {
+                    } else {
                         Log.e("TAGFALSEELSE", "CLICK!!!" + users.size());
 
-                        if(!sharedPref.getBooleanData("CHECKED")){
+                        if (!sharedPref.getBooleanData("CHECKED")) {
                             dialogErrorLogin("Please check your internet connection.");
-                        }else {
-                            if(!email.equals(emailSp)){
+                        } else {
+                            if (!email.equals(emailSp)) {
                                 dialogErrorLogin("Please check your internet connection.");
-                            }else {
+                            } else {
                                 dialogErrorLogin("Email and password do not match.");
                             }
                         }
@@ -243,21 +194,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        /*FOR TESTING*/
-        /*Intent intent = new Intent(context, HomeActivity.class);
-        startActivity(intent);
-        finish();*/
-        /*------------------------------------------------------------*/
-
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(btnLogin.getWindowToken(), 0);
     }
 
     //checks if internet connection is available
     private boolean isNetworkConnected() {
-        /*ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null;*/
-
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -269,12 +211,12 @@ public class MainActivity extends AppCompatActivity {
         try {
             InetAddress ipAddr = InetAddress.getByName("www.google.com"); //You can replace it with your name
 
-            Log.e("IP",""+ipAddr.getHostAddress());
+            Log.e("IP", "" + ipAddr.getHostAddress());
             return !ipAddr.equals("");
 
         } catch (Exception e) {
 
-            Log.e("tag","catch "+e.getLocalizedMessage());
+            Log.e("tag", "catch " + e.getLocalizedMessage());
             return false;
         }
 
@@ -288,8 +230,6 @@ public class MainActivity extends AppCompatActivity {
         dialogErrorLogin.setContentView(R.layout.dialog_error_login);
         dialogErrorLogin.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        //String message = "No internet connection. Make sure Wi-Fi or cellular data is turned on, then try again.";
-
         TextView tv_message = (TextView) dialogErrorLogin.findViewById(R.id.tv_message);
         Button ok = (Button) dialogErrorLogin.findViewById(R.id.btn_ok);
 
@@ -300,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
                 dialogErrorLogin.dismiss();
             }
         });
-
 
         dialogErrorLogin.show();
     }
@@ -330,19 +269,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         dialogCloseConfirmation.show();
     }
 
-    public void onlineIndicator(boolean ind) {
-        if (ind) {
-            tvIndicator.setText("ONLINE");
-            tvIndicator.setTextColor(Color.parseColor("#2da82d"));
-            ivIndicator.setBackgroundResource(R.drawable.ic_online);
-        } else {
-            tvIndicator.setText("OFFLINE");
-            tvIndicator.setTextColor(Color.parseColor("#ff0000"));
-            ivIndicator.setBackgroundResource(R.drawable.ic_offline);
-        }
-    }
 }

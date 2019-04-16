@@ -48,9 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class HomeActivity extends AppCompatActivity {
-
     public static ProgressDialog pDialog;
-    //@BindView(R.id.tv_sync_notif_count)
     public static TextView tvSyncNotifCount;
     Context context;
     @BindView(R.id.iv_logout)
@@ -69,7 +67,6 @@ public class HomeActivity extends AppCompatActivity {
     AuditReportFragment auditReportFragment;
     AuditorsFragment auditorsFragment;
     ReferenceDataFragment referenceDataFragment;
-    SelectedTemplateFragment selectedTemplateFragment;
     HomeFragment homeFragment;
     String selected = "";
     Dialog dialogCloseConfirmation;
@@ -93,15 +90,6 @@ public class HomeActivity extends AppCompatActivity {
 
     String newTemplates = "";
 
-    public HomeActivity() {
-
-    }
-
-    public static String getTime(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
-        return sdf.format(date);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +109,6 @@ public class HomeActivity extends AppCompatActivity {
         if (getIntent().getStringExtra("NEWTEMPLATE") != null) {
             newTemplates = getIntent().getStringExtra("NEWTEMPLATE");
         }
-
 
         if (!newTemplates.equals("")) {
             if (Integer.parseInt(newTemplates) > 0) {
@@ -165,28 +152,17 @@ public class HomeActivity extends AppCompatActivity {
         }.start();
     }
 
-    /*@Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-        getSupportFragmentManager().beginTransaction().add(R.id.fl_content, selectedTemplateFragment).addToBackStack(null).commit();
-    }*/
-
     public void initializeHome() {
         auditReportFragment = new AuditReportFragment();
         auditorsFragment = new AuditorsFragment();
         referenceDataFragment = new ReferenceDataFragment();
-        //selectedTemplateFragment = new SelectedTemplateFragment();
-
         sharedPref = new SharedPreferenceManager(context);
-//        int emp_id = sharedPref.getIntData("EMP_ID");
         String email = sharedPref.getStringData("EMAIL");
         String password = sharedPref.getStringData("PASSWORD");
 
-//        List<ModelUser> users = ModelUser.find(ModelUser.class, "empid = ?", emp_id + "");
         List<ModelUser> users = ModelUser.find(ModelUser.class, "email = ?", email + "");
         if (users.size() <= 0) {
             ModelUser modelUser = new ModelUser();
-//            modelUser.setEmp_id(emp_id);
             modelUser.setEmail(email);
             modelUser.setPassword(password);
             modelUser.save();
@@ -200,7 +176,6 @@ public class HomeActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (Variable.onTemplate) {
             if (Variable.onAudit) {
-                //Toast.makeText(context, "On Template", Toast.LENGTH_SHORT).show();
                 dialogCancelTemplate(auditReportFragment, "audit report", "Would you like to cancel answering this template?");
             } else {
                 dialogCancelTemplate(templateFragment, "template", "Would you like to cancel answering this template?");
@@ -277,8 +252,6 @@ public class HomeActivity extends AppCompatActivity {
 
                 break;
             case R.id.iv_audit_report:
-//                NotificationCreator notificationCreator = new NotificationCreator(context);
-//                notificationCreator.createNotification();
                 if (Variable.onTemplate) {
                     dialogCancelTemplate(auditReportFragment, "audit", "Would you like to cancel answering this template?");
                 } else {
@@ -346,7 +319,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
         dialogCloseConfirmation.show();
     }
 
@@ -385,7 +357,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
         dialogCancelTemplate.show();
     }
 
@@ -407,18 +378,11 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialogSyncConfirmation.dismiss();
-
                 //check internet connection
                 if (isNetworkConnected()) {
-                    //if (Variable.session == 0) {
-                        Variable.showDialog = true;
-                        new APICalls(context, "Syncing...", true, HomeActivity.this, "forceSync").execute();
-                        Variable.session++;
-                    /*} else {
-                        Variable.showDialog = true;
-                        new APICallsSession(context, "Syncing...", true, HomeActivity.this).execute();
-                        Variable.session = 0;
-                    }*/
+                    Variable.showDialog = true;
+                    new APICalls(context, "Syncing...", true, HomeActivity.this, "forceSync").execute();
+                    Variable.session++;
                 } else {
                     dialogErrorLogin("No internet connection. Make sure Wi-Fi or cellular data is turned on, then try again.");
                 }
@@ -432,14 +396,10 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
         dialogSyncConfirmation.show();
     }
 
     private boolean isNetworkConnected() {
-        /*ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null;*/
-
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -456,7 +416,6 @@ public class HomeActivity extends AppCompatActivity {
 
         TextView tv_message = (TextView) dialogErrorLogin.findViewById(R.id.tv_message);
         Button ok = (Button) dialogErrorLogin.findViewById(R.id.btn_ok);
-
         tv_message.setText(message);
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -464,7 +423,6 @@ public class HomeActivity extends AppCompatActivity {
                 dialogErrorLogin.dismiss();
             }
         });
-
 
         dialogErrorLogin.show();
     }
@@ -496,7 +454,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
         dialogAboutUs.show();
     }
 
@@ -506,17 +463,14 @@ public class HomeActivity extends AppCompatActivity {
             if (Variable.onTemplate) {
                 dialogCancelTemplate(new HomeFragment(), "Home", "You have unsaved information. Are you sure you want to leave this page?");
             } else {
-
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 fragmentManager.beginTransaction()
                         .replace(R.id.fl_content, new HomeFragment()).addToBackStack(null).commit();
-
             }
         } else {
             dialogAboutUs();
         }
-
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(ivLogo.getWindowToken(), 0);
     }

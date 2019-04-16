@@ -41,7 +41,7 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
 
     private static final String TAG = "AdapterScopeAuditIntere";
     private static boolean isCheck = true;
-    
+
     public AdapterScopeAuditInterest(List<TemplateModelScopeAuditInterest> templateModelScopeAuditInterests, Context context, String company_id) {
         this.templateModelScopeAuditInterests = templateModelScopeAuditInterests;
         this.context = context;
@@ -74,140 +74,9 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
             idList.add(modelProducts.get(count).getProduct_id());
         }
 
-        adapterDispo = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, dispotList);
-        adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
+        adapterDispo = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, dispotList);
+        adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, list);
     }
-
- /*   @Override
-    public int getCount() {
-        return templateModelScopeAuditInterests.size();
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return templateModelScopeAuditInterests.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
-    @Override
-    public View getView(int i, View rowView, ViewGroup viewGroup) {
-        final int z = i;
-        position = z + "";
-        final Widgets widgets;
-//        if (rowView == null) {
-
-        rowView = inflater.inflate(R.layout.custom_listview_template_scope_audit_interest, null);
-
-        widgets = new Widgets(rowView);
-        widgets.spnDisposition.setAdapter(adapterDispo);
-        widgets.spnDisposition.setEnabled(Variable.isAuthorized);
-        widgets.spnTypeAudit.setAdapter(adapter);
-        widgets.spnTypeAudit.setEnabled(Variable.isAuthorized);
-
-        if (templateModelScopeAuditInterests.get(z).getDisposition_id().equals("0")) {
-            templateModelScopeAuditInterests.get(z).setDisposition_id(modelDispositions.get(
-                    widgets.spnDisposition.getSelectedItemPosition()).getDisposition_id());
-        } else {
-            templateModelScopeAuditInterests.get(z).setSelected2(idDispotList.indexOf(
-                    templateModelScopeAuditInterests.get(i).getDisposition_id()));
-            Log.e("testing", "asd dispo - " + templateModelScopeAuditInterests.get(i).getDisposition_id());
-        }
-        widgets.spnDisposition.setSelection(templateModelScopeAuditInterests.get(i).getSelected2());
-        widgets.spnDisposition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i <= 0) {
-                    templateModelScopeAuditInterests.get(z).setDisposition("");
-                    templateModelScopeAuditInterests.get(z).setSelected2(0);
-                    templateModelScopeAuditInterests.get(z).setDisposition_id("");
-                } else {
-                    templateModelScopeAuditInterests.get(z).setDisposition(widgets.spnDisposition.getSelectedItem().toString());
-                    templateModelScopeAuditInterests.get(z).setSelected2(i);
-                    templateModelScopeAuditInterests.get(z).setDisposition_id(modelDispositions.get(i - 1).getDisposition_id());
-                    Log.e("dis_id", modelDispositions.get(i - 1).getDisposition_id());
-                    Log.e("TESTING-DISPOSITION", "POSITION: " + z + " DISPOSITION ID: " + modelDispositions.get(i - 1).getDisposition_id());
-                    Variable.selectedDisposition.put(String.valueOf(z), modelDispositions.get(i - 1).getDisposition_id());
-                    //productDisposition.put("", widgets.spnDisposition.getSelectedItem().toString());
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        if (templateModelScopeAuditInterests.get(z).getProduct_id().equals("0")) {
-            templateModelScopeAuditInterests.get(z).setProduct_id(modelProducts.get(widgets.spnTypeAudit.getSelectedItemPosition()).getProduct_id());
-//            templateModelScopeAuditInterests.get(z).setSelected(0);
-        } else {
-            templateModelScopeAuditInterests.get(z).setSelected(idList.indexOf(
-                    templateModelScopeAuditInterests.get(i).getProduct_id()
-            ));
-            Log.e("testing", "asd product - " + templateModelScopeAuditInterests.get(i).getProduct_id());
-        }
-
-        widgets.spnTypeAudit.setSelection(templateModelScopeAuditInterests.get(i).getSelected());
-        widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //if (i < modelProducts.size() && i > 0) {
-                if (i <= 0) {
-                    templateModelScopeAuditInterests.get(z).setProduct_name("");
-                    templateModelScopeAuditInterests.get(z).setSelected(0);
-                    templateModelScopeAuditInterests.get(z).setProduct_id("");
-                } else {
-                    templateModelScopeAuditInterests.get(z).setProduct_name(widgets.spnTypeAudit.getSelectedItem().toString());
-                    templateModelScopeAuditInterests.get(z).setSelected(i);
-                    templateModelScopeAuditInterests.get(z).setProduct_id(modelProducts.get(i - 1).getProduct_id());
-                    Log.e("pro_id", modelProducts.get(i - 1).getProduct_id());
-                    Variable.selectedProduct.put(String.valueOf(z), modelProducts.get(i - 1).getProduct_id());
-                    Log.e("TESTING-PRODUCT", "POSITION: " + z + " PRODUCT ID: " + modelProducts.get(i - 1).getProduct_id());
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
-        return rowView;
-    }*/
-
-//    public boolean check() {
-//        isCheck = true;
-//        tempPro = "";
-//        tempDispo = "";
-//
-//        for (int i = 0; i < selectedProduct.size(); i++) {
-//            if (tempPro.equals("")) {
-//                tempPro = selectedProduct.get(i);
-//                tempDispo = selectedDisposition.get(i);
-//            } else {
-//                for (int j = 0; j < selectedProduct.size(); j++) {
-//                    if (j==i)
-//                        continue;
-//                    if (selectedProduct.get(i).equals(tempPro) &&
-//                            selectedDisposition.get(i).equals(tempDispo))
-//                        isCheck=false;
-//                        break;
-//                }
-//
-//            }
-//            if (!isCheck)
-//                break;
-//        }
-//
-//        return isCheck;
-//    }
 
     public int getTypeAuditSize() {
         return modelProducts.size();
@@ -215,26 +84,10 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
 
     public void save(String report_id, long id) {
         for (TemplateModelScopeAuditInterest t : templateModelScopeAuditInterests) {
-            /*if (Variable.report_id.equals("0")) {
-                t.setReport_id(report_id);
-            } else {
-                t.setReport_id(Variable.report_id);
-            }
-
-            t.setProduct_id(Variable.selectedProduct.get(position));
-            t.setDisposition_id(Variable.selectedDisposition.get(position));
-
-            t.setAudit_id(id + "");
-            t.save();
-        }*/
             t.setReport_id(report_id);
             t.setAudit_id(id + "");
             t.save();
         }
-
-        //for testing
-        //picked products and disposition
-        //ModelAuditReports mar = ModelAuditReports.find(ModelAuditReports.class, "reportid = ?", Variable.report_id).get(0);
         for (int i = 0; i < Variable.selectedDisposition.size(); i++) {
             Log.i("FOR TESTING DISPO-PRO", "REPORT ID: " + Variable.report_id +
                     " DISPO: " + Variable.selectedDisposition.get(i + "") +
@@ -248,8 +101,6 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
                 .inflate(R.layout.custom_listview_template_scope_audit_interest, parent, false);
         return new AdapterScopeAuditInterest.Widgets(v);
     }
-
-
 
     @Override
     public void onBindViewHolder(Widgets widgets, int position) {
@@ -268,21 +119,8 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
             Log.e("testing", "asd dispo - " + templateModelScopeAuditInterests.get(position).getDisposition_id());
         }
         widgets.spnDisposition.setSelection(templateModelScopeAuditInterests.get(position).getSelected2());
-/*        widgets.spnDisposition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });*/
-
         if (templateModelScopeAuditInterests.get(position).getProduct_id().equals("0")) {
             templateModelScopeAuditInterests.get(position).setProduct_id(modelProducts.get(widgets.spnTypeAudit.getSelectedItemPosition()).getProduct_id());
-//            templateModelScopeAuditInterests.get(z).setSelected(0);
         } else {
             templateModelScopeAuditInterests.get(position).setSelected(idList.indexOf(
                     templateModelScopeAuditInterests.get(position).getProduct_id()
@@ -291,31 +129,16 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
         }
 
         widgets.spnTypeAudit.setSelection(templateModelScopeAuditInterests.get(position).getSelected());
-/*        widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //if (i < modelProducts.size() && i > 0) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });*/
-
         selectDisposition(widgets);
         selectProductofInterest(widgets);
     }
 
-    private void selectDisposition(final Widgets widgets){
+    private void selectDisposition(final Widgets widgets) {
         widgets.spnDisposition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     int adapter_position = widgets.getAdapterPosition();
-                   // Toast.makeText(context, "Position : " + position + " Adapter Position: " + widgets.getAdapterPosition()
-                   //         , Toast.LENGTH_SHORT).show();
                     if (position <= 0) {
                         isCheck = false;
                         templateModelScopeAuditInterests.get(adapter_position).setDisposition("");
@@ -329,10 +152,9 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
                         Log.e("dis_id", modelDispositions.get(position - 1).getDisposition_id());
                         Log.e("TESTING-DISPOSITION", "POSITION: " + adapter_position + " DISPOSITION ID: " + modelDispositions.get(position - 1).getDisposition_id());
                         Variable.selectedDisposition.put(String.valueOf(adapter_position), modelDispositions.get(position - 1).getDisposition_id());
-                        //productDisposition.put("", widgets.spnDisposition.getSelectedItem().toString());
                     }
-                }catch (Exception e){
-                    Log.e(TAG, "onItemSelected: "+e);
+                } catch (Exception e) {
+                    Log.e(TAG, "onItemSelected: " + e);
                 }
             }
 
@@ -343,14 +165,12 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
         });
     }
 
-    private void selectProductofInterest(final Widgets widgets){
+    private void selectProductofInterest(final Widgets widgets) {
         widgets.spnTypeAudit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     int adapter_position = widgets.getAdapterPosition();
-                   // Toast.makeText(context, "Position : " + position + " Adapter Position: " + widgets.getAdapterPosition()
-                   //         , Toast.LENGTH_SHORT).show();
                     if (position <= 0) {
                         isCheck = false;
                         templateModelScopeAuditInterests.get(adapter_position).setProduct_name("");
@@ -365,8 +185,8 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
                         Variable.selectedProduct.put(String.valueOf(adapter_position), modelProducts.get(position - 1).getProduct_id());
                         Log.e("TESTING-PRODUCT", "POSITION: " + adapter_position + " PRODUCT ID: " + modelProducts.get(position - 1).getProduct_id());
                     }
-                }catch (Exception e){
-                    Log.e(TAG, "onItemSelected: "+e);
+                } catch (Exception e) {
+                    Log.e(TAG, "onItemSelected: " + e);
                 }
             }
 
@@ -377,7 +197,7 @@ public class AdapterScopeAuditInterest extends RecyclerView.Adapter<AdapterScope
         });
     }
 
-     public static boolean  checkProdofInterestAndDisposition(){
+    public static boolean checkProdofInterestAndDisposition() {
         return isCheck;
     }
 

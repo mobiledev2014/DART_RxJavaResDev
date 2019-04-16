@@ -43,56 +43,51 @@ public class ApproverAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
-        return i;
+    public Object getItem(int item) {
+        return item;
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int id) {
+        return id;
     }
 
     @Override
     public View getView(int position, View rowView, ViewGroup viewGroup) {
         Widgets widgets;
-//        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_approver, null);
-            widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.row_background);
-            if (position % 2 == 0)
-                widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
-            else
-                widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
+        widgets = new Widgets();
+        rowView = inflater.inflate(R.layout.custom_listview_approver, null);
+        widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.row_background);
+        if (position % 2 == 0)
+            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
+        else
+            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
 
-            widgets.name = (TextView) rowView.findViewById(R.id.tv_approver_name);
-            widgets.date_modified = (TextView) rowView.findViewById(R.id.tv_date_modified);
-            widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
+        widgets.name = (TextView) rowView.findViewById(R.id.tv_approver_name);
+        widgets.date_modified = (TextView) rowView.findViewById(R.id.tv_date_modified);
+        widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
 
-            approverModel = approverModels.get(position);
-            final String firstname = approverModel.getFirstname();
-            final String middlename = approverModel.getMiddlename();
-            final String lastname = approverModel.getLastname();
-            final String designation = approverModel.getDesignation();
-            final String company = approverModel.getCompany();
-            final String department = approverModel.getDepartment();
-            final String email = approverModel.getEmail();
+        approverModel = approverModels.get(position);
+        final String firstname = approverModel.getFirstname();
+        final String middlename = approverModel.getMiddlename();
+        final String lastname = approverModel.getLastname();
+        final String designation = approverModel.getDesignation();
+        final String company = approverModel.getCompany();
+        final String department = approverModel.getDepartment();
+        final String email = approverModel.getEmail();
 
-            widgets.name.setText(firstname + " " + middlename + " " +
-                    lastname);
-            widgets.date_modified.setText(approverModel.getUpdate_date());
+        widgets.name.setText(firstname + " " + middlename + " " +
+                lastname);
+        widgets.date_modified.setText(approverModel.getUpdate_date());
 
-            widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialogViewApprover(firstname + " " + middlename + " " + lastname,
-                            designation, company, department,
-                            email);
-                }
-            });
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
+        widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogViewApprover(firstname + " " + middlename + " " + lastname,
+                        designation, company, department,
+                        email);
+            }
+        });
         return rowView;
     }
 

@@ -45,9 +45,9 @@ public class AdapterPersonelMetDuring extends RecyclerView.Adapter<AdapterPerson
 
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_listview_template_personel_met_during,parent, false);
-        return new Widgets(v);
+        return new Widgets(view);
     }
 
     @Override
@@ -89,12 +89,6 @@ public class AdapterPersonelMetDuring extends RecyclerView.Adapter<AdapterPerson
 
             }
         });
-
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
-
         if (!isCheck) {
             if (templateModelPersonelMetDurings.get(widgets.getAdapterPosition()).getName().isEmpty()) {
                 isCheck = true;
@@ -102,7 +96,6 @@ public class AdapterPersonelMetDuring extends RecyclerView.Adapter<AdapterPerson
             }
         }
     }
-
 
     public boolean check() {
         isCheck = true;
@@ -122,11 +115,11 @@ public class AdapterPersonelMetDuring extends RecyclerView.Adapter<AdapterPerson
 
     public void save(String report_id) {
         TemplateModelPersonelMetDuring.deleteAll(TemplateModelPersonelMetDuring.class, "reportid = ?", report_id);
-        for (TemplateModelPersonelMetDuring t : templateModelPersonelMetDurings) {
-            if (t.getName().isEmpty() && t.getPosition().isEmpty())
+        for (TemplateModelPersonelMetDuring templateModelPersonelMetDuring : templateModelPersonelMetDurings) {
+            if (templateModelPersonelMetDuring.getName().isEmpty() && templateModelPersonelMetDuring.getPosition().isEmpty())
                 continue;
-            t.setReport_id(report_id);
-            t.save();
+            templateModelPersonelMetDuring.setReport_id(report_id);
+            templateModelPersonelMetDuring.save();
         }
     }
 

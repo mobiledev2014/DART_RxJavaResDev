@@ -37,11 +37,6 @@ public class AdapterPresentDuringMeeting extends RecyclerView.Adapter<AdapterPre
         return templateModelPresentDuringMeetings.size();
     }
 
-//    @Override
-//    public Object getItem(int i) {
-//        return templateModelPresentDuringMeetings.get(i);
-//    }
-
     @Override
     public long getItemId(int i) {
         return i;
@@ -59,9 +54,9 @@ public class AdapterPresentDuringMeeting extends RecyclerView.Adapter<AdapterPre
 
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_listview_template_present_during_meeting, parent, false);
-        return new Widgets(v);
+        return new Widgets(view);
     }
 
     @Override
@@ -118,9 +113,9 @@ public class AdapterPresentDuringMeeting extends RecyclerView.Adapter<AdapterPre
     public boolean check() {
         isCheck = true;
         Log.e("getWidgets", "getWidgets1");
-        for (TemplateModelPresentDuringMeeting tmsa : templateModelPresentDuringMeetings) {
+        for (TemplateModelPresentDuringMeeting templateModelPresentDuringMeeting : templateModelPresentDuringMeetings) {
             Log.e("getWidgets", "getWidgets2");
-            if (tmsa.getName().isEmpty()) {
+            if (templateModelPresentDuringMeeting.getName().isEmpty()) {
                 isCheck = false;
                 break;
             }
@@ -133,11 +128,11 @@ public class AdapterPresentDuringMeeting extends RecyclerView.Adapter<AdapterPre
 
     public void save(String report_id) {
         TemplateModelPresentDuringMeeting.deleteAll(TemplateModelPresentDuringMeeting.class, "reportid = ?", report_id);
-        for (TemplateModelPresentDuringMeeting t : templateModelPresentDuringMeetings) {
-            if (t.getName().isEmpty() && t.getPosition().isEmpty())
+        for (TemplateModelPresentDuringMeeting templateModelPresentDuringMeeting : templateModelPresentDuringMeetings) {
+            if (templateModelPresentDuringMeeting.getName().isEmpty() && templateModelPresentDuringMeeting.getPosition().isEmpty())
                 continue;
-            t.setReport_id(report_id);
-            t.save();
+            templateModelPresentDuringMeeting.setReport_id(report_id);
+            templateModelPresentDuringMeeting.save();
         }
     }
 

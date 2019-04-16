@@ -30,18 +30,18 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
     List<TemplateModelSummaryRecommendation> templateModelSummaryRecommendations;
     LayoutInflater inflater;
     Context context;
-    List<ModelTemplateElements> mte;
+    List<ModelTemplateElements> modelTemplateElementsList;
 
     public AdapterSummaryRecommendation(List<TemplateModelSummaryRecommendation> templateModelSummaryRecommendations, Context context, String id) {
         this.templateModelSummaryRecommendations = templateModelSummaryRecommendations;
         this.context = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mte = ModelTemplateElements.find(ModelTemplateElements.class, "templateid = ?", id);
+        modelTemplateElementsList = ModelTemplateElements.find(ModelTemplateElements.class, "templateid = ?", id);
 
-        ModelTemplateElements mte2 = new ModelTemplateElements();
-        mte2.setElement_id("0");
-        mte2.setElement_name("None");
-        mte.add(0, mte2);
+        ModelTemplateElements modelTemplateElementsList2 = new ModelTemplateElements();
+        modelTemplateElementsList2.setElement_id("0");
+        modelTemplateElementsList2.setElement_name("None");
+        modelTemplateElementsList.add(0, modelTemplateElementsList2);
     }
 
     @Override
@@ -49,38 +49,32 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
         return templateModelSummaryRecommendations.size();
     }
 
-//    @Override
-//    public Object getItem(int i) {
-//        return templateModelSummaryRecommendations.get(i);
-//    }
-
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int id) {
+        return id;
     }
 
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_listview_template_summary_recommendation, parent, false);
-        return new Widgets(v);
+        return new Widgets(view);
     }
 
     @Override
     public void onBindViewHolder(final Widgets widgets, int position) {
         List<String> list = new ArrayList<>();
-//        list.add("Select element");
-        Log.d("SIZE", mte.size() + "");
-        int x = mte.size();
+        Log.d("SIZE", modelTemplateElementsList.size() + "");
+        int x = modelTemplateElementsList.size();
         for (int count = 0; count < x; count++) {
-            if (templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getElement_id().equals(mte.get(count).getElement_id())) {
+            if (templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getElement_id().equals(modelTemplateElementsList.get(count).getElement_id())) {
                 templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setSelected(count);
             }
-            list.add(mte.get(count).getElement_name());
+            list.add(modelTemplateElementsList.get(count).getElement_name());
         }
 
         if (templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getElement_id().isEmpty()) {
-            templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setElement_id(mte.get(0).getElement_id());
+            templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setElement_id(modelTemplateElementsList.get(0).getElement_id());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
@@ -93,7 +87,7 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setElement(widgets.element.getSelectedItem().toString());
                 templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setSelected(i);
-                templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setElement_id(mte.get(i).getElement_id());
+                templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setElement_id(modelTemplateElementsList.get(i).getElement_id());
 
                 if (i > 0) {
                     if (Variable.isAuthorized) {
@@ -118,7 +112,7 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
             public boolean onTouch(View v, MotionEvent event) {
                 if (widgets.remarks.hasFocus()) {
                     v.getParent().requestDisallowInterceptTouchEvent(true);
-                    switch (event.getAction() & MotionEvent.ACTION_MASK){
+                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_SCROLL:
                             v.getParent().requestDisallowInterceptTouchEvent(false);
                             return true;
@@ -129,12 +123,11 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
         });
 
 
-        Log.e("GET REMARKS", "onBindViewHolder: "+templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getRemarks());
+        Log.e("GET REMARKS", "onBindViewHolder: " + templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getRemarks());
 
-        if(templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getRemarks() != null) {
-       //     widgets.remarks.setText(templateModelSummaryRecommendations.get(i).getRemarks().replace("&lt;br&gt;", "\n").replace("&#8718;", "▪").replace("&#34;", "\""));
+        if (templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getRemarks() != null) {
             widgets.remarks.setText(templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getRemarks().replace("&lt;br&gt;", "\n").replace("&#34;", "\""));
-        }else{
+        } else {
             widgets.remarks.setText(templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).getRemarks());
         }
 
@@ -147,8 +140,7 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            //    templateModelSummaryRecommendations.get(z).setRemarks(widgets.remarks.getText().toString().replaceAll("[\r\n]+", "&lt;br&gt;").replace("▪","&#8718;").replace("\"","&#34;"));
-                templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setRemarks(widgets.remarks.getText().toString().replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"","&#34;"));
+                templateModelSummaryRecommendations.get(widgets.getAdapterPosition()).setRemarks(widgets.remarks.getText().toString().replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"", "&#34;"));
             }
 
             @Override
@@ -162,7 +154,7 @@ public class AdapterSummaryRecommendation extends RecyclerView.Adapter<AdapterSu
     }
 
     public int getRSize() {
-        return mte.size();
+        return modelTemplateElementsList.size();
     }
 
     public void save(String report_id) {

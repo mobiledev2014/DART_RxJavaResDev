@@ -50,15 +50,11 @@ public class ApproverFragment extends Fragment {
     @BindView(R.id.tv_no_result)
     TextView tvNoResult;
 
-    boolean loopIsDone = false;
-
     ApproverModel approverModel = new ApproverModel();
     List<ApproverModel> approverList;
     SharedPreferenceManager sharedPref;
 
     ApproverAdapter approverAdapter;
-    ModelApproverInfo modelApproverInfo;
-    ApiInterface apiInterface;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_approvers, container, false);
@@ -74,11 +70,10 @@ public class ApproverFragment extends Fragment {
         approverModel = new ApproverModel();
         approverList = ApproverModel.find(ApproverModel.class, "status = '1'", new String[]{}, null, "updatedate DESC", "100");
 
-        for(ApproverModel i: approverList){
+        for (ApproverModel i : approverList) {
 
-            Log.e("ApproverFragment",i.getFirstname() + " " + i.getLastname());
+            Log.e("ApproverFragment", i.getFirstname() + " " + i.getLastname());
         }
-
 
         Log.d("SIZE", approverList.size() + "");
         approverAdapter = new ApproverAdapter(context, approverList);
@@ -98,7 +93,7 @@ public class ApproverFragment extends Fragment {
     @OnClick(R.id.iv_search)
     public void onViewClicked() {
         searchApprover();
-        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(ivSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
@@ -109,7 +104,7 @@ public class ApproverFragment extends Fragment {
             approverList = ApproverModel.findWithQuery(ApproverModel.class, "SELECT * from APPROVER_MODEL WHERE " +
                     "(status = '1' AND firstname LIKE '%" + audName + "%') OR " +
                     "(status = '1' AND middlename LIKE '%" + audName + "%') OR " +
-                    "(status = '1' AND lastname LIKE '%" + audName + "%') "  +
+                    "(status = '1' AND lastname LIKE '%" + audName + "%') " +
                     "ORDER BY createdate DESC");
             Log.e("AuditorsCount", approverList.size() + "");
             if (approverList.size() > 0) {

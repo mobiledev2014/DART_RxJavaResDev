@@ -25,8 +25,6 @@ import java.util.List;
 public class SubActivityAdapter extends RecyclerView.Adapter<SubActivityAdapter.Widgets> {
     LayoutInflater inflater;
     Context context;
-
-    Dialog dialogViewApprover;
     List<ModelTemplateSubActivities> modelTemplateActivities;
     String activity_id;
 
@@ -35,19 +33,17 @@ public class SubActivityAdapter extends RecyclerView.Adapter<SubActivityAdapter.
         this.context = context;
         this.activity_id = activity_id;
         this.modelTemplateActivities = modelTemplateActivities;
-        for (ModelTemplateSubActivities mtsa : modelTemplateActivities) {
+        for (ModelTemplateSubActivities modelTemplateSubActivity : modelTemplateActivities) {
 
-            List<ModelReportSubActivities> mra = ModelReportSubActivities.find(ModelReportSubActivities.class, "reportid = ? AND subitemid = ?", report_id, mtsa.getSubItemID());
-            if (mra.size() > 0) {
-                mtsa.setCheck(mra.get(0).isCheck());
+            List<ModelReportSubActivities> modelReportSubActivities = ModelReportSubActivities.find(ModelReportSubActivities.class, "reportid = ? AND subitemid = ?", report_id, modelTemplateSubActivity.getSubItemID());
+            if (modelReportSubActivities.size() > 0) {
+                modelTemplateSubActivity.setCheck(modelReportSubActivities.get(0).isCheck());
                 Log.e("SubActivityAdapter", "ifSize:" + modelTemplateActivities.size());
             } else {
                 Log.e("SubActivityAdapter", "elseSize:" + modelTemplateActivities.size());
             }
         }
         Log.e("SubActivityAdapter", "size:" + modelTemplateActivities.size());
-//        if (modelTemplateActivities.size()<1)
-//            chBox.setVisibility(View.VISIBLE);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -55,11 +51,6 @@ public class SubActivityAdapter extends RecyclerView.Adapter<SubActivityAdapter.
     public int getItemCount() {
         return modelTemplateActivities.size();
     }
-
-//    @Override
-//    public Object getItem(int i) {
-//        return i;
-//    }
 
     @Override
     public long getItemId(int i) {
@@ -92,14 +83,14 @@ public class SubActivityAdapter extends RecyclerView.Adapter<SubActivityAdapter.
     }
 
     public void save(String report_id) {
-        for (ModelTemplateSubActivities mta : modelTemplateActivities) {
-            ModelReportSubActivities mra = new ModelReportSubActivities();
-            mra.setReport_id(report_id);
-            mra.setSub_item_id(mta.getSubItemID());
-            mra.setCheck(mta.isCheck());
-            mra.setActivity_id(activity_id);
-            mra.save();
-            Log.e("sub activity saving",mta.getSubItemID() + " --- " + mta.isCheck());
+        for (ModelTemplateSubActivities modelTemplateSubActivity : modelTemplateActivities) {
+            ModelReportSubActivities modelReportSubActivities = new ModelReportSubActivities();
+            modelReportSubActivities.setReport_id(report_id);
+            modelReportSubActivities.setSub_item_id(modelTemplateSubActivity.getSubItemID());
+            modelReportSubActivities.setCheck(modelTemplateSubActivity.isCheck());
+            modelReportSubActivities.setActivity_id(activity_id);
+            modelReportSubActivities.save();
+            Log.e("sub activity saving", modelTemplateSubActivity.getSubItemID() + " --- " + modelTemplateSubActivity.isCheck());
         }
     }
 

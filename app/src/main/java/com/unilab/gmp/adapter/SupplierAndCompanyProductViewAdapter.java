@@ -26,7 +26,6 @@ public class SupplierAndCompanyProductViewAdapter extends BaseAdapter {
     public SupplierAndCompanyProductViewAdapter(Context context, List<ModelProduct> productList) {
         this.productList = productList;
         this.context = context;
-        this.id = id;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -48,31 +47,24 @@ public class SupplierAndCompanyProductViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View rowview, ViewGroup viewGroup) {
         Widgets widgets;
-//        if (rowview == null) {
-            widgets = new Widgets();
-            rowview = inflater.inflate(R.layout.custom_listview_product_views, null);
+        widgets = new Widgets();
+        rowview = inflater.inflate(R.layout.custom_listview_product_views, null);
 
-            widgets.rowBackground = (LinearLayout) rowview.findViewById(R.id.row_background);
-            if (position % 2 == 0)
-                widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
-            else
-                widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
+        widgets.rowBackground = (LinearLayout) rowview.findViewById(R.id.row_background);
+        if (position % 2 == 0)
+            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
+        else
+            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
+        widgets.name = (TextView) rowview.findViewById(R.id.tv_dialog_name);
 
-            //widgets.type = (TextView) rowview.findViewById(R.id.tv_dialog_type);
-            widgets.name = (TextView) rowview.findViewById(R.id.tv_dialog_name);
-
-            final ModelProduct product = productList.get(position);
-            //widgets.type.setText(product.getType());
-            widgets.name.setText(product.getProduct_name());
-            rowview.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowview.getTag();
-//        }
+        final ModelProduct product = productList.get(position);
+        widgets.name.setText(product.getProduct_name());
+        rowview.setTag(widgets);
         return rowview;
     }
 
     public class Widgets {
-        TextView type, name;
+        TextView name;
         LinearLayout rowBackground;
     }
 }

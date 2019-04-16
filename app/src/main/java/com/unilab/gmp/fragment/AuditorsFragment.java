@@ -38,7 +38,6 @@ public class AuditorsFragment extends Fragment {
 
     Unbinder unbinder;
     Context context;
-
     @BindView(R.id.tv_sync_date)
     TextView tvSyncDate;
     @BindView(R.id.lv_auditor_list)
@@ -53,13 +52,8 @@ public class AuditorsFragment extends Fragment {
     TextView tvNoResult;
 
     List<AuditorsModel> auditorsList;
-    List<AuditorsModel> sortList;
     SharedPreferenceManager sharedPref;
-
     AuditorsAdapter auditorsAdapter;
-    ApiInterface apiInterface;
-    ModelAuditorInfo modelAuditorInfo;
-    boolean loopIsDone = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_auditors, container, false);
@@ -72,8 +66,6 @@ public class AuditorsFragment extends Fragment {
         Variable.onReferenceData = true;
         sharedPref = new SharedPreferenceManager(context);
 
-        //auditorsList = AuditorsModel.listAll(AuditorsModel.class);
-        //auditorsList = AuditorsModel.listAll(AuditorsModel.class, "createdate DESC");
         auditorsList = AuditorsModel.find(AuditorsModel.class, "status = '1'", new String[]{}, null, "updatedate DESC", "100");
 
         for(AuditorsModel i: auditorsList){

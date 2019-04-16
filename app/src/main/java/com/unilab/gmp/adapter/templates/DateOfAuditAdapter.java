@@ -26,8 +26,6 @@ public class DateOfAuditAdapter extends BaseAdapter {
     List<ModelDateOfAudit> datesOfAudit;
     LayoutInflater inflater;
 
-    Calendar dateSelected = Calendar.getInstance();
-
     public DateOfAuditAdapter(Context context, List<ModelDateOfAudit> datesOfAudit) {
         this.context = context;
         this.datesOfAudit = datesOfAudit;
@@ -39,9 +37,9 @@ public class DateOfAuditAdapter extends BaseAdapter {
         return datesOfAudit.size();
     }
 
-    public boolean validateDates(){
+    public boolean validateDates() {
         boolean valid = true;
-        for (ModelDateOfAudit dateOfAudit: datesOfAudit) {
+        for (ModelDateOfAudit dateOfAudit : datesOfAudit) {
             if (dateOfAudit.getDateOfAudit().equals(""))
                 valid = false;
         }
@@ -60,11 +58,11 @@ public class DateOfAuditAdapter extends BaseAdapter {
 
     public void save(String report_id) {
         ModelDateOfAudit.deleteAll(ModelDateOfAudit.class, "reportid = ?", report_id);
-        for (ModelDateOfAudit t : datesOfAudit) {
-            if (t.getDateOfAudit().isEmpty())
+        for (ModelDateOfAudit modelDateOfAudit : datesOfAudit) {
+            if (modelDateOfAudit.getDateOfAudit().isEmpty())
                 continue;
-            t.setReport_id(report_id);
-            t.save();
+            modelDateOfAudit.setReport_id(report_id);
+            modelDateOfAudit.save();
         }
     }
 
@@ -78,15 +76,11 @@ public class DateOfAuditAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View view, ViewGroup viewGroup) {
-
         view = inflater.inflate(R.layout.custom_listview_template_audit_date, null);
         final Widgets widgets = new Widgets(view);
-
-
         if (!datesOfAudit.get(position).getDateOfAudit().isEmpty()) {
             widgets.btn_date_of_audit.setText(DateTimeUtils.parseDateMonthToWord(datesOfAudit.get(position).getDateOfAudit()));
         }
-
         widgets.btn_date_of_audit.setEnabled(Variable.isAuthorized);
         widgets.btn_date_of_audit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +89,6 @@ public class DateOfAuditAdapter extends BaseAdapter {
                 datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "datePicker");
             }
         });
-
         return view;
     }
 

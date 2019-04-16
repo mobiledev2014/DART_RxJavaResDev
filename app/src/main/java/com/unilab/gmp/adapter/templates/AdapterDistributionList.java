@@ -39,7 +39,7 @@ public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistrib
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         distributionList = ModelDistribution.find(ModelDistribution.class, "status > 0");
-        Log.i("distributionList","count : " + distributionList.size());
+        Log.i("distributionList", "count : " + distributionList.size());
         List<String> distriList = new ArrayList<>();
         distriIdList = new ArrayList<>();
         int d = distributionList.size();
@@ -51,18 +51,13 @@ public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistrib
             distriIdList.add(distributionList.get(count).getDistribution_id());
         }
 
-        adapterDistri = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, distriList);
+        adapterDistri = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, distriList);
     }
 
     @Override
     public int getItemCount() {
         return templateModelDistributionLists.size();
     }
-
-//    @Override
-//    public Object getItem(int i) {
-//        return templateModelDistributionLists.get(i);
-//    }
 
     @Override
     public long getItemId(int i) {
@@ -91,7 +86,6 @@ public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistrib
             templateModelDistributionLists.get(z).setSelected(0);
             templateModelDistributionLists.get(z).setDistribution_id(0 + "");
             Log.i("SAVED-DISTRI", "SELECTED ELSE: " + widgets.spnTemplateNextDistributionList.getSelectedItemPosition());
-            //Log.i("SAVED-DISTRI", "POSITION ELSE: " + distributionList.get(widgets.spnTemplateNextDistributionList.getSelectedItemPosition()).getDistribution_id());
         }
 
         widgets.spnTemplateNextDistributionList.setSelection(templateModelDistributionLists.get(i).getSelected());
@@ -108,8 +102,6 @@ public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistrib
                 } else {
                     templateModelDistributionLists.get(z).setDistribution_id(0 + "");
                 }
-                //Log.i("SAVED-DISTRI", "SELECTED TEST: " + distributionList.get(index).getDistribution_id() + "\n");
-                //Log.i("SAVED-DISTRI", "POSITION TEST: " + widgets.spnTemplateNextDistributionList.getSelectedItem().toString() + "\n");
             }
 
             @Override
@@ -117,11 +109,6 @@ public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistrib
 
             }
         });
-
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
     }
 
     public boolean check() {
@@ -135,8 +122,6 @@ public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistrib
             }
             lump.add(tmsa.getDistribution_id());
         }
-
-
         if (!isCheck) {
             notifyDataSetChanged();
         }
@@ -146,10 +131,10 @@ public class AdapterDistributionList extends RecyclerView.Adapter<AdapterDistrib
 
     public void save(String report_id) {
         TemplateModelDistributionList.deleteAll(TemplateModelDistributionList.class, "reportid = ?", report_id);
-        for (TemplateModelDistributionList t : templateModelDistributionLists) {
-            Log.i("SAVED-DISTRI", "DISTRI: " + t.getDistribution_id() + " SIZE: " + templateModelDistributionLists.size() + "\n");
-            t.setReport_id(report_id);
-            t.save();
+        for (TemplateModelDistributionList templateModelDistribution : templateModelDistributionLists) {
+            Log.i("SAVED-DISTRI", "DISTRI: " + templateModelDistribution.getDistribution_id() + " SIZE: " + templateModelDistributionLists.size() + "\n");
+            templateModelDistribution.setReport_id(report_id);
+            templateModelDistribution.save();
         }
     }
 

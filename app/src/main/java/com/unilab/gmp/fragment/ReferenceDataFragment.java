@@ -22,7 +22,6 @@ import butterknife.Unbinder;
  */
 
 public class ReferenceDataFragment extends Fragment {
-
     Unbinder unbinder;
     Context context;
 

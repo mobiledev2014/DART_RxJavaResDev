@@ -36,11 +36,6 @@ public class AdapterDistributionOthers extends RecyclerView.Adapter<AdapterDistr
         return templateModelDistributionOthers.size();
     }
 
-//    @Override
-//    public Object getItem(int i) {
-//        return templateModelDistributionOthers.get(i);
-//    }
-
     @Override
     public long getItemId(int i) {
         return i;
@@ -48,18 +43,15 @@ public class AdapterDistributionOthers extends RecyclerView.Adapter<AdapterDistr
 
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_listview_template_other_distribution, parent, false);
-        return new Widgets(v);
+        return new Widgets(view);
     }
 
     @Override
     public void onBindViewHolder(final Widgets widgets, int i) {
         final int z = i;
-
         List<ModelDistribution> distributionList = ModelDistribution.listAll(ModelDistribution.class);
-
-
         if (distributionList.size() > i) {
             widgets.distributionOther.setText(distributionList.get(z).getDistribution_name());
         }

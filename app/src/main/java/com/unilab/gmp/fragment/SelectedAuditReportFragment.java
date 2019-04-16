@@ -89,8 +89,6 @@ public class SelectedAuditReportFragment extends Fragment {
     TextView tvTemplateProductType;
     @BindView(R.id.tv_template_standard)
     TextView tvTemplateStandard;
-    /*@BindView(R.id.lv_template_element)
-    ListView lvTemplateElement;*/
     @BindView(R.id.btn_cancel)
     Button btnCancel;
     @BindView(R.id.btn_save_draft)
@@ -293,21 +291,6 @@ public class SelectedAuditReportFragment extends Fragment {
         btnTemplateAuditAdd.setEnabled(false);
         btnTemplateAuditDelete.setEnabled(false);
     }
-   /* @Override
-    public void onResume() {
-        super.onResume();
-        if (context != null) {
-            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (context != null) {
-            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-        }
-    }*/
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -331,37 +314,13 @@ public class SelectedAuditReportFragment extends Fragment {
             etTemplateSiteAddressOne.setText(list.get(0).getAddress1());
             etTemplateSiteAddressTwo.setText(list.get(0).getAddress2() + "/" + list.get(0).getAddress3() + ", " + list.get(0).getCountry());
         }
-//        if (modelAuditReports.getAudit_date_1().length() > 0) {
-//            modelTemplates.setAudit_date_1(modelAuditReports.getAudit_date_1());
-//            btnTemplateDateFrom.setText(modelAuditReports.getAudit_date_1());
-//        }
-//        if (modelAuditReports.getAudit_date_2().length() > 0) {
-//            modelTemplates.setAudit_date_2(modelAuditReports.getAudit_date_2());
-//            btnTemplateDateTo.setText(modelAuditReports.getAudit_date_2());
-//        }
-
         modelTemplates.setCompany_id(modelAuditReports.getCompany_id());
     }
 
     private void setWidgets() {
-        //tableDirectory = new TableDirectory(context);
-        //questionModel = tableDirectory.getDirectory();
         List<ModelTemplateElements> mte = ModelTemplateElements.find(ModelTemplateElements.class,
                 "templateid = ?", modelTemplates.getTemplateID());
         modelTemplates.setModelTemplateElements(mte);
-//        for (int i = 0; i < modelTemplates.getModelTemplateElements().size(); i++) {
-//            ModelTemplateElements modelTemplateElement = new ModelTemplateElements();
-//            //QuestionModel value = new QuestionModel();
-//
-//            modelTemplateElement.setUpdate_date(modelTemplates.getModelTemplateElements().get(i).getUpdate_date());
-//            modelTemplateElement.setCreate_date(modelTemplates.getModelTemplateElements().get(i).getCreate_date());
-//            modelTemplateElement.setElement_id(modelTemplates.getModelTemplateElements().get(i).getElement_id());
-//            modelTemplateElement.setElement_name(modelTemplates.getModelTemplateElements().get(i).getElement_name());
-//            modelTemplateElement.setModelTemplateQuestionDetails(modelTemplates.getModelTemplateElements().get(i).getModelTemplateQuestionDetails());
-//
-//            modelTemplates.getModelTemplateElements().add(modelTemplateElement);
-//        }
-        //questionModel = tableDirectory.getDirectory();
         templateElementAdapter = new TemplateElementAdapter(context, modelTemplates.getModelTemplateElements()
                 , modelAuditReports.getReport_id(), modelTemplates.getProductType(), indicator);
 
@@ -371,7 +330,6 @@ public class SelectedAuditReportFragment extends Fragment {
 
         templateElementAdapter.notifyDataSetChanged();
         lvTemplateElement.setAdapter(templateElementAdapter);
-//        lvTemplateElement.setExpanded(true);
 
         lvTemplateElement.setOnTouchListener(new View.OnTouchListener() {
             // Setting on Touch Listener for handling the touch inside ScrollView
@@ -508,22 +466,6 @@ public class SelectedAuditReportFragment extends Fragment {
             public void onClick(View view) {
                 modelDateOfAudits.remove(modelDateOfAudits.size() - 1);
                 dateOfAuditAdapter.notifyDataSetChanged();
-
-                //for testing
-                /*int x = modelDateOfAudits.size() - 1;
-                Log.i("SAMPLE-DATE", "" + dateOfAuditAdapter.getItem(modelDateOfAudits.size() - 1));
-                Log.i("SAMPLE-DATE", "" + modelDateOfAudits.get(x).getId());
-                int del = (int) (modelDateOfAudits.get(x).getId() + 1);
-                Log.i("SAMPLE-DATE-DEL", "" + del);
-                List<ModelDateOfAudit> dateDel = ModelDateOfAudit.findWithQuery(ModelDateOfAudit.class,
-                        "SELECT date_Of_Audit FROM MODEL_DATE_OF_AUDIT WHERE id = '" + del + "'");
-
-                for (ModelDateOfAudit delDate : dateDel){
-                    Log.i("SAMPLE-DATE-DEL", "" + delDate.getDateOfAudit() + " id : " + delDate.getId());
-                }
-                Log.i("SAMPLE-DATE-DEL", "" + del);
-                ModelTemplates.executeQuery("DELETE FROM MODEL_DATE_OF_AUDIT WHERE id = '" + del + "'");*/
-
                 dialogDeleteDateOfAudit.dismiss();
             }
         });
@@ -540,18 +482,7 @@ public class SelectedAuditReportFragment extends Fragment {
     }
 
     private void analyzeInputs(ArrayList<ModelTemplateElements> modelTemplateElements) {
-//        List<ModelTemplateElements> modelTemplateElements = ModelTemplateElements.listAll(ModelTemplateElements.class);
-//        boolean allIsAnswered = true;
-//        for (ModelTemplateElements templates : modelTemplateElements) {
-//            for (ModelTemplateQuestionDetails questionDetails : templates.getModelTemplateQuestionDetails()) {
-//                if (questionDetails.getAnswer_id().equals("")) {
-//                    allIsAnswered = false;
-//                }
-//            }
-//        }
-//        boolean allIsAnswered = validate();
         if (validate()) {
-            //ProgressDialogUtils.showSimpleProgressDialog(context,"","Loading . . .",false);
             if (nextSelectAuditReport == null) {
                 nextSelectAuditReport = new NextSelectedAuditReportFragment(modelTemplates, modelAuditReports, templateElementAdapter, this);
                 Variable.isFromBackStack = true;
@@ -561,13 +492,6 @@ public class SelectedAuditReportFragment extends Fragment {
                 @Override
                 public void run() {
                     // Do something after 5s = 5000ms
-
-                    if (Variable.isFromBackStack) {
-              /*          if(Variable.isChangedSite){
-                            Variable.isChangedSite = false;
-                            NextSelectedAuditReportFragment.siteChanged();
-                        }*/
-                    }
 
                     List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
 
@@ -591,8 +515,6 @@ public class SelectedAuditReportFragment extends Fragment {
                             .replace(R.id.fl_content, nextSelectAuditReport).addToBackStack(null).commit();
                 }
             }, 700);
-//        } else {
-//            Toast.makeText(context, "Answer all questions first.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -798,12 +720,6 @@ public class SelectedAuditReportFragment extends Fragment {
                 mrq.setAnswer_details(mtqd.getAnswer_details());
                 mrq.save();
             }
-/*                mtqd.setQuestion_id(mtqd.getQuestion_id());
-                mtqd.setAnswer_id(mtqd.getAnswer_id());
-                mtqd.setNaoption_id(mtqd.getNaoption_id());
-                mtqd.setCategory_id(mtqd.getCategory_id());
-                mtqd.setAnswer_details(mtqd.getAnswer_details());
-                mtqd.save();*/
         }
 
         List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
@@ -840,7 +756,6 @@ public class SelectedAuditReportFragment extends Fragment {
             public void onClick(View view) {
                 /*start progress dialog*/
                 pDialog.show();
-
                 dialogSubmit.dismiss();
                 analyzeInputs(modelTemplateElements);
             }
@@ -883,116 +798,11 @@ public class SelectedAuditReportFragment extends Fragment {
     }
 
     public void setWatcher() {
-
         etTemplateSite.setEnabled(false);
-
-/*        etTemplateSite.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    List<ModelCompany> supplierList = ModelCompany.find(ModelCompany.class, "status = '1'");
-                    for(ModelCompany var: supplierList){
-                        Log.e("Supplier List", "onClick: "+ var.getCompany_name());
-                        if(etTemplateSite.getText().toString().equals(var.getCompany_name())){
-                            dialogChangeSite();
-                        }
-                    }
-                }
-                return false;
-            }
-        });
-
-        etTemplateSite.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(etTemplateSite.getText().equals("")){
-                    modelTemplates.setCompany_id("");
-                    etTemplateSiteAddressOne.setText("");
-                    etTemplateSiteAddressTwo.setText("");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        List<ModelCompany> listSite = ModelCompany.find(ModelCompany.class, "status = '1'");
-        String[] arrListSite = new String[listSite.size()];
-        for (int x = 0; x < listSite.size(); x++) {
-            arrListSite[x] = listSite.get(x).getCompany_name();
-        }
-        final ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(context, android.R.layout.select_dialog_item, arrListSite);
-        etTemplateSite.setAdapter(listAdapter);
-        etTemplateSite.setThreshold(3);
-
-        etTemplateSite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                List<ModelCompany> listSite = ModelCompany.find(ModelCompany.class, "companyname = ?", etTemplateSite.getText().toString());
-                etTemplateSiteAddressOne.setText(listSite.get(0).getAddress1());
-                etTemplateSiteAddressTwo.setText(listSite.get(0).getAddress2() + "/" + listSite.get(0).getAddress3() + ", " + listSite.get(0).getCountry());
-                modelTemplates.setCompany_id(listSite.get(0).getCompany_id());
-
-                etTemplateSite.setCursorVisible(false);
-                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                Utils.hideKeyboard(getActivity());
-
-                Log.e("testasd", modelTemplates.getCompany_id() + " sad");
-            }
-        });*/
     }
 
 
-
-/*    private void dialogChangeSite(){
-        final Dialog confirm = new Dialog(context);
-        confirm.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        confirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        confirm.setCancelable(false);
-        confirm.setContentView(R.layout.dialog_change_site);
-        confirm.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        final Button yesBtn = (Button) confirm.findViewById(R.id.btn_yes);
-        final Button noBtn = (Button) confirm.findViewById(R.id.btn_no);
-
-        yesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                modelTemplates.setCompany_id("");
-                Variable.isChangedSite = true;
-                etTemplateSite.setText("");
-                etTemplateSiteAddressOne.setText("");
-                etTemplateSiteAddressTwo.setText("");
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                confirm.cancel();
-            }
-        });
-
-        noBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirm.cancel();
-            }
-        });
-
-        confirm.show();
-
-    }*/
-
     public boolean validate() {
-//        if (!templateElementAdapter.validate()) {
-//            /*progress dialog dismiss*/
-//            pDialog.dismiss();
-//            return false;
-//        }
         Log.e("validate", "date of audit : " + dateOfAuditAdapter.getItem(0));
         boolean validate = true;
         for (int i = 0; i < dateOfAuditAdapter.getCount(); i++) {
@@ -1002,8 +812,6 @@ public class SelectedAuditReportFragment extends Fragment {
         }
 
         if (modelTemplates.getCompany_id().isEmpty()) {
-//            if (modelTemplates.getCompany_id().isEmpty() || modelTemplates.getAudit_date_1().isEmpty() ||
-//                    modelTemplates.getAudit_date_2().isEmpty())
             pDialog.dismiss();
             validate = false;
         }
@@ -1018,14 +826,12 @@ public class SelectedAuditReportFragment extends Fragment {
                 else {
                     ModelDateOfAudit doa = new ModelDateOfAudit();
                     doa.setDateOfAudit("");
-//            doa.setTemplate_id(modelTemplates.getTemplateID());
                     modelDateOfAudits.add(doa);
                     dateOfAuditAdapter.notifyDataSetChanged();
                 }
             } else {
                 ModelDateOfAudit doa = new ModelDateOfAudit();
                 doa.setDateOfAudit("");
-//            doa.setTemplate_id(modelTemplates.getTemplateID());
                 modelDateOfAudits.add(doa);
                 dateOfAuditAdapter.notifyDataSetChanged();
             }
@@ -1049,7 +855,6 @@ public class SelectedAuditReportFragment extends Fragment {
         List<TemplateModelAuditors> a = TemplateModelAuditors.find(TemplateModelAuditors.class,
                 "reportid = ?", modelAuditReports.getReport_id());
         if (a.size() > 0) {
-//        for (TemplateModelAuditors am : templateModelAuditorses) {
             for (TemplateModelAuditors am : a) {
                 List<AuditorsModel> a2 = AuditorsModel.find(AuditorsModel.class,
                         "auditorid = ?", am.getAuditor_id());

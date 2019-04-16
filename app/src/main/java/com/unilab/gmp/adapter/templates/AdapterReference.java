@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.unilab.gmp.R;
-import com.unilab.gmp.adapter.TemplateElementAdapter;
 import com.unilab.gmp.model.TemplateModelReference;
 import com.unilab.gmp.utility.DateTimeUtils;
 import com.unilab.gmp.utility.Variable;
@@ -38,9 +37,6 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
     Context context;
     boolean isCheck = true;
 
-    public AdapterReference() {
-    }
-
     public AdapterReference(List<TemplateModelReference> templateModelReferences, Context context) {
         this.templateModelReferences = templateModelReferences;
         this.context = context;
@@ -52,21 +48,16 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
         return templateModelReferences.size();
     }
 
-//    @Override
-//    public Object getItem(int i) {
-//        return templateModelReferences.get(i);
-//    }
-
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int id) {
+        return id;
     }
 
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_listview_template_reference, parent, false);
-        return new Widgets(v);
+        return new Widgets(view);
     }
 
     @Override
@@ -170,11 +161,6 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
             }
         });
         widgets.issue_date.setEnabled(Variable.isAuthorized);
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
-
         widgets.clearissuedateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,7 +205,7 @@ public class AdapterReference extends RecyclerView.Adapter<AdapterReference.Widg
                     )
                 continue;
 
-            Log.e("Issue Date Value", "save: Issue Date Value : "+t.getIssue_date());
+            Log.e("Issue Date Value", "save: Issue Date Value : " + t.getIssue_date());
 
             t.setReport_id(report_id);
             t.save();

@@ -60,8 +60,6 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
     boolean checked, edited, dialogYesIsShowing = false, dialogNoIsShowing = false,
             dialogYesRequiredIsShowing = false;
 
-
-
     public TemplateElementQuestionAdapter(Context context, List<ModelTemplateQuestionDetails> questionList,
                                           String report_id, String product_type, String element_id,
                                           String template_id, String indicator) {
@@ -74,35 +72,12 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         this.templateId = template_id;
         this.indic = indicator;
 
-//        l = ModelTemplateQuestionDetails.find(ModelTemplateQuestionDetails.class, "templateid = ? AND elementid = ?", questionList.get(0).getTemplate_id(), questionList.get(0).getElement_id());
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        //questionId.clear();
-        //checkBoxSetter(element_id, template_id, report_id);
-    }
-
-    public TemplateElementQuestionAdapter(){
-
-    }
-    public CheckBox getCb() {
-        return cb;
     }
 
     public void setCb(CheckBox cb) {
         this.cb = cb;
-    }
-
-    public void checkBoxSetter(String element_id, String template_id, String report_id) {
-        List<ModelTemplateQuestionDetails> questionDetailsList = ModelTemplateQuestionDetails.find
-                (ModelTemplateQuestionDetails.class, "templateid = ? AND elementid = ?",
-                        template_id, element_id);
-
-        for (ModelTemplateQuestionDetails mtqd : questionDetailsList) {
-            questionId.add(mtqd.getQuestion_id());
-        }
-
-        answerGetter(report_id);
     }
 
     public void answerGetter(String report_id) {
@@ -161,14 +136,10 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
             for (ModelReportQuestion answerList : mrq) {
                 if (!answerList.getAnswer_id().equals("4")) {
                     notcovered = false;
-                } /*else {
-                    notcovered = false;
-                    break;
-                }*/
+                }
             }
         }
         if (notcovered) {
-            //return "Not covered";
             checkValue = "Not covered";
             Variable.checkValue = checkValue;
             Log.i("checkValue 1", " : " + checkValue);
@@ -185,14 +156,10 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
             for (ModelReportQuestion answerList : mrq) {
                 if (!answerList.getAnswer_id().equals("3")) {
                     notapplicable = false;
-                } /*else {
-                    notapplicable = false;
-                    break;
-                }*/
+                }
             }
         }
         if (notapplicable) {
-            //return "Not applicable";
             checkValue = "Not applicable";
             Variable.checkValue = checkValue;
             Log.i("checkValue 2", " : " + checkValue);
@@ -212,11 +179,6 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
     public int getItemCount() {
         return questionList.size();
     }
-//
-//    @Override
-//    public Object getItem(int position) {
-//        return position;
-//    }
 
     @Override
     public long getItemId(int position) {
@@ -228,10 +190,8 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         final String question, questionNumber;
         final int z = position;
 
-        questionNumber = position + 1 + ""; //get question number
-        question = questionList.get(position).getQuestion(); //get question
-
-//        widgets.tvQuestionNumber.setText("Question " + questionNumber + ": ");
+        questionNumber = position + 1 + "";
+        question = questionList.get(position).getQuestion();
 
         widgets.btnNc.setEnabled(Variable.isAuthorized);
         widgets.btnNa.setEnabled(Variable.isAuthorized);
@@ -304,91 +264,87 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                 widgets.btnNo.setBackgroundResource(R.drawable.yes_button);
                 widgets.btnNa.setBackgroundResource(R.drawable.yes_button);
                 widgets.btnNc.setBackgroundResource(R.drawable.selected_button);
-            }else if (questionList.get(position).getAnswer_id().equals("")) {
+            } else if (questionList.get(position).getAnswer_id().equals("")) {
                 widgets.btnYes.setBackgroundResource(R.drawable.yes_button);
                 widgets.btnNo.setBackgroundResource(R.drawable.yes_button);
                 widgets.btnNa.setBackgroundResource(R.drawable.yes_button);
                 widgets.btnNc.setBackgroundResource(R.drawable.yes_button);
             }
         }
-        //}
-        //if (!checked) {
-            widgets.btnYes.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //if (questionList.get(position).getRequired_remarks().equalsIgnoreCase("yes")) {
 
-                    if (!questionList.get(z).getAnswer_id().isEmpty() && !questionList.get(z).getAnswer_id().equals("1")) {
-                        final Dialog confirm = new Dialog(context);
-                        confirm.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                        confirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        confirm.setCancelable(false);
-                        confirm.setContentView(R.layout.dialog_change_answer);
-                        confirm.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        widgets.btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!questionList.get(z).getAnswer_id().isEmpty() && !questionList.get(z).getAnswer_id().equals("1")) {
+                    final Dialog confirm = new Dialog(context);
+                    confirm.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                    confirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    confirm.setCancelable(false);
+                    confirm.setContentView(R.layout.dialog_change_answer);
+                    confirm.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-                        final Button yesBtn = (Button) confirm.findViewById(R.id.btn_yes);
-                        final Button noBtn = (Button) confirm.findViewById(R.id.btn_no);
+                    final Button yesBtn = (Button) confirm.findViewById(R.id.btn_yes);
+                    final Button noBtn = (Button) confirm.findViewById(R.id.btn_no);
 
-                        yesBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                clickedBtnYes(widgets, z, mrq);
-                                confirm.cancel();
-                            }
-                        });
+                    yesBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            clickedBtnYes(widgets, z, mrq);
+                            confirm.cancel();
+                        }
+                    });
 
-                        noBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                confirm.cancel();
-                            }
-                        });
+                    noBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            confirm.cancel();
+                        }
+                    });
 
-                        confirm.show();
+                    confirm.show();
 
 
-                    } else {
-                        clickedBtnYes(widgets, position, mrq);
-                    }
-
+                } else {
+                    clickedBtnYes(widgets, position, mrq);
                 }
-            });
-            widgets.btnNo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (!questionList.get(z).getAnswer_id().isEmpty() && !questionList.get(z).getAnswer_id().equals("2")) {
-                        final Dialog confirm = new Dialog(context);
-                        confirm.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                        confirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        confirm.setCancelable(false);
-                        confirm.setContentView(R.layout.dialog_change_answer);
-                        confirm.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-                        final Button yesBtn = (Button) confirm.findViewById(R.id.btn_yes);
-                        final Button noBtn = (Button) confirm.findViewById(R.id.btn_no);
+            }
+        });
+        widgets.btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!questionList.get(z).getAnswer_id().isEmpty() && !questionList.get(z).getAnswer_id().equals("2")) {
+                    final Dialog confirm = new Dialog(context);
+                    confirm.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                    confirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    confirm.setCancelable(false);
+                    confirm.setContentView(R.layout.dialog_change_answer);
+                    confirm.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-                        yesBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                clickedBtnNo(widgets, z, mrq);
-                                confirm.cancel();
-                            }
-                        });
+                    final Button yesBtn = (Button) confirm.findViewById(R.id.btn_yes);
+                    final Button noBtn = (Button) confirm.findViewById(R.id.btn_no);
 
-                        noBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                confirm.cancel();
-                            }
-                        });
+                    yesBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            clickedBtnNo(widgets, z, mrq);
+                            confirm.cancel();
+                        }
+                    });
 
-                        confirm.show();
-                    } else {
-                        clickedBtnNo(widgets, z, mrq);
-                    }
+                    noBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            confirm.cancel();
+                        }
+                    });
+
+                    confirm.show();
+                } else {
+                    clickedBtnNo(widgets, z, mrq);
                 }
-            });
-      //  }
+            }
+        });
 
         widgets.btnNa.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -437,12 +393,9 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         widgets.btnNc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Toast.makeText(context, "Not covered button clicked!", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "onClick: " + questionList.get(z).getAnswer_id());
 
                 if (!questionList.get(z).getAnswer_id().isEmpty() && !questionList.get(z).getAnswer_id().equals("4")) {
-                    //Ask
-
                     final Dialog confirm = new Dialog(context);
                     confirm.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                     confirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -550,18 +503,9 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         }
     }
 
-    public boolean isNA() {
-        for (ModelTemplateQuestionDetails a : questionList) {
-            if (!a.getAnswer_id().equals("3")) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public void dialogYes(String defaultText, final Button yes, final Button no, final Button na, final Button nc, final int z, final List<ModelReportQuestion> mrq) {
         dialogYes = new Dialog(context);
-        if(dialogYes.getWindow() != null){
+        if (dialogYes.getWindow() != null) {
             dialogYes.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             dialogYes.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialogYes.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -575,12 +519,9 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         Button cancel = (Button) dialogYes.findViewById(R.id.btn_cancel);
 
         default_text.setText(defaultText);
-        //if (mrq.size() > 0) {
         if (questionList.get(z).getAnswer_id().equals("1")) {
-        //    remarks.setText(questionList.get(z).getAnswer_details().replace("&lt;br&gt;", "\n").replace("&#8718;","▪").replace("&#34;","\""));
-            remarks.setText(questionList.get(z).getAnswer_details().replace("&lt;br&gt;", "\n").replace("&#34;","\""));
+            remarks.setText(questionList.get(z).getAnswer_details().replace("&lt;br&gt;", "\n").replace("&#34;", "\""));
         }
-        //}
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -591,15 +532,10 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                 String newStr = "";
                 strRemarks = remarks.getText().toString();
 
-                //for prod
-                //if (strRemarks.contains("\n") || strRemarks.contains("▪")|| strRemarks.contains("\"")) {
                 if (strRemarks.contains("\n") || strRemarks.contains("\"")) {
-                        //   newStr = strRemarks.replaceAll("[\r\n]+", "&lt;br&gt;").replace("▪","&#8718;").replace("\"","&#34;");
-                    newStr = strRemarks.replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"","&#34;");
-                    //Toast.makeText(context, newStr, Toast.LENGTH_SHORT).show();
+                    newStr = strRemarks.replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"", "&#34;");
                 } else {
                     newStr = strRemarks;
-                    //Toast.makeText(context, "else: " + newStr, Toast.LENGTH_SHORT).show();
                 }
 
                 yes.setBackgroundResource(R.drawable.selected_button);
@@ -607,12 +543,10 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                 na.setBackgroundResource(R.drawable.yes_button);
                 nc.setBackgroundResource(R.drawable.yes_button);
 
-                questionList.get(z).setAnswer_details(newStr); //for prod
-                //questionList.get(z).setAnswer_details(strRemarks); //for testing
+                questionList.get(z).setAnswer_details(newStr);
                 questionList.get(z).setAnswer_id("1");
                 questionList.get(z).setCategory_id("");
                 text = "N/A";
-                //cb.setChecked(false);
                 dialogYesIsShowing = false;
 
                 cb.setChecked(false);
@@ -651,15 +585,10 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         remarks.setHint("Remarks");
         default_text.setText(defaultText);
         String def_text = "";
-        //if (mrq.size() > 0) {
         if (questionList.get(z).getAnswer_id().equals("1")) {
-            //def_text = questionList.get(z).getAnswer_details().replaceAll("&lt;br&gt;", "\n").replace("&#8718;","▪").replace("&#34;","\"");
-            def_text = questionList.get(z).getAnswer_details().replaceAll("&lt;br&gt;", "\n").replace("&#34;","\"");
+            def_text = questionList.get(z).getAnswer_details().replaceAll("&lt;br&gt;", "\n").replace("&#34;", "\"");
             remarks.setText(def_text);
         }
-
-        //}
-
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -669,12 +598,8 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                 String newStr = "";
                 strRemarks = remarks.getText().toString();
 
-                //for prod
-              //  if (strRemarks.contains("\n") || strRemarks.contains("▪")|| strRemarks.contains("\"")) {
-                if (strRemarks.contains("\n") ||  strRemarks.contains("\"")) {
-                    //newStr = strRemarks.replaceAll("[\r\n]+", "&lt;br&gt;").replace("▪","&#8718;").replace("\"","&#34;");
-                    newStr = strRemarks.replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"","&#34;");
-                    // Toast.makeText(context, newStr, Toast.LENGTH_SHORT).show();
+                if (strRemarks.contains("\n") || strRemarks.contains("\"")) {
+                    newStr = strRemarks.replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"", "&#34;");
                 } else {
                     newStr = strRemarks;
                 }
@@ -690,8 +615,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                         na.setBackgroundResource(R.drawable.yes_button);
                         nc.setBackgroundResource(R.drawable.yes_button);
 
-                        questionList.get(z).setAnswer_details(newStr);//for prod
-                        //questionList.get(z).setAnswer_details(strRemarks);//for testing
+                        questionList.get(z).setAnswer_details(newStr);
                         questionList.get(z).setAnswer_id("1");
                         questionList.get(z).setCategory_id("");
                         text = "N/A";
@@ -733,20 +657,11 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         final Button save = (Button) dialogNo.findViewById(R.id.btn_save);
         Button cancel = (Button) dialogNo.findViewById(R.id.btn_cancel);
 
-        /*Log.i("TEST-ERROR-Q", "SIZE: " + question_id);
-        if (!question_id.equals("")) {
-            List<ModelReportQuestion> questionAnswer = ModelReportQuestion.find(ModelReportQuestion.class,
-                    "reportid = ? AND questionid = ?", report_id, question_id);
-            Log.i("TEST-ERROR-Q", "Q ID: " + question_id + " SEL SIZE: " + questionAnswer.size());
-        }*/
-
         Log.d("TemplateElementQA", productType + "");
-//        List<ModelClassification> modelClassificationList = ModelClassification.find(ModelClassification.class, "classificationname like '%"+ productType +"%'");
         List<ModelClassificationCategory> modelClassificationCategoryList =
                 ModelClassificationCategory.find(ModelClassificationCategory.class,
                         "classificationname like '%" + productType + "%'");
 
-//        Log.d("TemplateElementQA", modelClassificationCategoryList.get(0).toString() + " size :" + modelClassificationCategoryList.size());
         List<String> categoryId = new ArrayList<>();
         if (modelClassificationCategoryList.size() > 0) {
             for (ModelClassificationCategory mcc : modelClassificationCategoryList) {
@@ -756,11 +671,9 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
         }
 
         Log.d("TemplateElementQA", categoryId.size() + "");
-        //List<ModelCategory> categoryList = ModelCategory.listAll(ModelCategory.class);
         List<ModelCategory> categoryList = ModelCategory.find(ModelCategory.class, "status > 0");
 
-        if(categoryList.size() > 0) {
-
+        if (categoryList.size() > 0) {
             List<String> list = new ArrayList<>();
             final List<String> listid = new ArrayList<>();
             Log.d("TEST-TRAP", categoryList.size() + "");
@@ -772,12 +685,10 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                     list.add(categoryList.get(count).getCategory_name());
                     Log.d("TEST-TRAP", "ID: " + categoryList.get(count).getCategory_id());
                     listid.add(categoryList.get(count).getCategory_id());
-                    //if (mrq.size() > 0 && questionList.size() < z) {
                     if (mrq.size() >= 0 && questionList.size() > 0) {
                         Log.i("BUG-I",
                                 "CAT ID: " + questionList.get(z).getCategory_id() +
                                         " SEL ID: " + listid.get(listid.size() - 1));
-                        //if ()
                         if (questionList.get(z).getCategory_id().equals(listid.get(listid.size() - 1))) {
                             Log.i("BUG-I",
                                     "CAT ID: " + questionList.get(z).getCategory_id() +
@@ -788,21 +699,13 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                 }
             }
 
-
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list);
             category.setAdapter(adapter);
 
-
-            //if (mrq.size() > 0) {
             if (questionList.get(z).getAnswer_id().equals("2")) {
-                //remarks.setText(questionList.get(z).getAnswer_details().replace("&lt;br&gt;", "\n").replace("&#8718;", "▪").replace("&#34;", "\""));
                 remarks.setText(questionList.get(z).getAnswer_details().replace("&lt;br&gt;", "\n").replace("&#34;", "\""));
-                //for testing, set spinner item
-                //+ " Selected Category : " + questionList.get(z).getCategory_id() + " Selected : " + selected);
                 category.setSelection(selected);
             }
-            //}
-
 
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -814,16 +717,11 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                     strRemarks = remarks.getText().toString();
                     spnCategory = category.getSelectedItem().toString();
 
-                    //for prod
-                   // if (strRemarks.contains("\n") || strRemarks.contains("▪") || strRemarks.contains("\"")) {
                     if (strRemarks.contains("\n") || strRemarks.contains("\"")) {
-                        //newStr = strRemarks.replaceAll("[\r\n]+", "&lt;br&gt;").replace("▪", "&#8718;").replace("\"", "&#34;");
                         newStr = strRemarks.replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"", "&#34;");
-                        //Toast.makeText(context, newStr, Toast.LENGTH_SHORT).show();
                         Log.i("IF ANSWER : ", newStr);
                     } else {
                         newStr = strRemarks;
-                        //Toast.makeText(context, "else: " + newStr, Toast.LENGTH_SHORT).show();
                         Log.i("ELSE ANSWER : ", newStr);
                     }
 
@@ -838,19 +736,13 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
                             na.setBackgroundResource(R.drawable.yes_button);
                             nc.setBackgroundResource(R.drawable.yes_button);
 
-                            //Toast.makeText(context, "save data to db : " + strRemarks + spnCategory, Toast.LENGTH_SHORT).show();
-
                             questionList.get(z).setAnswer_id("2");
-                            //questionList.get(z).setAnswer_details(strRemarks);//for testing
                             questionList.get(z).setAnswer_details(newStr);// for prod
                             questionList.get(z).setCategory_id(listid.get(category.getSelectedItemPosition()));
                             text = "N/A";
-                            //cb.setChecked(false);
                             dialogNoIsShowing = false;
-
                             cb.setChecked(false);
                             cb.setText("N/A");
-
                             dialogNo.dismiss();
                         }
                     }
@@ -858,7 +750,7 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
             });
 
 
-        }else{
+        } else {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
             builder1.setMessage("This Product Type's Category is empty.  Please contact your administrator.");
             builder1.setCancelable(true);
@@ -918,13 +810,13 @@ public class TemplateElementQuestionAdapter extends RecyclerView.Adapter<Templat
 
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_listview_question, parent, false);
-        return new Widgets(v);
+        return new Widgets(view);
     }
 
     public static class Widgets extends RecyclerView.ViewHolder {
-        TextView tvQuestion, tvQuestionNumber;
+        TextView tvQuestion;
         public Button btnYes, btnNo, btnNa, btnNc;
 
 

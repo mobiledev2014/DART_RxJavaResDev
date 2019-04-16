@@ -43,11 +43,9 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
     ArrayList<TemplateElementQuestionAdapter> templateElementQuestionAdapters;
     Dialog dialogElementNa;
     String productType;
-    boolean pick;
     int size = 0;
     String report_id = "";
     String indic = "";
-    List<String> questionId = new ArrayList<>();
     private List<ModelTemplateElements> questionModel;
 
     public TemplateElementAdapter(Context context, List<ModelTemplateElements> questionModel,
@@ -61,7 +59,6 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
 
         templateElementQuestionAdapters = new ArrayList<>();
 
-
         for (ModelTemplateElements mte : questionModel) {
             mte.setModelTemplateQuestionDetails(ModelTemplateQuestionDetails.find(ModelTemplateQuestionDetails.class,
                     "elementid = ? ", mte.getElement_id()));
@@ -71,62 +68,16 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
             templateElementQuestionAdapters.add(questionList);
             size++;
             questionList.notifyDataSetChanged();
-            /*questionId.clear();
-            checkBoxSetter(mte.getElement_id(), mte.getTemplate_id(), report_id);*/
         }
 
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        try {
-
-            ListAdapter listAdapter = listView.getAdapter();
-            if (listAdapter == null) {
-                return;
-            }
-            int totalHeight = listView.getPaddingTop()
-                    + listView.getPaddingBottom();
-            int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
-                    View.MeasureSpec.EXACTLY);
-            for (int i = 0; i < listAdapter.getCount(); i++) {
-                View listItem = listAdapter.getView(i, null, listView);
-
-                if (listItem != null) {
-                    // This next line is needed before you call measure or else
-                    // you won't get measured height at all. The listitem needs
-                    // to be drawn first to know the height.
-                    listItem.setLayoutParams(new RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.WRAP_CONTENT,
-                            RelativeLayout.LayoutParams.WRAP_CONTENT));
-                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-                    totalHeight += listItem.getMeasuredHeight();
-
-                }
-            }
-
-            ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = totalHeight
-                    + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-            listView.setLayoutParams(params);
-            listView.requestLayout();
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-    }
-
     @Override
     public int getItemCount() {
         return questionModel.size();
     }
-
-//    @Override
-
-
-//    public Object getItem(int position) {
-//        return position;
-//    }
 
     @Override
     public long getItemId(int position) {
@@ -150,15 +101,8 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
 
         widgets.lvQuestionList.setAdapter(templateElementQuestionAdapters.get(position));
         widgets.lvQuestionList.setNestedScrollingEnabled(false);
-        //widgets.lvQuestionList.setExpanded(true);
-
-        /*if (templateElementQuestionAdapters.get(position).isNA()) {
-            widgets.cbElementNa.setChecked(true);
-            widgets.cbElementNa.setText("Not applicable");
-        }*/
 
         final String check = templateElementQuestionAdapters.get(position).isChecked();
-        //Log.i("RADIO_BUTTON", "VALUE : " + check + " Variable : " + Variable.checkValue);
         if (check.length() > 0) {
             Log.i("RADIO_BUTTON", "CHECK VALUE : " + check + " Variable : " + checkValue);
             widgets.cbElementNa.setText(check);
@@ -190,8 +134,7 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                         @Override
                         public void run() {
                             dialog.dismiss();
-                            //templateElementQuestionAdapters.get(z).setAnswer("", "", dialog);
-                            dialogElementNa(widgets.cbElementNa, widgets.getAdapterPosition() , dialog, questionModel.get(widgets.getAdapterPosition()).getElement_id());
+                            dialogElementNa(widgets.cbElementNa, widgets.getAdapterPosition(), dialog, questionModel.get(widgets.getAdapterPosition()).getElement_id());
                         }
                     }, 700);
                 } else {
@@ -211,9 +154,9 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
 
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custom_listview_element, parent, false);
-        return new Widgets(v);
+        return new Widgets(view);
     }
 
     public void save(String report_id) {
@@ -221,19 +164,6 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
         for (TemplateElementQuestionAdapter t : templateElementQuestionAdapters) {
             t.save(report_id);
         }
-    }
-
-    public boolean validate() {
-        boolean valid = true;
-        for (TemplateElementQuestionAdapter t : templateElementQuestionAdapters) {
-            for (ModelTemplateQuestionDetails mtqd : t.questionList) {
-                Log.e("JHUN---", mtqd.getAnswer_id() + "asd");
-                if (mtqd.getAnswer_id().isEmpty()) {
-                    valid = false;
-                }
-            }
-        }
-        return valid;
     }
 
     public void dialogElementNa(final CheckBox pick, final int z, final Dialog dialog, final String elementId) {
@@ -253,7 +183,6 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
         na.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(context, "Not applicable", Toast.LENGTH_SHORT).show();
                 dialog.show();
                 dialogElementNa.dismiss();
 
@@ -290,8 +219,6 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //templateElementQuestionAdapters.get(z).setAnswer("", "", dialog);
-                //templateElementQuestionAdapters.get(z).notifyDataSetChanged();
                 pick.setChecked(false);
                 dialogElementNa.dismiss();
             }

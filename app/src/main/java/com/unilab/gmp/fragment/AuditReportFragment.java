@@ -37,9 +37,7 @@ public class AuditReportFragment extends Fragment {
 
     Unbinder unbinder;
     Context context;
-
     List<ModelAuditReports> modelAuditReports;
-
     @BindView(R.id.tv_sync_date)
     TextView tvSyncDate;
     @BindView(R.id.lv_audit_report_list)
@@ -68,7 +66,6 @@ public class AuditReportFragment extends Fragment {
         Variable.onTemplate = false;
         sharedPref = new SharedPreferenceManager(context);
 
-        //modelAuditReports = ModelAuditReports.listAll(ModelAuditReports.class, "modifieddate DESC");
         modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0'", new String[]{}, null, "modifieddate DESC", "50");
 
         auditReportAdapter = new AuditReportAdapter(context, modelAuditReports);
@@ -76,7 +73,7 @@ public class AuditReportFragment extends Fragment {
         tvAuditReportCount.setText(modelAuditReports.size() + " Total Record(s)");
         tvSyncDate.setText("Data as of: " + sharedPref.getStringData("DATE"));
 
-        for(ModelAuditReports mar : modelAuditReports){
+        for (ModelAuditReports mar : modelAuditReports) {
             Log.e("Tset", mar.getReport_id() + " --- " + mar.getCompany_id());
         }
 
@@ -92,14 +89,14 @@ public class AuditReportFragment extends Fragment {
     @OnClick(R.id.iv_search)
     public void onViewClicked() {
         searchTemplate();
-        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(ivSearch.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
     public void searchTemplate() {
         String audName = etSearchTemplate.getText().toString();
 
-        List<ModelCompany> site = ModelCompany.find(ModelCompany.class, "companyname LIKE ?", "%"+audName+"%");
+        List<ModelCompany> site = ModelCompany.find(ModelCompany.class, "companyname LIKE ?", "%" + audName + "%");
         List<AuditorsModel> auditor = AuditorsModel.find(AuditorsModel.class, "fname LIKE ? OR mname LIKE ? OR lname LIKE ?",
                 "%" + audName + "%", "%" + audName + "%", "%" + audName + "%");
 
@@ -107,19 +104,12 @@ public class AuditReportFragment extends Fragment {
             if (site.size() > 0)
                 modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0' AND companyid LIKE ?",
                         "%" + site.get(0).getCompany_id() + "" + "%");
-//            modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0' AND status != '3' AND companyid LIKE ?",
-//                    "%" + site.get(0).getCompany_id() + "" + "%");
             else if (auditor.size() > 0)
                 modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0' AND auditorid LIKE ?",
                         "%" + auditor.get(0).getAuditor_id() + "" + "%");
-//            modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0' AND status != '3' AND auditorid LIKE ?",
-//                    "%" + auditor.get(0).getAuditor_id() + "" + "%");
             else
                 modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0' AND reportno LIKE ?",
                         "%" + audName + "%");
-
-//            modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0' AND status != '3' AND reportno LIKE ?",
-//                    "%" + audName + "%");
             Log.e("AuditorsCount", modelAuditReports.size() + "");
             if (modelAuditReports.size() > 0) {
                 setTemplateList();
@@ -129,7 +119,6 @@ public class AuditReportFragment extends Fragment {
                 tvNoResult.setVisibility(View.VISIBLE);
             }
         } else {
-//            modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status > '0' AND status != '3'", new String[]{}, null, "modifieddate DESC", "50");
             modelAuditReports = ModelAuditReports.find(ModelAuditReports.class, "status >= '0'", new String[]{}, null, "modifieddate DESC", "50");
             setTemplateList();
             tvNoResult.setVisibility(View.GONE);

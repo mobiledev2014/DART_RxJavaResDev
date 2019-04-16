@@ -28,7 +28,6 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
     boolean isCheck = true;
     int disable = 0;
     String reportid = "";
-    String status = "";
 
     public AdapterCompanyBackgroundMajorChanges(List<TemplateModelCompanyBackgroundMajorChanges> templateModelCompanyBackgroundMajorChanges, Context context, int disable) {
         this.templateModelCompanyBackgroundMajorChanges = templateModelCompanyBackgroundMajorChanges;
@@ -41,11 +40,6 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
     public int getItemCount() {
         return templateModelCompanyBackgroundMajorChanges.size();
     }
-
-//    @Override
-//    public Object getItem(int i) {
-//        return templateModelCompanyBackgroundMajorChanges.get(i);
-//    }
 
     @Override
     public long getItemId(int i) {
@@ -60,21 +54,20 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
     }
 
     @Override
-    public void onBindViewHolder(final Widgets widgets,int position) {
+    public void onBindViewHolder(final Widgets widgets, int position) {
         if (Variable.status.equals("3")) {
             int disabled_color = context.getResources().getColor(R.color.disabled_color);
-            widgets.majorchanges.setKeyListener( null );
-            widgets.majorchanges.setFocusable( false );
+            widgets.majorchanges.setKeyListener(null);
+            widgets.majorchanges.setFocusable(false);
             widgets.majorchanges.setCursorVisible(false);
             widgets.majorchanges.setTextColor(disabled_color);
         }
 
         if (templateModelCompanyBackgroundMajorChanges.size() > widgets.getAdapterPosition()) {
 
-            if(templateModelCompanyBackgroundMajorChanges.get(widgets.getAdapterPosition()).getMajorchanges() != null) {
-            //    widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(position).getMajorchanges().replace("&lt;br&gt;", "\n").replace("s&#0149;","▪").replace("&#34;","\""));
-                widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(widgets.getAdapterPosition()).getMajorchanges().replace("&lt;br&gt;", "\n").replace("&#34;","\""));
-            }else{
+            if (templateModelCompanyBackgroundMajorChanges.get(widgets.getAdapterPosition()).getMajorchanges() != null) {
+                widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(widgets.getAdapterPosition()).getMajorchanges().replace("&lt;br&gt;", "\n").replace("&#34;", "\""));
+            } else {
                 widgets.majorchanges.setText(templateModelCompanyBackgroundMajorChanges.get(widgets.getAdapterPosition()).getMajorchanges());
             }
 
@@ -90,6 +83,7 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
                     if (widgets.getAdapterPosition() < templateModelCompanyBackgroundMajorChanges.size())
                         templateModelCompanyBackgroundMajorChanges.get(widgets.getAdapterPosition()).setMajorchanges(charSequence.toString());
                 }
+
                 @Override
                 public void afterTextChanged(Editable editable) {
 
@@ -106,8 +100,8 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
         if (disable > position) {
             int disabled_color = context.getResources().getColor(R.color.disabled_color);
 
-            widgets.majorchanges.setKeyListener( null );
-            widgets.majorchanges.setFocusable( false );
+            widgets.majorchanges.setKeyListener(null);
+            widgets.majorchanges.setFocusable(false);
             widgets.majorchanges.setCursorVisible(false);
             widgets.majorchanges.setTextColor(disabled_color);
         }
@@ -134,15 +128,12 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
         TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
         int i = 0;
         for (TemplateModelCompanyBackgroundMajorChanges t : templateModelCompanyBackgroundMajorChanges) {
-
             if (i++ >= disable && !t.getMajorchanges().isEmpty()) {
                 t.setReport_id(report_id);
                 t.setCompany_id(company_id);
-
                 t.save();
             }
         }
-
     }
 
     public class Widgets extends RecyclerView.ViewHolder {
@@ -166,7 +157,6 @@ public class AdapterCompanyBackgroundMajorChanges extends RecyclerView.Adapter<A
                     return false;
                 }
             });
-
         }
     }
 }

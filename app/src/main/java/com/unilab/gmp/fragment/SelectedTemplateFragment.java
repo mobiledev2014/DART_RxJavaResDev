@@ -79,10 +79,6 @@ public class SelectedTemplateFragment extends Fragment {
     EditText etTemplateSiteAddressOne;
     @BindView(R.id.et_template_site_address_two)
     EditText etTemplateSiteAddressTwo;
-    //    @BindView(R.id.btn_template_date_from)
-//    Button btnTemplateDateFrom;
-//    @BindView(R.id.btn_template_date_to)
-//    Button btnTemplateDateTo;
     @BindView(R.id.btn_template_audit_date_add)
     Button btnTemplateDateAdd;
     @BindView(R.id.btn_template_audit_date_delete)
@@ -91,8 +87,6 @@ public class SelectedTemplateFragment extends Fragment {
     TextView tvTemplateProductType;
     @BindView(R.id.tv_template_standard)
     TextView tvTemplateStandard;
-    /*@BindView(R.id.lv_template_element)
-    ListView lvTemplateElement;*/
     @BindView(R.id.btn_cancel)
     Button btnCancel;
     @BindView(R.id.btn_save_draft)
@@ -119,10 +113,7 @@ public class SelectedTemplateFragment extends Fragment {
     Dialog dialogAnswerAll;
 
     int year = 2017, month, day;
-    Calendar dateSelected = Calendar.getInstance();
     Calendar currentTime = Calendar.getInstance();
-    int useDate;
-    String yearGmp = "";
     String substr = "";
     String indicator = "TEMPLATE";
 
@@ -171,35 +162,14 @@ public class SelectedTemplateFragment extends Fragment {
         lvTemplateAuditDate = (ExpandableHeightListView) rootView.findViewById(R.id.lv_template_audit_date);
         setWidgets();
         setWatcher();
-        setText();
 
         this.rootView = rootView;
         return rootView;
     }
 
     private void getYearGmp() {
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-//        yearGmp = sdf.format(new Date());
-//        substr = yearGmp.substring(2);
-//        Log.i("Year GMP", substr);
         substr = "00";
     }
-
-    /*@Override
-    public void onResume() {
-        super.onResume();
-        if (context != null) {
-            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (context != null) {
-            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-        }
-    }*/
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -211,65 +181,21 @@ public class SelectedTemplateFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    private void setText() {
-//        List<ModelTemplates> l = ModelTemplates.find(ModelTemplates.class, "template_id = ?", modelTemplates.getTemplateID());
-//        if (l.get(0).getCompany_id().length() > 0) {
-//            List<ModelCompany> list = ModelCompany.find(ModelCompany.class, "companyid = ?", l.get(0).getCompany_id());
-//            if (list.size() > 0) {
-//                Log.e("testasd", modelTemplates.getCompany_id() + " das");
-//                etTemplateSite.setText(list.get(0).getCompany_name());
-//                etTemplateSiteAddressOne.setText(list.get(0).getAddress1());
-//                etTemplateSiteAddressTwo.setText(list.get(0).getAddress2() + "/" + list.get(0).getAddress3() + ", " + list.get(0).getCountry());
-//            }
-//
-//            if (l.get(0).getAudit_date_1().length() > 0)
-//                btnTemplateDateFrom.setText(l.get(0).getAudit_date_1());
-//            if (l.get(0).getAudit_date_2().length() > 0)
-//                btnTemplateDateTo.setText(l.get(0).getAudit_date_2());
-//
-//            modelTemplates.setCompany_id(l.get(0).getCompany_id());
-//        }
-    }
 
     private void setWidgets() {
-        //tableDirectory = new TableDirectory(context);
-        //questionModel = tableDirectory.getDirectory();
         List<ModelTemplateElements> mte = ModelTemplateElements.find(ModelTemplateElements.class,
                 "templateid = ?", modelTemplates.getTemplateID());
         modelTemplates.setModelTemplateElements(mte);
-//        for (int i = 0; i < modelTemplates.getModelTemplateElements().size(); i++) {
-//            ModelTemplateElements modelTemplateElement = new ModelTemplateElements();
-//            //QuestionModel value = new QuestionModel();
-//
-//            modelTemplateElement.setUpdate_date(modelTemplates.getModelTemplateElements().get(i).getUpdate_date());
-//            modelTemplateElement.setCreate_date(modelTemplates.getModelTemplateElements().get(i).getCreate_date());
-//            modelTemplateElement.setElement_id(modelTemplates.getModelTemplateElements().get(i).getElement_id());
-//            modelTemplateElement.setElement_name(modelTemplates.getModelTemplateElements().get(i).getElement_name());
-//            modelTemplateElement.setModelTemplateQuestionDetails(modelTemplates.getModelTemplateElements().get(i).getModelTemplateQuestionDetails());
-//
-//            modelTemplates.getModelTemplateElements().add(modelTemplateElement);
-//        }
-        //questionModel = tableDirectory.getDirectory();
-
-
-
         templateElementAdapter = new TemplateElementAdapter(context, modelTemplates.getModelTemplateElements(),
                 "", modelTemplates.getProductType(), indicator);
-
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
         lvTemplateElement.setLayoutManager(mLayoutManager);
-      //  lvTemplateElement.setItemAnimator(new DefaultItemAnimator());
-
         lvTemplateElement.setNestedScrollingEnabled(false);
         lvTemplateElement.setAdapter(templateElementAdapter);
         lvTemplateElement.setHasFixedSize(true);
         lvTemplateElement.setItemViewCacheSize(20);
         lvTemplateElement.setDrawingCacheEnabled(true);
         lvTemplateElement.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-
-        //lvTemplateElement.addOnScrollListener(new RecyclerView.OnS);
-        //lvTemplateElement.setExpanded(true);
-
         lvTemplateElement.setOnTouchListener(new View.OnTouchListener() {
             // Setting on Touch Listener for handling the touch inside ScrollView
             @Override
@@ -280,9 +206,6 @@ public class SelectedTemplateFragment extends Fragment {
             }
         });
 
-
-//         modelDateOfAudits = ModelDateOfAudit.find(ModelDateOfAudit.class,
-//                "templateid = ?", modelTemplates.getTemplateID());
         modelDateOfAudits = new ArrayList<>();
         modelTemplates.setModelDateOfAudits(modelDateOfAudits);
         dateOfAuditAdapter = new DateOfAuditAdapter(context, modelTemplates.getModelDateOfAudits());
@@ -315,14 +238,6 @@ public class SelectedTemplateFragment extends Fragment {
             R.id.btn_save_draft, R.id.btn_submit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-//            case R.id.btn_template_date_from:
-//                useDate = 1;
-//                new DatePickerDialog(context, date, year, month, day).show();
-//                break;
-//            case R.id.btn_template_date_to:
-//                useDate = 2;
-//                new DatePickerDialog(context, date, year, month, day).show();
-//                break;
             case R.id.btn_template_audit_date_delete:
                 deleteDateOfAudit();
                 break;
@@ -342,12 +257,10 @@ public class SelectedTemplateFragment extends Fragment {
                 if (validate()) {
                     dialogSubmit("Would you like to proceed?");
                 } else {
-
                     List<ModelCompany> listSite = ModelCompany.find(ModelCompany.class, "companyname = ?", etTemplateSite.getText().toString());
-
-                    if(listSite.size() == 0){
+                    if (listSite.size() == 0) {
                         dialogAnswerAll("Please input a valid site.");
-                    }else {
+                    } else {
                         dialogAnswerAll("Please fill up all required fields.");
                     }
                 }
@@ -358,7 +271,6 @@ public class SelectedTemplateFragment extends Fragment {
     private void deleteDateOfAudit() {
         if (modelDateOfAudits.size() > 1) {
             dialogDeleteDateConfirmation("Are you sure you want to delete?");
-
         }
     }
 
@@ -397,19 +309,8 @@ public class SelectedTemplateFragment extends Fragment {
     }
 
     private void analyzeInputs(ArrayList<ModelTemplateElements> modelTemplateElements) {
-//        List<ModelTemplateElements> modelTemplateElements = ModelTemplateElements.listAll(ModelTemplateElements.class);
-
-//        boolean allIsAnswered = true;
         boolean allIsAnswered = validate();
-//        for (ModelTemplateElements templates : modelTemplateElements) {
-//            for (ModelTemplateQuestionDetails questionDetails : templates.getModelTemplateQuestionDetails()) {
-//                if (questionDetails.getAnswer_id().equals("")) {
-//                    allIsAnswered = false;
-//                }
-//            }
-//        }
         if (allIsAnswered) {
-            //ProgressDialogUtils.showSimpleProgressDialog(context,"","Loading . . .",false);
             if (nextSelectTemplate == null) {
                 nextSelectTemplate = new NextSelectedTemplateFragment(modelTemplates, templateElementAdapter, this);
                 Variable.isFromBackStack = true;
@@ -420,32 +321,17 @@ public class SelectedTemplateFragment extends Fragment {
                 @Override
                 public void run() {
                     // Do something after 5s = 5000ms
-                    /*FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.fl_content, nextSelectTemplate, "TemplateSelect")
-                            .addToBackStack(null).commit();*/
-                    if(Variable.isFromBackStack) {
-           /*             if(Variable.isChangedSite){
-                            Variable.isChangedSite = false;
-                            NextSelectedTemplateFragment.siteChanged();
-                        }*/
-                    }
-                        FragmentManager fragmentManager = getFragmentManager();
-                        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.fl_content, nextSelectTemplate).addToBackStack(null).commit();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fl_content, nextSelectTemplate).addToBackStack(null).commit();
 
                 }
             }, 700);
         } else {
-            //Toast.makeText(context, "Answer all questions first.", Toast.LENGTH_SHORT).show();
             dialogAnswerAll("Please fill out all the required field(s).");
         }
     }
-
-//    nextSelectTemplate = new NextSelectedTemplateFragment(modelTemplates, templateElementAdapter);
-//    FragmentManager fragmentManager = getFragmentManager();
-//            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//            fragmentManager.beginTransaction().add(R.id.fl_content, nextSelectTemplate).addToBackStack(null).commit();
 
     public void dialogCancelTemplate() {
         dialogCancelTemplate = new Dialog(context);
@@ -494,12 +380,6 @@ public class SelectedTemplateFragment extends Fragment {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (validate()) {
-//                    modelTemplates.save();
-//                    templateElementAdapter.save();
-//                } else {
-//                    Toast.makeText(context, "Not Saved", Toast.LENGTH_SHORT).show();
-//                }
                 ModelAuditReports mar = new ModelAuditReports();
 
                 List<ModelAuditReports> auditReps = ModelAuditReports.findWithQuery(ModelAuditReports.class,
@@ -589,44 +469,6 @@ public class SelectedTemplateFragment extends Fragment {
     }
 
     public void setWatcher() {
-       /* etTemplateSite.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    List<ModelCompany> supplierList = ModelCompany.find(ModelCompany.class, "status = '1'");
-                    for(ModelCompany var: supplierList){
-                        Log.e("Supplier List", "onClick: "+ var.getCompany_name());
-                        if(etTemplateSite.getText().toString().equals(var.getCompany_name())){
-                            dialogChangeSite();
-                        }
-                    }
-                }
-                return false;
-            }
-        });
-
-        etTemplateSite.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(etTemplateSite.getText().equals("")){
-                    modelTemplates.setCompany_id("");
-                    etTemplateSiteAddressOne.setText("");
-                    etTemplateSiteAddressTwo.setText("");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });*/
-
-
         List<ModelCompany> listSite = ModelCompany.find(ModelCompany.class, "status = '1'");
         String[] arrListSite = new String[listSite.size()];
         for (int x = 0; x < listSite.size(); x++) {
@@ -652,78 +494,20 @@ public class SelectedTemplateFragment extends Fragment {
         });
     }
 
-/*    private void dialogChangeSite(){
-        final Dialog confirm = new Dialog(context);
-        confirm.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        confirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        confirm.setCancelable(false);
-        confirm.setContentView(R.layout.dialog_change_site);
-        confirm.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        final Button yesBtn = (Button) confirm.findViewById(R.id.btn_yes);
-        final Button noBtn = (Button) confirm.findViewById(R.id.btn_no);
-
-        yesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                modelTemplates.setCompany_id("");
-                Variable.isChangedSite = true;
-                etTemplateSite.setText("");
-                etTemplateSiteAddressOne.setText("");
-                etTemplateSiteAddressTwo.setText("");
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                confirm.cancel();
-            }
-        });
-
-        noBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirm.cancel();
-            }
-        });
-
-        confirm.show();
-
-    }*/
-
     public boolean validate() {
-//        if (!templateElementAdapter.validate()) {
-//            pDialog.dismiss();
-//            return false;
-//        }
         Log.e("validate", "date of audit : " + dateOfAuditAdapter.getItem(0));
         boolean validate = true;
-        for(int i = 0; i < dateOfAuditAdapter.getCount(); i++){
-            if(dateOfAuditAdapter.getItem(i).equals("")){
+        for (int i = 0; i < dateOfAuditAdapter.getCount(); i++) {
+            if (dateOfAuditAdapter.getItem(i).equals("")) {
                 validate = false;
             }
         }
 
         if (modelTemplates.getCompany_id().isEmpty()) {
-//            if (modelTemplates.getCompany_id().isEmpty() || modelTemplates.getAudit_date_1().isEmpty() ||
-//                    modelTemplates.getAudit_date_2().isEmpty())
             pDialog.dismiss();
             validate = false;
         }
         return validate;
-    }
-
-    public boolean validateDraft() {
-        boolean noAnswer = false;
-        Log.e("validate", "date of audit : " + dateOfAuditAdapter.getItem(0));
-        if (modelTemplates.getCompany_id().isEmpty()) {
-            pDialog.dismiss();
-            noAnswer = true;
-        }
-
-        if (dateOfAuditAdapter.validateDates()) {
-            pDialog.dismiss();
-            noAnswer = true;
-        }
-
-        return noAnswer;
     }
 
     public void dialogSucSaveDraft(String mess) {
@@ -814,14 +598,12 @@ public class SelectedTemplateFragment extends Fragment {
                 else {
                     ModelDateOfAudit doa = new ModelDateOfAudit();
                     doa.setDateOfAudit("");
-                    //doa.setTemplate_id(modelTemplates.getTemplateID());
                     modelDateOfAudits.add(doa);
                     dateOfAuditAdapter.notifyDataSetChanged();
                 }
             } else {
                 ModelDateOfAudit doa = new ModelDateOfAudit();
                 doa.setDateOfAudit("");
-//            doa.setTemplate_id(modelTemplates.getTemplateID());
                 modelDateOfAudits.add(doa);
                 dateOfAuditAdapter.notifyDataSetChanged();
             }

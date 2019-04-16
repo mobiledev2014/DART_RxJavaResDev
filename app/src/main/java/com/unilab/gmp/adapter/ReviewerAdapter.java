@@ -43,56 +43,51 @@ public class ReviewerAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
-        return i;
+    public Object getItem(int item) {
+        return item;
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int id) {
+        return id;
     }
 
     @Override
     public View getView(int position, View rowView, ViewGroup viewGroup) {
         Widgets widgets;
-//        if (rowView == null) {
-            widgets = new Widgets();
+        widgets = new Widgets();
 
-            rowView = inflater.inflate(R.layout.custom_listview_reviewer, null);
+        rowView = inflater.inflate(R.layout.custom_listview_reviewer, null);
 
-            widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.row_background);
-            if (position % 2 == 0)
-                widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
-            else
-                widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
+        widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.row_background);
+        if (position % 2 == 0)
+            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
+        else
+            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
 
-            widgets.name = (TextView) rowView.findViewById(R.id.tv_reviewer_name);
-            widgets.date_modified = (TextView) rowView.findViewById(R.id.tv_date_modified);
-            widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
+        widgets.name = (TextView) rowView.findViewById(R.id.tv_reviewer_name);
+        widgets.date_modified = (TextView) rowView.findViewById(R.id.tv_date_modified);
+        widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
 
-            reviewerModel = reviewerModels.get(position);
-            final String firstname = reviewerModel.getFirstname();
-            final String middlename = reviewerModel.getMiddlename();
-            final String lastname = reviewerModel.getLastname();
-            final String designation = reviewerModel.getDesignation();
-            final String company = reviewerModel.getCompany();
-            final String department = reviewerModel.getDepartment();
-            final String email = reviewerModel.getEmail();
+        reviewerModel = reviewerModels.get(position);
+        final String firstname = reviewerModel.getFirstname();
+        final String middlename = reviewerModel.getMiddlename();
+        final String lastname = reviewerModel.getLastname();
+        final String designation = reviewerModel.getDesignation();
+        final String company = reviewerModel.getCompany();
+        final String department = reviewerModel.getDepartment();
+        final String email = reviewerModel.getEmail();
 
-            widgets.name.setText(firstname + " " + middlename + " " + lastname);
-            widgets.date_modified.setText(reviewerModel.getUpdate_date());
+        widgets.name.setText(firstname + " " + middlename + " " + lastname);
+        widgets.date_modified.setText(reviewerModel.getUpdate_date());
 
-            widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialogViewReviewer(firstname + " " + middlename + " " + lastname,
-                            designation, company, department, email);
-                }
-            });
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
+        widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogViewReviewer(firstname + " " + middlename + " " + lastname,
+                        designation, company, department, email);
+            }
+        });
         return rowView;
     }
 

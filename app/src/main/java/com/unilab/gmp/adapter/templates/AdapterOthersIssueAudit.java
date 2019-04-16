@@ -37,11 +37,6 @@ public class AdapterOthersIssueAudit extends RecyclerView.Adapter<AdapterOthersI
         return templateModelOtherIssuesAudits.size();
     }
 
-//    @Override
-//    public Object getItem(int i) {
-//        return templateModelOtherIssuesAudits.get(i);
-//    }
-
     @Override
     public long getItemId(int i) {
         return i;
@@ -49,14 +44,13 @@ public class AdapterOthersIssueAudit extends RecyclerView.Adapter<AdapterOthersI
 
     @Override
     public Widgets onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.custom_listview_template_other_issue_audit,parent, false);
-        return new Widgets(v);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custom_listview_template_other_issue_audit, parent, false);
+        return new Widgets(view);
     }
 
     @Override
     public void onBindViewHolder(final Widgets widgets, int position) {
-
         widgets.otherIssueAudit.setText(templateModelOtherIssuesAudits.get(widgets.getAdapterPosition()).getOther_issues_audit());
         widgets.otherIssueAudit.setEnabled(Variable.isAuthorized);
         widgets.otherIssueAudit.addTextChangedListener(new TextWatcher() {
@@ -69,7 +63,7 @@ public class AdapterOthersIssueAudit extends RecyclerView.Adapter<AdapterOthersI
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
                     templateModelOtherIssuesAudits.get(widgets.getAdapterPosition()).setOther_issues_audit(widgets.otherIssueAudit.getText().toString());
-                } catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
@@ -79,10 +73,7 @@ public class AdapterOthersIssueAudit extends RecyclerView.Adapter<AdapterOthersI
 
             }
         });
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
+
         if (!isCheck) {
             if (templateModelOtherIssuesAudits.get(widgets.getAdapterPosition()).getOther_issues_audit().isEmpty()) {
                 isCheck = true;
@@ -109,15 +100,15 @@ public class AdapterOthersIssueAudit extends RecyclerView.Adapter<AdapterOthersI
 
     public void save(String report_id) {
         TemplateModelOtherIssuesAudit.deleteAll(TemplateModelOtherIssuesAudit.class, "reportid = ?", report_id);
-        for (TemplateModelOtherIssuesAudit t : templateModelOtherIssuesAudits) {
-            if (t.getOther_issues_audit().isEmpty())
+        for (TemplateModelOtherIssuesAudit templateModelOtherIssuesAudit : templateModelOtherIssuesAudits) {
+            if (templateModelOtherIssuesAudit.getOther_issues_audit().isEmpty())
                 continue;
-            t.setReport_id(report_id);
-            t.save();
+            templateModelOtherIssuesAudit.setReport_id(report_id);
+            templateModelOtherIssuesAudit.save();
         }
     }
 
-    public class Widgets extends RecyclerView.ViewHolder{
+    public class Widgets extends RecyclerView.ViewHolder {
         EditText otherIssueAudit;
 
         public Widgets(View rowView) {

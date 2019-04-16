@@ -141,8 +141,8 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
        // dialog.setProgress(1);
         HttpClient httpclient = new DefaultHttpClient();
         InputStream inputStream = null;
-        //HttpPost httppost = new HttpPost("https://sams.unilab.com.ph/api"); //old api link applied
-        HttpPost httppost = new HttpPost("https://sams.unilab.com.ph/api"); //new api link applied
+        //HttpPost httppost = new HttpPost("http://sams.webqa.unilab.com.ph/api"); //old api link applied
+        HttpPost httppost = new HttpPost("http://sams.webqa.unilab.com.ph/api"); //new api link applied
         httppost.setHeader("Content-type", "application/x-www-form-urlencoded");
         String s = "";
         try {
@@ -150,7 +150,7 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
                     1);
             nameValuePairs.add(new BasicNameValuePair("token",
-                    "4a49c8ee0612249d64b8f737cf52800c13687016"));
+                    "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839"));
             nameValuePairs.add(new BasicNameValuePair("cmdEvent",
                     "authenticate"));
             nameValuePairs.add(new BasicNameValuePair("email",

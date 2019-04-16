@@ -33,7 +33,6 @@ import butterknife.Unbinder;
  */
 
 public class ReviewerFragment extends Fragment {
-
     Unbinder unbinder;
     Context context;
 
@@ -52,13 +51,9 @@ public class ReviewerFragment extends Fragment {
 
     ReviewerModel reviewerModel = new ReviewerModel();
     List<ReviewerModel> reviewerList;
-    List<ReviewerModel> reviewerListall;
     SharedPreferenceManager sharedPref;
 
     ReviewerAdapter reviewerAdapter;
-    ModelReviewerInfo modelReviewerInfo;
-    ApiInterface apiInterface;
-    boolean loopIsDone = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_reviewers, container, false);
@@ -72,7 +67,6 @@ public class ReviewerFragment extends Fragment {
         sharedPref = new SharedPreferenceManager(context);
 
         reviewerModel = new ReviewerModel();
-        //reviewerListall = ReviewerModel.listAll(ReviewerModel.class, "createdate DESC");
         reviewerList = ReviewerModel.find(ReviewerModel.class, "status = '1'", new String[]{}, null, "updatedate DESC", "100");
         Log.d("SIZE", reviewerList.size() + "");
         reviewerAdapter = new ReviewerAdapter(context, reviewerList);

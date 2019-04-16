@@ -44,11 +44,6 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         return templateModelAuditors.size();
     }
 
-//    @Override
-//    public Object getItem(int i) {
-//        return templateModelAuditors.get(i);
-//    }
-
     @Override
     public long getItemId(int i) {
         return i;
@@ -68,8 +63,6 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
         final List<String> list = new ArrayList<>();
         Log.d("SIZE", auditorsList.size() + "");
         int x = auditorsList.size();
-        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context);
-        String email = sharedPreferenceManager.getStringData("EMAIL");
 
         widgets.name.setEnabled(Variable.isAuthorized);
 
@@ -131,26 +124,25 @@ public class AdapterAuditors extends RecyclerView.Adapter<AdapterAuditors.Widget
     }
 
     public void save(String report_id) {
-        for (TemplateModelAuditors t : templateModelAuditors) {
-            t.setReport_id(report_id);
-            t.save();
-            Log.e("auditorID", "id : " + t.getAuditor_id());
+        for (TemplateModelAuditors templateModelAuditor : templateModelAuditors) {
+            templateModelAuditor.setReport_id(report_id);
+            templateModelAuditor.save();
+            Log.e("auditorID", "id : " + templateModelAuditor.getAuditor_id());
         }
     }
 
     public boolean check() {
         boolean isCheck = true;
         Set<String> lump = new HashSet<>();
-        for (TemplateModelAuditors tmsa : templateModelAuditors) {
-            if (!tmsa.getAuditor_id().equals("0")) {
-                if (lump.contains(tmsa.getAuditor_id())) {
+        for (TemplateModelAuditors templateModelAuditor : templateModelAuditors) {
+            if (!templateModelAuditor.getAuditor_id().equals("0")) {
+                if (lump.contains(templateModelAuditor.getAuditor_id())) {
                     isCheck = false;
                     break;
                 }
-                lump.add(tmsa.getAuditor_id());
+                lump.add(templateModelAuditor.getAuditor_id());
             }
         }
-
 
         if (!isCheck) {
             notifyDataSetChanged();

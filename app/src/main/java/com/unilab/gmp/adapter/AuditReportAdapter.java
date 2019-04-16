@@ -45,17 +45,17 @@ public class AuditReportAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
-        return modelAuditReports.get(i);
+    public Object getItem(int id) {
+        return modelAuditReports.get(id);
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int id) {
+        return id;
     }
 
     @Override
-    public View getView(final int i, View rowView, ViewGroup viewGroup) {
+    public View getView(final int position, View rowView, ViewGroup viewGroup) {
         Widgets widgets;
         widgets = new Widgets();
 
@@ -68,15 +68,15 @@ public class AuditReportAdapter extends BaseAdapter {
         widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
 
         widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.row_background);
-        if (i % 2 == 0)
+        if (position % 2 == 0)
             widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
         else
             widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
 
-        List<ModelCompany> modelCompany = ModelCompany.find(ModelCompany.class, "companyid = ?", modelAuditReports.get(i).getCompany_id());
-        List<AuditorsModel> auditorsModels = AuditorsModel.find(AuditorsModel.class, "auditorid = ?", modelAuditReports.get(i).getAuditor_id());
+        List<ModelCompany> modelCompany = ModelCompany.find(ModelCompany.class, "companyid = ?", modelAuditReports.get(position).getCompany_id());
+        List<AuditorsModel> auditorsModels = AuditorsModel.find(AuditorsModel.class, "auditorid = ?", modelAuditReports.get(position).getAuditor_id());
 
-        widgets.tv_ur_no.setText(modelAuditReports.get(i).getReport_no());
+        widgets.tv_ur_no.setText(modelAuditReports.get(position).getReport_no());
         if (modelCompany.size() > 0)
             widgets.tv_audited_site.setText(modelCompany.get(0).getCompany_name());
         else
@@ -85,25 +85,22 @@ public class AuditReportAdapter extends BaseAdapter {
             widgets.tv_auditors.setText(auditorsModels.get(0).getFname() + " " + auditorsModels.get(0).getMname() + " " + auditorsModels.get(0).getLname());
         else
             widgets.tv_auditors.setText("");
-        widgets.tv_date_modified.setText(modelAuditReports.get(i).getModified_date());
-        final int z = i;
+        widgets.tv_date_modified.setText(modelAuditReports.get(position).getModified_date());
 
         widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("STATUS-CLICKED!!!!", modelAuditReports.get(i).getStatus());
+                Log.i("STATUS-CLICKED!!!!", modelAuditReports.get(position).getStatus());
 
-                if (modelAuditReports.get(i).getStatus().equals("5")) {
-                    Utils.pdfIfExist(modelAuditReports.get(i).getReport_id(), context);
+                if (modelAuditReports.get(position).getStatus().equals("5")) {
+                    Utils.pdfIfExist(modelAuditReports.get(position).getReport_id(), context);
                 } else {
                     Variable.selectedProduct.clear();
                     Variable.selectedDisposition.clear();
                     Variable.elementSelect.clear();
                     Variable.report_id = "0";
 
-
-                    //Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
-                    ProgressDialogUtils.showSimpleProgressDialog(context,50,"Loading . . .",false);
+                    ProgressDialogUtils.showSimpleProgressDialog(context, 50, "Loading . . .", false);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -112,16 +109,13 @@ public class AuditReportAdapter extends BaseAdapter {
                             FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                             fragmentManager.beginTransaction()
-                                    .replace(R.id.fl_content, new SelectedAuditReportFragment(modelAuditReports.get(z))).addToBackStack(null).commit();
-                            //Toast.makeText(context, "Use this template", Toast.LENGTH_SHORT).show();
-
+                                    .replace(R.id.fl_content, new SelectedAuditReportFragment(modelAuditReports.get(position))).addToBackStack(null).commit();
                             ProgressDialogUtils.removeSimpleProgressDialog();
                         }
                     }, 700);
-                    }
+                }
             }
         });
-
 
         return rowView;
     }

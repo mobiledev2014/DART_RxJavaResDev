@@ -37,11 +37,6 @@ public class AdapterCompanyBackgroundName extends RecyclerView.Adapter<AdapterCo
         return templateModelCompanyBackgroundNames.size();
     }
 
-//    @Override
-//    public Object getItem(int i) {
-//        return templateModelCompanyBackgroundNames.get(i);
-//    }
-
     @Override
     public long getItemId(int i) {
         return i;
@@ -75,11 +70,6 @@ public class AdapterCompanyBackgroundName extends RecyclerView.Adapter<AdapterCo
 
             }
         });
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
-
         if (disable > i) {
             widgets.bgname.setEnabled(false);
         }

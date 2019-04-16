@@ -56,10 +56,6 @@ public class SupplierFragment extends Fragment {
     SharedPreferenceManager sharedPref;
 
     SupplierAndCompanyInformationAdapter supplierAdapter;
-    ApiInterface apiInterface;
-    ModelCompanyInfo modelCompanyInfo;
-
-    boolean loopIsDone = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_supplier, container, false);
@@ -73,7 +69,6 @@ public class SupplierFragment extends Fragment {
         sharedPref = new SharedPreferenceManager(context);
 
         supplierModel = new SupplierAndCompanyInformationModel();
-        //supplierList = ModelCompany.listAll(ModelCompany.class, "createdate DESC");
         supplierList = ModelCompany.find(ModelCompany.class, "status = '1'");
         Log.d("SIZE", supplierList.size() + "");
 
@@ -94,13 +89,12 @@ public class SupplierFragment extends Fragment {
     @OnClick(R.id.iv_search_site)
     public void onViewClicked() {
         searchSite();
-        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(ivSearchSite.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
     public void searchSite() {
         String audName = etSearchSite.getText().toString();
-
         if (!audName.equals("")) {
             supplierList = ModelCompany.findWithQuery(ModelCompany.class, "SELECT * from MODEL_COMPANY WHERE " +
                     "(companyname LIKE '%" + audName + "%' AND " + "status = '1')" +

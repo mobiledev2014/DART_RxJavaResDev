@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 
 public class ModelReport extends SugarRecord {
-    String token =  "4a49c8ee0612249d64b8f737cf52800c13687016";
+    String token =  "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839";
     String cmdEvent = "postInput";
     String report_id;
     String template_id;

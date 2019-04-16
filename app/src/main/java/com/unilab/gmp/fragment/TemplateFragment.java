@@ -42,8 +42,6 @@ public class TemplateFragment extends Fragment {
     Context context;
     ProgressDialog pDialog;
     Handler handler;
-
-    SelectedTemplateFragment selectedTemplateFragment;
     SharedPreferenceManager sharedPref;
 
     @BindView(R.id.tv_sync_date)
@@ -82,24 +80,23 @@ public class TemplateFragment extends Fragment {
         pDialog.setCancelable(false);
         handler = new Handler();
 
-//        templateList = ModelTemplates.listAll(ModelTemplates.class, "date_Created DESC");
         templateTotalCount = ModelTemplates.listAll(ModelTemplates.class);
-        Log.i("ALL_TEMPLATES" , "" + templateTotalCount.size());
+        Log.i("ALL_TEMPLATES", "" + templateTotalCount.size());
 
         templateList = ModelTemplates.find(ModelTemplates.class, null,
                 new String[]{}, null, "date_Created DESC", null);
 
 
-        for(ModelTemplates i: templateList){
-            Log.e(TAG, "onCreateView: ID: "+i.getTemplateID() + "No Status: " +i.getStatus());
+        for (ModelTemplates i : templateList) {
+            Log.e(TAG, "onCreateView: ID: " + i.getTemplateID() + "No Status: " + i.getStatus());
         }
 
         templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2'",
                 new String[]{}, null, "date_Created DESC", "50");
 
 
-        for(ModelTemplates i: templateList){
-            Log.e(TAG, "onCreateView: ID: "+i.getTemplateID() + " Status: " +i.getStatus());
+        for (ModelTemplates i : templateList) {
+            Log.e(TAG, "onCreateView: ID: " + i.getTemplateID() + " Status: " + i.getStatus());
         }
 
 
@@ -147,9 +144,9 @@ public class TemplateFragment extends Fragment {
                     "(status = '2' OR status = '1') " +
                     "ORDER BY date_Created DESC");
 
-            for(ModelTemplates e: templateList){
-                Log.e(TAG, "searchTemplate: "+e.getTemplateID() );
-                if(e.getTemplateID().equals("2")) {
+            for (ModelTemplates e : templateList) {
+                Log.e(TAG, "searchTemplate: " + e.getTemplateID());
+                if (e.getTemplateID().equals("2")) {
                     Log.e(TAG, "searchTemplate: Status 2: " + e.getStatus());
                 }
             }
@@ -162,13 +159,11 @@ public class TemplateFragment extends Fragment {
                 setTemplateList();
                 tvNoResult.setVisibility(View.VISIBLE);
             }
-            //pDialog.dismiss();
         } else {
             templateList = ModelTemplates.find(ModelTemplates.class, "status = '1' OR status = '2'",
                     new String[]{}, null, "date_Created DESC", "50");
             setTemplateList();
             tvNoResult.setVisibility(View.GONE);
-            //pDialog.dismiss();
         }
     }
 

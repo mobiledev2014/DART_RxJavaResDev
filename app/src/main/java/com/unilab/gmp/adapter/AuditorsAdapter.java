@@ -43,63 +43,52 @@ public class AuditorsAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
-        return i;
+    public Object getItem(int item) {
+        return item;
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int id) {
+        return id;
     }
 
     @Override
     public View getView(int position, View rowView, ViewGroup viewGroup) {
         Widgets widgets;
-//        if (rowView == null) {
-            widgets = new Widgets();
-            rowView = inflater.inflate(R.layout.custom_listview_auditors, null);
+        widgets = new Widgets();
+        rowView = inflater.inflate(R.layout.custom_listview_auditors, null);
 
-            widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.row_background);
-            if (position % 2 == 0)
-                widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
-            else
-                widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
+        widgets.rowBackground = (LinearLayout) rowView.findViewById(R.id.row_background);
+        if (position % 2 == 0)
+            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.white));
+        else
+            widgets.rowBackground.setBackgroundColor(context.getResources().getColor(R.color.row_color));
 
-            widgets.name = (TextView) rowView.findViewById(R.id.tv_auditors_name);
-            widgets.date_modified = (TextView) rowView.findViewById(R.id.tv_date_modified);
-            widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
-            //widgets.llRow = (LinearLayout) rowView.findViewById(R.id.ll_row);
+        widgets.name = (TextView) rowView.findViewById(R.id.tv_auditors_name);
+        widgets.date_modified = (TextView) rowView.findViewById(R.id.tv_date_modified);
+        widgets.viewInfo = (Button) rowView.findViewById(R.id.btn_view_info);
 
-            auditorsModel = auditorsModels.get(position);
-            final String fname = auditorsModel.getFname();
-            final String mname = auditorsModel.getMname();
-            final String lname = auditorsModel.getLname();
-            final String designation = auditorsModel.getDesignation();
-            final String company = auditorsModel.getCompany();
-            final String department = auditorsModel.getDepartment();
-            final String email = auditorsModel.getEmail();
+        auditorsModel = auditorsModels.get(position);
+        final String fname = auditorsModel.getFname();
+        final String mname = auditorsModel.getMname();
+        final String lname = auditorsModel.getLname();
+        final String designation = auditorsModel.getDesignation();
+        final String company = auditorsModel.getCompany();
+        final String department = auditorsModel.getDepartment();
+        final String email = auditorsModel.getEmail();
 
-            widgets.name.setText(fname + " " + mname + " " + lname);
+        widgets.name.setText(fname + " " + mname + " " + lname);
 
-            widgets.date_modified.setText(auditorsModel.getUpdate_date());
-            //widgets.action.setText(auditorsModel.getAuditor_id());
+        widgets.date_modified.setText(auditorsModel.getUpdate_date());
 
-            widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    //Toast.makeText(context, " " + auditorsModel.getAuditor_id(), Toast.LENGTH_SHORT).show();
-
-                    dialogViewAuditor(fname + " " + mname + " " + lname,
-                            designation, company, department,
-                            email);
-                }
-            });
-//            rowView.setTag(widgets);
-//        } else {
-//            widgets = (Widgets) rowView.getTag();
-//        }
-
+        widgets.viewInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogViewAuditor(fname + " " + mname + " " + lname,
+                        designation, company, department,
+                        email);
+            }
+        });
         return rowView;
     }
 
@@ -107,7 +96,6 @@ public class AuditorsAdapter extends BaseAdapter {
         TextView name, date_modified;
         LinearLayout rowBackground;
         Button viewInfo;
-        //LinearLayout llRow;
     }
 
     public void dialogViewAuditor(String Name, String Designation, String Company, String Department
