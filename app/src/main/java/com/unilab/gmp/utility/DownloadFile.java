@@ -45,21 +45,12 @@ public class DownloadFile extends AsyncTask<String, Void, Void> {
     protected Void doInBackground(String... arg0) {
         try {
             Log.e("DownloadFile", "DownloadFile! " + arg0[0]);
-//        	File c = new File(arg0[0]);
-
             URL url = new URL(arg0[0]);
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
-//            c.setRequestMethod("GET");
-//            c.setDoOutput(true);
             c.connect();
-
-//            Log.e("DownloadFile", "DownloadFile! " + c.getResponseMessage());
-//            Log.e("DownloadFile", "DownloadFile! " + c.getResponseCode());
-
             Log.e("DownloadFile", "DownloadFile! " + c.toString());
 
             String pdfPath = System.getenv("EXTERNAL_STORAGE") + "/DART/AuditReports/";
-//            String PATH = System.getenv("EXTERNAL_STORAGE")+"/apk";
             Log.e("DownloadFile", "Path: " + pdfPath);
             File file = new File(pdfPath);
             Log.e("DownloadFile", "File! " + file.toString());
@@ -72,7 +63,6 @@ public class DownloadFile extends AsyncTask<String, Void, Void> {
             Log.e("DownloadFile", "pass " + c.toString());
             InputStream is = c.getInputStream();
 
-//            InputStream is = new FileInputStream("file:///172.16.9.244/website/Bayanihan_Files/APK/UL_R_RX.apk");
             Log.e("DownloadFile", "passed " + c.toString());
             byte[] buffer = new byte[1024];
             int len1 = 0;
@@ -81,7 +71,6 @@ public class DownloadFile extends AsyncTask<String, Void, Void> {
             }
             fos.close();
             is.close();
-
 
         } catch (Exception e) {
             Log.e("UpdateAPP", "download error! " + e.getMessage());
@@ -105,10 +94,10 @@ public class DownloadFile extends AsyncTask<String, Void, Void> {
         dialogSelectPdf.setContentView(R.layout.dialog_pdf_picker);
         dialogSelectPdf.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        Button audit = (Button) dialogSelectPdf.findViewById(R.id.btn_audit_report);
-        Button executive = (Button) dialogSelectPdf.findViewById(R.id.btn_executive_summary);
-        Button annexure = (Button) dialogSelectPdf.findViewById(R.id.btn_annexure);
-        Button cancel = (Button) dialogSelectPdf.findViewById(R.id.btn_cancel);
+        Button audit = dialogSelectPdf.findViewById(R.id.btn_audit_report);
+        Button executive = dialogSelectPdf.findViewById(R.id.btn_executive_summary);
+        Button annexure = dialogSelectPdf.findViewById(R.id.btn_annexure);
+        Button cancel = dialogSelectPdf.findViewById(R.id.btn_cancel);
 
         audit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,8 +129,6 @@ public class DownloadFile extends AsyncTask<String, Void, Void> {
                 dialogSelectPdf.dismiss();
             }
         });
-
-
         dialogSelectPdf.show();
     }
 }

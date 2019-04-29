@@ -11,7 +11,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -28,6 +27,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import androidx.fragment.app.DialogFragment;
+
 @SuppressLint("ValidFragment")
 public class StartDatePickerButton extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 

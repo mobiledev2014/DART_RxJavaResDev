@@ -9,9 +9,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -19,8 +16,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.unilab.gmp.R;
 import com.unilab.gmp.activity.HomeActivity;
 import com.unilab.gmp.activity.MainActivity;
@@ -29,7 +24,6 @@ import com.unilab.gmp.fragment.NextSelectedAuditReportFragment;
 import com.unilab.gmp.fragment.NextSelectedTemplateFragment;
 import com.unilab.gmp.fragment.TemplateFragment;
 import com.unilab.gmp.model.ModelUser;
-import com.unilab.gmp.retrofit.ApiInterface;
 import com.unilab.gmp.retrofit.user.ResultUser;
 import com.unilab.gmp.utility.APICalls;
 import com.unilab.gmp.utility.DialogUtils;
@@ -56,14 +50,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.OkHttpClient;
+import androidx.annotation.RequiresApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class PostAsync extends AsyncTask<String, String, String> implements Callback<ResultUser> {
@@ -71,11 +61,9 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
     public ProgressDialog dialog;
     DialogUtils dUtils;
     Context context;
-    ApiInterface apiInterface;
     SharedPreferenceManager sharedPref;
     Dialog dialogLoginError;
     Dialog dialogPostError;
-    Dialog dialogSuccess;
     NextSelectedAuditReportFragment nextSelectedAuditReportFragment;
     NextSelectedTemplateFragment nextSelectedTemplateFragment;
     TemplateFragment templateFragment;
@@ -97,24 +85,6 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
         auditReportFragment = new AuditReportFragment();
 
         dUtils = new DialogUtils(context);
-        Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-                .setLenient()
-                .create();
-
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(60, TimeUnit.MINUTES)
-                .writeTimeout(60, TimeUnit.MINUTES)
-                .readTimeout(60, TimeUnit.MINUTES)
-                .build();
-
-/*        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://mrdgnsndp.hol.es/")
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();*/
-
-       // apiInterface = retrofit.create(ApiInterface.class);
         sharedPref = new SharedPreferenceManager(context);
         Log.e("TAG", "CLICK!!! 2 ");
     }
@@ -122,12 +92,12 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        if(this.action.equals(Glovar.LOGIN)) {
+        if (this.action.equals(Glovar.LOGIN)) {
             dialog = new ProgressDialog(context);
             dialog.setMessage("Validating user");
             dialog.setCancelable(false);
             dialog.show();
-        }else{
+        } else {
             dialog = new ProgressDialog(context);
             dialog.setMessage("Loading");
             dialog.setCancelable(false);
@@ -138,10 +108,8 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
     @Override
     protected String doInBackground(String... data) {
         // Create a new HttpClient and Post Header
-       // dialog.setProgress(1);
         HttpClient httpclient = new DefaultHttpClient();
         InputStream inputStream = null;
-        //HttpPost httppost = new HttpPost("http://sams.webqa.unilab.com.ph/api"); //old api link applied
         HttpPost httppost = new HttpPost("http://sams.webqa.unilab.com.ph/api"); //new api link applied
         httppost.setHeader("Content-type", "application/x-www-form-urlencoded");
         String s = "";
@@ -178,7 +146,7 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
         } catch (IOException e) {
             Log.e("HI", "CLICK!!! IOException");
             loginError = true;
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e("HI", "doInBackground: " + e.toString());
         }
 
@@ -197,12 +165,8 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
             Log.e("TAG", "RESULT LOG IN : " + obj.getString("status") + " Result : " + result);
             String message = obj.getString("message");
             if (obj.getString("status").equals("success")) {
-/*                Call<ResultUser> call = apiInterface.getUser(email);
-                call.enqueue(this);*/
-                //  dialog.setProgress(2);
                 Log.e("TAG", "CLICK!!! success" + email + " PASSWORD : " + password);
 
-//                sharedPref.saveData("ID", email);
                 sharedPref.saveData("EMAIL", email);
                 sharedPref.saveData("PASSWORD", password);
                 Log.e("UserEmail", " EMAIL : " + email + " PASSWORD : " + sharedPref.getStringData("PASSWORD"));
@@ -210,23 +174,16 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
                 if (this.action.equals(Glovar.LOGIN)) {
                     Variable.showDialog = true;
                     new APICalls(context, "Loading...", false, null, "login").execute();
-
                 } else if (this.action.equals(Glovar.POST_AUDIT)) {
                     dialog.dismiss();
                     nextSelectedAuditReportFragment.postData();
-                    //dialogSuccess("Successfully submitted.", false);
                 } else if (this.action.equals(Glovar.POST_TEMPLATE)) {
                     dialog.dismiss();
                     nextSelectedTemplateFragment.postData();
-
-                    //dialogSuccess("Successfully submitted.", false);
                 }
-            }else {
-                //dUtils.DialogWarning("Login error", "The username/password is invalid.", MainActivity.orientation);
+            } else {
                 if (this.action.equals(Glovar.LOGIN)) {
                     Log.i("ERROR", "invalid email");
-                    //dialogLoginError("Invalid email address. Please make sure that your email address is correct.");
-//                    dialogLoginError("Email and password do not match.");
                     dialogLoginError(message);
                     dialog.dismiss();
                 } else {
@@ -236,12 +193,12 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
                 }
                 Log.e("TAG", "CLICK!!! fail");
             }
-        } catch (JSONException e){
+        } catch (JSONException e) {
 
             dialog.dismiss();
 
-            if(!dialogLoginError.equals(null)){
-                if(dialogLoginError.isShowing()){
+            if (!dialogLoginError.equals(null)) {
+                if (dialogLoginError.isShowing()) {
                     dialogLoginError.dismiss();
                 }
             }
@@ -253,8 +210,8 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
             dialogLoginError.setContentView(R.layout.dialog_error_login);
             dialogLoginError.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-            Button ok = (Button) dialogLoginError.findViewById(R.id.btn_ok);
-            TextView msg = (TextView) dialogLoginError.findViewById(R.id.tv_message);
+            Button ok = dialogLoginError.findViewById(R.id.btn_ok);
+            TextView msg = dialogLoginError.findViewById(R.id.tv_message);
 
             msg.setText("Server is down. Please contact your administrator.");
 
@@ -268,8 +225,8 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
             dialogLoginError.show();
 
         } catch (Exception e) {
-            Log.e("HI", "onPostExecute: "+ e.toString());
-            if(this.action.equals(Glovar.LOGIN)) {
+            Log.e("HI", "onPostExecute: " + e.toString());
+            if (this.action.equals(Glovar.LOGIN)) {
                 dialog.dismiss();
             }
         }
@@ -282,8 +239,6 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
             List<ModelUser> result = response.body().getResult();
             Log.e("TAG_EMAIL", "RESULT : " + result.toString());
             if (result != null) {
-
-                //if (result.size() > 0) {
                 Log.e("TAG_EMAIL_2", "RESULT : " + result.toString());
                 // Save to database the retrieved user here.
                 ModelUser mUser = new ModelUser();
@@ -293,24 +248,10 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
 
                 sharedPref.saveData("EMP_ID", String.valueOf(mUser.getEmp_id()));
                 context.startActivity(new Intent(context, HomeActivity.class));
-                //}
             } else {
                 dialog.dismiss();
-                /*dUtils.DialogWarning("Login error",
-                        "There is no internet connection detected. Please check your connection and try again.",
-                        MainActivity.orientation);*/
-                //Log.i("ERROR_TAG_EMAIL", "no internet 1");
-                //dialogLoginError("There is no internet connection detected. Please check your connection and try again.");
             }
         } catch (Exception e) {
-
-
-      /*      if (dialog.isShowing()) {
-             //   dialog.dismiss();
-            }*/
-            /*dUtils.DialogWarning("Network error",
-                    "Internet connection cannot access the web service, please connect to other network.",
-                    MainActivity.orientation);*/
             Log.i("      ", "invalid email 2");
             dialogLoginError("Internet connection cannot access the web service, please connect to other network.");
         }
@@ -325,15 +266,10 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
         Log.e("DEBUG", "ERROR : " + throwable.toString());
         Log.e("TAGRename", "CLICK!!!" + throwable.toString());
         Log.e("TAGRename", "CLICK!!!" + throwable);
-        /*dUtils.DialogWarning("Login Error",
-                "There is no internet connection detected. Please check your connection and try again.",
-                MainActivity.orientation);*/
         Log.i("ERROR", "invalid email 3");
-
-        //dialogLoginError("There is no internet connection detected. Please check your connection and try again.");
         Activity activity = dialog.getOwnerActivity();
-        if(activity != null && !activity.isFinishing() && dialog != null){
-            if(dialog.isShowing()){
+        if (activity != null && !activity.isFinishing() && dialog != null) {
+            if (dialog.isShowing()) {
                 dialog.dismiss();
             }
         }
@@ -348,8 +284,8 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
         dialogLoginError.setContentView(R.layout.dialog_error_login);
         dialogLoginError.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        Button ok = (Button) dialogLoginError.findViewById(R.id.btn_ok);
-        TextView msg = (TextView) dialogLoginError.findViewById(R.id.tv_message);
+        Button ok = dialogLoginError.findViewById(R.id.btn_ok);
+        TextView msg = dialogLoginError.findViewById(R.id.tv_message);
 
         if (mess.equals("Invalid Email")) {
             mess = "Invalid email address. Please make sure that your email address is correct.";
@@ -375,8 +311,8 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
         dialogPostError.setContentView(R.layout.dialog_error_login);
         dialogPostError.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        Button ok = (Button) dialogPostError.findViewById(R.id.btn_ok);
-        TextView msg = (TextView) dialogPostError.findViewById(R.id.tv_message);
+        Button ok = dialogPostError.findViewById(R.id.btn_ok);
+        TextView msg = dialogPostError.findViewById(R.id.tv_message);
 
         msg.setText(mess);
 
@@ -392,37 +328,5 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
 
 
         dialogPostError.show();
-    }
-
-    public void dialogSuccess(String mess, final boolean template) {
-        dialogSuccess = new Dialog(context);
-        dialogSuccess.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialogSuccess.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogSuccess.setCancelable(false);
-        dialogSuccess.setContentView(R.layout.dialog_error_login);
-        dialogSuccess.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        TextView msg = (TextView) dialogSuccess.findViewById(R.id.tv_message);
-        Button ok = (Button) dialogSuccess.findViewById(R.id.btn_ok);
-
-        msg.setText(mess);
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                if (template) {
-                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fl_content, templateFragment).addToBackStack(null).commit();
-                } else {
-                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fl_content, auditReportFragment).addToBackStack(null).commit();
-                }
-                dialogSuccess.dismiss();
-            }
-        });
-
-        dialogSuccess.show();
     }
 }

@@ -2,8 +2,6 @@ package com.unilab.gmp.adapter;
 
 import android.content.Context;
 import android.os.Handler;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +21,9 @@ import com.unilab.gmp.utility.Utils;
 import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 /**
  * Created by c_jhcanuto on 8/29/2017.

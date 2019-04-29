@@ -9,14 +9,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -57,6 +49,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -96,6 +93,7 @@ public class SelectedTemplateFragment extends Fragment {
     @BindView(R.id.et_template_site)
     AutoCompleteTextView etTemplateSite;
 
+    @BindView(R.id.lv_template_element)
     RecyclerView lvTemplateElement;
     ExpandableHeightListView lvTemplateAuditDate;
     ModelTemplates modelTemplates;
@@ -158,7 +156,7 @@ public class SelectedTemplateFragment extends Fragment {
 
         templateFragment = new TemplateFragment();
 
-        lvTemplateElement = (RecyclerView) rootView.findViewById(R.id.lv_template_element);
+//        lvTemplateElement = (RecyclerView) rootView.findViewById(R.id.lv_template_element);
         lvTemplateAuditDate = (ExpandableHeightListView) rootView.findViewById(R.id.lv_template_audit_date);
         setWidgets();
         setWatcher();

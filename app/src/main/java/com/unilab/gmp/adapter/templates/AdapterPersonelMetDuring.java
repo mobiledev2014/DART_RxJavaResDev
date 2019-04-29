@@ -1,14 +1,12 @@
 package com.unilab.gmp.adapter.templates;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 
 import com.unilab.gmp.R;
@@ -16,6 +14,8 @@ import com.unilab.gmp.model.TemplateModelPersonelMetDuring;
 import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by c_jhcanuto on 8/24/2017.

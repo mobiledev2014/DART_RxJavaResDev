@@ -3,11 +3,12 @@ package com.unilab.gmp.utility;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.unilab.gmp.R;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by c_rcmiguel on 11/21/2017.
@@ -17,7 +18,6 @@ public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
 
     public SimpleDividerItemDecoration(Context context) {
-        //mDivider = context.getResources().getDrawable(R.drawable.line_divider);
         mDivider = ContextCompat.getDrawable(context,R.drawable.line_divider);
     }
 

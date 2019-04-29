@@ -43,7 +43,7 @@
                 android:layout_height="0dp"
                 android:layout_weight=".95">
 
-                <android.support.v4.widget.NestedScrollView
+                <androidx.core.widget.NestedScrollView
                     android:id="@+id/scrl_main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -52,8 +52,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginRight="15dp"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -77,9 +77,9 @@
                                         android:layout_marginRight="1dp"
                                         android:layout_weight=".5"
                                         android:background="#767676"
-                                        android:paddingBottom="10dp"
                                         android:paddingLeft="10dp"
                                         android:paddingTop="10dp"
+                                        android:paddingBottom="10dp"
                                         android:text="Activities carried out by company"
                                         android:textColor="#f7f7f7"
                                         android:textSize="20dp" />
@@ -88,11 +88,11 @@
 
                             </TableLayout> <!--activities carried out-->
 
-                            <android.support.v7.widget.RecyclerView
+                            <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/lv_template_next_activities_carried"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"/>
+                                android:layout_marginBottom="10dp" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -114,8 +114,8 @@
                                     android:id="@+id/et_template_next_activity_carried"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
-                                    android:layout_marginBottom="5dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
                                     android:layout_weight=".5"
                                     android:background="@drawable/template_field"
                                     android:gravity="center|left"
@@ -150,9 +150,9 @@
                                         android:layout_marginRight="1dp"
                                         android:layout_weight=".5"
                                         android:background="#767676"
-                                        android:paddingBottom="10dp"
                                         android:paddingLeft="10dp"
                                         android:paddingTop="10dp"
+                                        android:paddingBottom="10dp"
                                         android:text="Scope of Audit"
                                         android:textColor="#f7f7f7"
                                         android:textSize="20dp" />
@@ -161,12 +161,12 @@
 
                             </TableLayout> <!--scope of audit-->
 
-                            <android.support.v7.widget.RecyclerView
+                            <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/lv_template_next_scope_audit"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"/>
+                                android:dividerHeight="2dip" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -236,8 +236,8 @@
                                     android:id="@+id/et_template_next_audited_area"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
-                                    android:layout_marginBottom="5dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
                                     android:layout_weight=".5"
                                     android:background="@drawable/template_field"
                                     android:gravity="center|left"
@@ -283,8 +283,8 @@
                                     android:id="@+id/et_template_next_not_audited_area"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
-                                    android:layout_marginBottom="5dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
                                     android:layout_weight=".5"
                                     android:background="@drawable/template_field"
                                     android:gravity="center|left"
@@ -319,9 +319,9 @@
                                         android:layout_marginRight="1dp"
                                         android:layout_weight=".5"
                                         android:background="#767676"
-                                        android:paddingBottom="10dp"
                                         android:paddingLeft="10dp"
                                         android:paddingTop="10dp"
+                                        android:paddingBottom="10dp"
                                         android:text="References"
                                         android:textColor="#f7f7f7"
                                         android:textSize="20dp" />
@@ -330,12 +330,12 @@
 
                             </TableLayout> <!--reference-->
 
-                            <android.support.v7.widget.RecyclerView
+                            <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/lv_template_next_reference"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"/>
+                                android:dividerHeight="2dip" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -405,12 +405,12 @@
                                     android:layout_weight=".5"
                                     android:orientation="horizontal">
 
-                                    <android.support.v7.widget.RecyclerView
+                                    <androidx.recyclerview.widget.RecyclerView
                                         android:id="@+id/lv_template_next_pre_audit_doc"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight=".7"
-                                        android:gravity="center|top"/>
+                                        android:gravity="center|top" />
 
                                     <LinearLayout
                                         android:layout_width="0dp"
@@ -467,9 +467,9 @@
                                         android:layout_marginRight="1dp"
                                         android:layout_weight=".5"
                                         android:background="#767676"
-                                        android:paddingBottom="10dp"
                                         android:paddingLeft="10dp"
                                         android:paddingTop="10dp"
+                                        android:paddingBottom="10dp"
                                         android:text="Present during the close-out meeting"
                                         android:textColor="#f7f7f7"
                                         android:textSize="20dp" />
@@ -513,8 +513,8 @@
                                     android:id="@+id/et_template_next_date_of_wrap_up"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
-                                    android:layout_marginBottom="5dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
                                     android:layout_weight=".5"
                                     android:background="@drawable/template_field"
                                     android:enabled="true"
@@ -529,12 +529,12 @@
                             </LinearLayout><!--date of wrap up-->
 
 
-                            <android.support.v7.widget.RecyclerView
+                            <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/lv_template_next_present_during_meeting"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"/>
+                                android:dividerHeight="2dip" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -589,9 +589,9 @@
                                         android:layout_marginRight="1dp"
                                         android:layout_weight=".5"
                                         android:background="#767676"
-                                        android:paddingBottom="10dp"
                                         android:paddingLeft="10dp"
                                         android:paddingTop="10dp"
+                                        android:paddingBottom="10dp"
                                         android:text="Other personnel met during the inspection"
                                         android:textColor="#f7f7f7"
                                         android:textSize="20dp" />
@@ -600,12 +600,12 @@
 
                             </TableLayout> <!--present during inspection-->
 
-                            <android.support.v7.widget.RecyclerView
+                            <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/lv_template_next_personnel_inspection"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"/>
+                                android:dividerHeight="2dip" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -660,9 +660,9 @@
                                         android:layout_marginRight="1dp"
                                         android:layout_weight=".5"
                                         android:background="#767676"
-                                        android:paddingBottom="10dp"
                                         android:paddingLeft="10dp"
                                         android:paddingTop="10dp"
+                                        android:paddingBottom="10dp"
                                         android:text="Distribution List"
                                         android:textColor="#f7f7f7"
                                         android:textSize="20dp" />
@@ -716,11 +716,11 @@
                                         android:gravity="center|top"
                                         android:orientation="vertical">
 
-                                        <android.support.v7.widget.RecyclerView
+                                        <androidx.recyclerview.widget.RecyclerView
                                             android:id="@+id/lv_template_next_distribution_list"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginTop="5dp"/>
+                                            android:layout_marginTop="5dp" />
 
                                     </LinearLayout>
 
@@ -758,10 +758,10 @@
                             <EditText
                                 android:layout_width="match_parent"
                                 android:layout_height="2dp"
-                                android:background="@color/dividerColorSub"
-                                android:enabled="false"
                                 android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"/>
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/dividerColorSub"
+                                android:enabled="false" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -793,10 +793,10 @@
                                         android:gravity="center|top"
                                         android:orientation="vertical">
 
-                                        <android.support.v7.widget.RecyclerView
+                                        <androidx.recyclerview.widget.RecyclerView
                                             android:id="@+id/lv_template_next_other_distribution"
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"/>
+                                            android:layout_height="wrap_content" />
 
                                     </LinearLayout>
 
@@ -856,9 +856,9 @@
                                         android:layout_marginRight="1dp"
                                         android:layout_weight=".5"
                                         android:background="#767676"
-                                        android:paddingBottom="10dp"
                                         android:paddingLeft="10dp"
                                         android:paddingTop="10dp"
+                                        android:paddingBottom="10dp"
                                         android:text="Summary and Recommendation"
                                         android:textColor="#f7f7f7"
                                         android:textSize="20dp" />
@@ -867,12 +867,12 @@
 
                             </TableLayout>
 
-                            <android.support.v7.widget.RecyclerView
+                            <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/lv_template_next_summary_recommendation"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"/>
+                                android:dividerHeight="2dip" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -962,10 +962,10 @@
                                                 android:gravity="center|top"
                                                 android:orientation="vertical">
 
-                                                <android.support.v7.widget.RecyclerView
+                                                <androidx.recyclerview.widget.RecyclerView
                                                     android:id="@+id/lv_template_next_summary_recommendation_other_issues_audit"
                                                     android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"/>
+                                                    android:layout_height="wrap_content" />
 
                                             </LinearLayout>
 
@@ -1006,10 +1006,10 @@
                                 <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="2dp"
-                                    android:background="@color/dividerColorSub"
-                                    android:enabled="false"
                                     android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="5dp"/>
+                                    android:layout_marginBottom="5dp"
+                                    android:background="@color/dividerColorSub"
+                                    android:enabled="false" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -1063,10 +1063,10 @@
                                                 android:gravity="center|top"
                                                 android:orientation="vertical">
 
-                                                <android.support.v7.widget.RecyclerView
+                                                <androidx.recyclerview.widget.RecyclerView
                                                     android:id="@+id/lv_template_next_summary_recommendation_other_issues_executive"
                                                     android:layout_width="match_parent"
-                                                    android:layout_height="match_parent"/>
+                                                    android:layout_height="match_parent" />
 
                                             </LinearLayout>
 
@@ -1132,8 +1132,8 @@
                                             android:id="@+id/et_template_next_summary_recommendation_audit_close_date"
                                             android:layout_width="0dp"
                                             android:layout_height="35dp"
-                                            android:layout_marginBottom="5dp"
                                             android:layout_marginTop="5dp"
+                                            android:layout_marginBottom="5dp"
                                             android:layout_weight=".5"
                                             android:background="@drawable/template_field"
                                             android:enabled="true"
@@ -1175,9 +1175,9 @@
                                         android:layout_marginRight="1dp"
                                         android:layout_weight=".5"
                                         android:background="#767676"
-                                        android:paddingBottom="10dp"
                                         android:paddingLeft="10dp"
                                         android:paddingTop="10dp"
+                                        android:paddingBottom="10dp"
                                         android:text="Company Background / Audit History"
                                         android:textColor="#f7f7f7"
                                         android:textSize="20dp" />
@@ -1205,18 +1205,18 @@
                                     android:id="@+id/et_template_next_company_background_history"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginBottom="5dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
                                     android:layout_weight=".5"
                                     android:background="@drawable/template_field"
                                     android:enabled="false"
-                                    android:textColor="@color/disabled_color"
                                     android:gravity="center|left"
                                     android:hint="Supplier Background History"
-                                    android:paddingBottom="5dp"
                                     android:paddingLeft="10dp"
-                                    android:paddingRight="10dp"
                                     android:paddingTop="5dp"
+                                    android:paddingRight="10dp"
+                                    android:paddingBottom="5dp"
+                                    android:textColor="@color/disabled_color"
                                     android:textSize="20sp" />
 
                             </LinearLayout><!--supplier history-->
@@ -1287,10 +1287,10 @@
                                             android:paddingTop="5dp"
                                             android:textSize="20sp" />-->
 
-                                        <android.support.v7.widget.RecyclerView
+                                        <androidx.recyclerview.widget.RecyclerView
                                             android:id="@+id/lv_template_next_company_background_inspection_date"
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"/>
+                                            android:layout_height="wrap_content" />
 
 
                                     </LinearLayout>
@@ -1327,10 +1327,10 @@
                                             android:gravity="center|top"
                                             android:orientation="vertical">
 
-                                            <android.support.v7.widget.RecyclerView
+                                            <androidx.recyclerview.widget.RecyclerView
                                                 android:id="@+id/lv_template_next_company_background_name"
                                                 android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"/>
+                                                android:layout_height="wrap_content" />
 
                                         </LinearLayout>
 
@@ -1414,10 +1414,10 @@
                                         android:gravity="center|top"
                                         android:orientation="vertical">
 
-                                        <android.support.v7.widget.RecyclerView
+                                        <androidx.recyclerview.widget.RecyclerView
                                             android:id="@+id/lv_template_next_company_background_major_changes"
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"/>
+                                            android:layout_height="wrap_content" />
 
                                     </LinearLayout>
 
@@ -1476,9 +1476,9 @@
                                         android:layout_marginRight="1dp"
                                         android:layout_weight=".5"
                                         android:background="#767676"
-                                        android:paddingBottom="10dp"
                                         android:paddingLeft="10dp"
                                         android:paddingTop="10dp"
+                                        android:paddingBottom="10dp"
                                         android:text="Auditor/s"
                                         android:textColor="#f7f7f7"
                                         android:textSize="20dp" />
@@ -1552,16 +1552,16 @@
                                     android:id="@+id/et_template_next_auditor_lead_position"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
-                                    android:layout_marginBottom="5dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
                                     android:layout_weight=".5"
                                     android:background="@drawable/template_field"
                                     android:enabled="false"
-                                    android:textColor="@color/disabled_color"
                                     android:gravity="center|left"
                                     android:paddingLeft="10dp"
                                     android:paddingRight="10dp"
                                     android:singleLine="true"
+                                    android:textColor="@color/disabled_color"
                                     android:textSize="20sp" />
 
                             </LinearLayout><!--auditor lead position-->
@@ -1585,26 +1585,26 @@
                                     android:id="@+id/et_template_next_auditor_lead_department"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
-                                    android:layout_marginBottom="5dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
                                     android:layout_weight=".5"
                                     android:background="@drawable/template_field"
                                     android:enabled="false"
-                                    android:textColor="@color/disabled_color"
                                     android:gravity="center|left"
                                     android:paddingLeft="10dp"
                                     android:paddingRight="10dp"
                                     android:singleLine="true"
+                                    android:textColor="@color/disabled_color"
                                     android:textSize="20sp" />
 
                             </LinearLayout><!--auditor lead department-->
 
-                            <android.support.v7.widget.RecyclerView
+                            <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/lv_template_next_auditors"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:divider="@color/dividerColor"
-                                android:dividerHeight="2dip"/>
+                                android:dividerHeight="2dip" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1671,15 +1671,14 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginRight="1dp"
                                         android:layout_weight=".7"
-                                        android:paddingBottom="10dp"
                                         android:paddingLeft="5dp"
                                         android:paddingTop="10dp"
+                                        android:paddingBottom="10dp"
                                         android:text="Reviewer"
                                         android:textColor="#f7f7f7"
                                         android:textSize="20dp" />
 
                                     <CheckBox
-                                        android:visibility="invisible"
                                         android:id="@+id/cb_template_next_reviewer"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
@@ -1688,7 +1687,8 @@
                                         android:gravity="left|center"
                                         android:text="Department Head"
                                         android:textColor="#f7f7f7"
-                                        android:textSize="20dp" />
+                                        android:textSize="20dp"
+                                        android:visibility="invisible" />
 
                                 </TableRow>
 
@@ -1759,16 +1759,16 @@
                                     android:id="@+id/et_template_next_reviewer_position"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
-                                    android:layout_marginBottom="5dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
                                     android:layout_weight=".5"
                                     android:background="@drawable/template_field"
                                     android:enabled="false"
-                                    android:textColor="@color/disabled_color"
                                     android:gravity="center|left"
                                     android:paddingLeft="10dp"
                                     android:paddingRight="10dp"
                                     android:singleLine="true"
+                                    android:textColor="@color/disabled_color"
                                     android:textSize="20sp" />
 
                             </LinearLayout><!--reviewer_id position-->
@@ -1792,16 +1792,16 @@
                                     android:id="@+id/et_template_next_reviewer_department"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
-                                    android:layout_marginBottom="5dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
                                     android:layout_weight=".5"
                                     android:background="@drawable/template_field"
                                     android:enabled="false"
-                                    android:textColor="@color/disabled_color"
                                     android:gravity="center|left"
                                     android:paddingLeft="10dp"
                                     android:paddingRight="10dp"
                                     android:singleLine="true"
+                                    android:textColor="@color/disabled_color"
                                     android:textSize="20sp" />
 
                             </LinearLayout><!--reviewer_id department-->
@@ -1830,9 +1830,9 @@
                                         android:layout_marginRight="1dp"
                                         android:layout_weight=".5"
                                         android:background="#767676"
-                                        android:paddingBottom="10dp"
                                         android:paddingLeft="10dp"
                                         android:paddingTop="10dp"
+                                        android:paddingBottom="10dp"
                                         android:text="Approver"
                                         android:textColor="#f7f7f7"
                                         android:textSize="20dp" />
@@ -1906,16 +1906,16 @@
                                     android:id="@+id/et_template_next_approver_position"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
-                                    android:layout_marginBottom="5dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
                                     android:layout_weight=".5"
                                     android:background="@drawable/template_field"
                                     android:enabled="false"
-                                    android:textColor="@color/disabled_color"
                                     android:gravity="center|left"
                                     android:paddingLeft="10dp"
                                     android:paddingRight="10dp"
                                     android:singleLine="true"
+                                    android:textColor="@color/disabled_color"
                                     android:textSize="20sp" />
 
                             </LinearLayout><!--Approver position-->
@@ -1939,16 +1939,16 @@
                                     android:id="@+id/et_template_next_approver_department"
                                     android:layout_width="0dp"
                                     android:layout_height="35dp"
-                                    android:layout_marginBottom="5dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
                                     android:layout_weight=".5"
                                     android:background="@drawable/template_field"
                                     android:enabled="false"
-                                    android:textColor="@color/disabled_color"
                                     android:gravity="center|left"
                                     android:paddingLeft="10dp"
                                     android:paddingRight="10dp"
                                     android:singleLine="true"
+                                    android:textColor="@color/disabled_color"
                                     android:textSize="20sp" />
 
                             </LinearLayout><!--Approver department-->
@@ -1977,9 +1977,9 @@
                                         android:layout_marginRight="1dp"
                                         android:layout_weight=".5"
                                         android:background="#767676"
-                                        android:paddingBottom="10dp"
                                         android:paddingLeft="10dp"
                                         android:paddingTop="10dp"
+                                        android:paddingBottom="10dp"
                                         android:text="Translator(s)"
                                         android:textColor="#f7f7f7"
                                         android:textSize="20dp" />
@@ -2034,18 +2034,18 @@
                                         android:gravity="center|top"
                                         android:orientation="vertical">
 
-                                        <android.support.v7.widget.RecyclerView
+                                        <androidx.recyclerview.widget.RecyclerView
                                             android:id="@+id/lv_template_next_translator"
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"/>
+                                            android:layout_height="wrap_content" />
 
                                     </LinearLayout>
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_weight=".3"
                                         android:layout_gravity="bottom"
+                                        android:layout_weight=".3"
                                         android:orientation="horizontal">
 
                                         <Button
@@ -2076,7 +2076,7 @@
 
                     </LinearLayout>
 
-                </android.support.v4.widget.NestedScrollView>
+                </androidx.core.widget.NestedScrollView>
 
             </LinearLayout>
 

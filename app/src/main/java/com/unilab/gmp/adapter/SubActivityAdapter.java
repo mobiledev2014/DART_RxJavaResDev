@@ -1,8 +1,6 @@
 package com.unilab.gmp.adapter;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +15,8 @@ import com.unilab.gmp.model.ModelTemplateSubActivities;
 import com.unilab.gmp.utility.Variable;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by c_jhcanuto on 7/31/2017.

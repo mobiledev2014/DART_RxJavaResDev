@@ -1,17 +1,20 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.jakewharton.butterknife'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 28
     useLibrary  'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.unilab.gmp"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 8
         versionName "1.0.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     buildTypes {
         release {
@@ -20,30 +23,29 @@ android {
         }
     }
 
-    /*lintOptions {
-        abortOnError false
-        checkReleaseBuilds false
-    }*/
-
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
-    compile 'com.jakewharton:butterknife:8.7.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
-    compile 'com.github.paolorotolo:expandableheightlistview:1.0.0'
-    compile files('libs/retrofit-2.1.0.jar')
-    compile files('libs/gson-2.7.jar')
-    compile files('libs/converter-gson-2.1.0.jar')
-    compile files('libs/okhttp-3.4.1.jar')
-    compile files('libs/okio-1.9.0.jar')
-    compile 'com.github.satyan:sugar:1.4'
-    compile files('libs/lombok.jar')
-    //provided 'org.projectlombok:lombok:1.16.10'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0-alpha1'
+    //ButterKnife
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+
+    implementation 'com.github.paolorotolo:expandableheightlistview:1.0.0'
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
+    implementation 'com.github.satyan:sugar:1.4'
+    compileOnly('org.projectlombok:lombok:1.18.6')
+    annotationProcessor 'org.projectlombok:lombok:1.18.6'
+
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
 }

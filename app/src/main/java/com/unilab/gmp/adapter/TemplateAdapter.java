@@ -1,31 +1,27 @@
 package com.unilab.gmp.adapter;
 
-        import android.app.Dialog;
-        import android.content.Context;
-        import android.graphics.Color;
-        import android.graphics.Typeface;
-        import android.graphics.drawable.ColorDrawable;
-        import android.os.Handler;
-        import android.support.v4.app.FragmentManager;
-        import android.support.v7.app.AppCompatActivity;
-        import android.util.Log;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.view.Window;
-        import android.view.WindowManager;
-        import android.widget.BaseAdapter;
-        import android.widget.Button;
-        import android.widget.LinearLayout;
-        import android.widget.TextView;
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Typeface;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-        import com.unilab.gmp.R;
-        import com.unilab.gmp.fragment.SelectedTemplateFragment;
-        import com.unilab.gmp.model.ModelTemplates;
-        import com.unilab.gmp.utility.ProgressDialogUtils;
-        import com.unilab.gmp.utility.Variable;
+import com.unilab.gmp.R;
+import com.unilab.gmp.fragment.SelectedTemplateFragment;
+import com.unilab.gmp.model.ModelTemplates;
+import com.unilab.gmp.utility.ProgressDialogUtils;
+import com.unilab.gmp.utility.Variable;
 
-        import java.util.List;
+import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 /**
  * Created by c_jhcanuto on 7/31/2017.

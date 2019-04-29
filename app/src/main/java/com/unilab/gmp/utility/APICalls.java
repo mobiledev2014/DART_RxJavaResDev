@@ -10,9 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -89,6 +86,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -104,11 +104,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
     int changes = 0;
     int numberoftemplates, templatesdownloaded;
     boolean isdone = false;
-
-//    int numberoftemplates2, templatesdownloaded2;
-//    boolean isdone2 = false;
-
-    ApiClient apiClient;
     ApiInterface apiInterface;
     AlertDialog loginAlert;
 
@@ -137,9 +132,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
     Dialog dialogSyncSuccess;
     Boolean manualSync;
     HomeActivity homeActivity;
-//    ModelClassificationInfo modelClassificationInfo;
-//    ModelReferenceInfo modelReferenceInfo;
-//
 
     public APICalls(Context context, String message, Boolean sync, HomeActivity homeActivity, String status) {
         this.context = context;
@@ -175,8 +167,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             apiInterface = ApiClient.getConfig().create(ApiInterface.class);
             apiConfig();
             while (!isdone || templatesdownloaded != numberoftemplates)
-                //  while (!isdone2 || templatesdownloaded2 != numberoftemplates2) ;
-                //Log.e("changes", "changes : " + changes);
                 result = false;
         } catch (Exception e) {
             Log.i("CATCH", "RESULT_VALUE : " + e.toString() + "");
@@ -194,7 +184,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         final AlertDialog loginAlert2 = builder2.create();
         loginAlert2.show();
 
-        if (statusMessage.equals("auditReport")){
+        if (statusMessage.equals("auditReport")) {
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -231,7 +221,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 if (Variable.showDialog) {
                     dialogSyncSuccess("Data has been successfully synced.");
                 }
-                //homeActivity.initializeHome();
             } else {
                 Intent intent = new Intent(context, HomeActivity.class);
                 intent.putExtra("NEWTEMPLATE", changes + "");
@@ -420,7 +409,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     }
 
 
-                }else{
+                } else {
 
                 }
             }
@@ -429,7 +418,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             public void onFailure(Call<ModelApproverInfo> call, Throwable t) {
                 Log.e("Approver ", "OnFailure " + t.getMessage());
             }
-
 
 
         });
@@ -456,12 +444,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     auditorsModel.setUpdate_date(modelAuditorInfo.getModelAuditors().get(x).getUpdate_date());
                     auditorsModel.setEmail(modelAuditorInfo.getModelAuditors().get(x).getEmail());
                     auditorsModel.setStatus(modelAuditorInfo.getModelAuditors().get(x).getStatus());
-
-                    //tick for reviewer and approver
-                    /*
-                    * auditorsModel.setReviewer(modelAuditorInfo.getModelAuditors().get(x).getReviewer());
-                    * auditorsModel.setApprover(modelAuditorInfo.getModelAuditors().get(x).getApprover());
-                    * */
                     isAuditorExisting(auditorsModel);
                 }
 
@@ -543,7 +525,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                             modelSiteAuditHistory.setCompany_id(company_id);
                             modelSiteAuditHistory.save();
                             Log.e("APICalls", "CompanySite:company name : " + modelCompany.getCompany_name());
-                            //+ modelSiteAuditHistory.getModelSiteDates().size());
                             if (mc.getMajor_changes() != null) {
                                 for (TemplateModelCompanyBackgroundMajorChanges mmc : mc.getMajor_changes()) {
                                     TemplateModelCompanyBackgroundMajorChanges majorChanges = new TemplateModelCompanyBackgroundMajorChanges();
@@ -580,7 +561,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
                     isSupplierExisting(modelCompany);
                 }
-                //modelSamples.getDateCreated()
             }
 
             @Override
@@ -613,92 +593,92 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                             modelTemplates = response.body();
                             ModelTemplates modelTemplate = new ModelTemplates();
 
-                                if (modelTemplates != null) {
+                            if (modelTemplates != null) {
 
 
-                                    if (modelTemplates.getProductType() != null) {
+                                if (modelTemplates.getProductType() != null) {
 
-                                        //get all template id in local db
-                                        List<ModelTemplates> templateList = ModelTemplates.find
-                                                (ModelTemplates.class, "status = '1' OR status = '2'",
-                                                        new String[]{}, null, "", "");
+                                    //get all template id in local db
+                                    List<ModelTemplates> templateList = ModelTemplates.find
+                                            (ModelTemplates.class, "status = '1' OR status = '2'",
+                                                    new String[]{}, null, "", "");
 
-                                        //if local db not match with api modified date
-                                        for (ModelTemplates qid : templateList) {
-                                            Log.i("TEMPLATE_LIST", "ID : " + qid.getTemplateID() + " Modified Date offline : " + qid.getDateUpdated()
-                                                    + "ID : " + modelTemplates.getTemplateID() + " Modified Date API : " + modelTemplates.getDateUpdated());
+                                    //if local db not match with api modified date
+                                    for (ModelTemplates qid : templateList) {
+                                        Log.i("TEMPLATE_LIST", "ID : " + qid.getTemplateID() + " Modified Date offline : " + qid.getDateUpdated()
+                                                + "ID : " + modelTemplates.getTemplateID() + " Modified Date API : " + modelTemplates.getDateUpdated());
 
-                                            if (qid.getTemplateID().equals(modelTemplates.getTemplateID())) {
+                                        if (qid.getTemplateID().equals(modelTemplates.getTemplateID())) {
                                             /*Log.i("modified_date_template1", "local: " +
                                                     qid.getDateUpdated() + " api: " + modelTemplates.getDateUpdated());*/
-                                                if (!qid.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
-                                                    Log.i("TEMPLATE_LIST", "WHEN HERE");
+                                            if (!qid.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
+                                                Log.i("TEMPLATE_LIST", "WHEN HERE");
 
-                                                    //delete template
-                                                    ModelTemplates.executeQuery("DELETE FROM MODEL_TEMPLATES " +
-                                                            "WHERE template_id = '" + qid.getTemplateID() + "'");
-                                                    //test delete all question from element
-                                                    ModelTemplateQuestionDetails.executeQuery("DELETE FROM MODEL_TEMPLATE_QUESTION_DETAILS "
-                                                            + "WHERE templateid = '" + qid.getTemplateID() + "'");
-                                                } else {
-                                                    Log.i("modified_date_template2", "local: " +
-                                                            qid.getDateUpdated() + " api: " + modelTemplates.getDateUpdated());
-                                                }
+                                                //delete template
+                                                ModelTemplates.executeQuery("DELETE FROM MODEL_TEMPLATES " +
+                                                        "WHERE template_id = '" + qid.getTemplateID() + "'");
+                                                //test delete all question from element
+                                                ModelTemplateQuestionDetails.executeQuery("DELETE FROM MODEL_TEMPLATE_QUESTION_DETAILS "
+                                                        + "WHERE templateid = '" + qid.getTemplateID() + "'");
+                                            } else {
+                                                Log.i("modified_date_template2", "local: " +
+                                                        qid.getDateUpdated() + " api: " + modelTemplates.getDateUpdated());
                                             }
                                         }
-
-                                        //modelTemplate.setTemplateID(modelTemplates.getTemplateID() + "");
-                                        modelTemplate.setTemplateID(templateid);
-                                        modelTemplate.setProductType(modelTemplates.getProductType() + "");
-                                        modelTemplate.setTemplateName(modelTemplates.getTemplateName() + "");
-                                        modelTemplate.setDateCreated(modelTemplates.getDateCreated() + "");
-                                        modelTemplate.setDateUpdated(modelTemplates.getDateUpdated());
-                                        modelTemplate.setModelTemplateElements(modelTemplates.getModelTemplateElements());
-                                        modelTemplate.setModelTemplateActivities(modelTemplates.getModelTemplateActivities());
-                                        modelTemplate.setStatus(templateStatus);
-
-
-                                        Log.i("S T A T U S", "value : " + templateStatus + " --- " + modelTemplates.getTemplateName());
-                                        ModelTemplateElements.deleteAll(ModelTemplateElements.class, "templateid = ?", new String[]{templateid});
-                                        for (ModelTemplateElements mte : modelTemplates.getModelTemplateElements()) {
-                                            mte.setTemplate_id(modelTemplates.getTemplateID() + "");
-                                            if (isElementIDExisting(mte))
-                                                mte.save();
-                                            for (ModelTemplateQuestionDetails mteq : mte.getModelTemplateQuestionDetails()) {
-                                                mteq.setElement_id(mte.getElement_id());
-                                                mteq.setTemplate_id(mte.getTemplate_id() + "");
-                                                mteq.setRequired_remarks(mteq.getRequired_remarks());
-                                                Log.i("REMARKS-I", "REQUIRED : " + mteq.getRequired_remarks() +
-                                                        " ID : " + templateid + " EXIST: " + isQuestionIDExisting(mteq));
-
-                                                if (isQuestionIDExisting(mteq)) {
-                                                    Log.i("REMARKS-II", "REQUIRED : " + mteq.getQuestion_id() +
-                                                            " ID : " + templateid);
-                                                    mteq.save();
-                                                } else {
-                                                    Log.i("REMARKS-III", "REQUIRED : " + mteq.getQuestion_id() + " ID : " + templateid);
-                                                    updateQuestion(mteq);
-                                                }
-                                            }
-                                        }
-
-                                        for (ModelTemplateActivities mta : modelTemplates.getModelTemplateActivities()) {
-                                            mta.setTemplate_id(modelTemplates.getTemplateID() + "");
-                                            if (isActivityIDExisting(mta)) {
-                                                mta.save();
-                                            }
-                                            for (ModelTemplateSubActivities mtsa : mta.getModelTemplateSubActivities()) {
-                                                mtsa.setTemplate_id(mta.getTemplate_id());
-                                                if (isSubActivityIDExisting(mtsa)) {
-                                                    mtsa.save();
-                                                }
-                                            }
-                                        }
-
-                                        isTemplateExisting(modelTemplate);
                                     }
+
+                                    //modelTemplate.setTemplateID(modelTemplates.getTemplateID() + "");
+                                    modelTemplate.setTemplateID(templateid);
+                                    modelTemplate.setProductType(modelTemplates.getProductType() + "");
+                                    modelTemplate.setTemplateName(modelTemplates.getTemplateName() + "");
+                                    modelTemplate.setDateCreated(modelTemplates.getDateCreated() + "");
+                                    modelTemplate.setDateUpdated(modelTemplates.getDateUpdated());
+                                    modelTemplate.setModelTemplateElements(modelTemplates.getModelTemplateElements());
+                                    modelTemplate.setModelTemplateActivities(modelTemplates.getModelTemplateActivities());
+                                    modelTemplate.setStatus(templateStatus);
+
+
+                                    Log.i("S T A T U S", "value : " + templateStatus + " --- " + modelTemplates.getTemplateName());
+                                    ModelTemplateElements.deleteAll(ModelTemplateElements.class, "templateid = ?", new String[]{templateid});
+                                    for (ModelTemplateElements mte : modelTemplates.getModelTemplateElements()) {
+                                        mte.setTemplate_id(modelTemplates.getTemplateID() + "");
+                                        if (isElementIDExisting(mte))
+                                            mte.save();
+                                        for (ModelTemplateQuestionDetails mteq : mte.getModelTemplateQuestionDetails()) {
+                                            mteq.setElement_id(mte.getElement_id());
+                                            mteq.setTemplate_id(mte.getTemplate_id() + "");
+                                            mteq.setRequired_remarks(mteq.getRequired_remarks());
+                                            Log.i("REMARKS-I", "REQUIRED : " + mteq.getRequired_remarks() +
+                                                    " ID : " + templateid + " EXIST: " + isQuestionIDExisting(mteq));
+
+                                            if (isQuestionIDExisting(mteq)) {
+                                                Log.i("REMARKS-II", "REQUIRED : " + mteq.getQuestion_id() +
+                                                        " ID : " + templateid);
+                                                mteq.save();
+                                            } else {
+                                                Log.i("REMARKS-III", "REQUIRED : " + mteq.getQuestion_id() + " ID : " + templateid);
+                                                updateQuestion(mteq);
+                                            }
+                                        }
+                                    }
+
+                                    for (ModelTemplateActivities mta : modelTemplates.getModelTemplateActivities()) {
+                                        mta.setTemplate_id(modelTemplates.getTemplateID() + "");
+                                        if (isActivityIDExisting(mta)) {
+                                            mta.save();
+                                        }
+                                        for (ModelTemplateSubActivities mtsa : mta.getModelTemplateSubActivities()) {
+                                            mtsa.setTemplate_id(mta.getTemplate_id());
+                                            if (isSubActivityIDExisting(mtsa)) {
+                                                mtsa.save();
+                                            }
+                                        }
+                                    }
+
+                                    isTemplateExisting(modelTemplate);
                                 }
-                                Log.e("templatesdownloaded", "templatesdownloaded : " + ++templatesdownloaded);
+                            }
+                            Log.e("templatesdownloaded", "templatesdownloaded : " + ++templatesdownloaded);
 
                         }
 
@@ -884,7 +864,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                             mcc.save();
                         }
                     }
-//                    isDispositionExisting(modelClassification);
                 }
             }
 
@@ -932,8 +911,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             @Override
             public void onResponse(Call<ModelAuditReportsList> call, Response<ModelAuditReportsList> response) {
                 ModelAuditReportsList modelAuditReportsList = response.body();
-//                numberoftemplates2 = modelAuditReportsList.getAudit_report_list().size();
-//                isdone2 = true;
                 for (ModelAuditReportDetails mar : modelAuditReportsList.getAudit_report_list()) {
                     String reportId = mar.getReport_id();
                     final String modifiedDate = mar.getModified_date();
@@ -949,7 +926,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     Log.i("API_AUDIT_REPORT", "START 1 :" + mar.toString() + " size : " + auditReportsList.size());
                     Call<ModelAuditReports> report = ApiClient.getApiClientAuditReport()
                             .create(ApiInterface.class).getAuditReport(reportId + ".json");
-//                    final Call<ModelAuditReports> report = apiInterface.getAuditReport(reportId);
                     report.enqueue(new Callback<ModelAuditReports>() {
                         @Override
                         public void onResponse(Call<ModelAuditReports> call, Response<ModelAuditReports> response) {
@@ -971,8 +947,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                 reports.setReport_no(modelAuditReports.getReport_no());
                                 reports.setCompany_id(modelAuditReports.getCompany_id());
                                 reports.setOther_activities(modelAuditReports.getOther_activities());
-//                                reports.setP_inspection_date_1(modelAuditReports.getP_inspection_date_1());
-//                                reports.setP_inspection_date_2(modelAuditReports.getP_inspection_date_2());
                                 reports.setTemplate_id(modelAuditReports.getTemplate_id());
                                 reports.setAuditor_id(modelAuditReports.getAuditor_id());
                                 reports.setAudit_close_date(modelAuditReports.getAudit_close_date());
@@ -981,7 +955,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                 reports.setAudited_areas(modelAuditReports.getAudited_areas());
                                 reports.setAreas_to_consider(modelAuditReports.getAreas_to_consider());
                                 reports.setWrap_date(modelAuditReports.getWrap_date());
-//                                reports.setTranslator(modelAuditReports.getTranslator());
                                 reports.setReviewer_id(modelAuditReports.getReviewer_id());
                                 reports.setApprover_id(modelAuditReports.getApprover_id());
                                 Log.i("STATUS-!!!!", status);
@@ -992,8 +965,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
                                 if (version != null) {
                                     Log.i("AUDIT-REPORT", "START 4 ID: " + report_id);
-//                                    if (checkAuditReport(report_id, version)) {
-//                                        Log.i("AUDIT REPORT", "START 5");
                                     ModelDateOfAudit.deleteAll(ModelDateOfAudit.class, "reportid = ?", report_id);
                                     TemplateModelAuditors.deleteAll(TemplateModelAuditors.class, "reportid = ?", report_id);
                                     TemplateModelScopeAudit.deleteAll(TemplateModelScopeAudit.class, "reportid = ?", report_id);
@@ -1015,23 +986,17 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                     TemplateModelOtherIssuesExecutive.deleteAll(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report_id);
 
                                     saveListsOfAuditReport(report_id);
-
-//                                    } else {
-//                                        saveListsOfAuditReport(report_id);
-//                                    }
                                 }
 
                                 Log.e("ARGUNEW-NEW", response.toString() + " AuditReports: " + modelAuditReports.getReport_id());
                                 isAuditReportExisting(reports, modifiedDate);
 
                             }
-//                            Log.e("templatesdownloaded", "templatesdownloaded2 : " + ++templatesdownloaded2);
                         }
 
                         @Override
                         public void onFailure(Call<ModelAuditReports> call, Throwable t) {
                             Log.e("ModelAuditReportsasd", "asdasd" + t.getMessage());
-//                            Log.e("templatesdownloaded", "templatesdownloaded2 : " + ++templatesdownloaded2);
                         }
                     });
                 }
@@ -1040,8 +1005,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
             }
 
             private void saveListsOfAuditReport(String report_id) {
-
-
                 for (TemplateModelOtherIssuesAudit tmt : modelAuditReports.getOther_issues()) {
                     tmt.setReport_id(report_id);
                     tmt.save();
@@ -1061,17 +1024,14 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 }
                 for (ModelDateOfAudit mda : modelAuditReports.getDate_of_audit()) {
                     mda.setReport_id(report_id);
-//                    mda.setDateOfAudit(mda.getDateOfAudit());
                     mda.save();
                     Log.e("APICalls", "Audit dates : " + mda.getDateOfAudit());
                 }
                 for (TemplateModelAuditors mrca : modelAuditReports.getCo_auditor_id()) {
                     mrca.setReport_id(report_id);
-//                    mrca.setAuditor_id(mrca.getAuditor_id());
                     mrca.save();
                     Log.e("APICalls", "Auditors : " + mrca.getAuditor_id());
                 }
-                //-
                 int counter = 0;
                 for (TemplateModelScopeAuditCopy msa : modelAuditReports.getScope()) {
                     TemplateModelScopeAudit tmsa = new TemplateModelScopeAudit();
@@ -1091,21 +1051,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     tmsa.save();
                 }
 
-//                for (TemplateModelScopeAudit msa : modelAuditReports.getScope()) {
-//                  msa.setReport_id(report_id);
-//                  msa.setScope_id(msa.getScope_id());
-//                  msa.setScope_detail(msa.getScope_detail());
-//                  Log.e("APICalls", "Scope Audit : " + msa.getScope_detail());
-//                  for (TemplateModelScopeAuditInterest tmsai : msa.getTemplateModelScopeAuditInterests()) {
-//                      tmsai.setReport_id(report_id);
-//                      tmsai.setProduct_id(tmsai.getProduct_id());
-//                      tmsai.save();
-//                      Log.e("APICalls", "Scope Audit interest : " + tmsai.getProduct_id());
-//                  }
-//                  msa.save();
-//              }
-                //disposition
-//-
                 for (TemplateModelPreAuditDoc mpad : modelAuditReports.getPre_audit_documents()) {
                     mpad.setReport_id(report_id);
                     mpad.setPreaudit(mpad.getPreaudit());
@@ -1114,7 +1059,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     Log.e("APICalls", "Pre Audit : " + mpad.getPreaudit());
                 }
 
-                //-
                 for (TemplateModelReference mr : modelAuditReports.getReferencess()) {
                     mr.setReport_id(report_id);
                     mr.setCertification(mr.getCertification());
@@ -1128,7 +1072,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     Log.e("APICalls", "References : " + mr.getBody());
                 }
 
-                //-
                 for (TemplateModelCompanyBackgroundMajorChanges mmc : modelAuditReports.getInspection()) {
                     mmc.setReport_id(report_id);
                     mmc.setMajorchanges(mmc.getMajorchanges());
@@ -1137,16 +1080,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     Log.e("APICalls", "company major changes : " + mmc.getMajorchanges());
                 }
 
-                //-
-//                for (TemplateModelCompanyBackgroundName mmn : modelAuditReports.getInspector()) {
-//                    mmn.setReport_id(report_id);
-//                    mmn.setBgname(mmn.getBgname());
-//                    mmn.save();
-//
-//                    Log.e("APICalls", "Company bgname : " + mmn.getBgname());
-//                }
-
-                //-
                 for (TemplateModelPersonelMetDuring mpmd : modelAuditReports.getPersonnel()) {
                     mpmd.setReport_id(report_id);
                     mpmd.setName(mpmd.getName());
@@ -1156,7 +1089,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     Log.e("APICalls", "Personnel met : " + mpmd.toString());
                 }
 
-                //-
                 for (TemplateModelSummaryRecommendation msr : modelAuditReports.getRecommendation()) {
                     msr.setReport_id(report_id);
                     msr.setElement_id(msr.getElement_id());
@@ -1181,7 +1113,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     Log.e("APICalls", "Present During meeting : " + mpdm.toString());
                 }
 
-                //-
                 for (TemplateModelDistributionOthers mdl : modelAuditReports.getOther_distribution()) {
                     mdl.setReport_id(report_id);
                     if (mdl.getDistribution_other().equals("null")) {
@@ -1204,13 +1135,10 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     Log.e("APICalls", "Report question : " + mrq.toString());
                 }
 
-
-//                            List<ModelReportActivities> activities;
                 if (modelAuditReports.getActivities() != null) {
                     for (ModelReportActivities mra : modelAuditReports.getActivities()) {
                         mra.setReport_id(report_id);
                         mra.setActivity_id(mra.getActivity_id());
-//                        if (mra.getSub_activities().size() < 1)
                         mra.setCheck(true);
                         mra.save();
                         for (ModelReportSubActivities mrsa : mra.getSub_activities()) {
@@ -1227,7 +1155,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
             @Override
             public void onFailure(Call<ModelAuditReportsList> call, Throwable throwable) {
-//                isdone2 = true;
                 Log.e("ModelAuditReportsList", throwable.getMessage());
             }
         });
@@ -1235,43 +1162,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
 
     }
 
-//  public void apiAuditReports() {
-//        apiInterface = ApiClient.getApiClientAuditReport().create(ApiInterface.class);
-//        String reportId = "147";
-//        final Call<ModelReport> report = apiInterface.getAuditReport(reportId);
-//        report.enqueue(new Callback<ModelReport>() {
-//            @Override
-//            public void onResponse(Call<ModelReport> call, Response<ModelReport> response) {
-//                modelReport = response.body();
-//
-//                ModelAuditReports reports = new ModelAuditReports();
-//                reports.setReport_id(modelReport.getReport_id());
-//                reports.setReport_no(modelReport.getReport_no());
-//                reports.setTemplate_id("485");//modelAuditReports.getTemplate_id());
-//                reports.setCompany_id(modelReport.getCompany_id());
-//                reports.setOther_activities(modelReport.getOther_activities());
-//                reports.setAudit_date_1(modelReport.getAudit_date_1());
-//                reports.setAudit_date_2(modelReport.getAudit_date_2());
-//                reports.setP_inspection_date_1(modelReport.getP_inspection_date_1());
-//                reports.setP_inspection_date_2(modelReport.getP_inspection_date_2());
-//                reports.setAuditor_id(modelReport.getAuditor_id());
-//
-////                for (int x = 0; x < modelAuditReports.getQuestion().size(); x++) {
-////
-////                }
-//                Log.e("testing", response.toString() + " AuditReports: " + modelAuditReports.getQuestion().
-//                        get(0).getAnswer_details());
-//                isAuditReportExisting(reports);
-//
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ModelReport> call, Throwable t) {
-//                Log.e("testing", t.getMessage());
-//            }
-//        });
-//    }
     // checker
 
     //Approver
@@ -1431,7 +1321,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         company.setCompany_id(modelCompany.getCompany_id());
         company.setCompany_name(modelCompany.getCompany_name());
         company.setAddress1(modelCompany.getAddress1());
-        //supplierModelUpdate.setAddress2(supplierModel.getAddress2());
         company.setAddress2(modelCompany.getAddress2());
         company.setAddress3(modelCompany.getAddress3());
         company.setCountry(modelCompany.getCountry());
@@ -1462,7 +1351,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 Log.i("ARGULOOP", "SITE UPDATE");
                 if (!date.equals(modelCompany.getUpdate_date()))
                     updateDataSupplier(modelCompany);
-//                    auditorsAdapter.notifyDataSetChanged();
             } else {
                 Log.i("ARGULOOP", "SAVE");
                 modelCompany.save();
@@ -1509,7 +1397,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 Log.i("ARGULOOP", "CATEGORY UPDATE");
                 if (!date.equals(modelCategory.getUpdate_date()))
                     updateDataCategory(modelCategory);
-//                    auditorsAdapter.notifyDataSetChanged();
             } else {
                 Log.i("ARGULOOP", "SAVE");
                 modelCategory.save();
@@ -1558,7 +1445,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 Log.i("ARGULOOP", "PRODUCT UPDATE");
                 if (!date.equals(modelProduct.getUpdate_date()))
                     updateDataProduct(modelProduct);
-//                    auditorsAdapter.notifyDataSetChanged();
             } else {
                 Log.i("ARGULOOP", "SAVE");
                 modelProduct.save();
@@ -1593,7 +1479,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 Log.i("ARGULOOP", "TYPE AUDIT UPDATE");
                 if (!date.equals(modelTypeAudit.getUpdate_date()))
                     updateTypeAudit(modelTypeAudit);
-//                    auditorsAdapter.notifyDataSetChanged();
             } else {
                 Log.i("ARGULOOP", "SAVE");
                 modelTypeAudit.save();
@@ -1618,31 +1503,11 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         typeAudit.save();
     }
 
-    // Audit Report
-    public boolean checkAuditReport(String report_id, String version) {
-        List<ModelAuditReports> report = ModelAuditReports.find(ModelAuditReports.class, "reportid = ?", report_id);
-        int size = report.size();
-        Log.i("APICalls: ", "SIZE - " + size + " Report id: " + report_id);
-        Log.i("APICalls: ", " Audit report version - " + version);
-
-        boolean different = false;
-
-        if (size > 0) {
-            Log.i("APICalls: ", " Audit report version - " + report.get(0).getVersion());
-//            for (int count = 0; count < size; count++) {
-            if (report.get(0).getVersion().equals(version)) {
-                different = true;
-            }
-//            }
-        }
-        return different;
-    }
 
     public void isAuditReportExisting(ModelAuditReports modelAuditReports, String modDate) {
         String id = modelAuditReports.getReport_id();
         Log.i("ARGU", "Audit Report id " + id);
         List<ModelAuditReports> report = ModelAuditReports.find(ModelAuditReports.class, "reportid = ?", id);
-        // List<ModelAuditReports> report = ModelAuditReports.findWithQuery(ModelAuditReports.class, "SELECT * FROM MODEL_AUDIT_REPORTS WHERE reportid = '" + id + "'");
         int size = report.size();
         Log.i("R-E-P-O-R-T : ", "SIZE - " + size);
         Log.i("R-E-P-O-R-T : ", "SIZE - " + report.toString());
@@ -1698,21 +1563,10 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         ModelAuditReports auditReports = (ModelAuditReports.find(ModelAuditReports.class,
                 "reportid = ?", String.valueOf(report_id))).get(0);
         Log.i("ARGULOOP-DATE DB", "CHECKER " + auditReports.toString());
-//        auditReports.setReport_id(modelAuditReports.getReport_id());
-//        auditReports.setReport_no(modelAuditReports.getReport_no());
-//        auditReports.setCompany_id(modelAuditReports.getCompany_id());
-//        auditReports.setOther_activities(modelAuditReports.getOther_activities());
-//        auditReports.setAudit_date_1(modelAuditReports.getAudit_date_1());
-//        auditReports.setAudit_date_2(modelAuditReports.getAudit_date_2());
-//        auditReports.setP_inspection_date_1(modelAuditReports.getP_inspection_date_1());
-//        auditReports.setP_inspection_date_2(modelAuditReports.getP_inspection_date_2());
-//
         auditReports.setReport_id(report_id);
         auditReports.setReport_no(modelAuditReports.getReport_no());
         auditReports.setCompany_id(modelAuditReports.getCompany_id());
         auditReports.setOther_activities(modelAuditReports.getOther_activities());
-//        auditReports.setP_inspection_date_1(modelAuditReports.getP_inspection_date_1());
-//        auditReports.setP_inspection_date_2(modelAuditReports.getP_inspection_date_2());
         auditReports.setTemplate_id(modelAuditReports.getTemplate_id());
         auditReports.setAuditor_id(modelAuditReports.getAuditor_id());
         auditReports.setAudit_close_date(modelAuditReports.getAudit_close_date());
@@ -1720,8 +1574,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         auditReports.setOther_issues_executive(modelAuditReports.getOther_issues_executive());
         auditReports.setAudited_areas(modelAuditReports.getAudited_areas());
         auditReports.setAreas_to_consider(modelAuditReports.getAreas_to_consider());
-//        auditReports.setDate_of_wrap(modelAuditReports.getDate_of_wrap());
-//        auditReports.setTranslator(modelAuditReports.getTranslator());
         auditReports.setReviewer_id(modelAuditReports.getReviewer_id());
         auditReports.setApprover_id(modelAuditReports.getApprover_id());
         auditReports.setStatus(modelAuditReports.getStatus());
@@ -1752,7 +1604,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 Log.i("ARGULOOP", "DISPOSITION UPDATE");
                 if (!date.equals(modelDisposition.getUpdate_date()))
                     updateDisposition(modelDisposition);
-//                    auditorsAdapter.notifyDataSetChanged();
             } else {
                 Log.i("ARGULOOP", "SAVE");
                 modelDisposition.save();
@@ -1798,7 +1649,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                 Log.i("ARGULOOP", "DISTRIBUTION UPDATE");
                 if (!date.equals(modelDistribution.getUpdate_date()))
                     updateDistribution(modelDistribution);
-//                    auditorsAdapter.notifyDataSetChanged();
             } else {
                 Log.i("ARGULOOP", "SAVE");
                 modelDistribution.save();
@@ -1824,36 +1674,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         modelDistribution1.save();
     }
 
-    //ModelDateOfAudit
-    public void isDateOfAuditExisting(ModelDateOfAudit modelDateOfAudit) {
-        String id = modelDateOfAudit.getReport_id();
-        Log.i("ARGU", "CHECKER " + id);
-        List<ModelDateOfAudit> modelDateOfAudits = ModelDateOfAudit.find(ModelDateOfAudit.class, "reportid = ?", id);
-        int size = modelDateOfAudits.size();
-
-        if (size > 0) {
-            boolean found = false;
-            String date = "";
-            for (int count = 0; count < size; count++) {
-                if (modelDateOfAudits.get(count).getReport_id().equals(id)) {
-                    found = true;
-                }
-            }
-            if (found) {
-                modelDateOfAudit.save();
-            } else {
-                Log.i("ARGULOOP", "SAVE modelDateOfAudit");
-                modelDateOfAudit.save();
-                modelDateOfAudits.add(modelDateOfAudit);
-            }
-
-        } else {
-            Log.i("ARGU", "SAVE - SIZE 0 modelDateOfAudit");
-            modelDateOfAudit.save();
-            modelDateOfAudits.add(modelDateOfAudit);
-        }
-    }
-
     //Template
     public void updateDataTemplate(ModelTemplates modelTemplates) {
         String rowId = modelTemplates.getTemplateID();
@@ -1875,7 +1695,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         }
 
         template.setDateUpdated(modelTemplates.getDateUpdated());
-
         template.save();
     }
 
@@ -1916,24 +1735,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         }
     }
 
-    public boolean isTemplateIDExisting(ModelTemplates modelTemplates) {
-        boolean exists = true;
-        String id = modelTemplates.getTemplateID();
-        Log.i("ARGU", "CHECKER " + id);
-        List<ModelTemplates> templateList = ModelTemplates.listAll(ModelTemplates.class);
-        int size = templateList.size();
-
-        if (size > 0) {
-            for (int count = 0; count < size; count++) {
-                if (templateList.get(count).getTemplateID().equals(id)) {
-                    exists = false;
-                }
-            }
-
-        }
-        return exists;
-    }
-
     public boolean isElementIDExisting(ModelTemplateElements modelTemplateElements) {
         boolean exists = true;
         String id = modelTemplateElements.getElement_id();
@@ -1949,7 +1750,6 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     exists = false;
                 }
             }
-
         }
         return exists;
     }
@@ -2034,8 +1834,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         dialogSyncSuccess.setContentView(R.layout.dialog_error_login);
         dialogSyncSuccess.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        TextView msg = (TextView) dialogSyncSuccess.findViewById(R.id.tv_message);
-        Button ok = (Button) dialogSyncSuccess.findViewById(R.id.btn_ok);
+        TextView msg = dialogSyncSuccess.findViewById(R.id.tv_message);
+        Button ok = dialogSyncSuccess.findViewById(R.id.btn_ok);
 
         msg.setText(mess);
         ok.setOnClickListener(new View.OnClickListener() {

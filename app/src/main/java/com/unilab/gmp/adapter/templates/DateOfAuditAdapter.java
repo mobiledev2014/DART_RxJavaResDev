@@ -1,7 +1,6 @@
 package com.unilab.gmp.adapter.templates;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,8 @@ import com.unilab.gmp.utility.Variable;
 
 import java.util.Calendar;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by c_rcmiguel on 9/29/2017.

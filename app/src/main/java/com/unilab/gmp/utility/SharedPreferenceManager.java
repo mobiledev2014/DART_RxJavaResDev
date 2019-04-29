@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 
 public class SharedPreferenceManager {
 
-    private static SharedPreferenceManager yourPreference;
     private SharedPreferences sharedPreferences;
 
     private final String PREF_NAME = "UL_OJL_SHAREDPREFERENCE";
@@ -19,19 +18,6 @@ public class SharedPreferenceManager {
         this.context = context;
         sharedPreferences = context.getSharedPreferences(
                 PREF_NAME, Context.MODE_PRIVATE);
-    }
-
-    public static SharedPreferenceManager getInstance(Context context) {
-        if (yourPreference == null) {
-            yourPreference = new SharedPreferenceManager(context);
-        }
-        return yourPreference;
-    }
-
-    public void clearAllPreferences() {
-        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-        sharedPreferences.edit().clear();
-        prefsEditor.commit();
     }
 
     public void saveData(String key, String value) {
@@ -45,19 +31,6 @@ public class SharedPreferenceManager {
             return sharedPreferences.getString(key, "");
         }
         return "";
-    }
-
-    public void saveData(String key, int value) {
-        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-        prefsEditor.putInt(key, value);
-        prefsEditor.commit();
-    }
-
-    public int getIntData(String key) {
-        if (sharedPreferences != null) {
-            return sharedPreferences.getInt(key, 0);
-        }
-        return 0;
     }
 
     public void saveData(String key, boolean value) {
