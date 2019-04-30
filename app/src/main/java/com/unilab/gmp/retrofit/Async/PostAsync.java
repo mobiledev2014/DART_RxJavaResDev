@@ -40,6 +40,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -166,7 +167,7 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
             String message = obj.getString("message");
             if (obj.getString("status").equals("success")) {
                 Log.e("TAG", "CLICK!!! success" + email + " PASSWORD : " + password);
-
+                email = obj.getJSONArray("data").getJSONObject(0).getString("email");
                 sharedPref.saveData("EMAIL", email);
                 sharedPref.saveData("PASSWORD", password);
                 Log.e("UserEmail", " EMAIL : " + email + " PASSWORD : " + sharedPref.getStringData("PASSWORD"));

@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("ERROR", "POSTASYNC 1");
                 if (cbRemember.isChecked()) {
                     sharedPref.saveData("CHECKED", true);
-                    sharedPref.saveData("EMAIL", email);
+                    //sharedPref.saveData("EMAIL", email);
                     sharedPref.saveData("PASSWORD", password);
                 } else {
                     sharedPref.saveData("CHECKED", false);
