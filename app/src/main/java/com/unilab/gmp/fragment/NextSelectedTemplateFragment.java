@@ -319,7 +319,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             preAuditDocDelete = 2, distributionOthersDelete = 3, typeOfAuditDelete = 4,
             personnelMetDelete = 5, elementsRequiringDelete = 6, otherIssuesAuditDelete = 7,
             otherIssuesExecutiveDelete = 8, auditorDelete = 9, reviewerDelete = 10, presentDuringDelete = 11,
-            majorChangesDelete = 12;
+            majorChangesDelete = 12, referencesDelete = 13;
     Dialog dialogSuccess;
 
     public NextSelectedTemplateFragment(ModelTemplates modelTemplates, TemplateElementAdapter templateElementAdapter, SelectedTemplateFragment selectedTemplateFragment) {
@@ -762,8 +762,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 break;
             case R.id.btn_template_next_reference_delete:
                 if (templateModelReferences.size() > 1) {
-                    templateModelReferences.remove(templateModelReferences.size() - 1);
-                    adapterReference.notifyItemRemoved(templateModelReferences.size());
+                    dialogDeleteFromListConfirmation("Are you sure you want to delete?", referencesDelete);
                 }
                 break;
             case R.id.btn_template_next_pre_audit_doc_add:
@@ -2140,6 +2139,21 @@ public class NextSelectedTemplateFragment extends Fragment {
                             }
                         }
                     }
+
+                    if (list == referencesDelete) {
+                        if (templateModelReferences.size() > 1) {
+                            templateModelReferences.remove(templateModelReferences.size() - 1);
+                            adapterReference.notifyItemRemoved(templateModelReferences.size());
+                        } else {
+                            templateModelReferences.get(0).setCertification("");
+                            templateModelReferences.get(0).setBody("");
+                            templateModelReferences.get(0).setNumber("");
+                            templateModelReferences.get(0).setIssue_date("");
+                            templateModelReferences.get(0).setValidity("");
+                            adapterReference.notifyItemChanged(0);
+                        }
+                    }
+
                     dialogDeleteIsShowing = false;
                     dialogDeleteDateOfAudit.dismiss();
                 }
