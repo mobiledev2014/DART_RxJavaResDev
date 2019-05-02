@@ -142,9 +142,8 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            dialog.dismiss();
-                            templateElementQuestionAdapters.get(widgets.getAdapterPosition()).setAnswer("", "", dialog);
-                            widgets.cbElementNa.setText("N/A");
+                            Log.e("Change Dialog ", "dialogChangeAnswer: called");
+                            dialogChangeAnswer(dialog, widgets);
                         }
                     }, 700);
                 }
@@ -164,6 +163,51 @@ public class TemplateElementAdapter extends RecyclerView.Adapter<TemplateElement
 
         for (TemplateElementQuestionAdapter t : templateElementQuestionAdapters) {
             t.save(report_id);
+        }
+    }
+
+    public void dialogChangeAnswer(Dialog dialog, Widgets widgets){
+
+        Log.e("Change Dialog ", "dialogChangeAnswer: out");
+        dialogElementNa = new Dialog(context);
+        if (!dialogElementNa.isShowing()) {
+            dialogElementNa.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialogElementNa.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogElementNa.setCancelable(false);
+            dialogElementNa.setContentView(R.layout.dialog_exit_confirmation);
+            dialogElementNa.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+            TextView msg = (TextView) dialogElementNa.findViewById(R.id.tv_message);
+            Button yes = (Button) dialogElementNa.findViewById(R.id.btn_yes);
+            Button no = (Button) dialogElementNa.findViewById(R.id.btn_no);
+
+            msg.setText("Are you sure you want to change your answer?");
+
+            yes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogElementNa.dismiss();
+                    templateElementQuestionAdapters.get(widgets.getAdapterPosition()).setAnswer("", "", dialog);
+                    widgets.cbElementNa.setText("N/A");
+                }
+            });
+
+            no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    widgets.cbElementNa.setChecked(true);
+
+                    if(dialog.isShowing()){
+                        dialog.dismiss();
+                    }
+                    if(dialogElementNa.isShowing()) {
+                        dialogElementNa.dismiss();
+                    }
+                }
+            });
+
+            dialogElementNa.show();
         }
     }
 
