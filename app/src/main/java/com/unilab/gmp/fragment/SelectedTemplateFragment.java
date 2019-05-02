@@ -54,6 +54,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -66,6 +67,8 @@ import static com.unilab.gmp.activity.HomeActivity.pDialog;
  */
 @SuppressLint("ValidFragment")
 public class SelectedTemplateFragment extends Fragment {
+
+    private static final String TAG = "SelectedTemplateFragmen";
 
     Unbinder unbinder;
     Context context;
@@ -378,73 +381,12 @@ public class SelectedTemplateFragment extends Fragment {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ModelAuditReports mar = new ModelAuditReports();
-
-                List<ModelAuditReports> auditReps = ModelAuditReports.findWithQuery(ModelAuditReports.class,
-                        "SELECT * FROM MODEL_AUDIT_REPORTS ORDER BY CAST(reportid as INT) ASC", null);
-                int size = auditReps.size() + 1;
-                String zero = "";
-                if (size < 100) {
-                    zero = "0";
-                }
-                if (size < 10) {
-                    zero = "00";
-                }
-
-                for (ModelAuditReports idChecker : auditReps) {
-                    Log.i("AUDIT-REPORT-SIZE", "VALUE 0 : " + idChecker.getReport_id());
-                }
-
-                int rep_temp = 0;
-                String report_id = "";
-
-                if (auditReps.size() == 0 || auditReps == null) {
-                    report_id = "001";
+                int year = Calendar.getInstance().get(Calendar.YEAR);
+                if (year <= 2019) {
+                    saveReport2019();
                 } else {
-                    String crnt = auditReps.get(auditReps.size() - 1).getReport_id();
-                    String[] new_id = crnt.split("-");
-
-                    if (auditReps.size() != 0) {
-                        rep_temp = Integer.valueOf(new_id[0]);
-
-                        if (auditReps.size() < 10) {
-                            report_id = "00" + String.valueOf(rep_temp + 1);
-                        } else if (auditReps.size() > 9 && auditReps.size() < 100) {
-                            report_id = "0" + String.valueOf(rep_temp + 1);
-                        } else if (auditReps.size() >= 100) {
-                            report_id = String.valueOf(rep_temp + 1);
-                        }
-                    } else {
-                        report_id = "001";
-                    }
+                    saveReport2020Onwards();
                 }
-
-                //report_id = String.valueOf(rep_temp + 1);
-                Log.i("AUDIT-REPORT-SIZE", "VALUE 1 : " + rep_temp);
-                Log.i("AUDIT-REPORT-SIZE", "VALUE 2 : " + report_id);
-                report_id = report_id + "-B";
-
-                String crntrepno = report_id;
-                String[] new_repno = crntrepno.split("-");
-
-                mar.setReport_id(report_id);
-                mar.setReport_no("GMP-" + substr + "-" + new_repno[0]);
-                mar.setTemplate_id(modelTemplates.getTemplateID());
-                mar.setCompany_id(modelTemplates.getCompany_id());
-                mar.setAudit_date_1(modelTemplates.getAudit_date_1());
-                mar.setAudit_date_2(modelTemplates.getAudit_date_2());
-                templateElementAdapter.save(report_id);
-                dateOfAuditAdapter.save(report_id);
-                mar.setModified_date(getDate());
-                mar.setStatus("1");
-
-                SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context);
-                mar.setAuditor_id(AuditorsModel.find(AuditorsModel.class, "email=?", new String[]{sharedPreferenceManager.getStringData("EMAIL")}).get(0).getAuditor_id());
-
-                mar.save();
-
-                dialogSaveDraft.dismiss();
-                dialogSucSaveDraft("Successfully saved as draft.");
             }
         });
 
@@ -457,6 +399,163 @@ public class SelectedTemplateFragment extends Fragment {
 
         dialogSaveDraft.show();
     }
+
+    private void saveReport2020Onwards() {
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        String split_year = String.valueOf(year).substring(String.valueOf(year).length() - 2);
+
+        ModelAuditReports mar = new ModelAuditReports();
+
+/*        List<ModelAuditReports> auditReps = ModelAuditReports.findWithQuery(ModelAuditReports.class,
+                "SELECT * FROM MODEL_AUDIT_REPORTS WHERE ORDER BY CAST(reportid as INT) ASC", null);*/
+
+        List<ModelAuditReports> auditReps = ModelAuditReports.findWithQuery(ModelAuditReports.class,
+                "SELECT * FROM MODEL_AUDIT_REPORTS WHERE createdate BETWEEN '"+ year +"-01-01' AND '"+ year +"-12-31' ORDER BY CAST(reportid as INT) ASC", null);
+
+        int size = auditReps.size() + 1;
+        String zero = "";
+        if (size < 100) {
+            zero = "0";
+        }
+        if (size < 10) {
+            zero = "00";
+        }
+
+        for (ModelAuditReports idChecker : auditReps) {
+            Log.i("AUDIT-REPORT-SIZE", "VALUE 0 : " + idChecker.getReport_id());
+        }
+
+        int rep_temp = 0;
+        String report_id = "";
+
+
+        if (auditReps.size() == 0 || auditReps == null) {
+            report_id = "001";
+        } else {
+
+            String crnt = auditReps.get(auditReps.size() - 1).getReport_id();
+            String[] new_id = crnt.split("-");
+
+            if (auditReps.size() != 0) {
+                rep_temp = Integer.valueOf(new_id[0]);
+
+
+                if (auditReps.size() < 10) {
+                    report_id = "00" + String.valueOf(rep_temp + 1);
+                } else if (auditReps.size() > 9 && auditReps.size() < 100) {
+                    report_id = "0" + String.valueOf(rep_temp + 1);
+                } else if (auditReps.size() >= 100) {
+                    report_id = String.valueOf(rep_temp + 1);
+                }
+            } else {
+                report_id = "001";
+            }
+        }
+
+        //report_id = String.valueOf(rep_temp + 1);
+        Log.i("AUDIT-REPORT-SIZE", "VALUE 1 : " + rep_temp);
+        Log.i("AUDIT-REPORT-SIZE", "VALUE 2 : " + report_id);
+        report_id = report_id + "-B";
+
+        String crntrepno = report_id;
+        String[] new_repno = crntrepno.split("-");
+
+        mar.setReport_id(report_id);
+        mar.setReport_no("DFT-" + split_year + "-" + new_repno[0]);
+        mar.setTemplate_id(modelTemplates.getTemplateID());
+        mar.setCompany_id(modelTemplates.getCompany_id());
+        mar.setAudit_date_1(modelTemplates.getAudit_date_1());
+        mar.setAudit_date_2(modelTemplates.getAudit_date_2());
+        templateElementAdapter.save(report_id);
+        dateOfAuditAdapter.save(report_id);
+        mar.setModified_date(getDate());
+        mar.setCreate_date(getDate());
+        mar.setStatus("1");
+
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context);
+        mar.setAuditor_id(AuditorsModel.find(AuditorsModel.class, "email=?", new String[]{sharedPreferenceManager.getStringData("EMAIL")}).get(0).getAuditor_id());
+
+        mar.save();
+
+        dialogSaveDraft.dismiss();
+        dialogSucSaveDraft("Successfully saved as draft.");
+    }
+
+
+    private void saveReport2019(){
+        ModelAuditReports mar = new ModelAuditReports();
+
+        List<ModelAuditReports> auditReps = ModelAuditReports.findWithQuery(ModelAuditReports.class,
+                "SELECT * FROM MODEL_AUDIT_REPORTS ORDER BY CAST(reportid as INT) ASC", null);
+        int size = auditReps.size() + 1;
+        String zero = "";
+        if (size < 100) {
+            zero = "0";
+        }
+        if (size < 10) {
+            zero = "00";
+        }
+
+        for (ModelAuditReports idChecker : auditReps) {
+            Log.i("AUDIT-REPORT-SIZE", "VALUE 0 : " + idChecker.getCreate_date());
+        }
+
+        int rep_temp = 0;
+        String report_id = "";
+
+        Log.e(TAG, "year2019: "+auditReps.size());
+
+        if (auditReps.size() == 0 || auditReps == null) {
+            report_id = "001";
+        } else {
+
+            String crnt = auditReps.get(auditReps.size() - 1).getReport_id();
+            String[] new_id = crnt.split("-");
+
+            if (auditReps.size() != 0) {
+                rep_temp = Integer.valueOf(new_id[0]);
+
+                if (auditReps.size() < 10) {
+                    report_id = "00" + String.valueOf(rep_temp + 1);
+                } else if (auditReps.size() > 9 && auditReps.size() < 100) {
+                    report_id = "0" + String.valueOf(rep_temp + 1);
+                } else if (auditReps.size() >= 100) {
+                    report_id = String.valueOf(rep_temp + 1);
+                }
+            } else {
+                report_id = "001";
+            }
+        }
+
+        //report_id = String.valueOf(rep_temp + 1);
+        Log.i("AUDIT-REPORT-SIZE", "VALUE 1 : " + rep_temp);
+        Log.i("AUDIT-REPORT-SIZE", "VALUE 2 : " + report_id);
+        report_id = report_id + "-B";
+
+        String crntrepno = report_id;
+        String[] new_repno = crntrepno.split("-");
+
+        mar.setReport_id(report_id);
+        mar.setReport_no("GMP-" + substr + "-" + new_repno[0]);
+        mar.setTemplate_id(modelTemplates.getTemplateID());
+        mar.setCompany_id(modelTemplates.getCompany_id());
+        mar.setAudit_date_1(modelTemplates.getAudit_date_1());
+        mar.setAudit_date_2(modelTemplates.getAudit_date_2());
+        templateElementAdapter.save(report_id);
+        dateOfAuditAdapter.save(report_id);
+        mar.setModified_date(getDate());
+        mar.setCreate_date(getDate());
+        mar.setStatus("1");
+
+        SharedPreferenceManager sharedPreferenceManager = new SharedPreferenceManager(context);
+        mar.setAuditor_id(AuditorsModel.find(AuditorsModel.class, "email=?", new String[]{sharedPreferenceManager.getStringData("EMAIL")}).get(0).getAuditor_id());
+
+        mar.save();
+
+        dialogSaveDraft.dismiss();
+        dialogSucSaveDraft("Successfully saved as draft.");
+    }
+
 
     public String getDate() {
         String dateStr = "";

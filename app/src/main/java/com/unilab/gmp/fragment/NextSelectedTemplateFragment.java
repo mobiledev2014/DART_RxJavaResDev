@@ -90,6 +90,7 @@ import com.unilab.gmp.utility.Variable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -905,7 +906,12 @@ public class NextSelectedTemplateFragment extends Fragment {
 
         if (validate()) {
             if (isNetworkConnected()) {
-                saveReport();
+                int year = Calendar.getInstance().get(Calendar.YEAR);
+                if (year <= 2019) {
+                    saveReport2019();
+                } else {
+                    saveReport2020Onwards();
+                }
 
                 final String email = sharedPref.getStringData("EMAIL");
                 final String password = sharedPref.getStringData("PASSWORD");
@@ -923,7 +929,143 @@ public class NextSelectedTemplateFragment extends Fragment {
         }
     }
 
-    private void saveReport() {
+    private void saveReport2020Onwards(){
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        String split_year = String.valueOf(year).substring(String.valueOf(year).length() - 2);
+        ModelAuditReports mar = new ModelAuditReports();
+
+        //List<ModelAuditReports> auditReps = ModelAuditReports.listAll(ModelAuditReports.class);
+        //Note.findWithQuery(Note.class, "SELECT * FROM Book ORDER BY author DESC", null);
+/*        List<ModelAuditReports> auditReps = ModelAuditReports.findWithQuery(ModelAuditReports.class,
+                "SELECT * FROM MODEL_AUDIT_REPORTS ORDER BY CAST(reportid as INT) ASC", null);*/
+
+        List<ModelAuditReports> auditReps = ModelAuditReports.findWithQuery(ModelAuditReports.class,
+                "SELECT * FROM MODEL_AUDIT_REPORTS WHERE createdate BETWEEN '"+ year +"-01-01' AND '"+ year +"-12-31' ORDER BY CAST(reportid as INT) ASC", null);
+
+        int size = auditReps.size() + 1;
+        Log.i("AUDIT-REPORT-SIZE", "VALUE : " + size);
+        String zero = "";
+        if (size < 100) {
+            zero = "0";
+        }
+        if (size < 10) {
+            zero = "00";
+        }
+
+        for (ModelAuditReports idChecker : auditReps) {
+            Log.i("AUDIT-REPORT-SIZE", "VALUE 0 : " + idChecker.getReport_id());
+        }
+
+        /*//String report_id = zero + size;
+        int rep_temp = Integer.valueOf(auditReps.get(auditReps.size() - 1).getReport_id());
+        String report_id = String.valueOf(rep_temp + 1);*/
+        int rep_temp = 0;
+        String report_id = "";
+
+        if (auditReps.size() == 0 || auditReps == null) {
+            report_id = "001";
+        } else {
+            String crnt = auditReps.get(auditReps.size() - 1).getReport_id();
+            String[] new_id = crnt.split("-");
+
+            if (auditReps.size() != 0) {
+                rep_temp = Integer.valueOf(new_id[0]);
+
+                if (auditReps.size() < 10) {
+                    report_id = "00" + String.valueOf(rep_temp + 1);
+                } else if (auditReps.size() > 9 && auditReps.size() < 100) {
+                    report_id = "0" + String.valueOf(rep_temp + 1);
+                } else if (auditReps.size() >= 100) {
+                    report_id = String.valueOf(rep_temp + 1);
+                }
+            } else {
+                report_id = "001";
+            }
+        }
+
+        //report_id = String.valueOf(rep_temp + 1);
+        Log.i("AUDIT-REPORT-SIZE", "VALUE 1 : " + rep_temp);
+        Log.i("AUDIT-REPORT-SIZE", "VALUE 2 : " + report_id);
+        report_id = report_id + "-B";
+
+        String crntrepno = report_id;
+        String[] new_repno = crntrepno.split("-");
+
+        mar.setReport_id(report_id);
+        mar.setReport_no("DFT-"+ split_year +"-" + new_repno[0]);
+        mar.setStatus("1");
+        mar.setTemplate_id(modelTemplates.getTemplateID());
+        mar.setCompany_id(modelTemplates.getCompany_id());
+        mar.setAudit_date_1(modelTemplates.getAudit_date_1());
+        mar.setAudit_date_2(modelTemplates.getAudit_date_2());
+        mar.setAuditor_id(auditorsModels.get(sTemplateNextAuditorLeadName.getSelectedItemPosition()).getAuditor_id());
+        mar.setReviewer_id(reviewer_id);
+        mar.setApprover_id(approver_id);
+        mar.setReviewerChecked(modelTemplates.isReviewerChecked());
+        mar.setWrap_date(DateTimeUtils.parseDateMonthToDigit(etTemplateNextDateOfWrapUp.getText().toString()));
+
+        mar.setHead_lead(cbTemplateNextReviewer.isChecked() ? "1" : "0");
+
+        adapterAuditors.save(report_id);
+
+        ModelReportReviewer.deleteAll(ModelReportReviewer.class, "reportid = ?", report_id);
+        ModelReportReviewer mrr = new ModelReportReviewer();
+        mrr.setReport_id(report_id);
+        int rev_index = sTemplateNextReviewerName.getSelectedItemPosition();
+        if (rev_index > 0) {
+            rev_index -= 1;
+        }
+        mrr.setReviewer_id(reviewerModels.get(rev_index).getReviewer_id());
+        mrr.save();
+
+        ModelReportApprover.deleteAll(ModelReportApprover.class, "reportid = ?", report_id);
+        ModelReportApprover mra = new ModelReportApprover();
+        mra.setReport_id(report_id);
+        int apprvr_index = sTemplateNextApproverName.getSelectedItemPosition();
+        if (apprvr_index > 0)
+            apprvr_index -= 1;
+        mra.setApprover_id(approverModels.get(apprvr_index).getApprover_id());
+        mra.save();
+
+        ModelDateOfAudit.deleteAll(ModelDateOfAudit.class, "reportid = ?", report_id);
+        for (ModelDateOfAudit t : modelTemplates.getModelDateOfAudits()) {
+            t.setReport_id(report_id);
+            t.save();
+        }
+
+        mar.setAudit_close_date(DateTimeUtils.parseDateMonthToDigit(
+                etTemplateNextSummaryRecommendationAuditCloseDate.getText().toString()));
+        mar.setAudited_areas(etTemplateNextAuditedArea.getText().toString());
+        mar.setAreas_to_consider(etTemplateNextNotAuditedArea.getText().toString());
+
+        adapterTranslator.save(report_id);
+        adapterScopeAudit.save(report_id);
+        adapterPreAuditDoc.save(report_id);
+        adapterReference.save(report_id);
+        adapterCompanyBackgroundMajorChanges.save(report_id, mar.getCompany_id());//inspection
+        adapterCompanyBackgroundName.save(report_id);//inspector
+        adapterPersonelMetDuring.save(report_id);
+        activityAdapter.save(report_id);
+        templateElementAdapter.save(report_id);
+        adapterOthersIssueAudit.save(mar.getReport_id());
+        adapterOthersIssueExecutive.save(mar.getReport_id());
+
+        mar.setOther_activities(etTemplateNextActivityCarried.getText().toString());
+        adapterPresentDuringMeeting.save(report_id);//w
+        adapterDistributionList.save(report_id);//w
+        adapterDistributionOthers.save(report_id);
+
+        adapterSummaryRecommendation.save(report_id);//(y)
+        adapterOthersIssueAudit.save(report_id);
+        adapterOthersIssueExecutive.save(report_id);
+        mar.setModified_date(getDate());
+        mar.setCreate_date(getDate());
+        mar.save();
+        report = mar;
+    }
+
+
+    private void saveReport2019() {
         ModelAuditReports mar = new ModelAuditReports();
         //List<ModelAuditReports> auditReps = ModelAuditReports.listAll(ModelAuditReports.class);
         //Note.findWithQuery(Note.class, "SELECT * FROM Book ORDER BY author DESC", null);
@@ -970,6 +1112,7 @@ public class NextSelectedTemplateFragment extends Fragment {
             }
         }
 
+        //report_id = String.valueOf(rep_temp + 1);
         Log.i("AUDIT-REPORT-SIZE", "VALUE 1 : " + rep_temp);
         Log.i("AUDIT-REPORT-SIZE", "VALUE 2 : " + report_id);
         report_id = report_id + "-B";
@@ -1029,7 +1172,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         adapterPreAuditDoc.save(report_id);
         adapterReference.save(report_id);
         adapterCompanyBackgroundMajorChanges.save(report_id, mar.getCompany_id());//inspection
-        adapterCompanyBackgroundName.save(report_id);
+        adapterCompanyBackgroundName.save(report_id);//inspector
         adapterPersonelMetDuring.save(report_id);
         activityAdapter.save(report_id);
         templateElementAdapter.save(report_id);
@@ -1037,14 +1180,15 @@ public class NextSelectedTemplateFragment extends Fragment {
         adapterOthersIssueExecutive.save(mar.getReport_id());
 
         mar.setOther_activities(etTemplateNextActivityCarried.getText().toString());
-        adapterPresentDuringMeeting.save(report_id);
-        adapterDistributionList.save(report_id);
+        adapterPresentDuringMeeting.save(report_id);//w
+        adapterDistributionList.save(report_id);//w
         adapterDistributionOthers.save(report_id);
 
-        adapterSummaryRecommendation.save(report_id);
+        adapterSummaryRecommendation.save(report_id);//(y)
         adapterOthersIssueAudit.save(report_id);
         adapterOthersIssueExecutive.save(report_id);
         mar.setModified_date(getDate());
+        mar.setCreate_date(getDate());
         mar.save();
         report = mar;
     }
@@ -1917,7 +2061,12 @@ public class NextSelectedTemplateFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //save as draft
-                saveReport();
+                int year = Calendar.getInstance().get(Calendar.YEAR);
+                if(year <= 2019){
+                    saveReport2019();
+                }else{
+                    saveReport2020Onwards();
+                }
                 dialogSaveDraft.dismiss();
                 dialogSucSaveDraft("Successfully saved as draft");
             }
