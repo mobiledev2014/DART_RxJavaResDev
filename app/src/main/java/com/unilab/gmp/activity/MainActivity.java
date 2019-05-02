@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void getCredentials() {
         sharedPref = new SharedPreferenceManager(context);
-        String email = sharedPref.getStringData("EMAIL");
+        String email = sharedPref.getStringData("LOGIN_EMAIL");
         String password = sharedPref.getStringData("PASSWORD");
 
         if (sharedPref.getBooleanData("CHECKED")) {
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("ERROR", "POSTASYNC 1");
                 if (cbRemember.isChecked()) {
                     sharedPref.saveData("CHECKED", true);
-                    //sharedPref.saveData("EMAIL", email);
+                    sharedPref.saveData("LOGIN_EMAIL", email);
                     sharedPref.saveData("PASSWORD", password);
                 } else {
                     sharedPref.saveData("CHECKED", false);
@@ -162,11 +162,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("TAGFALSE", "CLICK!!!" + isNetworkConnected() + " " + email);
                 List<ModelUser> users = ModelUser.find(ModelUser.class, "email = ?", email);
 
-                String emailSp = sharedPref.getStringData("EMAIL");
+                String emailSp = sharedPref.getStringData("LOGIN_EMAIL");
                 String passwordSp = sharedPref.getStringData("PASSWORD");
 
                 if (!emailSp.equals(null) && !passwordSp.equals(null) && emailSp != null && passwordSp != null) {
-                    if (emailSp.equals(email) && passwordSp.equals(password)) {
+                    if (emailSp.equalsIgnoreCase(email) && passwordSp.equals(password)) {
 
                         if (cbRemember.isChecked()) {
                             sharedPref.saveData("CHECKED", true);
