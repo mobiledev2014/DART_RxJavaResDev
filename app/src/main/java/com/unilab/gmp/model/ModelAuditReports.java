@@ -1,5 +1,7 @@
 package com.unilab.gmp.model;
 
+import androidx.room.Entity;
+
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
@@ -15,8 +17,9 @@ import lombok.Setter;
 
 @Setter
 @Getter
+@Entity
 
-public class ModelAuditReports extends SugarRecord {
+public class ModelAuditReports  {
     String report_id;
     String report_no;
     String company_id;

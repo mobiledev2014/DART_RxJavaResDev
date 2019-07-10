@@ -2,7 +2,7 @@ package com.unilab.gmp.model;
 
 import com.orm.SugarRecord;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -10,8 +10,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-
-public class TemplateModelDistributionList extends SugarRecord {
+@Entity
+public class TemplateModelDistributionList  {
     String template_id;
     String distribution = "";
     String distribution_id = "";

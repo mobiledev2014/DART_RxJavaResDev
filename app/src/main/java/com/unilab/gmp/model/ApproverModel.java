@@ -2,7 +2,7 @@ package com.unilab.gmp.model;
 
 import com.orm.SugarRecord;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ApproverModel extends SugarRecord {
+public class ApproverModel  {
     String approver_id;
     String firstname;
     String middlename;

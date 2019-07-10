@@ -4,7 +4,7 @@ import com.orm.SugarRecord;
 
 import java.util.List;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -12,7 +12,8 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class ModelClassification extends SugarRecord{
+@Entity
+public class ModelClassification {
     String classification_id;
     String classification_name;
     String create_date;

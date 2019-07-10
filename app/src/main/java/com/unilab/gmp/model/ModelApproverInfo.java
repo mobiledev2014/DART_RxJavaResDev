@@ -1,11 +1,12 @@
-package com.unilab.gmp.model;
+ package com.unilab.gmp.model;
+import androidx.room.Entity;
 
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
 import java.util.ArrayList;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -13,7 +14,8 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class ModelApproverInfo extends SugarRecord {
+@Entity
+public class ModelApproverInfo  {
 
     @SerializedName("approver_info")
     ArrayList<ApproverModel> approverModels;

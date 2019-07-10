@@ -1,6 +1,8 @@
 package com.unilab.gmp.model;
 
-import lombok.Getter;
+import androidx.room.Entity;
+
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -8,6 +10,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@Entity
 
 //This model is just used for getting data from api
 //AuditorsModel is used in the database

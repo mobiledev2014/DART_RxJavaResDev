@@ -7,7 +7,7 @@ import com.unilab.gmp.adapter.templates.AdapterScopeAuditInterest;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -16,7 +16,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class TemplateModelScopeAudit extends SugarRecord {
+@Entity
+public class TemplateModelScopeAudit  {
     String audit_id = "";
     String scope_id = "";
     @SerializedName("scope_detail")

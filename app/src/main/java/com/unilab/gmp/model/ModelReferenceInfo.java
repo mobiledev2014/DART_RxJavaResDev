@@ -5,7 +5,7 @@ import com.orm.SugarRecord;
 
 import java.util.ArrayList;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -13,7 +13,8 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class ModelReferenceInfo extends SugarRecord {
+@Entity
+public class ModelReferenceInfo  {
     @SerializedName("standard_reference")
     ArrayList<ModelReference> modelReferences;
 }

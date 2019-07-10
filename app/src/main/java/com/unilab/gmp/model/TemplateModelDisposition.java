@@ -2,7 +2,7 @@ package com.unilab.gmp.model;
 
 import com.orm.SugarRecord;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -11,6 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TemplateModelDisposition extends SugarRecord {
+@Entity
+public class TemplateModelDisposition  {
     String template_id;
 }

@@ -1,8 +1,9 @@
-package com.unilab.gmp.model;
+ package com.unilab.gmp.model;
+import androidx.room.Entity;
 
 import com.orm.SugarRecord;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -11,7 +12,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ConfigModel extends SugarRecord {
+@Entity
+public class ConfigModel  {
     String approver = "2010-10-03 03:11:59";
     String auditor = "2010-10-03 03:11:59";
     String category = "2010-10-03 03:11:59";

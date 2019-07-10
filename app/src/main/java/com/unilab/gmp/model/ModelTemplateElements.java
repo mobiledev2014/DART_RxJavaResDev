@@ -5,7 +5,7 @@ import com.orm.SugarRecord;
 
 import java.util.List;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -14,7 +14,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class ModelTemplateElements extends SugarRecord {
+@Entity
+public class ModelTemplateElements  {
 
     String template_id;
     String element_id;

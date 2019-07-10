@@ -5,7 +5,7 @@ import com.orm.SugarRecord;
 
 import java.util.ArrayList;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -14,7 +14,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class ModelDistributionInfo extends SugarRecord {
+@Entity
+public class ModelDistributionInfo  {
     @SerializedName("distribution")
     ArrayList<ModelDistribution> modelDistributions;
 }

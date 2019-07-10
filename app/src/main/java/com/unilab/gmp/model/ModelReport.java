@@ -4,7 +4,7 @@ import com.orm.SugarRecord;
 
 import java.util.List;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -13,8 +13,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-
-public class ModelReport extends SugarRecord {
+@Entity
+public class ModelReport  {
     String token =  "35ced0a2f0ad35bdc9ae075ee213ea4b8e6c2839";
     String cmdEvent = "postInput";
     String report_id;

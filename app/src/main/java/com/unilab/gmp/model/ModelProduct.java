@@ -2,7 +2,7 @@ package com.unilab.gmp.model;
 
 import com.orm.SugarRecord;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -10,7 +10,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ModelProduct extends SugarRecord{
+@Entity
+public class ModelProduct {
     String product_id;
     String company_id;
     String product_name;

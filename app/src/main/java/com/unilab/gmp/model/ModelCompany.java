@@ -6,7 +6,7 @@ import com.orm.SugarRecord;
 
 import java.util.ArrayList;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -15,7 +15,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-public class ModelCompany extends SugarRecord {
+
+public class ModelCompany  {
     String company_id;
 
 

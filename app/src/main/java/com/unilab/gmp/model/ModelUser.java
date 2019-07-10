@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -12,7 +12,8 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class ModelUser extends SugarRecord{
+@Entity
+public class ModelUser {
 
     @SerializedName("emp_id")
     @Expose

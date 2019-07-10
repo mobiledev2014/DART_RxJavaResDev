@@ -5,7 +5,7 @@ import com.orm.SugarRecord;
 
 import java.util.List;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -13,7 +13,8 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class ModelReportActivities extends SugarRecord {
+@Entity
+public class ModelReportActivities  {
     String report_id;
     String activity_id;
     @SerializedName("scope_product")

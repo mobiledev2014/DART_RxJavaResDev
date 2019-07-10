@@ -4,7 +4,7 @@ import com.orm.SugarRecord;
 
 import java.util.ArrayList;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -13,6 +13,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TemplateListModel extends SugarRecord {
+@Entity
+public class TemplateListModel  {
     ArrayList<TemplateDetailsModel> template_list;
 }

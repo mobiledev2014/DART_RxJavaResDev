@@ -1,12 +1,12 @@
-package com.unilab.gmp.model;
+ package com.unilab.gmp.model;
 
 import androidx.room.Entity;
 
-import com.google.gson.annotations.SerializedName;
-import com.orm.SugarRecord;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import com.google.gson.annotations.SerializedName;
+
 
 /**
  * Created by c_jhcanuto on 8/24/2017.
@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class TemplateModelCompanyBackgroundMajorChanges extends SugarRecord{
+public class TemplateModelCompanyBackgroundMajorChanges {
     String template_id;
     @SerializedName("changes")
     String majorchanges = "";

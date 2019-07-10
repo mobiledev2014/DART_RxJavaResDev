@@ -3,7 +3,7 @@ package com.unilab.gmp.model;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -12,7 +12,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TemplateModelPersonelMetDuring extends SugarRecord {
+@Entity
+public class TemplateModelPersonelMetDuring  {
     String template_id;
     String name = "";
     @SerializedName("designation")

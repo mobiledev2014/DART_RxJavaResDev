@@ -2,7 +2,7 @@ package com.unilab.gmp.model;
 
 import com.orm.SugarRecord;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -11,7 +11,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class ModelReportSubActivities extends SugarRecord {
+@Entity
+public class ModelReportSubActivities  {
     String report_id;
     String sub_item_id;
     String activity_id;

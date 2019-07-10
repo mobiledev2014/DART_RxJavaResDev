@@ -6,7 +6,7 @@ import com.orm.SugarRecord;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
+import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -15,7 +15,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class TemplateModelScopeAuditCopy extends SugarRecord {
+@Entity
+public class TemplateModelScopeAuditCopy  {
     String scope_id = "";
     String scope_detail;
     @SerializedName("scope_product")
