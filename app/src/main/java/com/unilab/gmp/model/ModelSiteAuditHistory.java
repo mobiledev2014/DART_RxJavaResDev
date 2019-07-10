@@ -1,5 +1,7 @@
 package com.unilab.gmp.model;
 
+import androidx.room.Entity;
+
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
@@ -14,7 +16,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-
+@Entity
 public class ModelSiteAuditHistory extends SugarRecord {
     ArrayList<TemplateModelCompanyBackgroundMajorChanges> major_changes;
     @SerializedName("audit_dates")

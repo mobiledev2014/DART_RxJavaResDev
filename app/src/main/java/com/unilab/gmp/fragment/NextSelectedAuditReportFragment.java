@@ -79,7 +79,7 @@ import com.unilab.gmp.model.TemplateModelTranslator;
 import com.unilab.gmp.retrofit.ApiClient;
 import com.unilab.gmp.retrofit.ApiInterface;
 import com.unilab.gmp.retrofit.Async.PostAsync;
-import com.unilab.gmp.utility.APICalls;
+import com.unilab.gmp.utility.APICalls2;
 import com.unilab.gmp.utility.DateTimeUtils;
 import com.unilab.gmp.utility.Glovar;
 import com.unilab.gmp.utility.SharedPreferenceManager;
@@ -2651,7 +2651,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        new APICalls(context, "Loading...", true, null, "auditReport").execute();
+                        new APICalls2(context, "Loading...", true, null, "auditReport");
                     }
                 }, 1000);
 

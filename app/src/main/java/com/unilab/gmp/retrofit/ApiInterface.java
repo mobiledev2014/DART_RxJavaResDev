@@ -21,6 +21,7 @@ import com.unilab.gmp.retrofit.user.ResultUser;
 
 import java.util.ArrayList;
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -123,55 +124,54 @@ public interface ApiInterface {
     Call<ResultUser> getUser(@Field("email") String email);
 
     @GET("template_list.json")
-    Call<TemplateListModel> getDataList();
+    Observable<TemplateListModel> getDataList();
 
     @GET("config.json")
-    Call<ConfigModel> getConfig();
-
+    Observable<ConfigModel> getConfig();
 
     @GET("audit_report_list.json")
-    Call<ModelAuditReportsList> getAuditReportDataList();
+    Observable<ModelAuditReportsList> getAuditReportDataList();
 
     @GET
-    Call<ModelAuditReports> getAuditReport(@Url String url);
+    Observable<ModelAuditReports> getAuditReport(@Url String url);
 
     //    @GET(".json")
-//    Call<ModelTemplates> getData();
+//    Call<ModelTemplates> getTemplateInfo();
     @GET
-    public Call<ModelTemplates> getData(@Url String reportID);
+    Observable<ModelTemplates> getTemplateInfo(@Url String reportID);
 
     @GET("approver.json")
-    Call<ModelApproverInfo> getApprover();
+    Observable<ModelApproverInfo> getApprover();
 
     @GET("auditor.json")
-    Call<ModelAuditorInfo> getAuditors();
+    Observable<ModelAuditorInfo> getAuditors();
 
     @GET("reviewer.json")
-    Call<ModelReviewerInfo> getReviewer();
+    Observable<ModelReviewerInfo> getReviewer();
 
     @GET("category.json")
-    Call<ModelCategoryInfo> getCategory();
+    Observable<ModelCategoryInfo> getCategory();
 
     @GET("product.json")
-    Call<ModelProductInfo> getProducts();
+    Observable<ModelProductInfo> getProducts();
 
     @GET("classification.json")
-    Call<ModelClassificationInfo> getClassifications();
+    Observable<ModelClassificationInfo> getClassifications();
 
     @GET("site.json")
-    Call<ModelCompanyInfo> getCompanies();
+    Observable<ModelCompanyInfo> getCompanies();
 
     @GET("standard_reference.json")
     Call<ModelReferenceInfo> getReferences();
 
     @GET("type_audit.json ")
-    Call<ModelTypeAuditInfo> getTypeAudit();
+    Observable<ModelTypeAuditInfo> getTypeAudit();
 
     @GET("disposition.json")
-    Call<ModelDispositionInfo> getDisposition();
+    Observable<ModelDispositionInfo> getDisposition();
 
     @GET("distribution.json")
-    Call<ModelDistributionInfo> getDistribution();
+    Observable<ModelDistributionInfo> getDistribution();
 
     @FormUrlEncoded
     @POST("api")

@@ -1,5 +1,7 @@
 package com.unilab.gmp.model;
 
+import androidx.room.Entity;
+
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
@@ -12,6 +14,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
 public class TemplateModelCompanyBackgroundMajorChanges extends SugarRecord{
     String template_id;
     @SerializedName("changes")

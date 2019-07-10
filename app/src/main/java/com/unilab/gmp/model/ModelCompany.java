@@ -1,5 +1,7 @@
 package com.unilab.gmp.model;
 
+import androidx.room.Entity;
+
 import com.orm.SugarRecord;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@Entity
 public class ModelCompany extends SugarRecord {
     String company_id;
 

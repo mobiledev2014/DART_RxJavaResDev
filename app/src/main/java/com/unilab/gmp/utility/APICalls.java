@@ -1,14 +1,13 @@
+/*
 package com.unilab.gmp.utility;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -83,8 +82,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -93,9 +90,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+*/
 /**
  * Created by c_rcmiguel on 8/23/2017.
- */
+ *//*
+
 
 public class APICalls extends AsyncTask<String, String, Boolean> {
 
@@ -164,7 +163,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         Boolean result = false;
 
         try {
-            apiInterface = ApiClient.getConfig().create(ApiInterface.class);
+            apiInterface = ApiClient.getBaseURLConfig().create(ApiInterface.class);
             apiConfig();
             while (!isdone || templatesdownloaded != numberoftemplates)
                 result = false;
@@ -571,7 +570,7 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
     }
 
     public void apiTemplateList() {
-        apiInterface = ApiClient.getApiClientTemplate().create(ApiInterface.class);
+        apiInterface = ApiClient.getApiBaseURLTemplate().create(ApiInterface.class);
         Call<TemplateListModel> listCall = apiInterface.getDataList();
         listCall.enqueue(new Callback<TemplateListModel>() {
             @Override
@@ -585,8 +584,8 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                     final String templateid = tdm.getTemplate_id();
                     final String templateStatus = tdm.getStatus();
 
-                    Call<ModelTemplates> listCall = ApiClient.getApiClientTemplate().
-                            create(ApiInterface.class).getData(tdm.getTemplate_id() + ".json");
+                    Call<ModelTemplates> listCall = ApiClient.getApiBaseURLTemplate().
+                            create(ApiInterface.class).getTemplateInfo(tdm.getTemplate_id() + ".json");
                     listCall.enqueue(new Callback<ModelTemplates>() {
                         @Override
                         public void onResponse(Call<ModelTemplates> call, Response<ModelTemplates> response) {
@@ -609,8 +608,10 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
                                                 + "ID : " + modelTemplates.getTemplateID() + " Modified Date API : " + modelTemplates.getDateUpdated());
 
                                         if (qid.getTemplateID().equals(modelTemplates.getTemplateID())) {
-                                            /*Log.i("modified_date_template1", "local: " +
-                                                    qid.getDateUpdated() + " api: " + modelTemplates.getDateUpdated());*/
+                                            */
+/*Log.i("modified_date_template1", "local: " +
+                                                    qid.getDateUpdated() + " api: " + modelTemplates.getDateUpdated());*//*
+
                                             if (!qid.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
                                                 Log.i("TEMPLATE_LIST", "WHEN HERE");
 
@@ -1853,3 +1854,4 @@ public class APICalls extends AsyncTask<String, String, Boolean> {
         dialogSyncSuccess.show();
     }
 }
+*/

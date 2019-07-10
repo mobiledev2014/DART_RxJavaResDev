@@ -25,7 +25,7 @@ import com.unilab.gmp.fragment.NextSelectedTemplateFragment;
 import com.unilab.gmp.fragment.TemplateFragment;
 import com.unilab.gmp.model.ModelUser;
 import com.unilab.gmp.retrofit.user.ResultUser;
-import com.unilab.gmp.utility.APICalls;
+import com.unilab.gmp.utility.APICalls2;
 import com.unilab.gmp.utility.DialogUtils;
 import com.unilab.gmp.utility.Glovar;
 import com.unilab.gmp.utility.SharedPreferenceManager;
@@ -174,7 +174,7 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
 
                 if (this.action.equals(Glovar.LOGIN)) {
                     Variable.showDialog = true;
-                    new APICalls(context, "Loading...", false, null, "login").execute();
+                    new APICalls2(context, "Loading...", false, null, "login");
                 } else if (this.action.equals(Glovar.POST_AUDIT)) {
                     dialog.dismiss();
                     nextSelectedAuditReportFragment.postData();
@@ -198,7 +198,7 @@ public class PostAsync extends AsyncTask<String, String, String> implements Call
 
             dialog.dismiss();
 
-            if (!dialogLoginError.equals(null)) {
+            if (dialogLoginError != null) {
                 if (dialogLoginError.isShowing()) {
                     dialogLoginError.dismiss();
                 }

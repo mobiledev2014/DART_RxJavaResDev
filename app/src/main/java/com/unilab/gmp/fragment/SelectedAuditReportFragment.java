@@ -576,7 +576,18 @@ public class SelectedAuditReportFragment extends Fragment {
                 mar.setAudit_date_1(modelTemplates.getAudit_date_1());
                 mar.setAudit_date_2(modelTemplates.getAudit_date_2());
                 dateOfAuditAdapter.save(modelAuditReports.getReport_id());
-                templateElementAdapter.save("TEMPData");
+
+                List<ModelReportQuestion> question_list = ModelReportQuestion.find(ModelReportQuestion.class,
+                        "reportid = ? AND answerid > '0'"
+                        , modelAuditReports.getReport_id());
+                if (question_list.size() > 0) {
+                    templateElementAdapter.save("TEMPData");
+                } else {
+
+                    templateElementAdapter.save(modelAuditReports.getReport_id());
+                }
+
+                //templateElementAdapter.save("TEMPData");
                 saveLocalQuestion();
                 //templateElementAdapter.save(mar.getReport_id());
                 mar.setModified_date(getDate());

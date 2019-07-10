@@ -1,3 +1,4 @@
+/*
 package com.unilab.gmp.utility;
 
 import android.app.Activity;
@@ -88,9 +89,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+*/
 /**
  * Created by c_rcmiguel on 8/23/2017.
- */
+ *//*
+
 
 public class APICallsSession extends AsyncTask<String, String, Boolean> {
 
@@ -154,7 +157,7 @@ public class APICallsSession extends AsyncTask<String, String, Boolean> {
 
         Boolean result = false;
 
-        apiInterface = ApiClient.getConfig().create(ApiInterface.class);
+        apiInterface = ApiClient.getBaseURLConfig().create(ApiInterface.class);
 
         apiConfig();
 
@@ -206,10 +209,12 @@ public class APICallsSession extends AsyncTask<String, String, Boolean> {
             }
 
             Log.i("New_Template", changes + "");
-            /*if (changes > 0){
+            */
+/*if (changes > 0){
                 HomeActivity.tvSyncNotifCount.setText(changes + "");
                 HomeActivity.tvSyncNotifCount.setVisibility(View.VISIBLE);
-            }*/
+            }*//*
+
             if (Variable.showDialog) {
                 dialogSyncSuccess("Data has been successfully synced.");
             }
@@ -416,10 +421,12 @@ public class APICallsSession extends AsyncTask<String, String, Boolean> {
                     auditorsModel.setStatus(modelAuditorInfo.getModelAuditors().get(x).getStatus());
 
                     //tick for reviewer and approver
-                    /*
+                    */
+/*
                     * auditorsModel.setReviewer(modelAuditorInfo.getModelAuditors().get(x).getReviewer());
                     * auditorsModel.setApprover(modelAuditorInfo.getModelAuditors().get(x).getApprover());
-                    * */
+                    * *//*
+
                     isAuditorExisting(auditorsModel);
                 }
 
@@ -548,7 +555,7 @@ public class APICallsSession extends AsyncTask<String, String, Boolean> {
     }
 
     public void apiTemplateList() {
-        apiInterface = ApiClient.getApiClientTemplate().create(ApiInterface.class);
+        apiInterface = ApiClient.getApiBaseURLTemplate().create(ApiInterface.class);
         Call<TemplateListModel> listCall = apiInterface.getDataList();
         listCall.enqueue(new Callback<TemplateListModel>() {
             @Override
@@ -563,7 +570,7 @@ public class APICallsSession extends AsyncTask<String, String, Boolean> {
                     final String templateid = tdm.getTemplate_id();
                     final String templateStatus = tdm.getStatus();
                     //String templateModifiedDate = tdm.getModified_date();
-                    Call<ModelTemplates> listCall = ApiClient.getApiClientTemplate().create(ApiInterface.class).getData(tdm.getTemplate_id() + ".json");
+                    Call<ModelTemplates> listCall = ApiClient.getApiBaseURLTemplate().create(ApiInterface.class).getTemplateInfo(tdm.getTemplate_id() + ".json");
                     listCall.enqueue(new Callback<ModelTemplates>() {
                         @Override
                         public void onResponse(Call<ModelTemplates> call, Response<ModelTemplates> response) {
@@ -1911,9 +1918,11 @@ public class APICallsSession extends AsyncTask<String, String, Boolean> {
     public String getDate() {
         String dateStr = "";
 
-        /*Calendar c = Calendar.getInstance();
+        */
+/*Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-        dateStr = df.format(c.getTime());*/
+        dateStr = df.format(c.getTime());*//*
+
 
         DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         Date date = new Date();
@@ -1949,3 +1958,4 @@ public class APICallsSession extends AsyncTask<String, String, Boolean> {
         dialogSyncSuccess.show();
     }
 }
+*/

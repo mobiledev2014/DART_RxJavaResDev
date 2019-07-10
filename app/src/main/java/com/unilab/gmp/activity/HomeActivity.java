@@ -32,7 +32,7 @@ import com.unilab.gmp.fragment.SelectedTemplateFragment;
 import com.unilab.gmp.fragment.TemplateFragment;
 import com.unilab.gmp.model.AuditorsModel;
 import com.unilab.gmp.model.ModelUser;
-import com.unilab.gmp.utility.APICalls;
+import com.unilab.gmp.utility.APICalls2;
 import com.unilab.gmp.utility.SharedPreferenceManager;
 import com.unilab.gmp.utility.Variable;
 
@@ -381,7 +381,7 @@ public class HomeActivity extends AppCompatActivity {
                 //check internet connection
                 if (isNetworkConnected()) {
                     Variable.showDialog = true;
-                    new APICalls(context, "Syncing...", true, HomeActivity.this, "forceSync").execute();
+                    new APICalls2(context, "Syncing...", true, HomeActivity.this, "forceSync");
                     Variable.session++;
                 } else {
                     dialogErrorLogin("No internet connection. Make sure Wi-Fi or cellular data is turned on, then try again.");

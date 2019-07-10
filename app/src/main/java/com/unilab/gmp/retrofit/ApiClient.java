@@ -2,9 +2,11 @@ package com.unilab.gmp.retrofit;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -36,14 +38,12 @@ public class ApiClient {
             .readTimeout(1, TimeUnit.HOURS)
             .build();
 
-    public static Retrofit getApiClientPostAuditReport()
-    {
+    public static Retrofit getApiClientPostAuditReport() {
         //if (retrofit==null)
         //{
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
-
 
 
         retrofit = new Retrofit.Builder()
@@ -55,54 +55,54 @@ public class ApiClient {
         return retrofit;
     }
 
-    public static Retrofit getApiClientTemplate()
-    {
+    public static Retrofit getApiBaseURLTemplate() {
         //if (retrofit==null)
         //{
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL_TEMPLATE)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .build();
         //}
         return retrofit;
     }
 
 
-    public static Retrofit getApiClient()
-    {
+    public static Retrofit getBaseURLDataMaintenance() {
         //if (retrofit==null)
         //{
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .build();
         //}
         return retrofit;
     }
 
-    public static Retrofit getApiClientAuditReport()
-    {
+    public static Retrofit getApiBaseURLAuditReport() {
         //if (retrofit==null)
         //{
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL_AUDIT_REPORT)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .build();
         //}
         return retrofit;
     }
 
-    public static Retrofit getConfig()
-    {
+    public static Retrofit getBaseURLConfig() {
         //if (retrofit==null)
         //{
         retrofit = new Retrofit.Builder()
                 .baseUrl(CONFIG_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .build();
         //}
         return retrofit;
