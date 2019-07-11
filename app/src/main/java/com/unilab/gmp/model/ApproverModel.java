@@ -11,6 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
 public class ApproverModel  {
     String approver_id;
     String firstname;
