@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DART.iml" filepath="$PROJECT_DIR$/DART.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DART_RxJavaResDev.iml" filepath="$PROJECT_DIR$/DART_RxJavaResDev.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
