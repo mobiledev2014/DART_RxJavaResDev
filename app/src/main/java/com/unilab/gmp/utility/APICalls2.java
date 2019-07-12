@@ -443,7 +443,10 @@ public class APICalls2 {
                     }
 
                     private void saveApprovers(ModelApproverInfo modelApproverInfo) {
-                        ApproverModel.deleteAll(ApproverModel.class);
+
+
+                        AppDatabase.getInstance(context).approverModelDAO().delete();
+
                         if (modelApproverInfo != null) {
                             for (int x = 0; x < modelApproverInfo.getApproverModels().size(); x++) {
                                 ApproverModel approversModel = new ApproverModel();
@@ -658,7 +661,7 @@ public class APICalls2 {
                             Log.e("APICalls", modelCompanyInfo.toString() + " CompanySite: " + modelCompanyInfo.getModelCompanies().
                                     get(x).getCompany_name());
 
-                            isSupplierExisting(modelCompany);
+//                            isSupplierExisting(modelCompany);
                         }
                     }
                 });
@@ -1433,33 +1436,53 @@ public class APICalls2 {
     }
 
     //Approver
+    @SuppressLint("CheckResult")
     public void isAppoverExisting(ApproverModel approverModel) {
         String id = approverModel.getApprover_id();
-        List<ApproverModel> approverList = ApproverModel.find(ApproverModel.class, "approverid = ?", id);
-        int size = approverList.size();
 
-        if (size > 0) {
-            boolean found = false;
-            String date = "";
-            for (int count = 0; count < size; count++) {
-                if (approverList.get(count).getApprover_id().equals(id)) {
-                    found = true;
-                    date = approverList.get(count).getUpdate_date();
-                }
-            }
+        AppDatabase.getInstance(context).approverModelDAO().getListItem(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(sampleModels -> {
+                    int size = sampleModels.size();
+                    if (size > 0) {
+                        boolean found = false;
+                        String date = "";
+                        for (int count = 0; count < size; count++) {
+                            if (sampleModels.get(count).getApprover_id().equals(id)) {
+                                found = true;
+                                date = sampleModels.get(count).getUpdate_date();
+                            }
+                        }
 
-            if (found) {
-                if (!date.equals(approverModel.getUpdate_date()))
-                    updateDataApprover(approverModel);
-            } else {
-                approverModel.save();
-                approverList.add(approverModel);
-            }
+                        if (found) {
+                            if (!date.equals(approverModel.getUpdate_date()))
+                                updateDataApprover(approverModel);
+                        } else {
+                            ApproverInsert(approverModel);
+                            sampleModels.add(approverModel);
+                        }
 
-        } else {
-            approverModel.save();
-            approverList.add(approverModel);
-        }
+                    } else {
+                        ApproverInsert(approverModel);
+                        sampleModels.add(approverModel);
+                    }
+                });
+
+//        int size = approverList.size();
+
+    }
+
+    public void ApproverInsert(ApproverModel approverModel){
+        AppDatabase.getInstance(context).approverModelDAO().insert(approverModel)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
     }
 
     public void updateDataApprover(ApproverModel approverModel) {
@@ -1599,40 +1622,40 @@ public class APICalls2 {
         company.save();
     }
 
-    public void isSupplierExisting(ModelCompany modelCompany) {
-        String id = modelCompany.getCompany_id();
-        Log.i("ARGU", "CHECKER " + id);
-        List<ModelCompany> supplierList = ModelCompany.find(ModelCompany.class, "companyid = ?", id);
-        int size = supplierList.size();
-
-        if (size > 0) {
-            boolean found = false;
-            String date = "";
-            for (int count = 0; count < size; count++) {
-                if (supplierList.get(count).getCompany_id().equals(id)) {
-                    date = supplierList.get(count).getUpdate_date();
-                    found = true;
-                }
-            }
-
-            if (found) {
-                Log.i("ARGULOOP", "SITE UPDATE");
-                if (!date.equals(modelCompany.getUpdate_date()))
-                    updateDataSupplier(modelCompany);
-            } else {
-                Log.i("ARGULOOP", "SAVE");
-                modelCompany.save();
-                supplierList.add(modelCompany);
-
-                AppDatabase.getInstance(context).modelCompanyDAO().insert(modelCompany);
-            }
-
-        } else {
-            Log.i("ARGU", "SAVE - SIZE 0");
-            modelCompany.save();
-            supplierList.add(modelCompany);
-        }
-    }
+//    public void isSupplierExisting(ModelCompany modelCompany) {
+//        String id = modelCompany.getCompany_id();
+//        Log.i("ARGU", "CHECKER " + id);
+//        List<ModelCompany> supplierList = ModelCompany.find(ModelCompany.class, "companyid = ?", id);
+//        int size = supplierList.size();
+//
+//        if (size > 0) {
+//            boolean found = false;
+//            String date = "";
+//            for (int count = 0; count < size; count++) {
+//                if (supplierList.get(count).getCompany_id().equals(id)) {
+//                    date = supplierList.get(count).getUpdate_date();
+//                    found = true;
+//                }
+//            }
+//
+//            if (found) {
+//                Log.i("ARGULOOP", "SITE UPDATE");
+//                if (!date.equals(modelCompany.getUpdate_date()))
+//                    updateDataSupplier(modelCompany);
+//            } else {
+//                Log.i("ARGULOOP", "SAVE");
+//                modelCompany.save();
+//                supplierList.add(modelCompany);
+//
+//                AppDatabase.getInstance(context).modelCompanyDAO().insert(modelCompany);
+//            }
+//
+//        } else {
+//            Log.i("ARGU", "SAVE - SIZE 0");
+//            modelCompany.save();
+//            supplierList.add(modelCompany);
+//        }
+//    }
 
     //Category
     public void updateDataCategory(ModelCategory modelCategory) {
