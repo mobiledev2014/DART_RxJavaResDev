@@ -3,7 +3,16 @@ package com.unilab.gmp.DAO;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
-import androidx.room.Entity;import lombok.Getter;
+import androidx.room.Dao;
+import androidx.room.Entity;
+import androidx.room.Insert;
+import androidx.room.Query;
+
+import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -11,22 +20,14 @@ import lombok.Setter;
  */
 
 
-@Setter
-@Getter
-@Entity
-public class TemplateModelDistributionOthers  {
-    @SerializedName("others")
-    String distribution_other;
+@Dao
+public interface TemplateModelDistributionOthers  {
+    @Query("select * from TemplateModelDistributionOthers")
+    Flowable<List<TemplateModelDistributionOthers>> getItemList();
 
-    String report_id;
-    String template_id;
+    @Insert
+    Completable insert(final TemplateModelDistributionOthers templateModelDistributionOthers);
 
-    @Override
-    public String toString() {
-        return "TemplateModelDistributionOthers{" +
-                "distribution_other='" + distribution_other + '\'' +
-                ", report_id='" + report_id + '\'' +
-                ", template_id='" + template_id + '\'' +
-                '}';
-    }
+    @Query("DELETE FROM TemplateModelDistributionOthers")
+    void delete();
 }

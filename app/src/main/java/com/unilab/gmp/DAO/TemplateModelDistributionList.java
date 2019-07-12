@@ -2,31 +2,29 @@ package com.unilab.gmp.DAO;
 
 import com.orm.SugarRecord;
 
-import androidx.room.Entity;import lombok.Getter;
+import androidx.room.Dao;
+import androidx.room.Entity;
+import androidx.room.Insert;
+import androidx.room.Query;
+
+import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
  * Created by c_jhcanuto on 8/24/2017.
  */
-@Getter
-@Setter
-@Entity
-public class TemplateModelDistributionList  {
-    String template_id;
-    String distribution = "";
-    String distribution_id = "";
-    int selected;
+@Dao
+public interface TemplateModelDistributionList  {
+    @Query("select * from TemplateModelDistributionList")
+    Flowable<List<TemplateModelDistributionList>> getItemList();
 
-    String report_id;
+    @Insert
+    Completable insert(final TemplateModelDistributionList templateModelDistributionList);
 
-    @Override
-    public String toString() {
-        return "TemplateModelDistributionList{" +
-                "template_id='" + template_id + '\'' +
-                ", distribution='" + distribution + '\'' +
-                ", distribution_id='" + distribution_id + '\'' +
-                ", selected=" + selected +
-                ", report_id='" + report_id + '\'' +
-                '}';
-    }
+    @Query("DELETE FROM TemplateModelDistributionList")
+    void delete();
 }

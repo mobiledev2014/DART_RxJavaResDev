@@ -1,26 +1,32 @@
  package com.unilab.gmp.DAO;
 
+import androidx.room.Dao;
 import androidx.room.Entity;
+import androidx.room.Insert;
+import androidx.room.Query;
 
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import lombok.Getter;
 import lombok.Setter;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 
  /**
   * Created by c_jhcanuto on 8/24/2017.
   */
 
- @Getter
- @Setter
- @Entity
- public class TemplateModelCompanyBackgroundMajorChanges {
-     String template_id;
-     @SerializedName("changes")
-     String majorchanges = "";
+ @Dao
+ public interface TemplateModelCompanyBackgroundMajorChanges {
+     @Query("select * from TemplateModelCompanyBackgroundMajorChanges")
+     Flowable<List<TemplateModelCompanyBackgroundMajorChanges>> getItemList();
 
-     String report_id;
+     @Insert
+     Completable insert(final TemplateModelCompanyBackgroundMajorChanges templateModelCompanyBackgroundMajorChanges);
 
-     String company_id;
+     @Query("DELETE FROM TemplateModelCompanyBackgroundMajorChanges")
+     void delete();
  }

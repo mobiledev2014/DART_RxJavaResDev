@@ -8,29 +8,29 @@ import com.unilab.gmp.model.TemplateModelScopeAuditInterest;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.room.Entity;import lombok.Getter;
+import androidx.room.Dao;
+import androidx.room.Entity;
+import androidx.room.Insert;
+import androidx.room.Query;
+
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
  * Created by c_jhcanuto on 8/23/2017.
  */
 
-@Setter
-@Getter
-@Entity
-public class TemplateModelScopeAudit  {
-    String audit_id = "";
-    String scope_id = "";
-    @SerializedName("scope_detail")
-    String scope_detail = "";
-    String scope_name = "";
-    String template_id;
-    int selected;
+@Dao
+public interface TemplateModelScopeAudit  {
+    @Query("select * from TemplateModelScopeAudit")
+    Flowable<List<TemplateModelScopeAudit>> getItemList();
 
-    String report_id = "";
-    @SerializedName("adapterScope")
-    AdapterScopeAuditInterest adapterScope;
-    @SerializedName("scope_product")
-    List<TemplateModelScopeAuditInterest> templateModelScopeAuditInterests = new ArrayList<>();
+    @Insert
+    Completable insert(final TemplateModelScopeAudit templateModelScopeAudit);
+
+    @Query("DELETE FROM TemplateModelScopeAudit")
+    void delete();
 
 }

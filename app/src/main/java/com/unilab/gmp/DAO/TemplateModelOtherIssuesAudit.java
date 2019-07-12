@@ -2,17 +2,30 @@ package com.unilab.gmp.DAO;
 
 import com.orm.SugarRecord;
 
-import androidx.room.Entity;import lombok.Getter;
+import androidx.room.Dao;
+import androidx.room.Entity;
+import androidx.room.Insert;
+import androidx.room.Query;
+
+import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
  * Created by c_jsbustamante on 08/11/2017.
  */
 
-@Setter
-@Getter
-@Entity
-public class TemplateModelOtherIssuesAudit  {
-    String report_id;
-    String other_issues_audit;
+@Dao
+public interface TemplateModelOtherIssuesAudit  {
+    @Query("select * from TemplateModelOtherIssuesAudit")
+    Flowable<List<TemplateModelOtherIssuesAudit>> getItemList();
+
+    @Insert
+    Completable insert(final TemplateModelOtherIssuesAudit templateModelOtherIssuesAudit);
+
+    @Query("DELETE FROM TemplateModelOtherIssuesAudit")
+    void delete();
 }

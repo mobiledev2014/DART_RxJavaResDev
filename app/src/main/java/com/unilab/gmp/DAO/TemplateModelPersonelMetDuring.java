@@ -3,31 +3,30 @@ package com.unilab.gmp.DAO;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 
-import androidx.room.Entity;import lombok.Getter;
+import androidx.room.Dao;
+import androidx.room.Entity;
+import androidx.room.Insert;
+import androidx.room.Query;
+
+import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
  * Created by c_jhcanuto on 8/24/2017.
  */
 
-@Getter
-@Setter
-@Entity
-public class TemplateModelPersonelMetDuring  {
-    String template_id;
-    String name = "";
-    @SerializedName("designation")
-    String position = "";
+@Dao
+public interface TemplateModelPersonelMetDuring  {
+    @Query("select * from TemplateModelPersonelMetDuring")
+    Flowable<List<TemplateModelPersonelMetDuring>> getItemList();
 
-    String report_id;
+    @Insert
+    Completable insert(final TemplateModelPersonelMetDuring templateModelPersonelMetDuring);
 
-    @Override
-    public String toString() {
-        return "TemplateModelPersonelMetDuring{" +
-                "template_id='" + template_id + '\'' +
-                ", name='" + name + '\'' +
-                ", position='" + position + '\'' +
-                ", report_id='" + report_id + '\'' +
-                '}';
-    }
+    @Query("DELETE FROM TemplateModelPersonelMetDuring")
+    void delete();
 }

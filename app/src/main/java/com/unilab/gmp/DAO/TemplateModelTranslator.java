@@ -1,21 +1,32 @@
 package com.unilab.gmp.DAO;
 
+import androidx.room.Dao;
 import androidx.room.Entity;
 
 import com.orm.SugarRecord;
 
-import androidx.room.Entity;import lombok.Getter;
+import androidx.room.Entity;
+import androidx.room.Insert;
+import androidx.room.Query;
+
+import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
  * Created by c_jhcanuto on 8/24/2017.
  */
-@Getter
-@Setter
-@Entity
-public class TemplateModelTranslator  {
-    String template_id;
-    String translator = "";
+@Dao
+public interface TemplateModelTranslator  {
+    @Query("select * from TemplateModelTranslator")
+    Flowable<List<TemplateModelTranslator>> getItemList();
 
-    String report_id;
+    @Insert
+    Completable insert(final TemplateModelTranslator templateModelTranslator);
+
+    @Query("DELETE FROM TemplateModelTranslator")
+    void delete();
 }
