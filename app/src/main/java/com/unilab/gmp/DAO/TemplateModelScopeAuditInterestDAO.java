@@ -1,0 +1,32 @@
+package com.unilab.gmp.DAO;
+
+import androidx.room.Dao;
+
+import androidx.room.Insert;
+import androidx.room.Query;
+
+import com.unilab.gmp.model.TemplateModelScopeAuditInterest;
+
+import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+
+/**
+ * Created by c_jhcanuto on 8/24/2017.
+ */
+
+@Dao
+public interface TemplateModelScopeAuditInterestDAO {
+    @Query("select * from TemplateModelScopeAuditInterest")
+    Flowable<List<TemplateModelScopeAuditInterest>> getItemList();
+
+    @Insert
+    Completable insert(final TemplateModelScopeAuditInterest templateModelScopeAuditInterest);
+
+    @Query("DELETE FROM TemplateModelScopeAuditInterest")
+    void delete();
+
+    @Query("DELETE FROM TemplateModelScopeAuditInterest WHERE report_id = :reportId")
+    void deleteId(String reportId);
+}

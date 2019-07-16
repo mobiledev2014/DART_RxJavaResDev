@@ -21,9 +21,6 @@ public class TemplateModelScopeAuditCopy  {
     String scope_detail;
     @SerializedName("scope_product")
     List<TemplateModelScopeAuditInterest> templateModelScopeAuditInterests = new ArrayList<>();
-
-
-
     String scope_name = "";
     String template_id;
     int selected;

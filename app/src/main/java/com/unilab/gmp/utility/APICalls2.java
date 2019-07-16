@@ -86,10 +86,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -548,8 +552,8 @@ public class APICalls2 {
                     }
 
                     private void saveReviewers(ModelReviewerInfo modelReviewerInfo) {
-                        ReviewerModel.deleteAll(ReviewerModel.class);
-
+//                        ReviewerModel.deleteAll(ReviewerModel.class);
+                        AppDatabase.getInstance(context).reviewerModelDAO().delete();
                         if (modelReviewerInfo != null)
                             if (modelReviewerInfo.getModelReviewers() != null)
                                 for (int x = 0; x < modelReviewerInfo.getModelReviewers().size(); x++) {
@@ -599,12 +603,17 @@ public class APICalls2 {
 
                     }
 
+                    @SuppressLint("CheckResult")
                     private void saveCompanies(ModelCompanyInfo modelCompanyInfo) {
                         ModelCompany.deleteAll(ModelCompany.class);
-                        ModelSiteAuditHistory.deleteAll(ModelSiteAuditHistory.class);
-                        TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class);
-                        TemplateModelCompanyBackgroundName.deleteAll(TemplateModelCompanyBackgroundName.class);
-                        ModelSiteDate.deleteAll(ModelSiteDate.class);
+                        //ModelSiteAuditHistory.deleteAll(ModelSiteAuditHistory.class);
+                        AppDatabase.getInstance(context).modelSiteAuditHistoryDAO().delete();
+//                        TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class);
+                        AppDatabase.getInstance(context).templateModelCompanyBackgroundMajorChangesDAO().delete();
+//                        TemplateModelCompanyBackgroundName.deleteAll(TemplateModelCompanyBackgroundName.class);
+                        AppDatabase.getInstance(context).templateModelCompanyBackgroundNameDAO().delete();
+                        //ModelSiteDate.deleteAll(ModelSiteDate.class);
+                        AppDatabase.getInstance(context).modelSiteDateDAO().delete();
                         for (int x = 0; x < modelCompanyInfo.getModelCompanies().size(); x++) {
                             ModelCompany modelCompany = new ModelCompany();
                             String company_id = modelCompanyInfo.getModelCompanies().get(x).getCompany_id();
@@ -625,7 +634,17 @@ public class APICalls2 {
                                 for (ModelSiteAuditHistory mc : modelCompanyInfo.getModelCompanies().get(x).getAudit_history()) {
                                     ModelSiteAuditHistory modelSiteAuditHistory = new ModelSiteAuditHistory();
                                     modelSiteAuditHistory.setCompany_id(company_id);
-                                    modelSiteAuditHistory.save();
+//                                    modelSiteAuditHistory.save();
+                                    AppDatabase.getInstance(context).modelSiteAuditHistoryDAO().insert(modelSiteAuditHistory)
+                                            .subscribeOn(Schedulers.io())
+                                            .subscribe(() -> {
+                                                // success
+                                                Log.e(TAG, "ON SUCCESS ModelSiteAuditHistory");
+                                            }, throwable -> {
+                                                // error
+                                                Log.e(TAG, "ON ERROR ModelSiteAuditHistory");
+                                            });
+
                                     Log.e("APICalls", "CompanySite:company name : " + modelCompany.getCompany_name());
                                     if (mc.getMajor_changes() != null) {
                                         for (TemplateModelCompanyBackgroundMajorChanges mmc : mc.getMajor_changes()) {
@@ -633,7 +652,16 @@ public class APICalls2 {
                                             majorChanges.setCompany_id(company_id);
                                             majorChanges.setMajorchanges(mmc.getMajorchanges());
                                             majorChanges.setReport_id("0");
-                                            majorChanges.save();
+//                                            majorChanges.save();
+                                            AppDatabase.getInstance(context).templateModelCompanyBackgroundMajorChangesDAO().insert(majorChanges)
+                                                    .subscribeOn(Schedulers.io())
+                                                    .subscribe(() -> {
+                                                        // success
+                                                        Log.e(TAG, "ON SUCCESS TemplateModelCompanyBackgroundMajorChanges");
+                                                    }, throwable -> {
+                                                        // error
+                                                        Log.e(TAG, "ON ERROR TemplateModelCompanyBackgroundMajorChanges");
+                                                    });
                                             Log.e("APICalls", " CompanySite:changes " + mmc.getMajorchanges());
 
                                         }
@@ -643,7 +671,18 @@ public class APICalls2 {
                                             ModelSiteDate modelSiteDate = new ModelSiteDate();
                                             modelSiteDate.setCompany_id(company_id);
                                             modelSiteDate.setInspection_date(msd.getInspection_date());
-                                            modelSiteDate.save();
+                                            //modelSiteDate.save();
+
+                                            AppDatabase.getInstance(context).modelSiteDateDAO().insert(modelSiteDate)
+                                                    .subscribeOn(Schedulers.io())
+                                                    .subscribe(() -> {
+                                                        // success
+                                                        Log.e(TAG, "ON SUCCESS MODELSITEDATE");
+                                                    }, throwable -> {
+                                                        // error
+                                                        Log.e(TAG, "ON SUCCESS MODELSITEDATE");
+                                                    });
+
                                             Log.e("APICalls", " CompanySite:date" + msd.getInspection_date());
 
                                         }
@@ -653,7 +692,15 @@ public class APICalls2 {
                                             TemplateModelCompanyBackgroundName modelSiteInspectors = new TemplateModelCompanyBackgroundName();
                                             modelSiteInspectors.setBgname(msi.getBgname());
                                             modelSiteInspectors.setCompany_id(company_id);
-                                            modelSiteInspectors.save();
+                                            AppDatabase.getInstance(context).templateModelCompanyBackgroundNameDAO().insert(modelSiteInspectors)
+                                                    .subscribeOn(Schedulers.io())
+                                                    .subscribe(() -> {
+                                                        // success
+                                                        Log.e(TAG, "ON SUCCESS TemplateModelCompanyBackgroundName");
+                                                    }, throwable -> {
+                                                        // error
+                                                        Log.e(TAG, "ON ERROR TemplateModelCompanyBackgroundName");
+                                                    });
                                             Log.e("APICalls", " CompanySite:inspector" + msi.getBgname());
                                         }
                                 }
@@ -701,8 +748,19 @@ public class APICalls2 {
 
                     }
 
+                    @SuppressLint("CheckResult")
                     private void saveTemplates(TemplateListModel templateListModel) {
-                        ModelTemplates.executeQuery("UPDATE MODEL_TEMPLATES SET status='2' where status = 1", new String[]{});
+//                        ModelTemplates.executeQuery("UPDATE MODEL_TEMPLATES SET status='2' where status = 1", new String[]{});
+                        AppDatabase.getInstance(context).modelTemplatesDAO().updateStatus1()
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(() -> {
+                                    // success
+                                    Log.e(TAG, "ON SUCCESS ModelTemplates");
+                                }, throwable -> {
+                                    // error
+                                    Log.e(TAG, "ON ERROR ModelTemplates");
+                                });
+
                         numberoftemplates = templateListModel.getTemplate_list().size();
                         isdone = true;
                         Log.e("numberoftemplates", "numberoftemplates : " + numberoftemplates);
@@ -741,6 +799,7 @@ public class APICalls2 {
 
                                     }
 
+                                    @SuppressLint("CheckResult")
                                     private void saveTemplateInfo(ModelTemplates modelTemplates) {
                                         ModelTemplates modelTemplate = new ModelTemplates();
 
@@ -750,33 +809,44 @@ public class APICalls2 {
                                             if (modelTemplates.getProductType() != null) {
 
                                                 //get all template id in local db
-                                                List<ModelTemplates> templateList = ModelTemplates.find
+                                       /*         List<ModelTemplates> templateList = ModelTemplates.find
                                                         (ModelTemplates.class, "status = '1' OR status = '2'",
-                                                                new String[]{}, null, "", "");
+                                                                new String[]{}, null, "", "");*/
 
-                                                //if local db not match with api modified date
-                                                for (ModelTemplates qid : templateList) {
-                                                    Log.i("TEMPLATE_LIST", "ID : " + qid.getTemplateID() + " Modified Date offline : " + qid.getDateUpdated()
-                                                            + "ID : " + modelTemplates.getTemplateID() + " Modified Date API : " + modelTemplates.getDateUpdated());
+                                                AppDatabase.getInstance(context).modelTemplatesDAO().getStatus1OR2()
+                                                        .observeOn(Schedulers.io())
+                                                        .subscribe(templateList -> {
+                                                            //if local db not match with api modified date
+                                                            for (ModelTemplates qid : templateList) {
+                                                                Log.i("TEMPLATE_LIST", "ID : " + qid.getTemplateID() + " Modified Date offline : " + qid.getDateUpdated()
+                                                                        + "ID : " + modelTemplates.getTemplateID() + " Modified Date API : " + modelTemplates.getDateUpdated());
 
-                                                    if (qid.getTemplateID().equals(modelTemplates.getTemplateID())) {
+                                                                if (qid.getTemplateID().equals(modelTemplates.getTemplateID())) {
                                             /*Log.i("modified_date_template1", "local: " +
                                                     qid.getDateUpdated() + " api: " + modelTemplates.getDateUpdated());*/
-                                                        if (!qid.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
-                                                            Log.i("TEMPLATE_LIST", "WHEN HERE");
+                                                                    if (!qid.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
+                                                                        Log.i("TEMPLATE_LIST", "WHEN HERE");
 
-                                                            //delete template
-                                                            ModelTemplates.executeQuery("DELETE FROM MODEL_TEMPLATES " +
-                                                                    "WHERE template_id = '" + qid.getTemplateID() + "'");
-                                                            //test delete all question from element
-                                                            ModelTemplateQuestionDetails.executeQuery("DELETE FROM MODEL_TEMPLATE_QUESTION_DETAILS "
-                                                                    + "WHERE templateid = '" + qid.getTemplateID() + "'");
-                                                        } else {
-                                                            Log.i("modified_date_template2", "local: " +
-                                                                    qid.getDateUpdated() + " api: " + modelTemplates.getDateUpdated());
-                                                        }
-                                                    }
-                                                }
+                                                                        //delete template
+/*
+                                                                        ModelTemplates.executeQuery("DELETE FROM MODEL_TEMPLATES " +
+                                                                                "WHERE template_id = '" + qid.getTemplateID() + "'");
+*/
+                                                                        AppDatabase.getInstance(context).modelTemplatesDAO().deleteTemplateId(qid.getTemplateID());
+
+                                                                        //test delete all question from element
+//                                                            ModelTemplateQuestionDetails.executeQuery("DELETE FROM MODEL_TEMPLATE_QUESTION_DETAILS "
+//                                                                    + "WHERE templateid = '" + qid.getTemplateID() + "'");
+                                                                        AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().deleteTemplateId(qid.getTemplateID());
+                                                                    } else {
+                                                                        Log.i("modified_date_template2", "local: " +
+                                                                                qid.getDateUpdated() + " api: " + modelTemplates.getDateUpdated());
+                                                                    }
+                                                                }
+                                                            }
+
+                                                        });
+
 
                                                 //modelTemplate.setTemplateID(modelTemplates.getTemplateID() + "");
                                                 modelTemplate.setTemplateID(templateid);
@@ -790,22 +860,40 @@ public class APICalls2 {
 
 
                                                 Log.i("S T A T U S", "value : " + templateStatus + " --- " + modelTemplates.getTemplateName());
-                                                ModelTemplateElements.deleteAll(ModelTemplateElements.class, "templateid = ?", new String[]{templateid});
+                                                //ModelTemplateElements.deleteAll(ModelTemplateElements.class, "templateid = ?", new String[]{templateid});
+                                                AppDatabase.getInstance(context).modelTemplateElementsDAO().deleteId(templateid);
                                                 for (ModelTemplateElements mte : modelTemplates.getModelTemplateElements()) {
                                                     mte.setTemplate_id(modelTemplates.getTemplateID() + "");
                                                     if (isElementIDExisting(mte))
-                                                        mte.save();
+                                                        AppDatabase.getInstance(context).modelTemplateElementsDAO().insert(mte)
+                                                                .subscribeOn(Schedulers.io())
+                                                                .subscribe(() -> {
+                                                                    // success
+
+                                                                    Log.e(TAG, "ON SUCCESS ModelTemplateElements");
+                                                                }, throwable -> {
+                                                                    // error
+                                                                    Log.e(TAG, "ON ERROR ModelTemplateElements");
+                                                                });
                                                     for (ModelTemplateQuestionDetails mteq : mte.getModelTemplateQuestionDetails()) {
                                                         mteq.setElement_id(mte.getElement_id());
                                                         mteq.setTemplate_id(mte.getTemplate_id() + "");
                                                         mteq.setRequired_remarks(mteq.getRequired_remarks());
                                                         Log.i("REMARKS-I", "REQUIRED : " + mteq.getRequired_remarks() +
                                                                 " ID : " + templateid + " EXIST: " + isQuestionIDExisting(mteq));
-
                                                         if (isQuestionIDExisting(mteq)) {
                                                             Log.i("REMARKS-II", "REQUIRED : " + mteq.getQuestion_id() +
                                                                     " ID : " + templateid);
-                                                            mteq.save();
+//                                                            mteq.save();
+                                                            AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().insert(mteq)
+                                                                    .subscribeOn(Schedulers.io())
+                                                                    .subscribe(() -> {
+                                                                        // success
+                                                                        Log.e(TAG, "ON SUCCESS ModelTemplateQuestionDetails");
+                                                                    }, throwable -> {
+                                                                        // error
+                                                                        Log.e(TAG, "ON ERROR ModelTemplateQuestionDetails");
+                                                                    });
                                                         } else {
                                                             Log.i("REMARKS-III", "REQUIRED : " + mteq.getQuestion_id() + " ID : " + templateid);
                                                             updateQuestion(mteq);
@@ -816,12 +904,31 @@ public class APICalls2 {
                                                 for (ModelTemplateActivities mta : modelTemplates.getModelTemplateActivities()) {
                                                     mta.setTemplate_id(modelTemplates.getTemplateID() + "");
                                                     if (isActivityIDExisting(mta)) {
-                                                        mta.save();
+                                                        //mta.save();
+                                                        AppDatabase.getInstance(context).modelTemplateActivitiesDAO().insert(mta)
+                                                                .subscribeOn(Schedulers.io())
+                                                                .subscribe((Action) () -> {
+                                                                    // success
+                                                                    Log.e(TAG, "ON SUCCESS ModelTemplateActivities");
+                                                                }, (Consumer<Throwable>) throwable -> {
+                                                                    // error
+                                                                    Log.e(TAG, "ON ERROR ModelTemplateActivities");
+                                                                });
                                                     }
                                                     for (ModelTemplateSubActivities mtsa : mta.getModelTemplateSubActivities()) {
                                                         mtsa.setTemplate_id(mta.getTemplate_id());
                                                         if (isSubActivityIDExisting(mtsa)) {
-                                                            mtsa.save();
+//                                                            mtsa.save();
+                                                            AppDatabase.getInstance(context).modelTemplateSubActivitiesDAO().insert(mtsa)
+                                                                    .subscribeOn(Schedulers.io())
+                                                                    .subscribe(() -> {
+                                                                        // success
+                                                                        Log.e(TAG, "ON SUCCESS ModelTemplateSubActivities");
+                                                                    }, throwable -> {
+                                                                        // error
+                                                                        Log.e(TAG, "ON ERROR ModelTemplateSubActivities");
+                                                                    });
+
                                                         }
                                                     }
                                                 }
@@ -836,6 +943,7 @@ public class APICalls2 {
                 });
     }
 
+    @SuppressLint("CheckResult")
     private void updateQuestion(ModelTemplateQuestionDetails mteq) {
         String id = mteq.getElement_id();
         Log.i("ARGU-TEMPLATE", "CHECKER E " + id);
@@ -843,23 +951,36 @@ public class APICalls2 {
         Log.i("ARGU-TEMPLATE", "CHECKER Q " + mteq.getQuestion_id());
 
         //get question list via template id
-        List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
+/*        List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
                 (ModelTemplateQuestionDetails.class, "templateid = ?", mteq.getTemplate_id());
-        Log.i("ARGU-TEMPLATE", "QUESTION COUNT DB " + questionList.size());
+        Log.i("ARGU-TEMPLATE", "QUESTION COUNT DB " + questionList.size());*/
 
         //get template question details on local db via element id, template id and question id
-        ModelTemplateQuestionDetails template = (ModelTemplateQuestionDetails.find
-                (ModelTemplateQuestionDetails.class, "elementid = ? AND templateid = ? AND questionid = ?",
-                        id, mteq.getTemplate_id(), mteq.getQuestion_id())).get(0);
+//        ModelTemplateQuestionDetails template = (ModelTemplateQuestionDetails.find
+//                (ModelTemplateQuestionDetails.class, "elementid = ? AND templateid = ? AND questionid = ?",
+//                        id, mteq.getTemplate_id(), mteq.getQuestion_id())).get(0);
 
-        template.setQuestion_id(mteq.getQuestion_id());
-        template.setQuestion(mteq.getQuestion());
-        template.setDefault_yes(mteq.getDefault_yes());
-        template.setRequired_remarks(mteq.getRequired_remarks());
-        template.setElement_id(mteq.getElement_id());
-        template.setTemplate_id(mteq.getTemplate_id());
+        AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().findElementTemplateQuestionId(id, mteq.getTemplate_id(), mteq.getQuestion_id())
+                .observeOn(Schedulers.io())
+                .subscribe(template -> {
+                    template.setQuestion_id(mteq.getQuestion_id());
+                    template.setQuestion(mteq.getQuestion());
+                    template.setDefault_yes(mteq.getDefault_yes());
+                    template.setRequired_remarks(mteq.getRequired_remarks());
+                    template.setElement_id(mteq.getElement_id());
+                    template.setTemplate_id(mteq.getTemplate_id());
+//                  template.save();
+                    AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().insert(template)
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(() -> {
+                                // success
+                                Log.e(TAG, "ON SUCCESS ModelTemplateQuestionDetails");
+                            }, throwable -> {
+                                // error
+                                Log.e(TAG, "ON ERROR ModelTemplateQuestionDetails");
+                            });
+                });
 
-        template.save();
     }
 
     public void apiCategory() {
@@ -982,7 +1103,8 @@ public class APICalls2 {
                     }
 
                     private void saveProducts(ModelTypeAuditInfo modelTypeAuditInfo) {
-                        ModelTypeAudit.deleteAll(ModelTypeAudit.class);
+//                        ModelTypeAudit.deleteAll(ModelTypeAudit.class);
+                        AppDatabase.getInstance(context).modelTypeAuditDAO().delete();
                         for (int x = 0; x < modelTypeAuditInfo.getModelTypeAudits().size(); x++) {
                             ModelTypeAudit typeAuditModel = new ModelTypeAudit();
                             typeAuditModel.setScope_id(modelTypeAuditInfo.getModelTypeAudits().get(x).getScope_id());
@@ -1255,24 +1377,39 @@ public class APICalls2 {
                     if (version != null) {
                         Log.i("AUDIT-REPORT", "START 4 ID: " + report_id);
                         ModelDateOfAudit.deleteAll(ModelDateOfAudit.class, "reportid = ?", report_id);
-                        TemplateModelAuditors.deleteAll(TemplateModelAuditors.class, "reportid = ?", report_id);
-                        TemplateModelScopeAudit.deleteAll(TemplateModelScopeAudit.class, "reportid = ?", report_id);
-                        TemplateModelScopeAuditInterest.deleteAll(TemplateModelScopeAuditInterest.class, "reportid = ?", report_id);
-                        TemplateModelPreAuditDoc.deleteAll(TemplateModelPreAuditDoc.class, "reportid = ?", report_id);
-                        TemplateModelReference.deleteAll(TemplateModelReference.class, "reportid = ?", report_id);
-                        TemplateModelTranslator.deleteAll(TemplateModelTranslator.class, "reportid = ?", report_id);
-                        TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
-//                                        TemplateModelCompanyBackgroundName.deleteAll(TemplateModelCompanyBackgroundName.class, "reportid = ?", report_id);
-                        TemplateModelPersonelMetDuring.deleteAll(TemplateModelPersonelMetDuring.class, "reportid = ?", report_id);
-                        TemplateModelSummaryRecommendation.deleteAll(TemplateModelSummaryRecommendation.class, "reportid = ?", report_id);
-                        TemplateModelDistributionList.deleteAll(TemplateModelDistributionList.class, "reportid = ?", report_id);
-                        TemplateModelPresentDuringMeeting.deleteAll(TemplateModelPresentDuringMeeting.class, "reportid = ?", report_id);
-                        TemplateModelDistributionOthers.deleteAll(TemplateModelDistributionOthers.class, "reportid = ?", report_id);
-                        ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", report_id);
+//                        TemplateModelAuditors.deleteAll(TemplateModelAuditors.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelAuditorsDAO().deleteId(report_id);
+//                        TemplateModelScopeAudit.deleteAll(TemplateModelScopeAudit.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelScopeAuditDAO().deleteId(report_id);
+//                        TemplateModelScopeAuditInterest.deleteAll(TemplateModelScopeAuditInterest.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelScopeAuditInterestDAO().deleteId(report_id);
+//                        TemplateModelPreAuditDoc.deleteAll(TemplateModelPreAuditDoc.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelPreAuditDocDAO().deleteId(report_id);
+//                        TemplateModelReference.deleteAll(TemplateModelReference.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelReferenceDAO().deleteId(report_id);
+//                        TemplateModelTranslator.deleteAll(TemplateModelTranslator.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelTranslatorDAO().deleteId(report_id);
+//                      TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelCompanyBackgroundMajorChangesDAO().deleteId(report_id);
+//                      TemplateModelCompanyBackgroundName.deleteAll(TemplateModelCompanyBackgroundName.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelCompanyBackgroundNameDAO().deleteId(report_id);
+//                        TemplateModelPersonelMetDuring.deleteAll(TemplateModelPersonelMetDuring.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelPersonelMetDuringDAO().deleteId(report_id);
+//                      TemplateModelSummaryRecommendation.deleteAll(TemplateModelSummaryRecommendation.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelSummaryRecommendationDAO().deleteId(report_id);
+//                        TemplateModelDistributionList.deleteAll(TemplateModelDistributionList.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelDistributionListDAO().deleteId(report_id);
+//                        TemplateModelPresentDuringMeeting.deleteAll(TemplateModelPresentDuringMeeting.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelPresentDuringMeetingDAO().deleteId(report_id);
+//                        TemplateModelDistributionOthers.deleteAll(TemplateModelDistributionOthers.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelDistributionOthersDAO().deleteId(report_id);
+                        AppDatabase.getInstance(context).modelReportQuestionDAO().deleteId(report_id);
                         ModelReportActivities.deleteAll(ModelReportActivities.class, "reportid = ?", report_id);
-                        ModelReportSubActivities.deleteAll(ModelReportSubActivities.class, "reportid = ?", report_id);
-                        TemplateModelOtherIssuesAudit.deleteAll(TemplateModelOtherIssuesAudit.class, "reportid = ?", report_id);
-                        TemplateModelOtherIssuesExecutive.deleteAll(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).modelReportSubActivitiesDAO().deleteId(report_id);
+//                        TemplateModelOtherIssuesAudit.deleteAll(TemplateModelOtherIssuesAudit.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelOtherIssuesAuditDAO().deleteId(report_id);
+//                        TemplateModelOtherIssuesExecutive.deleteAll(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).templateModelOtherIssuesExecutiveDAO().deleteId(report_id);
 
                         saveListsOfAuditReport(report_id);
                     }
@@ -1286,22 +1423,50 @@ public class APICalls2 {
     }
 
 
+    @SuppressLint("CheckResult")
     private void saveListsOfAuditReport(String report_id) {
         for (TemplateModelOtherIssuesAudit tmt : modelAuditReports.getOther_issues()) {
             tmt.setReport_id(report_id);
-            tmt.save();
+//            tmt.save();
+            AppDatabase.getInstance(context).templateModelOtherIssuesAuditDAO().insert(tmt)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelOtherIssuesAudit");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR TemplateModelOtherIssuesAudit");
+                    });
             Log.e("APICalls", "issuesAudit : " + tmt.getOther_issues_audit());
         }
 
         for (TemplateModelOtherIssuesExecutive tmt : modelAuditReports.getOther_issues_executive()) {
             tmt.setReport_id(report_id);
-            tmt.save();
+//            tmt.save();
+            AppDatabase.getInstance(context).templateModelOtherIssuesExecutiveDAO().insert(tmt)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelOtherIssuesExecutive");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR TemplateModelOtherIssuesExecutive");
+                    });
             Log.e("APICalls", "issuesExecutive : " + tmt.getOther_issues_executive());
         }
 
         for (TemplateModelTranslator tmt : modelAuditReports.getTranslators()) {
             tmt.setReport_id(report_id);
-            tmt.save();
+//            tmt.save();
+            AppDatabase.getInstance(context).templateModelTranslatorDAO().insert(tmt)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelTranslator");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR TemplateModelTranslator");
+                    });
             Log.e("APICalls", "translators : " + tmt.getTranslator());
         }
         for (ModelDateOfAudit mda : modelAuditReports.getDate_of_audit()) {
@@ -1311,7 +1476,16 @@ public class APICalls2 {
         }
         for (TemplateModelAuditors mrca : modelAuditReports.getCo_auditor_id()) {
             mrca.setReport_id(report_id);
-            mrca.save();
+//            mrca.save();
+            AppDatabase.getInstance(context).templateModelAuditorsDAO().insert(mrca)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelAuditors");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR TemplateModelAuditors");
+                    });
             Log.e("APICalls", "Auditors : " + mrca.getAuditor_id());
         }
         int counter = 0;
@@ -1326,17 +1500,44 @@ public class APICalls2 {
                 tmsai.setProduct_id(tmsai.getProduct_id());
                 tmsai.setDisposition_id(tmsai.getDisposition_id());
                 tmsai.setAudit_id(counter + "");
-                tmsai.save();
+//                tmsai.save();
+                AppDatabase.getInstance(context).templateModelScopeAuditInterestDAO().insert(tmsai)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(() -> {
+                            // success
+                            Log.e(TAG, "ON SUCCESS TemplateModelScopeAuditInterest");
+                        }, throwable -> {
+                            // error
+                            Log.e(TAG, "ON ERROR TemplateModelScopeAuditInterest");
+                        });
                 Log.e("API-SCOPE-PRODUCT", "Scope Audit interest : " + tmsai.getProduct_id() + " ID: " + report_id);
             }
             counter++;
-            tmsa.save();
+//            tmsa.save();
+            AppDatabase.getInstance(context).templateModelScopeAuditDAO().insert(tmsa)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelScopeAudit");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR TemplateModelScopeAudit");
+                    });
         }
 
         for (TemplateModelPreAuditDoc mpad : modelAuditReports.getPre_audit_documents()) {
             mpad.setReport_id(report_id);
             mpad.setPreaudit(mpad.getPreaudit());
-            mpad.save();
+//            mpad.save();
+            AppDatabase.getInstance(context).templateModelPreAuditDocDAO().insert(mpad)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelPreAuditDoc");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR TemplateModelPreAuditDoc");
+                    });
 
             Log.e("APICalls", "Pre Audit : " + mpad.getPreaudit());
         }
@@ -1348,17 +1549,32 @@ public class APICalls2 {
             mr.setNumber(mr.getNumber());
             mr.setValidity(mr.getValidity());
             mr.setIssue_date(mr.getIssue_date());
-            mr.save();
-
-
+//            mr.save();
+            AppDatabase.getInstance(context).templateModelReferenceDAO().insert(mr)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelReference");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR TemplateModelReference");
+                    });
             Log.e("APICalls", "References : " + mr.getBody());
         }
 
         for (TemplateModelCompanyBackgroundMajorChanges mmc : modelAuditReports.getInspection()) {
             mmc.setReport_id(report_id);
             mmc.setMajorchanges(mmc.getMajorchanges());
-            mmc.save();
-
+//            mmc.save();
+            AppDatabase.getInstance(context).templateModelCompanyBackgroundMajorChangesDAO().insert(mmc)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelCompanyBackgroundMajorChanges");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR TemplateModelCompanyBackgroundMajorChanges");
+                    });
             Log.e("APICalls", "company major changes : " + mmc.getMajorchanges());
         }
 
@@ -1366,8 +1582,16 @@ public class APICalls2 {
             mpmd.setReport_id(report_id);
             mpmd.setName(mpmd.getName());
             mpmd.setPosition(mpmd.getPosition());
-            mpmd.save();
-
+//            mpmd.save();
+            AppDatabase.getInstance(context).templateModelPersonelMetDuringDAO().insert(mpmd)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelPersonelMetDuring");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR TemplateModelPersonelMetDuring");
+                    });
             Log.e("APICalls", "Personnel met : " + mpmd.toString());
         }
 
@@ -1375,15 +1599,33 @@ public class APICalls2 {
             msr.setReport_id(report_id);
             msr.setElement_id(msr.getElement_id());
             msr.setRemarks(msr.getRemarks());
-            msr.save();
-
+//            msr.save();
+            AppDatabase.getInstance(context).templateModelSummaryRecommendationDAO().insert(msr)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelSummaryRecommendation");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR TemplateModelSummaryRecommendation");
+                    });
             Log.e("APICalls", "Summary Recommendation : " + msr.toString());
         }
 
         for (TemplateModelDistributionList mdl : modelAuditReports.getDistribution()) {
             mdl.setReport_id(report_id);
             mdl.setDistribution_id(mdl.getDistribution_id());
-            mdl.save();
+//            mdl.save();
+            AppDatabase.getInstance(context).templateModelDistributionListDAO().insert(mdl)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelDistributionList");
+                    }, throwable -> {
+                        // error
+
+                        Log.e(TAG, "ON ERROR TemplateModelDistributionList");
+                    });
             Log.e("APICalls", "Distri list : " + mdl.toString());
         }
 
@@ -1391,7 +1633,18 @@ public class APICalls2 {
             mpdm.setReport_id(report_id);
             mpdm.setName(mpdm.getName());
             mpdm.setPosition(mpdm.getPosition());
-            mpdm.save();
+//            mpdm.save();
+
+            AppDatabase.getInstance(context).templateModelPresentDuringMeetingDAO().insert(mpdm)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelPresentDuringMeeting");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR TemplateModelPresentDuringMeeting");
+                    });
+
             Log.e("APICalls", "Present During meeting : " + mpdm.toString());
         }
 
@@ -1401,7 +1654,16 @@ public class APICalls2 {
                 mdl.setDistribution_other("");
             }
             mdl.setDistribution_other(mdl.getDistribution_other());
-            mdl.save();
+//            mdl.save();
+            AppDatabase.getInstance(context).templateModelDistributionOthersDAO().insert(mdl)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS TemplateModelDistributionOthers");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR TemplateModelDistributionOthers");
+                    });
             Log.e("APICalls", "Distri others : " + mdl.toString());
         }
 
@@ -1412,7 +1674,16 @@ public class APICalls2 {
             mrq.setAnswer_id(mrq.getAnswer_id());
             mrq.setCategory_id(mrq.getCategory_id());
             mrq.setAnswer_details(mrq.getAnswer_details());
-            mrq.save();
+            //mrq.save();
+            AppDatabase.getInstance(context).modelReportQuestionDAO().insert(mrq)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(() -> {
+                        // success
+                        Log.e(TAG, "ON SUCCESS: ModelReportQuestion");
+                    }, throwable -> {
+                        // error
+                        Log.e(TAG, "ON ERROR: ModelReportQuestion");
+                    });
 
             Log.e("APICalls", "Report question : " + mrq.toString());
         }
@@ -1427,7 +1698,16 @@ public class APICalls2 {
                     mrsa.setReport_id(report_id);
                     mrsa.setActivity_id(mra.getActivity_id());
                     mrsa.setCheck(true);
-                    mrsa.save();
+                    //mrsa.save();
+                    AppDatabase.getInstance(context).modelReportSubActivitiesDAO().insert(mrsa)
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(() -> {
+                                // success
+                                Log.e(TAG, "ON SUCCESS: ModelReportSubActivities");
+                            }, throwable -> {
+                                // error
+                                Log.e(TAG, "ON ERROR: ModelReportSubActivities");
+                            });
                     Log.e("APICalls", "Report sub activities : " + mrsa.toString());
                 }
                 Log.e("APICalls", "Report activities : " + mra.toString());
@@ -1547,9 +1827,21 @@ public class APICalls2 {
     }
 
     //Reviewer
+    @SuppressLint("CheckResult")
     public void updateDataReviewer(ReviewerModel reviewerModel) {
         String rowId = reviewerModel.getReviewer_id();
-        Log.i("ARGU", "CHECKER " + rowId);
+        String firstname = reviewerModel.getFirstname();
+        String middlename = reviewerModel.getMiddlename();
+        String lastname = reviewerModel.getLastname();
+        String designation = reviewerModel.getDesignation();
+        String company = reviewerModel.getCompany();
+        String department = reviewerModel.getDepartment();
+        String create_date = reviewerModel.getCreate_date();
+        String update_date = reviewerModel.getUpdate_date();
+        String email = reviewerModel.getEmail();
+        String status = reviewerModel.getStatus();
+
+/*        Log.i("ARGU", "CHECKER " + rowId);
         ReviewerModel reviewerModelUpdate = (ReviewerModel.find(ReviewerModel.class, "reviewerid = ?", String.valueOf(rowId))).get(0);
         reviewerModelUpdate.setReviewer_id(reviewerModel.getReviewer_id());
         reviewerModelUpdate.setFirstname(reviewerModel.getFirstname());
@@ -1562,38 +1854,74 @@ public class APICalls2 {
         reviewerModelUpdate.setUpdate_date(reviewerModel.getUpdate_date());
         reviewerModelUpdate.setEmail(reviewerModel.getEmail());
         reviewerModelUpdate.setStatus(reviewerModel.getStatus());
-        reviewerModelUpdate.save();
+        reviewerModelUpdate.save();*/
+        AppDatabase.getInstance(context).reviewerModelDAO().update(rowId, firstname, middlename,
+                lastname, designation, company, department, create_date, update_date, email, status)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+                    Log.e(TAG, "ON ERROR");
+                });
+
     }
 
+    @SuppressLint("CheckResult")
     public void isReviewerExisting(ReviewerModel reviewerModel) {
         String id = reviewerModel.getReviewer_id();
         Log.i("ARGU", "CHECKER " + id);
-        List<ReviewerModel> reviewerList = ReviewerModel.find(ReviewerModel.class, "reviewerid = ?", id);
-        int size = reviewerList.size();
+//        List<ReviewerModel> reviewerList = ReviewerModel.find(ReviewerModel.class, "reviewerid = ?", id);
 
-        if (size > 0) {
-            boolean found = false;
-            String date = "";
-            for (int count = 0; count < size; count++) {
-                if (reviewerList.get(count).getReviewer_id().equals(id)) {
-                    date = reviewerList.get(count).getUpdate_date();
-                    found = true;
-                }
-            }
-            if (found) {
-                Log.i("ARGULOOP", "REVIEWER UPDATE");
-                if (!date.equals(reviewerModel.getUpdate_date()))
-                    updateDataReviewer(reviewerModel);
-            } else {
-                Log.i("ARGULOOP", "SAVE");
-                reviewerModel.save();
-                reviewerList.add(reviewerModel);
-            }
-        } else {
-            Log.i("ARGU", "SAVE - SIZE 0");
-            reviewerModel.save();
-            reviewerList.add(reviewerModel);
-        }
+        AppDatabase.getInstance(context).reviewerModelDAO().getByReviewerId(id)
+                .observeOn(Schedulers.io())
+                .subscribe(reviewerList -> {
+                    int size = reviewerList.size();
+                    if (size > 0) {
+                        boolean found = false;
+                        String date = "";
+                        for (int count = 0; count < size; count++) {
+                            if (reviewerList.get(count).getReviewer_id().equals(id)) {
+                                date = reviewerList.get(count).getUpdate_date();
+                                found = true;
+                            }
+                        }
+                        if (found) {
+                            Log.i("ARGULOOP", "REVIEWER UPDATE");
+                            if (!date.equals(reviewerModel.getUpdate_date()))
+                                updateDataReviewer(reviewerModel);
+                        } else {
+                            Log.i("ARGULOOP", "SAVE");
+//                            reviewerModel.save();
+                            AppDatabase.getInstance(context).reviewerModelDAO().insert(reviewerModel)
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(() -> {
+                                        // success
+
+                                        Log.e(TAG, "ON SUCCESS");
+                                    }, throwable -> {
+                                        // error
+
+                                    });
+                            reviewerList.add(reviewerModel);
+                        }
+                    } else {
+                        Log.i("ARGU", "SAVE - SIZE 0");
+//                        reviewerModel.save();
+                        AppDatabase.getInstance(context).reviewerModelDAO().insert(reviewerModel)
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(() -> {
+                                    // success
+
+                                    Log.e(TAG, "ON SUCCESS");
+                                }, throwable -> {
+                                    // error
+
+                                });
+                        reviewerList.add(reviewerModel);
+                    }
+                });
     }
 
     //Supplier
@@ -1744,48 +2072,86 @@ public class APICalls2 {
     }
 
     //Type Audit
+    @SuppressLint("CheckResult")
     public void isTypeAuditExisting(ModelTypeAudit modelTypeAudit) {
         String id = modelTypeAudit.getScope_id();
         Log.i("ARGU", "CHECKER " + id);
-        List<ModelTypeAudit> typeAuditList = ModelTypeAudit.find(ModelTypeAudit.class, "scopeid = ?", id);
-        int size = typeAuditList.size();
+//        List<ModelTypeAudit> typeAuditList = ModelTypeAudit.find(ModelTypeAudit.class, "scopeid = ?", id);
+        AppDatabase.getInstance(context).modelTypeAuditDAO().getScopeIdList(id)
+                .observeOn(Schedulers.io())
+                .subscribe(typeAuditList -> {
+                    int size = typeAuditList.size();
+                    if (size > 0) {
+                        boolean found = false;
+                        String date = "";
+                        for (int count = 0; count < size; count++) {
+                            if (typeAuditList.get(count).getScope_id().equals(id)) {
+                                date = typeAuditList.get(count).getUpdate_date();
+                                found = true;
+                            }
+                        }
 
-        if (size > 0) {
-            boolean found = false;
-            String date = "";
-            for (int count = 0; count < size; count++) {
-                if (typeAuditList.get(count).getScope_id().equals(id)) {
-                    date = typeAuditList.get(count).getUpdate_date();
-                    found = true;
-                }
-            }
+                        if (found) {
+                            Log.i("ARGULOOP", "TYPE AUDIT UPDATE");
+                            if (!date.equals(modelTypeAudit.getUpdate_date()))
+                                updateTypeAudit(modelTypeAudit);
+                        } else {
+                            Log.i("ARGULOOP", "SAVE");
+//                            modelTypeAudit.save();
+                            AppDatabase.getInstance(context).modelTypeAuditDAO().insert(modelTypeAudit)
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(() -> {
+                                        // success
+                                        Log.e(TAG, "ON SUCCESS ModelTypeAudit");
+                                    }, throwable -> {
+                                        // error
+                                        Log.e(TAG, "ON ERROR ModelTypeAudit");
+                                    });
+                            typeAuditList.add(modelTypeAudit);
+                        }
 
-            if (found) {
-                Log.i("ARGULOOP", "TYPE AUDIT UPDATE");
-                if (!date.equals(modelTypeAudit.getUpdate_date()))
-                    updateTypeAudit(modelTypeAudit);
-            } else {
-                Log.i("ARGULOOP", "SAVE");
-                modelTypeAudit.save();
-                typeAuditList.add(modelTypeAudit);
-            }
+                    } else {
+                        Log.i("isTypeAuditExistingARGU", "SAVE - SIZE 0");
+//                        modelTypeAudit.save();
+                        AppDatabase.getInstance(context).modelTypeAuditDAO().insert(modelTypeAudit)
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(() -> {
+                                    // success
+                                    Log.e(TAG, "ON SUCCESS ModelTypeAudit");
+                                }, throwable -> {
+                                    // error
+                                    Log.e(TAG, "ON ERROR ModelTypeAudit");
+                                });
+                        typeAuditList.add(modelTypeAudit);
+                    }
+                });
 
-        } else {
-            Log.i("isTypeAuditExistingARGU", "SAVE - SIZE 0");
-            modelTypeAudit.save();
-            typeAuditList.add(modelTypeAudit);
-        }
     }
 
+    @SuppressLint("CheckResult")
     public void updateTypeAudit(ModelTypeAudit modelTypeAudit) {
         String rowId = modelTypeAudit.getScope_id();
+        String scope_name = modelTypeAudit.getScope_name();
+        String create_date = modelTypeAudit.getCreate_date();
+        String status = modelTypeAudit.getStatus();
         Log.i("ARGU", "CHECKER " + rowId);
+/*
         ModelTypeAudit typeAudit = (ModelTypeAudit.find(ModelTypeAudit.class, "scopeid = ?", String.valueOf(rowId))).get(0);
         typeAudit.setScope_id(modelTypeAudit.getScope_id());
         typeAudit.setScope_name(modelTypeAudit.getScope_name());
         typeAudit.setCreate_date(modelTypeAudit.getCreate_date());
         typeAudit.setStatus(modelTypeAudit.getStatus());
         typeAudit.save();
+*/
+        AppDatabase.getInstance(context).modelTypeAuditDAO().update(rowId, scope_name, create_date, status)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+                    Log.e(TAG, "ON SUCCESS ModelTypeAudit");
+                }, throwable -> {
+                    // error
+                    Log.e(TAG, "ON ERROR ModelTypeAudit");
+                });
     }
 
 
@@ -1960,145 +2326,198 @@ public class APICalls2 {
     }
 
     //Template
+    //Template
+    @SuppressLint("CheckResult")
     public void updateDataTemplate(ModelTemplates modelTemplates) {
         String rowId = modelTemplates.getTemplateID();
+        String product_type = modelTemplates.getProductType();
+        String template_name = modelTemplates.getTemplateName();
+        AtomicReference<String> status = new AtomicReference<>("1");
+        String dateUpdated = modelTemplates.getDateUpdated();
         Log.i("ARGU", "CHECKER " + rowId);
-        ModelTemplates template = (ModelTemplates.find(ModelTemplates.class, "template_id = ?", String.valueOf(rowId))).get(0);
-        template.setTemplateID(modelTemplates.getTemplateID());
-        template.setProductType(modelTemplates.getProductType());
-        template.setTemplateName(modelTemplates.getTemplateName());
+        //ModelTemplates template = (ModelTemplates.find(ModelTemplates.class, "template_id = ?", String.valueOf(rowId))).get(0);
 
-        if (!template.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
-            if (modelTemplates.getStatus().equals("1")) {
-                changes++;
-                template.setStatus("1");
-            } else {
-                template.setStatus(modelTemplates.getStatus());
-            }
-        } else if (modelTemplates.getStatus().equals("1")) {
-            template.setStatus("2");
-        }
+        AppDatabase.getInstance(context).modelTemplatesDAO().getTemplateId(rowId)
+                .observeOn(Schedulers.io())
+                .subscribe(template -> {
+                    if (!template.getDateUpdated().equals(modelTemplates.getDateUpdated())) {
+                        if (modelTemplates.getStatus().equals("1")) {
+                            changes++;
+                            //    template.setStatus("1");
+                            status.set("1");
+                        } else {
+                            //   template.setStatus(modelTemplates.getStatus());
+                            status.set(modelTemplates.getStatus());
+                        }
+                    } else if (modelTemplates.getStatus().equals("1")) {
+                        // template.setStatus("2");
+                        status.set("2");
+                    }
+                });
 
-        template.setDateUpdated(modelTemplates.getDateUpdated());
-        template.save();
+        AppDatabase.getInstance(context).modelTemplatesDAO().updateStatusTemplateId(rowId, product_type, template_name, status.get(), dateUpdated)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+                    Log.e(TAG, "ON SUCCESS ModelTemplates");
+                }, throwable -> {
+                    // error
+                    Log.e(TAG, "ON ERROR ModelTemplates");
+                });
     }
 
+    @SuppressLint("CheckResult")
     public void isTemplateExisting(ModelTemplates modelTemplates) {
         String id = modelTemplates.getTemplateID();
         Log.i("ARGU", "CHECKER " + id);
-        List<ModelTemplates> templateList = ModelTemplates.find(ModelTemplates.class, "template_id = ?", id);
-        int size = templateList.size();
+//        List<ModelTemplates> templateList = ModelTemplates.find(ModelTemplates.class, "template_id = ?", id);
+        AppDatabase.getInstance(context).modelTemplatesDAO().getTemplateIdList(id)
+                .observeOn(Schedulers.io())
+                .subscribe(templateList -> {
+                    int size = templateList.size();
+                    if (size > 0) {
+                        boolean found = false;
+                        String date = "";
+                        for (int count = 0; count < size; count++) {
+                            if (templateList.get(count).getTemplateID().equals(id)) {
+                                date = templateList.get(count).getDateUpdated();
+                                found = true;
+                            }
+                        }
 
-        if (size > 0) {
-            boolean found = false;
-            String date = "";
-            for (int count = 0; count < size; count++) {
-                if (templateList.get(count).getTemplateID().equals(id)) {
-                    date = templateList.get(count).getDateUpdated();
-                    found = true;
-                }
-            }
+                        if (found) {
+                            Log.i("ARGULOOP", "TEMPLATES UPDATE");
+                            if (!date.equals(modelTemplates.getDateUpdated()))
+                                updateDataTemplate(modelTemplates);
+                        } else {
+                            Log.i("ARGULOOP", "SAVE");
+//                            modelTemplates.save();
+                            AppDatabase.getInstance(context).modelTemplatesDAO().insert(modelTemplates)
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(() -> {
+                                        // success
+                                        Log.e(TAG, "ON SUCCESS MODELTEMPLATES");
+                                    }, throwable -> {
+                                        // error
+                                        Log.e(TAG, "ON ERROR MODELTEMPLATES");
+                                    });
+                            templateList.add(modelTemplates);
+                            if (modelTemplates.getStatus().equals("1"))
+                                changes++;
+                        }
 
-            if (found) {
-                Log.i("ARGULOOP", "TEMPLATES UPDATE");
-                if (!date.equals(modelTemplates.getDateUpdated()))
-                    updateDataTemplate(modelTemplates);
-            } else {
-                Log.i("ARGULOOP", "SAVE");
-                modelTemplates.save();
-                templateList.add(modelTemplates);
-                if (modelTemplates.getStatus().equals("1"))
-                    changes++;
-            }
-
-        } else {
-            Log.i("ARGU", "SAVE - SIZE 0");
-            modelTemplates.save();
-            templateList.add(modelTemplates);
-            if (modelTemplates.getStatus().equals("1"))
-                changes++;
-        }
+                    } else {
+                        Log.i("ARGU", "SAVE - SIZE 0");
+                        AppDatabase.getInstance(context).modelTemplatesDAO().insert(modelTemplates)
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(() -> {
+                                    // success
+                                    Log.e(TAG, "ON SUCCESS MODELTEMPLATES");
+                                }, throwable -> {
+                                    // error
+                                    Log.e(TAG, "ON ERROR MODELTEMPLATES");
+                                });
+                        templateList.add(modelTemplates);
+                        if (modelTemplates.getStatus().equals("1"))
+                            changes++;
+                    }
+                });
     }
 
+    @SuppressLint("CheckResult")
     public boolean isElementIDExisting(ModelTemplateElements modelTemplateElements) {
-        boolean exists = true;
+        AtomicBoolean exists = new AtomicBoolean(true);
         String id = modelTemplateElements.getElement_id();
         Log.i("ARGU", "CHECKER " + id);
-        List<ModelTemplateElements> templateList = ModelTemplateElements.find(
-                ModelTemplateElements.class, "elementid = ? AND templateid = ?", id,
-                modelTemplateElements.getTemplate_id());
-        int size = templateList.size();
 
-        if (size > 0) {
-            for (int count = 0; count < size; count++) {
-                if (templateList.get(count).getElement_id().equals(id)) {
-                    exists = false;
-                }
-            }
-        }
-        return exists;
+/*        List<ModelTemplateElements> templateList = ModelTemplateElements.find(
+                ModelTemplateElements.class, "elementid = ? AND templateid = ?", id,
+                modelTemplateElements.getTemplate_id());*/
+
+        AppDatabase.getInstance(context).modelTemplateElementsDAO().findByElementAndTemplateId(id, modelTemplateElements.getTemplate_id())
+                .observeOn(Schedulers.io())
+                .subscribe(templateList -> {
+                    int size = templateList.size();
+                    if (size > 0) {
+                        for (int count = 0; count < size; count++) {
+                            if (templateList.get(count).getElement_id().equals(id)) {
+                                exists.set(false);
+                            }
+                        }
+                    }
+                });
+
+        return exists.get();
     }
 
+    @SuppressLint("CheckResult")
     public boolean isQuestionIDExisting(ModelTemplateQuestionDetails modelTemplateQuestionDetails) {
-        boolean exists = true;
+        AtomicBoolean exists = new AtomicBoolean(true);
         String id = modelTemplateQuestionDetails.getElement_id();
         Log.i("ARGU-TEMPLATE", "CHECKER E " + id);
         Log.i("ARGU-TEMPLATE", "CHECKER T " + modelTemplateQuestionDetails.getTemplate_id());
         Log.i("ARGU-TEMPLATE", "CHECKER Q " + modelTemplateQuestionDetails.getQuestion_id());
-
+/*
         List<ModelTemplateQuestionDetails> templateList = ModelTemplateQuestionDetails.find
                 (ModelTemplateQuestionDetails.class, "elementid = ? AND templateid = ? AND questionid = ?",
                         id, modelTemplateQuestionDetails.getTemplate_id(), modelTemplateQuestionDetails.getQuestion_id());
-        int size = templateList.size();
-        Log.i("ARGU-TEMPLATE-SIZE", "SIZE: " + size + " ID: " + modelTemplateQuestionDetails.getTemplate_id());
+*/
+        AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().findElementTemplateQuestionIdList(id, modelTemplateQuestionDetails.getTemplate_id(), modelTemplateQuestionDetails.getQuestion_id())
+                .observeOn(Schedulers.io())
+                .subscribe(templateList -> {
+                    int size = templateList.size();
+                    Log.i("ARGU-TEMPLATE-SIZE", "SIZE: " + size + " ID: " + modelTemplateQuestionDetails.getTemplate_id());
+                    if (size > 0) {
+                        for (int count = 0; count < size; count++) {
+                            Log.i("ARGU-TEMPLATE-SIZE", "DB: " + templateList.get(count).getElement_id() +
+                                    " API: " + id);
+                            if (templateList.get(count).getElement_id().equals(id)) {
+                                exists.set(false);
+                            }
+                        }
 
-        if (size > 0) {
-            for (int count = 0; count < size; count++) {
-                Log.i("ARGU-TEMPLATE-SIZE", "DB: " + templateList.get(count).getElement_id() +
-                        " API: " + id);
-                if (templateList.get(count).getElement_id().equals(id)) {
-                    exists = false;
-                }
-            }
-
-        }
-        return exists;
+                    }
+                });
+        return exists.get();
     }
 
     public boolean isActivityIDExisting(ModelTemplateActivities modelTemplateActivities) {
         boolean exists = true;
         String id = modelTemplateActivities.getActivityID();
         Log.i("ARGU", "CHECKER " + id);
-        List<ModelTemplateActivities> templateList = ModelTemplateActivities.find(ModelTemplateActivities.class, "activity_id = ? AND templateid = ?", id, modelTemplateActivities.getTemplate_id());
+        //List<ModelTemplateActivities> templateList = ModelTemplateActivities.find(ModelTemplateActivities.class, "activity_id = ? AND templateid = ?", id, modelTemplateActivities.getTemplate_id());
+        List<ModelTemplateActivities> templateList = AppDatabase.getInstance(context).modelTemplateActivitiesDAO().searchActIdAndTempId(id, modelTemplateActivities.getTemplate_id());
         int size = templateList.size();
-
         if (size > 0) {
             for (int count = 0; count < size; count++) {
                 if (templateList.get(count).getActivityID().equals(id)) {
                     exists = false;
                 }
             }
-
         }
         return exists;
     }
 
+    @SuppressLint("CheckResult")
     public boolean isSubActivityIDExisting(ModelTemplateSubActivities modelTemplateSubActivities) {
-        boolean exists = true;
+        AtomicBoolean exists = new AtomicBoolean(true);
         String id = modelTemplateSubActivities.getActivity_id();
         Log.i("ARGU", "CHECKER " + id);
-        List<ModelTemplateSubActivities> templateList = ModelTemplateSubActivities.find(ModelTemplateSubActivities.class, "activityid = ? AND templateid = ? AND sub_item_id = ?", id, modelTemplateSubActivities.getTemplate_id(), modelTemplateSubActivities.getSubItemID());
-        int size = templateList.size();
+//        List<ModelTemplateSubActivities> templateList = ModelTemplateSubActivities.find(ModelTemplateSubActivities.class, "activityid = ? AND templateid = ? AND sub_item_id = ?", id, modelTemplateSubActivities.getTemplate_id(), modelTemplateSubActivities.getSubItemID());
+        AppDatabase.getInstance(context).modelTemplateSubActivitiesDAO().getActvitiyTemplateSubItemId(id, modelTemplateSubActivities.getTemplate_id(), modelTemplateSubActivities.getSubItemID())
+                .observeOn(Schedulers.io())
+                .subscribe(templateList -> {
+                    int size = templateList.size();
+                    if (size > 0) {
+                        for (int count = 0; count < size; count++) {
+                            if (templateList.get(count).getActivity_id().equals(id)) {
+                                exists.set(false);
+                            }
+                        }
 
-        if (size > 0) {
-            for (int count = 0; count < size; count++) {
-                if (templateList.get(count).getActivity_id().equals(id)) {
-                    exists = false;
-                }
-            }
-
-        }
-        return exists;
+                    }
+                });
+        return exists.get();
     }
 
     public String getDate() {

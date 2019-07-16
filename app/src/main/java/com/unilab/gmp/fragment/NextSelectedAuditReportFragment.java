@@ -80,6 +80,7 @@ import com.unilab.gmp.retrofit.ApiClient;
 import com.unilab.gmp.retrofit.ApiInterface;
 import com.unilab.gmp.retrofit.Async.PostAsync;
 import com.unilab.gmp.utility.APICalls2;
+import com.unilab.gmp.utility.Database.AppDatabase;
 import com.unilab.gmp.utility.DateTimeUtils;
 import com.unilab.gmp.utility.Glovar;
 import com.unilab.gmp.utility.SharedPreferenceManager;
@@ -752,8 +753,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         int counter = 0;
         String question = "";
-        List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class,
-                "reportid = ? AND answerid > '0'", "TEMPData");
+       /* List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class,
+                "reportid = ? AND answerid > '0'", "TEMPData"); */
+
+        List<ModelReportQuestion> mrq = AppDatabase.getInstance(context).modelReportQuestionDAO().getByAnswerAndReportIdTempData();
 
         List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
                 (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
@@ -792,8 +795,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         question = "";
-        List<ModelReportQuestion> mrq2 = ModelReportQuestion.find(ModelReportQuestion.class,
-                "reportid = ? AND answerid > '0'", report.getReport_id());
+       /* List<ModelReportQuestion> mrq2 = ModelReportQuestion.find(ModelReportQuestion.class,
+                "reportid = ? AND answerid > '0'", report.getReport_id());*/
+
+        List<ModelReportQuestion> mrq2 = AppDatabase.getInstance(context).modelReportQuestionDAO().getByAnswerAndReportId(report.getReport_id());
 
         List<ModelTemplateQuestionDetails> questionList2 = ModelTemplateQuestionDetails.find
                 (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
@@ -1306,8 +1311,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     public void saveLocalQuestion() {
-        List<ModelReportQuestion> tempQuestions = ModelReportQuestion.find(ModelReportQuestion.class,
-                "reportid = ? AND answerid > '0'", "TEMPData");
+//        List<ModelReportQuestion> tempQuestions = ModelReportQuestion.find(ModelReportQuestion.class,
+//                "reportid = ? AND answerid > '0'", "TEMPData");
+
+        List<ModelReportQuestion> tempQuestions = AppDatabase.getInstance(context).modelReportQuestionDAO().getByAnswerAndReportIdTempData();
+
 
         List<ModelTemplateQuestionDetails> tempAnswers = ModelTemplateQuestionDetails.find
                 (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
@@ -1333,8 +1341,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
             }
         }
 
-        List<ModelReportQuestion> questions = ModelReportQuestion.find(ModelReportQuestion.class,
-                "reportid = ? AND answerid > '0'", report.getReport_id());
+//        List<ModelReportQuestion> questions = ModelReportQuestion.find(ModelReportQuestion.class,
+//                "reportid = ? AND answerid > '0'", report.getReport_id());
+
+        List<ModelReportQuestion> questions = AppDatabase.getInstance(context).modelReportQuestionDAO().getByAnswerAndReportId(report.getReport_id());
 
         List<ModelTemplateQuestionDetails> answerList = ModelTemplateQuestionDetails.find
                 (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
@@ -1386,7 +1396,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
     public void save(String report_id, List<ModelTemplateQuestionDetails> answerList, List<ModelReportQuestion> questionList) {
         for (ModelTemplateQuestionDetails mtqd : answerList) {
-            List<ModelReportQuestion> lmrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
+//            List<ModelReportQuestion> lmrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
+            List<ModelReportQuestion> lmrq = AppDatabase.getInstance(context).modelReportQuestionDAO().getByReportAndQuestionId(report.getReport_id(), mtqd.getQuestion_id());
+
             if (lmrq.size() > 0) {
                 lmrq.get(0).setReport_id(report_id);
                 lmrq.get(0).setQuestion_id(mtqd.getQuestion_id());
