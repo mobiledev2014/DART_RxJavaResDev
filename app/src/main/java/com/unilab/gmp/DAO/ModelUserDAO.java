@@ -4,6 +4,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.unilab.gmp.model.ModelUser;
+
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -15,10 +17,10 @@ import io.reactivex.Flowable;
 @Dao
 public interface ModelUserDAO {
     @Query("select * from ModelUser")
-    Flowable<List<ModelUserDAO>> getItemList();
+    Flowable<List<ModelUser>> getItemList();
 
     @Insert
-    Completable insert(final ModelUserDAO modelUser);
+    Completable insert(final ModelUser modelUser);
 
     @Query("DELETE FROM ModelUser")
     void delete();

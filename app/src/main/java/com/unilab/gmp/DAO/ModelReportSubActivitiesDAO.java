@@ -4,6 +4,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.unilab.gmp.model.ModelReportSubActivities;
+
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -16,11 +18,15 @@ import io.reactivex.Flowable;
 @Dao
 public interface ModelReportSubActivitiesDAO {
     @Query("select * from ModelReportSubActivities")
-    Flowable<List<ModelReportSubActivitiesDAO>> getItemList();
+    Flowable<List<ModelReportSubActivities>> getItemList();
 
     @Insert
-    Completable insert(final ModelReportSubActivitiesDAO modelReportSubActivities);
+    Completable insert(final ModelReportSubActivities modelReportSubActivities);
 
     @Query("DELETE FROM ModelReportSubActivities")
     void delete();
+
+    @Query("DELETE FROM ModelReportSubActivities WHERE report_id = :id")
+    void deleteId(String id);
+
 }

@@ -1,7 +1,5 @@
 package com.unilab.gmp.model;
 
-import com.orm.SugarRecord;
-
 import androidx.room.Entity;import lombok.Getter;
 import lombok.Setter;
 

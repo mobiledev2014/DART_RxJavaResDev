@@ -4,6 +4,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.unilab.gmp.model.ModelTemplateQuestionDetails;
+
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -16,11 +18,20 @@ import io.reactivex.Flowable;
 @Dao
 public interface ModelTemplateQuestionDetailsDAO {
     @Query("select * from ModelTemplateQuestionDetails")
-    Flowable<List<ModelTemplateQuestionDetailsDAO>> getItemList();
+    Flowable<List<ModelTemplateQuestionDetails>> getItemList();
 
     @Insert
-    Completable insert(final ModelTemplateQuestionDetailsDAO modelTemplateQuestionDetails);
+    Completable insert(final ModelTemplateQuestionDetails modelTemplateQuestionDetails);
 
     @Query("DELETE FROM ModelTemplateQuestionDetails")
     void delete();
+
+    @Query("DELETE FROM ModelTemplateQuestionDetails WHERE template_id = :template_id")
+    void deleteTemplateId(String template_id);
+
+    @Query("SELECT * FROM ModelTemplateQuestionDetails WHERE element_id = :elementId AND template_id = :templateId AND question_id = :questionId")
+    Flowable<ModelTemplateQuestionDetails> findElementTemplateQuestionId(String elementId, String templateId, String questionId);
+
+    @Query("SELECT * FROM ModelTemplateQuestionDetails WHERE element_id = :elementId AND template_id = :templateId AND question_id = :questionId")
+    Flowable<List<ModelTemplateQuestionDetails>> findElementTemplateQuestionIdList(String elementId, String templateId, String questionId);
 }

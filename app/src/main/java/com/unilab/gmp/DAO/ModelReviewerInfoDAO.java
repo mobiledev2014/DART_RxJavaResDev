@@ -6,6 +6,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.unilab.gmp.model.ModelReviewerInfo;
+
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 
@@ -15,10 +17,10 @@ import io.reactivex.Flowable;
 @Dao
 public interface ModelReviewerInfoDAO {
     @Query("select * from ModelReviewerInfo")
-    Flowable<List<ModelReviewerInfoDAO>> getItemList();
+    Flowable<List<ModelReviewerInfo>> getItemList();
 
     @Insert
-    Completable insert(final ModelReviewerInfoDAO modelReviewerInfo);
+    Completable insert(final ModelReviewerInfo modelReviewerInfo);
 
     @Query("DELETE FROM ModelReviewerInfo")
     void delete();

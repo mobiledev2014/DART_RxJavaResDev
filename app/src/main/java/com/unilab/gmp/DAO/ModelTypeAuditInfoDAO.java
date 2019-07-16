@@ -6,6 +6,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.unilab.gmp.model.ModelTypeAuditInfo;
+
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 
@@ -15,10 +17,10 @@ import io.reactivex.Flowable;
 @Dao
 public interface ModelTypeAuditInfoDAO {
     @Query("select * from ModelTypeAuditInfo")
-    Flowable<List<ModelTypeAuditInfoDAO>> getItemList();
+    Flowable<List<ModelTypeAuditInfo>> getItemList();
 
     @Insert
-    Completable insert(final ModelTypeAuditInfoDAO modelTypeAuditInfo);
+    Completable insert(final ModelTypeAuditInfo modelTypeAuditInfo);
 
     @Query("DELETE FROM ModelTypeAuditInfo")
     void delete();

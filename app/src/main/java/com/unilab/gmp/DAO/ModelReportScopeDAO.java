@@ -6,6 +6,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.unilab.gmp.model.ModelReportScope;
+
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 
@@ -15,10 +17,10 @@ import io.reactivex.Flowable;
 @Dao
 public interface ModelReportScopeDAO {
     @Query("select * from ModelReportScope")
-    Flowable<List<ModelReportScopeDAO>> getItemList();
+    Flowable<List<ModelReportScope>> getItemList();
 
     @Insert
-    Completable insert(final ModelReportScopeDAO modelReportReviewer);
+    Completable insert(final ModelReportScope modelReportReviewer);
 
     @Query("DELETE FROM ModelReportScope")
     void delete();

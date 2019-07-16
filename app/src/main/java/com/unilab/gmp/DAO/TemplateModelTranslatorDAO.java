@@ -5,6 +5,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.unilab.gmp.model.TemplateModelTranslator;
+
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -16,11 +18,14 @@ import io.reactivex.Flowable;
 @Dao
 public interface TemplateModelTranslatorDAO {
     @Query("select * from TemplateModelTranslator")
-    Flowable<List<TemplateModelTranslatorDAO>> getItemList();
+    Flowable<List<TemplateModelTranslator>> getItemList();
 
     @Insert
-    Completable insert(final TemplateModelTranslatorDAO templateModelTranslator);
+    Completable insert(final TemplateModelTranslator templateModelTranslator);
 
     @Query("DELETE FROM TemplateModelTranslator")
     void delete();
+
+    @Query("DELETE FROM TemplateModelTranslator WHERE report_id = :reportId")
+    void deleteId(String reportId);
 }

@@ -4,6 +4,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.unilab.gmp.model.ModelSiteDate;
+
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -16,10 +18,10 @@ import io.reactivex.Flowable;
  @Dao
  public interface ModelSiteDateDAO {
      @Query("select * from ModelSiteDate")
-     Flowable<List<ModelSiteDateDAO>> getItemList();
+     Flowable<List<ModelSiteDate>> getItemList();
 
      @Insert
-     Completable insert(final ModelSiteDateDAO modelSiteDate);
+     Completable insert(final ModelSiteDate modelSiteDate);
 
      @Query("DELETE FROM ModelSiteDate")
      void delete();

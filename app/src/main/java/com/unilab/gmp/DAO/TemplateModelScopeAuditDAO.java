@@ -6,6 +6,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.unilab.gmp.model.TemplateModelScopeAudit;
+
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 
@@ -16,12 +18,15 @@ import io.reactivex.Flowable;
 @Dao
 public interface TemplateModelScopeAuditDAO {
     @Query("select * from TemplateModelScopeAudit")
-    Flowable<List<TemplateModelScopeAuditDAO>> getItemList();
+    Flowable<List<TemplateModelScopeAudit>> getItemList();
 
     @Insert
-    Completable insert(final TemplateModelScopeAuditDAO templateModelScopeAudit);
+    Completable insert(final TemplateModelScopeAudit templateModelScopeAudit);
 
     @Query("DELETE FROM TemplateModelScopeAudit")
     void delete();
+
+    @Query("DELETE FROM TemplateModelScopeAudit WHERE report_id = :reportId")
+    void deleteId(String reportId);
 
 }

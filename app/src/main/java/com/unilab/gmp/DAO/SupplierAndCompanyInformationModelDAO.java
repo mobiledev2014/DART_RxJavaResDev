@@ -4,7 +4,9 @@
  import androidx.room.Insert;
 import androidx.room.Query;
 
-import java.util.List;
+ import com.unilab.gmp.model.SupplierAndCompanyInformationModel;
+
+ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
@@ -16,10 +18,10 @@ import io.reactivex.Flowable;
  @Dao
  public interface SupplierAndCompanyInformationModelDAO {
   @Query("select * from SupplierAndCompanyInformationModel")
-  Flowable<List<SupplierAndCompanyInformationModelDAO>> getItemList();
+  Flowable<List<SupplierAndCompanyInformationModel>> getItemList();
 
   @Insert
-  Completable insert(final SupplierAndCompanyInformationModelDAO supplierAndCompanyInformationModel);
+  Completable insert(final SupplierAndCompanyInformationModel supplierAndCompanyInformationModel);
 
   @Query("DELETE FROM SupplierAndCompanyInformationModel")
   void delete();
