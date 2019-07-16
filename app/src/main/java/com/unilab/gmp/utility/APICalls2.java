@@ -91,9 +91,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by c_rcmiguel on 8/23/2017.
@@ -304,114 +301,120 @@ public class APICalls2 {
         }
     }
 
+    @SuppressLint("CheckResult")
     private void saveConfig(ConfigModel configModel) {
-        List<ConfigModel> cm = ConfigModel.listAll(ConfigModel.class);
-        //apiInterface = ApiClient.getBaseURLDataMaintenance().create(ApiInterface.class);
-        if (cm.size() > 0) {
-            if (configModel != null) {
-                if (configModel.getApprover() != null) {
-                    Log.i("config_date_debug", "approver" + configModel.getApprover());
-                    if (date(cm.get(0).getApprover()).before(date(configModel.getApprover()))) {
-                        cm.get(0).setApprover(configModel.getApprover());
+        AppDatabase.getInstance(context).configModelDAO().getItemList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(cm -> {
+                    if (cm.size() > 0) {
+                        if (configModel != null) {
+                            if (configModel.getApprover() != null) {
+                                Log.i("config_date_debug", "approver" + configModel.getApprover());
+                                if (date(cm.get(0).getApprover()).before(date(configModel.getApprover()))) {
+                                    cm.get(0).setApprover(configModel.getApprover());
+                                    apiApprover();
+                                }
+                            }
+
+                            if (configModel.getAuditor() != null) {
+                                Log.i("config_date_debug", "auditor" + configModel.getApprover());
+                                if (date(cm.get(0).getAuditor()).before(date(configModel.getAuditor()))) {
+                                    cm.get(0).setAuditor(configModel.getAuditor());
+                                    apiAuditors();
+                                }
+                            }
+
+                            if (configModel.getReviewer() != null) {
+                                Log.i("config_date_debug", "reviewer" + configModel.getApprover());
+                                if (date(cm.get(0).getReviewer()).before(date(configModel.getReviewer()))) {
+                                    Log.e(TAG, "onResponse: Enter get reviewer");
+                                    cm.get(0).setReviewer(configModel.getReviewer());
+                                    apiReviewer();
+                                }
+                            }
+
+                            if (configModel.getSite() != null) {
+                                Log.i("config_date_debug", "site" + configModel.getApprover());
+                                if (date(cm.get(0).getSite()).before(date(configModel.getSite()))) {
+                                    cm.get(0).setSite(configModel.getSite());
+                                    apiSupplier();
+                                }
+                            }
+
+                            if (configModel.getCategory() != null) {
+                                Log.i("config_date_debug", "category" + configModel.getApprover());
+                                if (date(cm.get(0).getCategory()).before(date(configModel.getCategory()))) {
+                                    cm.get(0).setCategory(configModel.getCategory());
+                                    apiCategory();
+                                }
+                            }
+
+                            if (configModel.getProduct() != null) {
+                                Log.i("config_date_debug", "product" + configModel.getApprover());
+                                if (date(cm.get(0).getProduct()).before(date(configModel.getProduct()))) {
+                                    cm.get(0).setProduct(configModel.getProduct());
+                                    apiProduct();
+                                }
+                            }
+                            if (configModel.getType_audit() != null) {
+                                Log.i("config_date_debug", "type audit" + configModel.getApprover());
+                                if (date(cm.get(0).getType_audit()).before(date(configModel.getType_audit()))) {
+                                    cm.get(0).setType_audit(configModel.getType_audit());
+                                    apiTypeAudit();
+                                }
+                            }
+                            if (configModel.getDisposition() != null) {
+                                Log.i("config_date_debug", "disposition" + configModel.getApprover());
+                                if (date(cm.get(0).getDisposition()).before(date(configModel.getDisposition()))) {
+                                    cm.get(0).setDisposition(configModel.getDisposition());
+                                    apiDisposition();
+                                }
+                            }
+                            if (configModel.getDistribution() != null) {
+                                Log.i("config_date_debug", "distribution" + configModel.getApprover());
+                                if (date(cm.get(0).getDistribution()).before(date(configModel.getDistribution()))) {
+                                    cm.get(0).setDistribution(configModel.getDistribution());
+                                    apiDistribution();
+                                }
+                            }
+                            if (configModel.getClassification() != null) {
+                                Log.i("config_date_debug", "classification" + configModel.getApprover());
+                                if (date(cm.get(0).getClassification()).before(date(configModel.getClassification()))) {
+                                    cm.get(0).setDistribution(configModel.getClassification());
+                                    apiClassification();
+                                }
+                            }
+
+                            //for testing only
+                            if (!statusMessage.equals("auditReport")) {
+                                apiTemplateList();
+                            } else {
+                                isdone = true;
+                            }
+                            apiAuditReports();
+
+                            ConfigModelInsert(cm);
+                        }
+                    } else {
+                        if (configModel != null) {
+                            ConfigModelInsert(cm);
+                        }
                         apiApprover();
-                    }
-                }
-
-                if (configModel.getAuditor() != null) {
-                    Log.i("config_date_debug", "auditor" + configModel.getApprover());
-                    if (date(cm.get(0).getAuditor()).before(date(configModel.getAuditor()))) {
-                        cm.get(0).setAuditor(configModel.getAuditor());
                         apiAuditors();
-                    }
-                }
-
-                if (configModel.getReviewer() != null) {
-                    Log.i("config_date_debug", "reviewer" + configModel.getApprover());
-                    if (date(cm.get(0).getReviewer()).before(date(configModel.getReviewer()))) {
-                        Log.e(TAG, "onResponse: Enter get reviewer");
-                        cm.get(0).setReviewer(configModel.getReviewer());
                         apiReviewer();
-                    }
-                }
-
-                if (configModel.getSite() != null) {
-                    Log.i("config_date_debug", "site" + configModel.getApprover());
-                    if (date(cm.get(0).getSite()).before(date(configModel.getSite()))) {
-                        cm.get(0).setSite(configModel.getSite());
                         apiSupplier();
-                    }
-                }
-
-                if (configModel.getCategory() != null) {
-                    Log.i("config_date_debug", "category" + configModel.getApprover());
-                    if (date(cm.get(0).getCategory()).before(date(configModel.getCategory()))) {
-                        cm.get(0).setCategory(configModel.getCategory());
                         apiCategory();
-                    }
-                }
-
-                if (configModel.getProduct() != null) {
-                    Log.i("config_date_debug", "product" + configModel.getApprover());
-                    if (date(cm.get(0).getProduct()).before(date(configModel.getProduct()))) {
-                        cm.get(0).setProduct(configModel.getProduct());
                         apiProduct();
-                    }
-                }
-                if (configModel.getType_audit() != null) {
-                    Log.i("config_date_debug", "type audit" + configModel.getApprover());
-                    if (date(cm.get(0).getType_audit()).before(date(configModel.getType_audit()))) {
-                        cm.get(0).setType_audit(configModel.getType_audit());
                         apiTypeAudit();
-                    }
-                }
-                if (configModel.getDisposition() != null) {
-                    Log.i("config_date_debug", "disposition" + configModel.getApprover());
-                    if (date(cm.get(0).getDisposition()).before(date(configModel.getDisposition()))) {
-                        cm.get(0).setDisposition(configModel.getDisposition());
                         apiDisposition();
-                    }
-                }
-                if (configModel.getDistribution() != null) {
-                    Log.i("config_date_debug", "distribution" + configModel.getApprover());
-                    if (date(cm.get(0).getDistribution()).before(date(configModel.getDistribution()))) {
-                        cm.get(0).setDistribution(configModel.getDistribution());
                         apiDistribution();
-                    }
-                }
-                if (configModel.getClassification() != null) {
-                    Log.i("config_date_debug", "classification" + configModel.getApprover());
-                    if (date(cm.get(0).getClassification()).before(date(configModel.getClassification()))) {
-                        cm.get(0).setDistribution(configModel.getClassification());
                         apiClassification();
+
                     }
-                }
+                });
 
-                //for testing only
-                if (!statusMessage.equals("auditReport")) {
-                    apiTemplateList();
-                } else {
-                    isdone = true;
-                }
-                apiAuditReports();
+        //apiInterface = ApiClient.getBaseURLDataMaintenance().create(ApiInterface.class);
 
-                cm.get(0).save();
-            }
-        } else {
-            if (configModel != null) {
-                configModel.save();
-            }
-            apiApprover();
-            apiAuditors();
-            apiReviewer();
-            apiSupplier();
-            apiCategory();
-            apiProduct();
-            apiTypeAudit();
-            apiDisposition();
-            apiDistribution();
-            apiClassification();
-
-        }
     }
 
     @SuppressLint("CheckResult")
@@ -443,7 +446,6 @@ public class APICalls2 {
                     }
 
                     private void saveApprovers(ModelApproverInfo modelApproverInfo) {
-
 
                         AppDatabase.getInstance(context).approverModelDAO().delete();
 
@@ -497,7 +499,7 @@ public class APICalls2 {
                     }
 
                     private void saveAuditors(ModelAuditorInfo modelAuditorInfo) {
-                        AuditorsModel.deleteAll(AuditorsModel.class);
+                        AppDatabase.getInstance(context).auditorsModelDAO().delete();
 
                         for (int x = 0; x < modelAuditorInfo.getModelAuditors().size(); x++) {
                             AuditorsModel auditorsModel = new AuditorsModel();
@@ -617,8 +619,6 @@ public class APICalls2 {
                             modelCompany.setCreate_date(modelCompanyInfo.getModelCompanies().get(x).getCreate_date());
                             modelCompany.setUpdate_date(modelCompanyInfo.getModelCompanies().get(x).getUpdate_date());
                             modelCompany.setStatus(modelCompanyInfo.getModelCompanies().get(x).getStatus());
-
-
 
 
                             if (modelCompanyInfo.getModelCompanies().get(x).getAudit_history() != null) {
@@ -1442,15 +1442,15 @@ public class APICalls2 {
 
         AppDatabase.getInstance(context).approverModelDAO().getListItem(id)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(sampleModels -> {
-                    int size = sampleModels.size();
+                .subscribe(approverModels -> {
+                    int size = approverModels.size();
                     if (size > 0) {
                         boolean found = false;
                         String date = "";
                         for (int count = 0; count < size; count++) {
-                            if (sampleModels.get(count).getApprover_id().equals(id)) {
+                            if (approverModels.get(count).getApprover_id().equals(id)) {
                                 found = true;
-                                date = sampleModels.get(count).getUpdate_date();
+                                date = approverModels.get(count).getUpdate_date();
                             }
                         }
 
@@ -1458,13 +1458,13 @@ public class APICalls2 {
                             if (!date.equals(approverModel.getUpdate_date()))
                                 updateDataApprover(approverModel);
                         } else {
-                            ApproverInsert(approverModel);
-                            sampleModels.add(approverModel);
+                            ApproverInsert(approverModels);
+                            approverModels.add(approverModel);
                         }
 
                     } else {
-                        ApproverInsert(approverModel);
-                        sampleModels.add(approverModel);
+                        ApproverInsert(approverModels);
+                        approverModels.add(approverModel);
                     }
                 });
 
@@ -1472,86 +1472,78 @@ public class APICalls2 {
 
     }
 
-    public void ApproverInsert(ApproverModel approverModel){
-        AppDatabase.getInstance(context).approverModelDAO().insert(approverModel)
-                .subscribeOn(Schedulers.io())
-                .subscribe(() -> {
-                    // success
 
-                    Log.e(TAG, "ON SUCCESS");
-                }, throwable -> {
-                    // error
+    @SuppressLint("CheckResult")
+    public void updateDataApprover(ApproverModel approverModel) {
+        String rowId = approverModel.getApprover_id();
+
+
+        AppDatabase.getInstance(context).approverModelDAO().updateApprover(approverModel.getApprover_id(),
+                approverModel.getFirstname(), approverModel.getMiddlename(), approverModel.getLastname(),
+                approverModel.getDesignation(), approverModel.getCompany(), approverModel.getDepartment(),
+                approverModel.getCreate_date(), approverModel.getUpdate_date(), approverModel.getEmail(),
+                approverModel.getStatus(), rowId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(approverModels -> {
+
+                });
+
+    }
+
+    //Auditors
+    @SuppressLint("CheckResult")
+    public void updateDataAuditors(AuditorsModel auditorsModel) {
+        String rowId = auditorsModel.getAuditor_id();
+
+        AppDatabase.getInstance(context).auditorsModelDAO().updateApprover(auditorsModel.getAuditor_id(),
+                auditorsModel.getFname(), auditorsModel.getMname(), auditorsModel.getLname(),
+                auditorsModel.getDesignation(), auditorsModel.getCompany(), auditorsModel.getDepartment(),
+                auditorsModel.getCreate_date(), auditorsModel.getActions() , auditorsModel.getUpdate_date(), auditorsModel.getEmail(),
+                auditorsModel.getStatus(), rowId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(approverModels -> {
 
                 });
     }
 
-    public void updateDataApprover(ApproverModel approverModel) {
-        String rowId = approverModel.getApprover_id();
-        ApproverModel approverModelUpdate = (ApproverModel.find(ApproverModel.class, "approverid = ?", String.valueOf(rowId))).get(0);
-        approverModelUpdate.setApprover_id(approverModel.getApprover_id());
-        approverModelUpdate.setFirstname(approverModel.getFirstname());
-        approverModelUpdate.setMiddlename(approverModel.getMiddlename());
-        approverModelUpdate.setLastname(approverModel.getLastname());
-        approverModelUpdate.setDesignation(approverModel.getDesignation());
-        approverModelUpdate.setCompany(approverModel.getCompany());
-        approverModelUpdate.setDepartment(approverModel.getDepartment());
-        approverModelUpdate.setCreate_date(approverModel.getCreate_date());
-        approverModelUpdate.setUpdate_date(approverModel.getUpdate_date());
-        approverModelUpdate.setEmail(approverModel.getEmail());
-        approverModelUpdate.setStatus(approverModel.getStatus());
-        approverModelUpdate.save();
-    }
-
-    //Auditors
-    public void updateDataAuditors(AuditorsModel auditorsModel) {
-        String rowId = auditorsModel.getAuditor_id();
-        Log.i("ARGU", "CHECKER " + rowId);
-        AuditorsModel auditorsModelUpdate = (AuditorsModel.find(AuditorsModel.class, "auditorid = ?", String.valueOf(rowId))).get(0);
-        auditorsModelUpdate.setAuditor_id(auditorsModel.getAuditor_id());
-        auditorsModelUpdate.setFname(auditorsModel.getFname());
-        auditorsModelUpdate.setMname(auditorsModel.getMname());
-        auditorsModelUpdate.setLname(auditorsModel.getLname());
-        auditorsModelUpdate.setDesignation(auditorsModel.getDesignation());
-        auditorsModelUpdate.setCompany(auditorsModel.getCompany());
-        auditorsModelUpdate.setDepartment(auditorsModel.getDepartment());
-        auditorsModelUpdate.setCreate_date(auditorsModel.getCreate_date());
-        auditorsModelUpdate.setUpdate_date(auditorsModel.getUpdate_date());
-        auditorsModelUpdate.setEmail(auditorsModel.getEmail());
-        auditorsModelUpdate.setStatus(auditorsModel.getStatus());
-        auditorsModelUpdate.save();
-    }
-
+    @SuppressLint("CheckResult")
     public void isAuditorExisting(AuditorsModel auditorsModel) {
         String id = auditorsModel.getAuditor_id();
-        List<AuditorsModel> auditorsList = AuditorsModel.find(AuditorsModel.class, "auditorid = ?", id);
-        int size = auditorsList.size();
-        Log.i("ARGU", "size " + size);
 
-        if (size > 0) {
-            boolean found = false;
-            String date = "";
-            for (int count = 0; count < size; count++) {
-                if (auditorsList.get(count).getAuditor_id().equals(id)) {
-                    date = auditorsList.get(count).getUpdate_date();
-                    found = true;
-                }
-            }
+        AppDatabase.getInstance(context).auditorsModelDAO().getItemList(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(auditorsList -> {
 
-            if (found) {
-                Log.i("ARGULOOP", "AUDITOR UPDATE");
-                if (!date.equals(auditorsModel.getUpdate_date()))
-                    updateDataAuditors(auditorsModel);
-            } else {
-                Log.i("ARGULOOP", "SAVE");
-                auditorsModel.save();
-                auditorsList.add(auditorsModel);
-            }
+                    int size = auditorsList.size();
+                    Log.i("ARGU", "size " + size);
 
-        } else {
-            Log.i("ARGU", "SAVE - SIZE 0");
-            auditorsModel.save();
-            auditorsList.add(auditorsModel);
-        }
+                    if (size > 0) {
+                        boolean found = false;
+                        String date = "";
+                        for (int count = 0; count < size; count++) {
+                            if (auditorsList.get(count).getAuditor_id().equals(id)) {
+                                date = auditorsList.get(count).getUpdate_date();
+                                found = true;
+                            }
+                        }
+
+                        if (found) {
+                            Log.i("ARGULOOP", "AUDITOR UPDATE");
+                            if (!date.equals(auditorsModel.getUpdate_date()))
+                                updateDataAuditors(auditorsModel);
+                        } else {
+                            Log.i("ARGULOOP", "SAVE");
+                            AuditorsModelInsert(auditorsList);
+                            auditorsList.add(auditorsModel);
+                        }
+
+                    } else {
+                        Log.i("ARGU", "SAVE - SIZE 0");
+                        AuditorsModelInsert(auditorsList);
+                        auditorsList.add(auditorsModel);
+                    }
+
+                });
     }
 
     //Reviewer
@@ -2145,4 +2137,52 @@ public class APICalls2 {
 
         dialogSyncSuccess.show();
     }
+
+
+
+
+    //INSERT
+
+
+    public void ApproverInsert(List<ApproverModel> approverModel) {
+        AppDatabase.getInstance(context).approverModelDAO().insert(approverModel)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
+    }
+    public void AuditorsModelInsert(List<AuditorsModel> auditorsModel) {
+
+        AppDatabase.getInstance(context).auditorsModelDAO().insert(auditorsModel)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
+    }
+
+
+    public void ConfigModelInsert(List<ConfigModel> configModels) {
+
+        AppDatabase.getInstance(context).configModelDAO().insert(configModels)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
+    }
+
 }
