@@ -605,7 +605,9 @@ public class APICalls2 {
 
                     @SuppressLint("CheckResult")
                     private void saveCompanies(ModelCompanyInfo modelCompanyInfo) {
-                        ModelCompany.deleteAll(ModelCompany.class);
+//                        ModelCompany.deleteAll(ModelCompany.class);
+
+                        AppDatabase.getInstance(context).modelCompanyDAO().delete();
                         //ModelSiteAuditHistory.deleteAll(ModelSiteAuditHistory.class);
                         AppDatabase.getInstance(context).modelSiteAuditHistoryDAO().delete();
 //                        TemplateModelCompanyBackgroundMajorChanges.deleteAll(TemplateModelCompanyBackgroundMajorChanges.class);
@@ -1011,7 +1013,8 @@ public class APICalls2 {
                     }
 
                     private void saveCategories(ModelCategoryInfo modelCategoryInfo) {
-                        ModelCategory.deleteAll(ModelCategory.class);
+//                        ModelCategory.deleteAll(ModelCategory.class);
+                        AppDatabase.getInstance(context).modelCategoryDAO().delete();
                         for (int x = 0; x < modelCategoryInfo.getModelCategories().size(); x++) {
                             ModelCategory modelCategory = new ModelCategory();
                             modelCategory.setCategory_id(modelCategoryInfo.getModelCategories().get(x).getCategory_id());
@@ -1057,7 +1060,8 @@ public class APICalls2 {
                     }
 
                     private void saveProducts(ModelProductInfo modelProductInfo) {
-                        ModelProduct.deleteAll(ModelProduct.class);
+//                        ModelProduct.deleteAll(ModelProduct.class);
+                        AppDatabase.getInstance(context).modelProductDAO().delete();
                         for (int x = 0; x < modelProductInfo.getModelProducts().size(); x++) {
                             ModelProduct product = new ModelProduct();
                             product.setProduct_id(modelProductInfo.getModelProducts().get(x).getProduct_id());
@@ -1147,7 +1151,8 @@ public class APICalls2 {
                     }
 
                     private void saveDisposition(ModelDispositionInfo modelDispositionInfo) {
-                        ModelDisposition.deleteAll(ModelDisposition.class);
+//                        ModelDisposition.deleteAll(ModelDisposition.class);
+                        AppDatabase.getInstance(context).modelDispositionDAO().delete();
                         for (int x = 0; x < modelDispositionInfo.getDisposition().size(); x++) {
                             ModelDisposition modelDisposition = new ModelDisposition();
                             modelDisposition.setDisposition_id(modelDispositionInfo.getDisposition().get(x).getDisposition_id());
@@ -1190,7 +1195,8 @@ public class APICalls2 {
                     }
 
                     private void saveClassification(ModelClassificationInfo modelClassificationInfo) {
-                        ModelClassification.deleteAll(ModelClassification.class);
+//                        ModelClassification.deleteAll(ModelClassification.class);
+                        AppDatabase.getInstance(context).modelClassificationDAO().delete();
                         for (int x = 0; x < modelClassificationInfo.getModelClassifications().size(); x++) {
                             ModelClassification modelClassification = new ModelClassification();
                             modelClassification.setClassification_id(modelClassificationInfo.getModelClassifications().get(x).getClassification_id());
@@ -1198,7 +1204,7 @@ public class APICalls2 {
                             modelClassification.setCreate_date(modelClassificationInfo.getModelClassifications().get(x).getCreate_date());
                             modelClassification.setUpdate_date(modelClassificationInfo.getModelClassifications().get(x).getUpdate_date());
                             modelClassification.setStatus(modelClassificationInfo.getModelClassifications().get(x).getStatus());
-                            modelClassification.save();
+                            ClassifocationModelInsert(modelClassification);
                             Log.e("testing", modelClassificationInfo.toString() + " Classification: " + modelClassification.toString());
                             if (modelClassificationInfo.getModelClassifications().get(x).getCategory() != null) {
                                 for (ModelClassificationCategory mcc : modelClassificationInfo.getModelClassifications().get(x).getCategory()) {
@@ -1206,7 +1212,7 @@ public class APICalls2 {
                                     mcc.setClassification_id(modelClassification.getClassification_id());
                                     mcc.setClassification_name(modelClassification.getClassification_name());
                                     mcc.setCategory_id(mcc.getCategory_id());
-                                    mcc.save();
+                                    ClassifocationCategoryModelInsert(mcc);
                                 }
                             }
                         }
@@ -1244,8 +1250,10 @@ public class APICalls2 {
                     }
 
                     private void saveDistribution(ModelDistributionInfo modelDistributionInfo) {
-                        ModelClassification.deleteAll(ModelClassification.class);
-                        ModelDistribution.deleteAll(ModelDistribution.class);
+                        AppDatabase.getInstance(context).modelClassificationDAO().delete();
+//                        ModelClassification.deleteAll(ModelClassification.class);
+//                        ModelDistribution.deleteAll(ModelDistribution.class);
+                        AppDatabase.getInstance(context).modelDistributionDAO().delete();
                         for (int x = 0; x < modelDistributionInfo.getModelDistributions().size(); x++) {
                             ModelDistribution modelDistribution = new ModelDistribution();
                             modelDistribution.setDistribution_id(modelDistributionInfo.getModelDistributions().get(x).getDistribution_id());
@@ -1289,22 +1297,27 @@ public class APICalls2 {
 
             }
 
+            @SuppressLint("CheckResult")
             private void saveAuditReportList(ModelAuditReportsList modelAuditReportsList) {
                 for (ModelAuditReportDetails mar : modelAuditReportsList.getAudit_report_list()) {
                     String reportId = mar.getReport_id();
                     final String modifiedDate = mar.getModified_date();
                     final String status = mar.getStatus();
 
-                    List<ModelAuditReports> auditReportsList = ModelAuditReports.find(
-                            ModelAuditReports.class, "reportid = ? AND modifieddate = ?", reportId, modifiedDate);
-                    if (auditReportsList.size() > 0) {
+//                    List<ModelAuditReports> auditReportsList = ModelAuditReports.find(
+//                            ModelAuditReports.class, "reportid = ? AND modifieddate = ?", reportId, modifiedDate);
+
+                    List<ModelAuditReports> auditReportsModel =
+                            AppDatabase.getInstance(context).modelAuditReportsDAO().getListItem(reportId, modifiedDate);
+                    if (auditReportsModel.size() > 0) {
                         Log.i("API_AUDIT_REPORT", "Existing :" + mar.toString());
                         continue;
                     }
 
-                    Log.i("API_AUDIT_REPORT", "START 1 :" + mar.toString() + " size : " + auditReportsList.size());
+                    Log.i("API_AUDIT_REPORT", "START 1 :" + mar.toString() + " size : " + auditReportsModel.size());
 
                     getAuditReportInfo(reportId, modifiedDate, status);
+
 
                 }
             }
@@ -1376,7 +1389,10 @@ public class APICalls2 {
 
                     if (version != null) {
                         Log.i("AUDIT-REPORT", "START 4 ID: " + report_id);
-                        ModelDateOfAudit.deleteAll(ModelDateOfAudit.class, "reportid = ?", report_id);
+//                        ModelDateOfAudit.deleteAll(ModelDateOfAudit.class, "reportid = ?", report_id);
+
+                        AppDatabase.getInstance(context).modelDateOfAuditDAO().deleteId(report_id);
+
 //                        TemplateModelAuditors.deleteAll(TemplateModelAuditors.class, "reportid = ?", report_id);
                         AppDatabase.getInstance(context).templateModelAuditorsDAO().deleteId(report_id);
 //                        TemplateModelScopeAudit.deleteAll(TemplateModelScopeAudit.class, "reportid = ?", report_id);
@@ -1404,7 +1420,8 @@ public class APICalls2 {
 //                        TemplateModelDistributionOthers.deleteAll(TemplateModelDistributionOthers.class, "reportid = ?", report_id);
                         AppDatabase.getInstance(context).templateModelDistributionOthersDAO().deleteId(report_id);
                         AppDatabase.getInstance(context).modelReportQuestionDAO().deleteId(report_id);
-                        ModelReportActivities.deleteAll(ModelReportActivities.class, "reportid = ?", report_id);
+//                        ModelReportActivities.deleteAll(ModelReportActivities.class, "reportid = ?", report_id);
+                        AppDatabase.getInstance(context).modelReportActivitiesDAO().deleteId(report_id);
                         AppDatabase.getInstance(context).modelReportSubActivitiesDAO().deleteId(report_id);
 //                        TemplateModelOtherIssuesAudit.deleteAll(TemplateModelOtherIssuesAudit.class, "reportid = ?", report_id);
                         AppDatabase.getInstance(context).templateModelOtherIssuesAuditDAO().deleteId(report_id);
@@ -1471,7 +1488,7 @@ public class APICalls2 {
         }
         for (ModelDateOfAudit mda : modelAuditReports.getDate_of_audit()) {
             mda.setReport_id(report_id);
-            mda.save();
+            DateofAuditModelInsert(mda);
             Log.e("APICalls", "Audit dates : " + mda.getDateOfAudit());
         }
         for (TemplateModelAuditors mrca : modelAuditReports.getCo_auditor_id()) {
@@ -1693,7 +1710,8 @@ public class APICalls2 {
                 mra.setReport_id(report_id);
                 mra.setActivity_id(mra.getActivity_id());
                 mra.setCheck(true);
-                mra.save();
+//                mra.save();
+                ReportActivitiesModelInsert(mra);
                 for (ModelReportSubActivities mrsa : mra.getSub_activities()) {
                     mrsa.setReport_id(report_id);
                     mrsa.setActivity_id(mra.getActivity_id());
@@ -1778,7 +1796,7 @@ public class APICalls2 {
         AppDatabase.getInstance(context).auditorsModelDAO().updateApprover(auditorsModel.getAuditor_id(),
                 auditorsModel.getFname(), auditorsModel.getMname(), auditorsModel.getLname(),
                 auditorsModel.getDesignation(), auditorsModel.getCompany(), auditorsModel.getDepartment(),
-                auditorsModel.getCreate_date(), auditorsModel.getActions() , auditorsModel.getUpdate_date(), auditorsModel.getEmail(),
+                auditorsModel.getCreate_date(), auditorsModel.getActions(), auditorsModel.getUpdate_date(), auditorsModel.getEmail(),
                 auditorsModel.getStatus(), rowId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(approverModels -> {
@@ -1925,22 +1943,22 @@ public class APICalls2 {
     }
 
     //Supplier
-    public void updateDataSupplier(ModelCompany modelCompany) {
-        String rowId = modelCompany.getCompany_id();
-        Log.i("ARGU", "CHECKER " + rowId);
-        ModelCompany company = (ModelCompany.find(ModelCompany.class, "companyid = ?", String.valueOf(rowId))).get(0);
-        company.setCompany_id(modelCompany.getCompany_id());
-        company.setCompany_name(modelCompany.getCompany_name());
-        company.setAddress1(modelCompany.getAddress1());
-        company.setAddress2(modelCompany.getAddress2());
-        company.setAddress3(modelCompany.getAddress3());
-        company.setCountry(modelCompany.getCountry());
-        company.setBackground(modelCompany.getBackground());
-        company.setCreate_date(modelCompany.getCreate_date());
-        company.setUpdate_date(modelCompany.getUpdate_date());
-        company.setStatus(modelCompany.getStatus());
-        company.save();
-    }
+//    public void updateDataSupplier(ModelCompany modelCompany) {
+//        String rowId = modelCompany.getCompany_id();
+//        Log.i("ARGU", "CHECKER " + rowId);
+//        ModelCompany company = (ModelCompany.find(ModelCompany.class, "companyid = ?", String.valueOf(rowId))).get(0);
+//        company.setCompany_id(modelCompany.getCompany_id());
+//        company.setCompany_name(modelCompany.getCompany_name());
+//        company.setAddress1(modelCompany.getAddress1());
+//        company.setAddress2(modelCompany.getAddress2());
+//        company.setAddress3(modelCompany.getAddress3());
+//        company.setCountry(modelCompany.getCountry());
+//        company.setBackground(modelCompany.getBackground());
+//        company.setCreate_date(modelCompany.getCreate_date());
+//        company.setUpdate_date(modelCompany.getUpdate_date());
+//        company.setStatus(modelCompany.getStatus());
+//        company.save();
+//    }
 
 //    public void isSupplierExisting(ModelCompany modelCompany) {
 //        String id = modelCompany.getCompany_id();
@@ -1978,22 +1996,43 @@ public class APICalls2 {
 //    }
 
     //Category
+    @SuppressLint("CheckResult")
     public void updateDataCategory(ModelCategory modelCategory) {
+        String category_id = modelCategory.getCategory_id();
+        String category_name = modelCategory.getCategory_name();
+        String category_createdate = modelCategory.getCreate_date();
+        String category_updatedate = modelCategory.getUpdate_date();
+        String category_status = modelCategory.getStatus();
+
         String rowId = modelCategory.getCategory_id();
         Log.i("ARGU", "CHECKER " + rowId);
-        ModelCategory category = (ModelCategory.find(ModelCategory.class, "categoryid = ?", String.valueOf(rowId))).get(0);
-        category.setCategory_id(modelCategory.getCategory_id());
-        category.setCategory_name(modelCategory.getCategory_name());
-        category.setCreate_date(modelCategory.getCreate_date());
-        category.setUpdate_date(modelCategory.getUpdate_date());
-        category.setStatus(modelCategory.getStatus());
-        category.save();
+
+        AppDatabase.getInstance(context).modelCategoryDAO().update(category_id, category_name, category_createdate,
+                category_updatedate, category_status, rowId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+                    Log.e(TAG, "ON ERROR");
+                });
+
+//        ModelCategory category = (ModelCategory.find(ModelCategory.class, "categoryid = ?", String.valueOf(rowId))).get(0);
+//        category.setCategory_id(modelCategory.getCategory_id());
+//        category.setCategory_name(modelCategory.getCategory_name());
+//        category.setCreate_date(modelCategory.getCreate_date());
+//        category.setUpdate_date(modelCategory.getUpdate_date());
+//        category.setStatus(modelCategory.getStatus());
+//        category.save();
+
     }
 
     public void isCategoryExisting(ModelCategory modelCategory) {
         String id = modelCategory.getCategory_id();
         Log.i("ARGU", "CHECKER " + id);
-        List<ModelCategory> categoryList = ModelCategory.find(ModelCategory.class, "categoryid = ?", id);
+        List<ModelCategory> categoryList = AppDatabase.getInstance(context).modelCategoryDAO().getListItem(id);
+
         int size = categoryList.size();
 
         if (size > 0) {
@@ -2012,36 +2051,48 @@ public class APICalls2 {
                     updateDataCategory(modelCategory);
             } else {
                 Log.i("ARGULOOP", "SAVE");
-                modelCategory.save();
+//                modelCategory.save();
+                CategoryModelInsert(modelCategory);
                 categoryList.add(modelCategory);
             }
 
         } else {
             Log.i("ARGU", "SAVE - SIZE 0");
-            modelCategory.save();
+//            modelCategory.save();
+            CategoryModelInsert(modelCategory);
             categoryList.add(modelCategory);
         }
     }
 
     //Product
+    @SuppressLint("CheckResult")
     public void updateDataProduct(ModelProduct modelProduct) {
         String rowId = modelProduct.getProduct_id();
         Log.i("ARGU", "CHECKER " + rowId);
-        ModelProduct category = (ModelProduct.find(ModelProduct.class, "productid = ?", String.valueOf(rowId))).get(0);
-        category.setProduct_id(modelProduct.getProduct_id());
-        category.setCompany_id(modelProduct.getCompany_id());
-        category.setProduct_name(modelProduct.getProduct_name());
-        category.setType(modelProduct.getType());
-        category.setCreate_date(modelProduct.getCreate_date());
-        category.setUpdate_date(modelProduct.getUpdate_date());
-        category.setStatus(modelProduct.getStatus());
-        category.save();
+        String product_id = modelProduct.getProduct_id();
+        String company_id = modelProduct.getCompany_id();
+        String product_name = modelProduct.getProduct_name();
+        String type = modelProduct.getType();
+        String create_date = modelProduct.getCreate_date();
+        String update_date = modelProduct.getUpdate_date();
+        String status = modelProduct.getStatus();
+
+        AppDatabase.getInstance(context).modelProductDAO().update(product_id, company_id, product_name,
+                type, create_date, update_date, status, rowId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+                    Log.e(TAG, "ON ERROR");
+                });
     }
 
     public void isProductExisting(ModelProduct modelProduct) {
         String id = modelProduct.getProduct_id();
         Log.i("ARGU", "CHECKER " + id);
-        List<ModelProduct> productList = ModelProduct.find(ModelProduct.class, "productid = ?", id);
+        List<ModelProduct> productList = AppDatabase.getInstance(context).modelProductDAO().getListItem(id);
         int size = productList.size();
 
         if (size > 0) {
@@ -2060,13 +2111,14 @@ public class APICalls2 {
                     updateDataProduct(modelProduct);
             } else {
                 Log.i("ARGULOOP", "SAVE");
-                modelProduct.save();
+//                modelProduct.save();
+                ProductModelInsert(modelProduct);
                 productList.add(modelProduct);
             }
 
         } else {
             Log.i("ARGU", "SAVE - SIZE 0");
-            modelProduct.save();
+            ProductModelInsert(modelProduct);
             productList.add(modelProduct);
         }
     }
@@ -2158,7 +2210,7 @@ public class APICalls2 {
     public void isAuditReportExisting(ModelAuditReports modelAuditReports, String modDate) {
         String id = modelAuditReports.getReport_id();
         Log.i("ARGU", "Audit Report id " + id);
-        List<ModelAuditReports> report = ModelAuditReports.find(ModelAuditReports.class, "reportid = ?", id);
+        List<ModelAuditReports> report = AppDatabase.getInstance(context).modelAuditReportsDAO().getListReport(id);
         int size = report.size();
         Log.i("R-E-P-O-R-T : ", "SIZE - " + size);
         Log.i("R-E-P-O-R-T : ", "SIZE - " + report.toString());
@@ -2191,7 +2243,7 @@ public class APICalls2 {
 //                    auditorsAdapter.notifyDataSetChanged();
             } else {
                 Log.i("ARGULOOP", "SAVE");
-                modelAuditReports.save();
+                AuditReportModelInsert(modelAuditReports);
                 report.add(modelAuditReports);
             }
 
@@ -2201,36 +2253,50 @@ public class APICalls2 {
             //update ung laman via modelAuditReports.getScope
             //check inner model para sa adapater within adapter
             //then save
-            modelAuditReports.save();
+            AuditReportModelInsert(modelAuditReports);
             report.add(modelAuditReports);
         }
     }
 
+    @SuppressLint("CheckResult")
     public void updateAuditReport(ModelAuditReports modelAuditReports) {
         String report_id = modelAuditReports.getReport_id();
         Log.i("ARGU", "CHECKER " + report_id);
         Log.i("ARGULOOP-DATE API", "CHECKER " + modelAuditReports.toString());
 
-        ModelAuditReports auditReports = (ModelAuditReports.find(ModelAuditReports.class,
-                "reportid = ?", String.valueOf(report_id))).get(0);
-        Log.i("ARGULOOP-DATE DB", "CHECKER " + auditReports.toString());
-        auditReports.setReport_id(report_id);
-        auditReports.setReport_no(modelAuditReports.getReport_no());
-        auditReports.setCompany_id(modelAuditReports.getCompany_id());
-        auditReports.setOther_activities(modelAuditReports.getOther_activities());
-        auditReports.setTemplate_id(modelAuditReports.getTemplate_id());
-        auditReports.setAuditor_id(modelAuditReports.getAuditor_id());
-        auditReports.setAudit_close_date(modelAuditReports.getAudit_close_date());
-        auditReports.setOther_issues(modelAuditReports.getOther_issues());
-        auditReports.setOther_issues_executive(modelAuditReports.getOther_issues_executive());
-        auditReports.setAudited_areas(modelAuditReports.getAudited_areas());
-        auditReports.setAreas_to_consider(modelAuditReports.getAreas_to_consider());
-        auditReports.setReviewer_id(modelAuditReports.getReviewer_id());
-        auditReports.setApprover_id(modelAuditReports.getApprover_id());
-        auditReports.setStatus(modelAuditReports.getStatus());
-        auditReports.setVersion(modelAuditReports.getVersion());
-        auditReports.setHead_lead(modelAuditReports.getHead_lead());
-        auditReports.save();
+//        ModelAuditReports auditReports = (ModelAuditReports.find(ModelAuditReports.class,
+//                "reportid = ?", String.valueOf(report_id))).get(0);
+//        Log.i("ARGULOOP-DATE DB", "CHECKER " + auditReports.toString());
+        String report_no = modelAuditReports.getReport_no();
+        String company_id = modelAuditReports.getCompany_id();
+        String other_activities = modelAuditReports.getOther_activities();
+        String template_id = modelAuditReports.getTemplate_id();
+        String auditor_id = modelAuditReports.getAuditor_id();
+        String audit_close_date = modelAuditReports.getAudit_close_date();
+        List<TemplateModelOtherIssuesAudit> other_issues = modelAuditReports.getOther_issues();
+        List<TemplateModelOtherIssuesExecutive> other_issues_executive = modelAuditReports.getOther_issues_executive();
+        String audited_areas = modelAuditReports.getAudited_areas();
+        String areas_to_consider = modelAuditReports.getAreas_to_consider();
+        String reviewer_id = modelAuditReports.getReviewer_id();
+        String approver_id = modelAuditReports.getApprover_id();
+        String status = modelAuditReports.getStatus();
+        String version = modelAuditReports.getVersion();
+        String head_lead = modelAuditReports.getHead_lead();
+
+        AppDatabase.getInstance(context).modelAuditReportsDAO().update(report_id,
+                report_no, company_id, other_activities, template_id,
+                auditor_id, audit_close_date, other_issues,
+                other_issues_executive, audited_areas, areas_to_consider,
+                reviewer_id, approver_id, status, version, head_lead, report_id)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+                    Log.e(TAG, "ON SUCCESS ModelAuditReports");
+                }, throwable -> {
+                    // error
+                    Log.e(TAG, "ON ERROR ModelAuditReports");
+                });
+
 
         Log.i("DISPO-SIZE", "NEW SIZE: " + modelAuditReports.getDisposition());
     }
@@ -2239,7 +2305,7 @@ public class APICalls2 {
     public void isDispositionExisting(ModelDisposition modelDisposition) {
         String id = modelDisposition.getDisposition_id();
         Log.i("ARGU", "CHECKER " + id);
-        List<ModelDisposition> dispositionList = ModelDisposition.find(ModelDisposition.class, "dispositionid = ?", id);
+        List<ModelDisposition> dispositionList = AppDatabase.getInstance(context).modelDispositionDAO().getListItem(id);
         int size = dispositionList.size();
 
         if (size > 0) {
@@ -2257,34 +2323,46 @@ public class APICalls2 {
                     updateDisposition(modelDisposition);
             } else {
                 Log.i("ARGULOOP", "SAVE");
-                modelDisposition.save();
+                DispositionModelInsert(modelDisposition);
                 dispositionList.add(modelDisposition);
             }
 
         } else {
             Log.i("ARGU", "SAVE - SIZE 0");
-            modelDisposition.save();
+            DispositionModelInsert(modelDisposition);
             dispositionList.add(modelDisposition);
         }
     }
 
+    @SuppressLint("CheckResult")
     public void updateDisposition(ModelDisposition modelDisposition) {
         String rowId = modelDisposition.getDisposition_id();
         Log.i("ARGU", "CHECKER " + rowId);
-        ModelDisposition disposition = (ModelDisposition.find(ModelDisposition.class, "dispositionid = ?", String.valueOf(rowId))).get(0);
-        disposition.setDisposition_id(modelDisposition.getDisposition_id());
-        disposition.setDisposition_name(modelDisposition.getDisposition_name());
-        disposition.setCreate_date(modelDisposition.getCreate_date());
-        disposition.setUpdate_date(modelDisposition.getUpdate_date());
-        disposition.setStatus(modelDisposition.getStatus());
-        disposition.save();
+//        ModelDisposition disposition = (ModelDisposition.find(ModelDisposition.class, "dispositionid = ?", String.valueOf(rowId))).get(0);
+        String disposition_id = modelDisposition.getDisposition_id();
+        String disposition_name = modelDisposition.getDisposition_name();
+        String create_date = modelDisposition.getCreate_date();
+        String update_date = modelDisposition.getUpdate_date();
+        String status = modelDisposition.getStatus();
+
+        AppDatabase.getInstance(context).modelDispositionDAO().update(disposition_id, disposition_name,
+                create_date, update_date, status, rowId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+                    Log.e(TAG, "ON SUCCESS ModelTypeAudit");
+                }, throwable -> {
+                    // error
+                    Log.e(TAG, "ON ERROR ModelTypeAudit");
+                });
+
     }
 
     //Distribution
     public void isDistributionExisting(ModelDistribution modelDistribution) {
         String id = modelDistribution.getDistribution_id();
         Log.i("ARGU", "CHECKER " + id);
-        List<ModelDistribution> modelDistributions = ModelDistribution.find(ModelDistribution.class, "distributionid = ?", id);
+        List<ModelDistribution> modelDistributions = AppDatabase.getInstance(context).modelDistributionDAO().getListItem(id);
         int size = modelDistributions.size();
 
         if (size > 0) {
@@ -2302,27 +2380,39 @@ public class APICalls2 {
                     updateDistribution(modelDistribution);
             } else {
                 Log.i("ARGULOOP", "SAVE");
-                modelDistribution.save();
+                DistributionModelInsert(modelDistribution);
                 modelDistributions.add(modelDistribution);
             }
 
         } else {
             Log.i("ARGU", "SAVE - SIZE 0");
-            modelDistribution.save();
+            DistributionModelInsert(modelDistribution);
             modelDistributions.add(modelDistribution);
         }
     }
 
+    @SuppressLint("CheckResult")
     public void updateDistribution(ModelDistribution modelDistribution) {
         String rowId = modelDistribution.getDistribution_id();
         Log.i("ARGU", "CHECKER " + rowId);
-        ModelDistribution modelDistribution1 = (ModelDistribution.find(ModelDistribution.class, "distributionid = ?", String.valueOf(rowId))).get(0);
-        modelDistribution1.setDistribution_id(modelDistribution.getDistribution_id());
-        modelDistribution1.setDistribution_name(modelDistribution.getDistribution_name());
-        modelDistribution1.setCreate_date(modelDistribution.getCreate_date());
-        modelDistribution1.setUpdate_date(modelDistribution.getUpdate_date());
-        modelDistribution1.setStatus(modelDistribution.getStatus());
-        modelDistribution1.save();
+//        ModelDistribution modelDistribution1 = (ModelDistribution.find(ModelDistribution.class, "distributionid = ?", String.valueOf(rowId))).get(0);
+        String distribution_id = modelDistribution.getDistribution_id();
+        String distribution_name = modelDistribution.getDistribution_name();
+        String create_date = modelDistribution.getCreate_date();
+        String update_date = modelDistribution.getUpdate_date();
+        String status = modelDistribution.getStatus();
+
+        AppDatabase.getInstance(context).modelDistributionDAO().update(distribution_id, distribution_name,
+                create_date, update_date, status, rowId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+                    Log.e(TAG, "ON SUCCESS ModelTypeAudit");
+                }, throwable -> {
+                    // error
+                    Log.e(TAG, "ON ERROR ModelTypeAudit");
+                });
+
     }
 
     //Template
@@ -2558,11 +2648,10 @@ public class APICalls2 {
     }
 
 
-
-
     //INSERT
 
 
+    @SuppressLint("CheckResult")
     public void ApproverInsert(List<ApproverModel> approverModel) {
         AppDatabase.getInstance(context).approverModelDAO().insert(approverModel)
                 .subscribeOn(Schedulers.io())
@@ -2575,6 +2664,8 @@ public class APICalls2 {
 
                 });
     }
+
+    @SuppressLint("CheckResult")
     public void AuditorsModelInsert(List<AuditorsModel> auditorsModel) {
 
         AppDatabase.getInstance(context).auditorsModelDAO().insert(auditorsModel)
@@ -2590,6 +2681,7 @@ public class APICalls2 {
     }
 
 
+    @SuppressLint("CheckResult")
     public void ConfigModelInsert(List<ConfigModel> configModels) {
 
         AppDatabase.getInstance(context).configModelDAO().insert(configModels)
@@ -2604,4 +2696,130 @@ public class APICalls2 {
                 });
     }
 
+
+    @SuppressLint("CheckResult")
+    public void ClassifocationModelInsert(ModelClassification modelClassifications) {
+        AppDatabase.getInstance(context).modelClassificationDAO().insert(modelClassifications)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    public void ClassifocationCategoryModelInsert(ModelClassificationCategory modelClassificationCategory) {
+
+        AppDatabase.getInstance(context).modelClassificationCategoryDAO().insert(modelClassificationCategory)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    public void DateofAuditModelInsert(ModelDateOfAudit modelDateOfAudit) {
+        AppDatabase.getInstance(context).modelDateOfAuditDAO().insert(modelDateOfAudit)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    public void ReportActivitiesModelInsert(ModelReportActivities modelReportActivities) {
+        AppDatabase.getInstance(context).modelReportActivitiesDAO().insert(modelReportActivities)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    public void CategoryModelInsert(ModelCategory modelCategory) {
+        AppDatabase.getInstance(context).modelCategoryDAO().insert(modelCategory)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    public void ProductModelInsert(ModelProduct modelProduct) {
+        AppDatabase.getInstance(context).modelProductDAO().insert(modelProduct)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    public void AuditReportModelInsert(ModelAuditReports modelAuditReports) {
+        AppDatabase.getInstance(context).modelAuditReportsDAO().insert(modelAuditReports)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
+    }
+
+    @SuppressLint("CheckResult")
+    public void DistributionModelInsert(ModelDistribution modelDistribution) {
+        AppDatabase.getInstance(context).modelDistributionDAO().insert(modelDistribution)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
+    }
+
+    public void DispositionModelInsert(ModelDisposition modelDisposition) {
+        AppDatabase.getInstance(context).modelDispositionDAO().insert(modelDisposition)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {
+                    // success
+
+                    Log.e(TAG, "ON SUCCESS");
+                }, throwable -> {
+                    // error
+
+                });
+    }
 }

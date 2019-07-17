@@ -16,11 +16,11 @@ import io.reactivex.Flowable;
 @Dao
 public interface ModelCompanyDAO  {
     @Query("select * from ModelCompany")
-    Flowable<List<ModelCompany>> getApproverList();
+    Flowable<List<ModelCompany>> getList();
 
 
-    @Query("select * from ModelCompany WHERE approver_id = :approver_id")
-    Flowable<List<ApproverModel>> getListItem(String approver_id);
+//    @Query("select * from ModelCompany WHERE approver_id = :approver_id")
+//    Flowable<List<ApproverModel>> getListItem(String approver_id);
 
 //    @Query("UPDATE ModelCompany SET approver_id=:approver_id, firstname =:firstname, " +
 //            "middlename =:middlename, lastname =:lastname, designation =:designation, " +
