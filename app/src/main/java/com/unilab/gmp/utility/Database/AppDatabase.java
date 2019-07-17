@@ -15,6 +15,7 @@ import com.unilab.gmp.DAO.ModelApproverInfoDAO;
 import com.unilab.gmp.DAO.ModelAuditReportDetailsDAO;
 import com.unilab.gmp.DAO.ModelAuditReportReplyDAO;
 import com.unilab.gmp.DAO.ModelAuditReportWrapUpDateDAO;
+import com.unilab.gmp.DAO.ModelAuditReportsDAO;
 import com.unilab.gmp.DAO.ModelAuditReportsListDAO;
 import com.unilab.gmp.DAO.ModelAuditorInfoDAO;
 import com.unilab.gmp.DAO.ModelAuditorsDAO;
@@ -164,6 +165,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ModelAuditReportDetailsDAO modelAuditReportDetailsDAO();
     public abstract ModelAuditReportReplyDAO modelAuditReportReplyDAO();
     public abstract ModelAuditReportsListDAO modelAuditReportsListDAO();
+    public abstract ModelAuditReportsDAO modelAuditReportsDAO();
     public abstract ModelCategoryDAO modelCategoryDAO();
     public abstract ModelCategoryInfoDAO modelCategoryInfoDAO();
     public abstract ModelClassificationDAO modelClassificationDAO();
