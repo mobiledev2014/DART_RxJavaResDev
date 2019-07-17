@@ -29,4 +29,15 @@ import java.util.List;
 
      @Query("DELETE FROM TemplateModelCompanyBackgroundMajorChanges WHERE report_id = :reportId")
      void deleteId(String reportId);
+
+     @Query("select * from TemplateModelCompanyBackgroundMajorChanges WHERE company_id = :companyId AND report_id = '0'")
+     List<TemplateModelCompanyBackgroundMajorChanges> getByCompanyAndReportId(String companyId);
+
+     @Query("select * from TemplateModelCompanyBackgroundMajorChanges WHERE report_id = report_id")
+     List<TemplateModelCompanyBackgroundMajorChanges> getByReportId(String reportId);
+
+     @Query("UPDATE TemplateModelCompanyBackgroundMajorChanges WHERE report_id = :reportId")
+     void updateReportId(String reportId);
+
+
  }

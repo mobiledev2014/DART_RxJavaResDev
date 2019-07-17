@@ -29,6 +29,10 @@ public interface ReviewerModelDAO {
     @Query("select * from ReviewerModel WHERE reviewer_id = :reviewerId")
     Flowable<List<ReviewerModel>> getByReviewerId(String reviewerId);
 
+    @Query("select * from ReviewerModel WHERE status > 0")
+    List<ReviewerModel> getByStatus();
+
+
     @Query("UPDATE ReviewerModel SET reviewer_id = :reviewer_id, firstname = :firstname,middlename = :middlename," +
             "lastname = :lastname, designation = :designation, company = :company, department = :department," +
             "create_date = :createdate, update_date = :updatedate, email = :email, status = :status")

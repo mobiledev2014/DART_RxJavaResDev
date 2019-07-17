@@ -27,4 +27,10 @@ import io.reactivex.Flowable;
 
      @Query("DELETE FROM TemplateModelPresentDuringMeeting WHERE report_id = :reportId")
      void deleteId(String reportId);
-}
+
+     @Query("select * from TemplateModelPresentDuringMeeting WHERE report_id = :reportId")
+     List<TemplateModelPresentDuringMeeting> getByReportId(String reportId);
+
+     @Query("UPDATE TemplateModelPresentDuringMeeting SET report_id = :reportId WHERE report_id = :reportId")
+     void updateReportId(String reportId);
+ }

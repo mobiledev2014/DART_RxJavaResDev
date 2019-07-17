@@ -29,4 +29,16 @@ public interface TemplateModelSummaryRecommendationDAO {
 
     @Query("DELETE FROM TemplateModelSummaryRecommendation WHERE report_id = :reportId")
     void deleteId(String reportId);
+
+    @Query("select * from TemplateModelSummaryRecommendation WHERE report_id = :reportId")
+    List<TemplateModelSummaryRecommendation> getByReportId(String reportId);
+
+    @Query("select * from TemplateModelSummaryRecommendation WHERE report_id = :reportId AND element > '0'")
+    List<TemplateModelSummaryRecommendation> getByReportAndElementId(String reportId);
+
+
+    @Query("select * from TemplateModelSummaryRecommendation WHERE report_id = :reportId")
+    void updateReportId(String reportId);
+
+
 }

@@ -955,7 +955,7 @@ public class APICalls2 {
 //                (ModelTemplateQuestionDetails.class, "elementid = ? AND templateid = ? AND questionid = ?",
 //                        id, mteq.getTemplate_id(), mteq.getQuestion_id())).get(0);
 
-        AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().findElementTemplateQuestionId(id, mteq.getTemplate_id(), mteq.getQuestion_id())
+        AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().getByElementTemplateQuestionId(id, mteq.getTemplate_id(), mteq.getQuestion_id())
                 .observeOn(Schedulers.io())
                 .subscribe(template -> {
                     template.setQuestion_id(mteq.getQuestion_id());
@@ -2465,7 +2465,7 @@ public class APICalls2 {
                 (ModelTemplateQuestionDetails.class, "elementid = ? AND templateid = ? AND questionid = ?",
                         id, modelTemplateQuestionDetails.getTemplate_id(), modelTemplateQuestionDetails.getQuestion_id());
 */
-        AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().findElementTemplateQuestionIdList(id, modelTemplateQuestionDetails.getTemplate_id(), modelTemplateQuestionDetails.getQuestion_id())
+        AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().getByElementTemplateQuestionIdList(id, modelTemplateQuestionDetails.getTemplate_id(), modelTemplateQuestionDetails.getQuestion_id())
                 .observeOn(Schedulers.io())
                 .subscribe(templateList -> {
                     int size = templateList.size();

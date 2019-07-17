@@ -17,7 +17,7 @@ import io.reactivex.Flowable;
 
 @Dao
 public interface TemplateModelOtherIssuesExecutiveDAO {
-    @Query("select * from TemplateModelOtherIssuesExecutive")
+    @Query("SELECT * from TemplateModelOtherIssuesExecutive")
     Flowable<List<TemplateModelOtherIssuesExecutive>> getItemList();
 
     @Insert
@@ -28,4 +28,13 @@ public interface TemplateModelOtherIssuesExecutiveDAO {
 
     @Query("DELETE FROM TemplateModelOtherIssuesExecutive WHERE report_id = :reportId")
     void deleteId(String reportId);
+
+    @Query("SELECT * FROM TemplateModelOtherIssuesExecutive WHERE report_id = :reportId")
+    List<TemplateModelOtherIssuesExecutive> getByReportId(String reportId);
+
+    @Query("UPDATE TemplateModelOtherIssuesExecutive SET report_id = :reportId WHERE report_id = :reportId")
+    void updateReportId(String reportId);
+
+
+
 }

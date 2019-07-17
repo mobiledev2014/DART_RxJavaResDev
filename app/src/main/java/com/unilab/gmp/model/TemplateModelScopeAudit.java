@@ -7,7 +7,10 @@ import com.unilab.gmp.adapter.templates.AdapterScopeAuditInterest;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.room.Entity;import lombok.Getter;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -18,6 +21,10 @@ import lombok.Setter;
 @Getter
 @Entity
 public class TemplateModelScopeAudit  {
+
+    @PrimaryKey(autoGenerate = true)
+    int id;
+
     String audit_id = "";
     String scope_id = "";
     @SerializedName("scope_detail")

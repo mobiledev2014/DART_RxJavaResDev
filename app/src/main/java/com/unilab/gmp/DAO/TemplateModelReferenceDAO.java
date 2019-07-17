@@ -29,4 +29,10 @@ public interface TemplateModelReferenceDAO {
     @Query("DELETE FROM TemplateModelReference WHERE report_id = :reportId")
     void deleteId(String reportId);
 
+    @Query("select * from TemplateModelReference WHERE report_id = :reportId")
+    List<TemplateModelReference> getByReportId(String reportId);
+
+    @Query("UPDATE TemplateModelReference SET report_id = :reportId WHERE report_id = :reportId")
+    void updateReportId(String reportId);
+
 }

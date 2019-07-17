@@ -28,4 +28,11 @@ public interface TemplateModelTranslatorDAO {
 
     @Query("DELETE FROM TemplateModelTranslator WHERE report_id = :reportId")
     void deleteId(String reportId);
+
+    @Query("select * from TemplateModelTranslator WHERE report_id = :reportId")
+    List<TemplateModelTranslator> getByReportId(String reportId);
+
+    @Query("UPDATE TemplateModelTranslator SET report_id = :reportId WHERE report_id = :reportId")
+    void updateReportId(String reportId);
+
 }

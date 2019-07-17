@@ -29,4 +29,10 @@ public interface TemplateModelScopeAuditDAO {
     @Query("DELETE FROM TemplateModelScopeAudit WHERE report_id = :reportId")
     void deleteId(String reportId);
 
+    @Query("select * from TemplateModelScopeAudit WHERE report_id = :reportId")
+    List<TemplateModelScopeAudit> getReportId(String reportId);
+
+    @Query("UPDATE TemplateModelScopeAudit SET report_id = :reportId WHERE report_id = :reportId")
+    void updateReportId(String reportId);
+
 }

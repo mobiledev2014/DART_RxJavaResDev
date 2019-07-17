@@ -4,7 +4,10 @@ import androidx.room.Entity;
 
 import com.orm.SugarRecord;
 
-import androidx.room.Entity;import lombok.Getter;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -15,6 +18,10 @@ import lombok.Setter;
 @Setter
 @Entity
 public class TemplateModelScopeAuditInterest  {
+
+    @PrimaryKey(autoGenerate = true)
+    int id;
+
     String template_id;
     int selected;
     String product_name = "";

@@ -440,7 +440,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         //--- Lead Auditor setting end
 
         //--- Reviewer setting start
-        reviewerModels = ReviewerModel.find(ReviewerModel.class, "status > 0");
+//        reviewerModels = ReviewerModel.find(ReviewerModel.class, "status > 0");
+        reviewerModels = AppDatabase.getInstance(context).reviewerModelDAO().getByStatus();
         int rev = 0;
 
         final List<String> reviewerList = new ArrayList<>();
@@ -535,10 +536,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
         });
         //--- Approver setting end
         // --- Audit Scope
-        templateModelScopeAudits = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
-
-        templateModelScopeAuditsInterest = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ?", report.getReport_id());
-
+//        templateModelScopeAudits = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
+        templateModelScopeAudits = AppDatabase.getInstance(context).templateModelScopeAuditDAO().getReportId(report.getReport_id());
+//        templateModelScopeAuditsInterest = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ?", report.getReport_id());
+        templateModelScopeAuditsInterest = AppDatabase.getInstance(context).templateModelScopeAuditInterestDAO().getByReportId(report.getReport_id());
         adapterScopeAudit = new AdapterScopeAudit(templateModelScopeAudits, context, modelTemplates.getCompany_id(), null, this, btnTemplateNextScopeAuditAdd);
         lvTemplateNextScopeAudit.setNestedScrollingEnabled(false);
         lvTemplateNextScopeAudit.setLayoutManager(new LinearLayoutManager(context));
@@ -564,8 +565,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
 
         // --- Other issues Audit
-        templateModelOtherIssuesAudits = TemplateModelOtherIssuesAudit.find(
-                TemplateModelOtherIssuesAudit.class, "reportid = ?", report.getReport_id());
+//        templateModelOtherIssuesAudits = TemplateModelOtherIssuesAudit.find(
+//                TemplateModelOtherIssuesAudit.class, "reportid = ?", report.getReport_id());
+
+        templateModelOtherIssuesAudits = AppDatabase.getInstance(context).templateModelOtherIssuesAuditDAO().getByReportId(report.getReport_id());
+
         adapterOthersIssueAudit = new AdapterOthersIssueAudit(templateModelOtherIssuesAudits, context);
         lvTemplateNextSummaryRecommendationOtherIssuesAudit.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextSummaryRecommendationOtherIssuesAudit.setItemAnimator(new DefaultItemAnimator());
@@ -576,8 +580,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
 
         // --- Other issues Executive
-        templateModelOtherIssuesExecutives = TemplateModelOtherIssuesExecutive.find(
-                TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
+//        templateModelOtherIssuesExecutives = TemplateModelOtherIssuesExecutive.find(
+//                TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
+        templateModelOtherIssuesExecutives = AppDatabase.getInstance(context).templateModelOtherIssuesExecutiveDAO().getByReportId(report.getReport_id());
         adapterOthersIssueExecutive = new AdapterOthersIssueExecutive(templateModelOtherIssuesExecutives, context);
         lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextSummaryRecommendationOtherIssuesExecutive.setItemAnimator(new DefaultItemAnimator());
@@ -593,7 +598,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextReference.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextReference.setAdapter(adapterReference);
         lvTemplateNextReference.addItemDecoration(new SimpleDividerItemDecoration(context));
-        templateModelReferences.addAll(TemplateModelReference.find(TemplateModelReference.class, "reportid = ?", report.getReport_id()));
+//        templateModelReferences.addAll(TemplateModelReference.find(TemplateModelReference.class, "reportid = ?", report.getReport_id()));
+        templateModelReferences.addAll(AppDatabase.getInstance(context).templateModelReferenceDAO().getByReportId(report.getReport_id()));
         if (templateModelReferences.size() <= 0) {
             addReference();
         }
@@ -604,7 +610,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextPreAuditDoc.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextPreAuditDoc.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextPreAuditDoc.setAdapter(adapterPreAuditDoc);
-        templateModelPreAuditDocs.addAll(TemplateModelPreAuditDoc.find(TemplateModelPreAuditDoc.class, " reportid = ?", report.getReport_id()));
+//        templateModelPreAuditDocs.addAll(TemplateModelPreAuditDoc.find(TemplateModelPreAuditDoc.class, " reportid = ?", report.getReport_id()));
+        templateModelPreAuditDocs.addAll(AppDatabase.getInstance(context).templateModelPreAuditDocDAO().getReportById(report.getReport_id()));
+
         if (templateModelPreAuditDocs.size() <= 0) {
             addPreAuditDoc();
         }
@@ -615,7 +623,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextPresentDuringMeeting.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextPresentDuringMeeting.setAdapter(adapterPresentDuringMeeting);
         lvTemplateNextPresentDuringMeeting.addItemDecoration(new SimpleDividerItemDecoration(context));
-        templateModelPresentDuringMeetings.addAll(TemplateModelPresentDuringMeeting.find(TemplateModelPresentDuringMeeting.class, "reportid = ?", report.getReport_id()));
+//        templateModelPresentDuringMeetings.addAll(TemplateModelPresentDuringMeeting.find(TemplateModelPresentDuringMeeting.class, "reportid = ?", report.getReport_id()));
+        templateModelPresentDuringMeetings.addAll(AppDatabase.getInstance(context).templateModelPresentDuringMeetingDAO().getByReportId(report.getReport_id()));
         if (templateModelPresentDuringMeetings.size() <= 0) {
             addPresentDuringMeeting();
         }
@@ -627,8 +636,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextPersonnelInspection.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextPersonnelInspection.setAdapter(adapterPersonelMetDuring);
         lvTemplateNextPersonnelInspection.addItemDecoration(new SimpleDividerItemDecoration(context));
-        templateModelPersonelMetDurings.addAll(TemplateModelPersonelMetDuring.find(TemplateModelPersonelMetDuring.class, "reportid = ?", report.getReport_id()));
-        if (templateModelPersonelMetDurings.size() <= 0) {
+//        templateModelPersonelMetDurings.addAll(TemplateModelPersonelMetDuring.find(TemplateModelPersonelMetDuring.class, "reportid = ?", report.getReport_id()));
+        templateModelPersonelMetDurings.addAll(AppDatabase.getInstance(context).templateModelPersonelMetDuringDAO().getByReportId(report.getReport_id()));
+                if (templateModelPersonelMetDurings.size() <= 0) {
             addPersonelMet();
         }
         // --- Distribution List
@@ -637,7 +647,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextDistributionList.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextDistributionList.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextDistributionList.setAdapter(adapterDistributionList);
-        templateModelDistributionLists.addAll(TemplateModelDistributionList.find(TemplateModelDistributionList.class, "reportid = ?", report.getReport_id()));
+//        templateModelDistributionLists.addAll(TemplateModelDistributionList.find(TemplateModelDistributionList.class, "reportid = ?", report.getReport_id()));
+        templateModelDistributionLists.addAll(AppDatabase.getInstance(context).templateModelDistributionListDAO().getByReportId(report.getReport_id()));
         if (templateModelDistributionLists.size() <= 0) {
             addDistribution();
         }
@@ -648,7 +659,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextOtherDistribution.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextOtherDistribution.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextOtherDistribution.setAdapter(adapterDistributionOthers);
-        templateModelDistributionOthers.addAll(TemplateModelDistributionOthers.find(TemplateModelDistributionOthers.class, "reportid = ?", report.getReport_id()));
+//        templateModelDistributionOthers.addAll(TemplateModelDistributionOthers.find(TemplateModelDistributionOthers.class, "reportid = ?", report.getReport_id()));
+        templateModelDistributionOthers.addAll(AppDatabase.getInstance(context).templateModelDistributionOthersDAO().getByReportId(report.getReport_id()));
         if (templateModelDistributionOthers.size() <= 0) {
             addDistributionOthers();
         }
@@ -660,15 +672,18 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextSummaryRecommendation.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextSummaryRecommendation.setAdapter(adapterSummaryRecommendation);
         lvTemplateNextSummaryRecommendation.addItemDecoration(new SimpleDividerItemDecoration(context));
-        templateModelSummaryRecommendations.addAll(TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "reportid = ?", report.getReport_id()));
+//        templateModelSummaryRecommendations.addAll(TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "reportid = ?", report.getReport_id()));
+        templateModelSummaryRecommendations.addAll(AppDatabase.getInstance(context).templateModelSummaryRecommendationDAO().getByReportId(report.getReport_id()));
         if (templateModelSummaryRecommendations.size() <= 0) {
             addRecommendation();
         }
 
         templateModelCompanyBackgroundNames = new ArrayList<>();
-        templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", report.getCompany_id()));
+//        templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "companyid = ?", report.getCompany_id()));
+        templateModelCompanyBackgroundNames.addAll(AppDatabase.getInstance(context).templateModelCompanyBackgroundNameDAO().getByCompanyId(report.getCompany_id()));
         adapterCompanyBackgroundName = new AdapterCompanyBackgroundName(templateModelCompanyBackgroundNames, context, templateModelCompanyBackgroundNames.size());
-        templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "reportid = ?", report.getReport_id()));
+//        templateModelCompanyBackgroundNames.addAll(TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "reportid = ?", report.getReport_id()));
+        templateModelCompanyBackgroundNames.addAll(AppDatabase.getInstance(context).templateModelCompanyBackgroundNameDAO().getByReportId(report.getReport_id()));
         lvTemplateNextCompanyBackgroundName.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextCompanyBackgroundName.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextCompanyBackgroundName.setAdapter(adapterCompanyBackgroundName);
@@ -677,13 +692,18 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
 
         templateModelCompanyBackgroundMajorChanges = new ArrayList<>();
-        sitemajorchangescount = TemplateModelCompanyBackgroundMajorChanges
-                .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", modelTemplates.getCompany_id()).size();
-        templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges
-                .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", modelTemplates.getCompany_id()));
+//        sitemajorchangescount = TemplateModelCompanyBackgroundMajorChanges
+//                .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", modelTemplates.getCompany_id()).size();
+        sitemajorchangescount =
+                AppDatabase.getInstance(context).templateModelCompanyBackgroundMajorChangesDAO().getByCompanyAndReportId(modelTemplates.getCompany_id()).size()
+
+//        templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges
+//                .find(TemplateModelCompanyBackgroundMajorChanges.class, "companyid = ? AND reportid = '0'", modelTemplates.getCompany_id()));
+        templateModelCompanyBackgroundMajorChanges.addAll(AppDatabase.getInstance(context).templateModelCompanyBackgroundMajorChangesDAO().getByCompanyAndReportId(modelTemplates.getCompany_id()));
 
         adapterCompanyBackgroundMajorChanges = new AdapterCompanyBackgroundMajorChanges(templateModelCompanyBackgroundMajorChanges, context, templateModelCompanyBackgroundMajorChanges.size());
-        templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id()));
+//        templateModelCompanyBackgroundMajorChanges.addAll(TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id()));
+        templateModelCompanyBackgroundMajorChanges.addAll(AppDatabase.getInstance(context).templateModelCompanyBackgroundMajorChangesDAO().getByReportId(report.getReport_id()));
 
         lvTemplateNextCompanyBackgroundMajorChanges.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextCompanyBackgroundMajorChanges.setItemAnimator(new DefaultItemAnimator());
@@ -701,7 +721,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextAuditors.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextAuditors.setAdapter(adapterAuditors);
         lvTemplateNextAuditors.addItemDecoration(new SimpleDividerItemDecoration(context));
-        templateModelAuditorses.addAll(TemplateModelAuditors.find(TemplateModelAuditors.class, "reportid = ?", report.getReport_id()));
+//        templateModelAuditorses.addAll(TemplateModelAuditors.find(TemplateModelAuditors.class, "reportid = ?", report.getReport_id()));
+        templateModelAuditorses.addAll(AppDatabase.getInstance(context).templateModelAuditorsDAO().getByReportId(report.getReport_id()));
         if (templateModelAuditorses.size() <= 0) {
             addAuditors();
         }
@@ -711,7 +732,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         lvTemplateNextTranslator.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextTranslator.setItemAnimator(new DefaultItemAnimator());
         lvTemplateNextTranslator.setAdapter(adapterTranslator);
-        templateModelTranslators.addAll(TemplateModelTranslator.find(TemplateModelTranslator.class, "reportid = ?", report.getReport_id()));
+//        templateModelTranslators.addAll(TemplateModelTranslator.find(TemplateModelTranslator.class, "reportid = ?", report.getReport_id()));
+        templateModelTranslators.addAll(AppDatabase.getInstance(context).templateModelTranslatorDAO().getByReportId(report.getReport_id()));
         if (templateModelTranslators.size() <= 0) {
             addTranslator();
         }
@@ -723,7 +745,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
             etTemplateNextCompanyBackgroundHistory.setText(mc.get(0).getBackground());
         }
 
-        List<ModelSiteDate> modelSiteDates = ModelSiteDate.find(ModelSiteDate.class, "companyid = ?", modelTemplates.getCompany_id());
+//        List<ModelSiteDate> modelSiteDates = ModelSiteDate.find(ModelSiteDate.class, "companyid = ?", modelTemplates.getCompany_id());
+        List<ModelSiteDate> modelSiteDates = AppDatabase.getInstance(context).modelSiteDateDAO().getByCompanyId(modelTemplates.getCompany_id());
         AdapterInspectionDate adapterInspectionDate = new AdapterInspectionDate(context, modelSiteDates);
         lvTemplateNextCompanyBackgroundInspectionDate.setLayoutManager(new LinearLayoutManager(context));
         lvTemplateNextCompanyBackgroundInspectionDate.setItemAnimator(new DefaultItemAnimator());
@@ -758,8 +781,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         List<ModelReportQuestion> mrq = AppDatabase.getInstance(context).modelReportQuestionDAO().getByAnswerAndReportIdTempData();
 
-        List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
-                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+//        List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
+//                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+        List<ModelTemplateQuestionDetails> questionList = AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().getByTemplateId(report.getTemplate_id());
+
         Log.i("QUESTION_FILTER", "QUESTION COUNT : " + questionList.size());
         Log.i("QUESTION_FILTER", "ANSWER COUNT : " + mrq.size());
 
@@ -800,8 +825,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         List<ModelReportQuestion> mrq2 = AppDatabase.getInstance(context).modelReportQuestionDAO().getByAnswerAndReportId(report.getReport_id());
 
-        List<ModelTemplateQuestionDetails> questionList2 = ModelTemplateQuestionDetails.find
-                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+//        List<ModelTemplateQuestionDetails> questionList2 = ModelTemplateQuestionDetails.find
+//                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+
+        List<ModelTemplateQuestionDetails> questionList2 = AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().getByTemplateId(report.getTemplate_id());
+
         Log.i("QUESTION_FILTER", "QUESTION COUNT : " + questionList2.size());
         Log.i("QUESTION_FILTER", "ANSWER COUNT : " + mrq.size());
 
@@ -989,8 +1017,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 found = true;
         }
 
-        List<TemplateModelAuditors> a = TemplateModelAuditors.find(TemplateModelAuditors.class,
-                "reportid = ?", report.getReport_id());
+//        List<TemplateModelAuditors> a = TemplateModelAuditors.find(TemplateModelAuditors.class,
+//                "reportid = ?", report.getReport_id());
+
+        List<TemplateModelAuditors> a = AppDatabase.getInstance(context).templateModelAuditorsDAO().getByReportId(report.getReport_id());
+
         if (a.size() > 0) {
             for (TemplateModelAuditors am : a) {
                 List<AuditorsModel> a2 = AuditorsModel.find(AuditorsModel.class,
@@ -1267,7 +1298,9 @@ public class NextSelectedAuditReportFragment extends Fragment {
         if (rev_index > 0)
             rev_index -= 1;
         mrr.setReviewer_id(reviewerModels.get(rev_index).getReviewer_id());
-        mrr.save();
+//        mrr.save();
+        AppDatabase.getInstance(context).modelReportReviewerDAO().insert(mrr);
+
 
         ModelReportApprover mra = new ModelReportApprover();
         mra.setReport_id(mar.getReport_id());
@@ -1317,8 +1350,10 @@ public class NextSelectedAuditReportFragment extends Fragment {
         List<ModelReportQuestion> tempQuestions = AppDatabase.getInstance(context).modelReportQuestionDAO().getByAnswerAndReportIdTempData();
 
 
-        List<ModelTemplateQuestionDetails> tempAnswers = ModelTemplateQuestionDetails.find
-                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+//        List<ModelTemplateQuestionDetails> tempAnswers = ModelTemplateQuestionDetails.find
+//                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+
+        List<ModelTemplateQuestionDetails> tempAnswers = AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().getByTemplateId(report.getTemplate_id());
 
         List<String> answers = new ArrayList<>();
 
@@ -1346,8 +1381,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         List<ModelReportQuestion> questions = AppDatabase.getInstance(context).modelReportQuestionDAO().getByAnswerAndReportId(report.getReport_id());
 
-        List<ModelTemplateQuestionDetails> answerList = ModelTemplateQuestionDetails.find
-                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+//        List<ModelTemplateQuestionDetails> answerList = ModelTemplateQuestionDetails.find
+//                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+
+        List<ModelTemplateQuestionDetails> answerList = AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().getByTemplateId(report.getTemplate_id());
+
 
         List<String> answers2 = new ArrayList<>();
 
@@ -1399,14 +1437,20 @@ public class NextSelectedAuditReportFragment extends Fragment {
 //            List<ModelReportQuestion> lmrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ? AND questionid = ?", report_id, mtqd.getQuestion_id());
             List<ModelReportQuestion> lmrq = AppDatabase.getInstance(context).modelReportQuestionDAO().getByReportAndQuestionId(report.getReport_id(), mtqd.getQuestion_id());
 
+            String question_id = mtqd.getQuestion_id();
+            String answer_id = mtqd.getAnswer_id();
+            String naoption_id = mtqd.getNaoption_id();
+            String category_id = mtqd.getCategory_id();
+            String answer_details = mtqd.getAnswer_details();
+
             if (lmrq.size() > 0) {
-                lmrq.get(0).setReport_id(report_id);
-                lmrq.get(0).setQuestion_id(mtqd.getQuestion_id());
-                lmrq.get(0).setAnswer_id(mtqd.getAnswer_id());
-                lmrq.get(0).setNaoption_id(mtqd.getNaoption_id());
-                lmrq.get(0).setCategory_id(mtqd.getCategory_id());
-                lmrq.get(0).setAnswer_details(mtqd.getAnswer_details());
-                lmrq.get(0).save();
+//                lmrq.get(0).setReport_id(report_id);
+//                lmrq.get(0).setQuestion_id(mtqd.getQuestion_id());
+//                lmrq.get(0).setAnswer_id(mtqd.getAnswer_id());
+//                lmrq.get(0).setNaoption_id(mtqd.getNaoption_id());
+//                lmrq.get(0).setCategory_id(mtqd.getCategory_id());
+//                lmrq.get(0).setAnswer_details(mtqd.getAnswer_details());
+                AppDatabase.getInstance(context).modelReportQuestionDAO().updateByReportAndQuestionId(report_id,question_id,answer_id,category_id,answer_details);
             } else {
                 ModelReportQuestion mrq = new ModelReportQuestion();
                 mrq.setReport_id(report_id);
@@ -1415,14 +1459,15 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 mrq.setNaoption_id(mtqd.getNaoption_id());
                 mrq.setCategory_id(mtqd.getCategory_id());
                 mrq.setAnswer_details(mtqd.getAnswer_details());
-                mrq.save();
+                AppDatabase.getInstance(context).modelReportQuestionDAO().insert(mrq);
             }
         }
 
-        List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
-
+//        List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+        List<ModelReportQuestion> modelReportQuestion  = AppDatabase.getInstance(context).modelReportQuestionDAO().getTempData();
         if (modelReportQuestion.size() > 0) {
-            ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+//            ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+            AppDatabase.getInstance(context).modelReportQuestionDAO().deleteTempData();
         }
 
     }
@@ -1590,24 +1635,29 @@ public class NextSelectedAuditReportFragment extends Fragment {
         dialogCancelTemplate.setContentView(R.layout.dialog_cancel_template_confirmation);
         dialogCancelTemplate.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        Button yes = (Button) dialogCancelTemplate.findViewById(R.id.btn_yes);
-        Button no = (Button) dialogCancelTemplate.findViewById(R.id.btn_no);
+        Button yes = dialogCancelTemplate.findViewById(R.id.btn_yes);
+        Button no = dialogCancelTemplate.findViewById(R.id.btn_no);
 
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+        yes.setOnClickListener(view -> {
+//            List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+//
+//            if (modelReportQuestion.size() > 0) {
+//                ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+//            }
 
-                if (modelReportQuestion.size() > 0) {
-                    ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", "TEMPData");
-                }
 
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fl_content, auditReportFragment).addToBackStack(null).commit();
-                dialogCancelTemplate.dismiss();
+//        List<ModelReportQuestion> modelReportQuestion = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+            List<ModelReportQuestion> modelReportQuestion  = AppDatabase.getInstance(context).modelReportQuestionDAO().getTempData();
+            if (modelReportQuestion.size() > 0) {
+//            ModelReportQuestion.deleteAll(ModelReportQuestion.class, "reportid = ?", "TEMPData");
+                AppDatabase.getInstance(context).modelReportQuestionDAO().deleteTempData();
             }
+
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fl_content, auditReportFragment).addToBackStack(null).commit();
+            dialogCancelTemplate.dismiss();
         });
 
         no.setOnClickListener(new View.OnClickListener() {
@@ -1901,11 +1951,19 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         String new_scope = "";
         counter = 0;
-        List<TemplateModelScopeAudit> tmsa2 = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class,
-                "reportid = ?", report.getReport_id());
+//        List<TemplateModelScopeAudit> tmsa2 = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class,
+//                "reportid = ?", report.getReport_id());
+
+        List<TemplateModelScopeAudit> tmsa2 = AppDatabase.getInstance(context).templateModelScopeAuditDAO().getReportId(report.getReport_id());
+
         for (TemplateModelScopeAudit t : tmsa2) {
-            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class,
-                    "reportid = ? AND auditid = ?", report.getReport_id(), counter + "");
+//            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class,
+//                    "reportid = ? AND auditid = ?", report.getReport_id(), counter + "");
+
+            List<TemplateModelScopeAuditInterest> mm =
+                    AppDatabase.getInstance(context).templateModelScopeAuditInterestDAO()
+                            .getByReportAndAuditId(report.getReport_id(), counter + "");
+
             String scope_product = "";
             int m_counter = 0;
             for (TemplateModelScopeAuditInterest m : mm) {
@@ -1922,7 +1980,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         String pre_audit_documents = "";
-        List<TemplateModelPreAuditDoc> tmpd = TemplateModelPreAuditDoc.find(TemplateModelPreAuditDoc.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelPreAuditDoc> tmpd = TemplateModelPreAuditDoc.find(TemplateModelPreAuditDoc.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelPreAuditDoc> tmpd = AppDatabase.getInstance(context).templateModelPreAuditDocDAO().getReportById(report.getReport_id());
         for (TemplateModelPreAuditDoc t : tmpd) {
             pre_audit_documents += "{\"document_name\":\"" + t.getPreaudit() + "\"}";
             if (++counter != tmpd.size()) {
@@ -1931,7 +1990,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
         counter = 0;
         String references = "";
-        List<TemplateModelReference> tmr = TemplateModelReference.find(TemplateModelReference.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelReference> tmr = TemplateModelReference.find(TemplateModelReference.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelReference> tmr = AppDatabase.getInstance(context).templateModelReferenceDAO().getByReportId(report.getReport_id());
         for (TemplateModelReference t : tmr) {
             references += "{\"reference_name\":\"" + t.getCertification() + "\",\"issuer\":\"" + t.getBody()
                     + "\",\"reference_no\":\"" + t.getNumber() + "\",\"validity\":\"" + t.getValidity()
@@ -1943,7 +2003,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         String inspection = "";
-        List<TemplateModelCompanyBackgroundMajorChanges> tmc = TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelCompanyBackgroundMajorChanges> tmc = TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelCompanyBackgroundMajorChanges> tmc = AppDatabase.getInstance(context).templateModelCompanyBackgroundMajorChangesDAO().getByReportId(report.getReport_id());
         for (TemplateModelCompanyBackgroundMajorChanges t : tmc) {
             Log.e("Audit", "postData: Major Changes : " + t.getMajorchanges());
             inspection += "{\"changes\":\"" + t.getMajorchanges().replaceAll("[\r\n]+", "&lt;br&gt;").replace("\"", "&#34;") + "\"}";
@@ -1955,7 +2016,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         String inspector = "";
-        List<TemplateModelCompanyBackgroundName> tmn = TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelCompanyBackgroundName> tmn = TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelCompanyBackgroundName> tmn = AppDatabase.getInstance(context).templateModelCompanyBackgroundNameDAO().getByReportId(report.getReport_id());
         for (TemplateModelCompanyBackgroundName t : tmn) {
             inspector += "{\"name\":\"" + t.getBgname() + "\"}";
             if (++counter != tmn.size()) {
@@ -1964,7 +2026,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
         }
         counter = 0;
         String personnel = "";
-        List<TemplateModelPersonelMetDuring> tmp = TemplateModelPersonelMetDuring.find(TemplateModelPersonelMetDuring.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelPersonelMetDuring> tmp = TemplateModelPersonelMetDuring.find(TemplateModelPersonelMetDuring.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelPersonelMetDuring> tmp = AppDatabase.getInstance(context).templateModelPersonelMetDuringDAO().getByReportId(report.getReport_id());
         for (TemplateModelPersonelMetDuring t : tmp) {
             personnel += "{\"name\":\"" + t.getName() + "\",\"designation\":\"" + t.getPosition() + "\"}";
             if (++counter != tmp.size()) {
@@ -1983,7 +2046,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
                 if (counter++ > 0) {
                     activities += ",";
                 }
-                List<ModelReportSubActivities> subactivity_list = ModelReportSubActivities.find(ModelReportSubActivities.class, "reportid = ? AND activityid = ?", report.getReport_id(), t.getActivity_id());
+//                List<ModelReportSubActivities> subactivity_list = ModelReportSubActivities.find(ModelReportSubActivities.class, "reportid = ? AND activityid = ?", report.getReport_id(), t.getActivity_id());
+                List<ModelReportSubActivities> subactivity_list = AppDatabase.getInstance(context).modelReportSubActivitiesDAO().getByReportAndActivityId(report.getReport_id(), t.getActivity_id());
                 for (ModelReportSubActivities sub_activity : subactivity_list) {
                     if (sub_activity.isCheck()) {
                         sub_activity_counter++;
@@ -2013,11 +2077,17 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         String question = "";
-        List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class,
-                "reportid = ? AND answerid > '0'", report.getReport_id());
+//        List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class,
+//                "reportid = ? AND answerid > '0'", report.getReport_id());
 
-        List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
-                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+        List<ModelReportQuestion> mrq = AppDatabase.getInstance(context).modelReportQuestionDAO().getByAnswerAndReportId(report.getReport_id());
+
+//        List<ModelTemplateQuestionDetails> questionList = ModelTemplateQuestionDetails.find
+//                (ModelTemplateQuestionDetails.class, "templateid = ?", report.getTemplate_id());
+
+        List<ModelTemplateQuestionDetails> questionList = AppDatabase.getInstance(context).modelTemplateQuestionDetailsDAO().getByTemplateId(report.getTemplate_id());
+
+
         Log.i("QUESTION_FILTER", "QUESTION COUNT : " + questionList.size());
         Log.i("QUESTION_FILTER", "ANSWER COUNT : " + mrq.size());
 
@@ -2051,7 +2121,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         String recommendation = "";
-        List<TemplateModelSummaryRecommendation> tmsr = TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "reportid = ? AND elementid > 0", report.getReport_id());
+//        List<TemplateModelSummaryRecommendation> tmsr = TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "reportid = ? AND elementid > 0", report.getReport_id());
+        List<TemplateModelSummaryRecommendation> tmsr = AppDatabase.getInstance(context).templateModelSummaryRecommendationDAO().getByReportAndElementId(report.getReport_id());
         for (TemplateModelSummaryRecommendation t : tmsr) {
             recommendation += "{\"element_id\":" + t.getElement_id() + ",\"recommendation\":\"" + t.getRemarks() + "\"}";
             if (++counter != tmsr.size()) {
@@ -2061,7 +2132,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         String otherdistribution = "";
-        List<TemplateModelDistributionOthers> tmdo = TemplateModelDistributionOthers.find(TemplateModelDistributionOthers.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelDistributionOthers> tmdo = TemplateModelDistributionOthers.find(TemplateModelDistributionOthers.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelDistributionOthers> tmdo = AppDatabase.getInstance(context).templateModelDistributionOthersDAO().getByReportId(report.getReport_id());
         for (TemplateModelDistributionOthers t : tmdo) {
             otherdistribution += "{\"others\":\"" + t.getDistribution_other() + "\"}";
             if (++counter != tmdo.size()) {
@@ -2071,7 +2143,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         String distribution = "";
-        List<TemplateModelDistributionList> tmdl = TemplateModelDistributionList.find(TemplateModelDistributionList.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelDistributionList> tmdl = TemplateModelDistributionList.find(TemplateModelDistributionList.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelDistributionList> tmdl = AppDatabase.getInstance(context).templateModelDistributionListDAO().getByReportId(report.getReport_id());
         for (TemplateModelDistributionList t : tmdl) {
             distribution += "{\"distribution_id\":" + t.getDistribution_id() + "}";
             if (++counter != tmdl.size()) {
@@ -2081,7 +2154,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         String present_during_meeting = "";
-        List<TemplateModelPresentDuringMeeting> tmpdm = TemplateModelPresentDuringMeeting.find(TemplateModelPresentDuringMeeting.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelPresentDuringMeeting> tmpdm = TemplateModelPresentDuringMeeting.find(TemplateModelPresentDuringMeeting.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelPresentDuringMeeting> tmpdm = AppDatabase.getInstance(context).templateModelPresentDuringMeetingDAO().getByReportId(report.getReport_id());
         for (TemplateModelPresentDuringMeeting t : tmpdm) {
             present_during_meeting += "{\"name\":\"" + t.getName() + "\",\"position\":\"" + t.getPosition() + "\"}";
             if (++counter != tmpdm.size()) {
@@ -2101,7 +2175,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         String translators = "";
-        List<TemplateModelTranslator> translatorList = TemplateModelTranslator.find(TemplateModelTranslator.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelTranslator> translatorList = TemplateModelTranslator.find(TemplateModelTranslator.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelTranslator> translatorList = AppDatabase.getInstance(context).templateModelTranslatorDAO().getByReportId(report.getReport_id());
         for (TemplateModelTranslator t : translatorList) {
             translators += "{\"translator\":\"" + t.getTranslator() + "\"}";
             if (++counter != translatorList.size()) {
@@ -2111,7 +2186,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         String issue = "";
-        List<TemplateModelOtherIssuesAudit> issueList = TemplateModelOtherIssuesAudit.find(TemplateModelOtherIssuesAudit.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelOtherIssuesAudit> issueList = TemplateModelOtherIssuesAudit.find(TemplateModelOtherIssuesAudit.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelOtherIssuesAudit> issueList = AppDatabase.getInstance(context).templateModelOtherIssuesAuditDAO().getByReportId(report.getReport_id());
         for (TemplateModelOtherIssuesAudit t : issueList) {
             issue += "{\"" + t.getOther_issues_audit() + "\"}";
             if (++counter != issueList.size()) {
@@ -2121,7 +2197,8 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
         counter = 0;
         String issuex = "";
-        List<TemplateModelOtherIssuesExecutive> issuexList = TemplateModelOtherIssuesExecutive.find(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelOtherIssuesExecutive> issuexList = TemplateModelOtherIssuesExecutive.find(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelOtherIssuesExecutive> issuexList = AppDatabase.getInstance(context).templateModelOtherIssuesExecutiveDAO().getByReportId(report.getReport_id());
         for (TemplateModelOtherIssuesExecutive t : issuexList) {
             issuex += "{\"" + t.getOther_issues_executive() + "\"}";
             if (++counter != issuexList.size()) {
@@ -2282,8 +2359,11 @@ public class NextSelectedAuditReportFragment extends Fragment {
 
                             // send to co_auditors
                             apiInterface = ApiClient.getApiClientPostAuditReport().create(ApiInterface.class);
-                            List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class,
-                                    "reportid = ?", report.getReport_id());
+//                            List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class,
+//                                    "reportid = ?", report.getReport_id());
+
+                            List<TemplateModelAuditors> ltma = AppDatabase.getInstance(context).templateModelAuditorsDAO().getByReportId(report.getReport_id());
+
                             for (TemplateModelAuditors tma : ltma) {
                                 List<AuditorsModel> coEmail = AuditorsModel.find(AuditorsModel.class, "auditorid = ?", tma.getAuditor_id());
                                 Log.i("co_email", "value : " + coEmail.size());
@@ -2352,92 +2432,123 @@ public class NextSelectedAuditReportFragment extends Fragment {
     }
 
     public void updateDate(String report_id) {
-        List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id());
+//        List<TemplateModelAuditors> ltma = TemplateModelAuditors.find(TemplateModelAuditors.class, "templateid = ? AND reportid = ?", report.getTemplate_id(), report.getReport_id());
+        List<TemplateModelAuditors> ltma = AppDatabase.getInstance(context).templateModelAuditorsDAO().getByTemplateAndReportId( report.getTemplate_id(), report.getReport_id());
         for (TemplateModelAuditors t : ltma) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelAuditorsDAO().updateReportId(report.getTemplate_id(), report_id);
+
         }
 
-        List<TemplateModelScopeAudit> tmsa = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelScopeAudit> tmsa = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelScopeAudit> tmsa = AppDatabase.getInstance(context).templateModelScopeAuditDAO().getReportId(report.getReport_id());
+
         for (TemplateModelScopeAudit t : tmsa) {
-            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND id = ?", report.getReport_id(), t.getId() + "");
+//            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND id = ?", report.getReport_id(), t.getId() + "");
+            List<TemplateModelScopeAuditInterest> mm = AppDatabase.getInstance(context).templateModelScopeAuditInterestDAO().getByReportAndPrimaryId(report.getReport_id(), t.getId() + "");
             for (TemplateModelScopeAuditInterest m : mm) {
                 m.setReport_id(report_id);
-                m.save();
+//                m.save();
+                AppDatabase.getInstance(context).templateModelScopeAuditInterestDAO().updateReportId(report_id, t.getId() +"");
             }
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelScopeAuditDAO().updateReportId(report_id);
         }
 
-        List<TemplateModelPreAuditDoc> tmpd = TemplateModelPreAuditDoc.find(TemplateModelPreAuditDoc.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelPreAuditDoc> tmpd = TemplateModelPreAuditDoc.find(TemplateModelPreAuditDoc.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelPreAuditDoc> tmpd = AppDatabase.getInstance(context).templateModelPreAuditDocDAO().getReportById(report.getReport_id());
         for (TemplateModelPreAuditDoc t : tmpd) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelPreAuditDocDAO().updateReportId(report_id);
         }
 
-        List<TemplateModelReference> tmr = TemplateModelReference.find(TemplateModelReference.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelReference> tmr = TemplateModelReference.find(TemplateModelReference.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelReference> tmr = AppDatabase.getInstance(context).templateModelReferenceDAO().getByReportId(report.getReport_id());
         for (TemplateModelReference t : tmr) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelReferenceDAO().updateReportId(report_id);
         }
 
-        List<TemplateModelCompanyBackgroundMajorChanges> tmc = TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelCompanyBackgroundMajorChanges> tmc = TemplateModelCompanyBackgroundMajorChanges.find(TemplateModelCompanyBackgroundMajorChanges.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelCompanyBackgroundMajorChanges> tmc = AppDatabase.getInstance(context).templateModelCompanyBackgroundMajorChangesDAO().getByReportId(report.getReport_id());
         for (TemplateModelCompanyBackgroundMajorChanges t : tmc) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelCompanyBackgroundMajorChangesDAO().updateReportId(report.getReport_id());
         }
 
-        List<TemplateModelCompanyBackgroundName> tmn = TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelCompanyBackgroundName> tmn = TemplateModelCompanyBackgroundName.find(TemplateModelCompanyBackgroundName.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelCompanyBackgroundName> tmn = AppDatabase.getInstance(context).templateModelCompanyBackgroundNameDAO().getByReportId(report.getReport_id());
         for (TemplateModelCompanyBackgroundName t : tmn) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelCompanyBackgroundNameDAO().updateReportId(report_id);
         }
 
-        List<TemplateModelPersonelMetDuring> tmp = TemplateModelPersonelMetDuring.find(TemplateModelPersonelMetDuring.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelPersonelMetDuring> tmp = TemplateModelPersonelMetDuring.find(TemplateModelPersonelMetDuring.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelPersonelMetDuring> tmp = AppDatabase.getInstance(context).templateModelPersonelMetDuringDAO().getByReportId(report.getReport_id());
         for (TemplateModelPersonelMetDuring t : tmp) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelPersonelMetDuringDAO().updateReportId(report_id);
         }
 
         List<ModelReportActivities> mra = ModelReportActivities.find(ModelReportActivities.class, "reportid = ?", report.getReport_id());
         for (ModelReportActivities t : mra) {
-            List<ModelReportSubActivities> mm = ModelReportSubActivities.find(ModelReportSubActivities.class, "reportid = ? AND activityid = ?", report.getReport_id(), t.getActivity_id());
+//            List<ModelReportSubActivities> mm = ModelReportSubActivities.find(ModelReportSubActivities.class, "reportid = ? AND activityid = ?", report.getReport_id(), t.getActivity_id());
+            List<ModelReportSubActivities> mm = AppDatabase.getInstance(context).modelReportSubActivitiesDAO().getByReportAndActivityId(report.getReport_id(), t.getActivity_id());
+
             for (ModelReportSubActivities m : mm) {
                 m.setReport_id(report_id);
-                m.save();
+//                m.save();
+                AppDatabase.getInstance(context).modelReportSubActivitiesDAO().updateId(report.getReport_id(), t.getActivity_id());
             }
             t.setReport_id(report_id);
             t.save();
         }
 
-        List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", report.getReport_id());
+//        List<ModelReportQuestion> mrq = ModelReportQuestion.find(ModelReportQuestion.class, "reportid = ?", report.getReport_id());
+        List<ModelReportQuestion> mrq  = AppDatabase.getInstance(context).modelReportQuestionDAO().getByReportId(report.getReport_id());
         for (ModelReportQuestion t : mrq) {
             t.setReport_id(report_id);
             t.save();
+            AppDatabase.getInstance(context).modelReportQuestionDAO().getByReportId(report.getReport_id());
         }
 
-        List<TemplateModelSummaryRecommendation> tmsr = TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelSummaryRecommendation> tmsr = TemplateModelSummaryRecommendation.find(TemplateModelSummaryRecommendation.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelSummaryRecommendation> tmsr = AppDatabase.getInstance(context).templateModelSummaryRecommendationDAO().getByReportId(report.getReport_id());
         for (TemplateModelSummaryRecommendation t : tmsr) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelSummaryRecommendationDAO().updateReportId(report_id);
         }
 
-        List<TemplateModelDistributionOthers> tmdo = TemplateModelDistributionOthers.find(TemplateModelDistributionOthers.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelDistributionOthers> tmdo = TemplateModelDistributionOthers.find(TemplateModelDistributionOthers.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelDistributionOthers> tmdo = AppDatabase.getInstance(context).templateModelDistributionOthersDAO().getByReportId(report.getReport_id());
         for (TemplateModelDistributionOthers t : tmdo) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelDistributionOthersDAO().updateReportId(report_id);
         }
 
-        List<TemplateModelDistributionList> tmdl = TemplateModelDistributionList.find(TemplateModelDistributionList.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelDistributionList> tmdl = TemplateModelDistributionList.find(TemplateModelDistributionList.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelDistributionList> tmdl = AppDatabase.getInstance(context).templateModelDistributionListDAO().getByReportId(report.getReport_id());
         for (TemplateModelDistributionList t : tmdl) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelDistributionListDAO().updateReportId(report_id);
         }
 
-        List<TemplateModelPresentDuringMeeting> tmpdm = TemplateModelPresentDuringMeeting.find(TemplateModelPresentDuringMeeting.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelPresentDuringMeeting> tmpdm = TemplateModelPresentDuringMeeting.find(TemplateModelPresentDuringMeeting.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelPresentDuringMeeting> tmpdm = AppDatabase.getInstance(context).templateModelPresentDuringMeetingDAO().getByReportId(report.getReport_id());
         for (TemplateModelPresentDuringMeeting t : tmpdm) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelPresentDuringMeetingDAO().updateReportId(report_id);
         }
 
         List<ModelDateOfAudit> mdoa = ModelDateOfAudit.find(ModelDateOfAudit.class, "reportid = ?", report.getReport_id());
@@ -2446,22 +2557,28 @@ public class NextSelectedAuditReportFragment extends Fragment {
             t.save();
         }
 
-        List<TemplateModelOtherIssuesAudit> issue = TemplateModelOtherIssuesAudit.find(TemplateModelOtherIssuesAudit.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelOtherIssuesAudit> issue = TemplateModelOtherIssuesAudit.find(TemplateModelOtherIssuesAudit.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelOtherIssuesAudit> issue = AppDatabase.getInstance(context).templateModelOtherIssuesAuditDAO().getByReportId(report.getReport_id());
         for (TemplateModelOtherIssuesAudit t : issue) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelOtherIssuesAuditDAO().updateReportId(report_id);
         }
 
-        List<TemplateModelOtherIssuesExecutive> issuex = TemplateModelOtherIssuesExecutive.find(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelOtherIssuesExecutive> issuex = TemplateModelOtherIssuesExecutive.find(TemplateModelOtherIssuesExecutive.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelOtherIssuesExecutive> issuex = AppDatabase.getInstance(context).templateModelOtherIssuesExecutiveDAO().getByReportId(report.getReport_id());
         for (TemplateModelOtherIssuesExecutive t : issuex) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelOtherIssuesExecutiveDAO().updateReportId(report_id);
         }
 
-        List<TemplateModelTranslator> tra = TemplateModelTranslator.find(TemplateModelTranslator.class, "reportid = ?", report.getReport_id());
+//        List<TemplateModelTranslator> tra = TemplateModelTranslator.find(TemplateModelTranslator.class, "reportid = ?", report.getReport_id());
+        List<TemplateModelTranslator> tra = AppDatabase.getInstance(context).templateModelTranslatorDAO().getByReportId(report.getReport_id());
         for (TemplateModelTranslator t : tra) {
             t.setReport_id(report_id);
-            t.save();
+//            t.save();
+            AppDatabase.getInstance(context).templateModelTranslatorDAO().updateReportId(report_id);
         }
     }
 

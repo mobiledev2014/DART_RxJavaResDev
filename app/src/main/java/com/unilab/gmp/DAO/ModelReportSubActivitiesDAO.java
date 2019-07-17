@@ -29,4 +29,10 @@ public interface ModelReportSubActivitiesDAO {
     @Query("DELETE FROM ModelReportSubActivities WHERE report_id = :id")
     void deleteId(String id);
 
+    @Query("select * from ModelReportSubActivities WHERE report_id = :reportId AND activity_id = :activityId")
+    List<ModelReportSubActivities> getByReportAndActivityId(String reportId, String activityId);
+
+    @Query("UPDATE ModelReportSubActivities SET report_id = :reportId WHERE report_id = :reportId AND activity_id = activity_id")
+    void updateId(String reportId, String activityId);
+
 }

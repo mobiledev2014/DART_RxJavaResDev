@@ -28,4 +28,11 @@ public interface TemplateModelPreAuditDocDAO {
 
     @Query("DELETE FROM TemplateModelPreAuditDoc WHERE report_id = :reportId")
     void deleteId(String reportId);
+
+    @Query("SELECT * FROM TemplateModelPreAuditDoc WHERE report_id = :reportId")
+    List<TemplateModelPreAuditDoc> getReportById(String reportId);
+
+    @Query("UPDATE TemplateModelPreAuditDoc SET report_id = :reportId WHERE report_id = :reportId")
+    void updateReportId(String reportId);
+
 }

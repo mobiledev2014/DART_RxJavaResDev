@@ -27,4 +27,12 @@ public interface TemplateModelDistributionListDAO {
 
     @Query("DELETE FROM TemplateModelDistributionList WHERE report_id = :reportId")
     void deleteId(String reportId);
+
+    @Query("select * from TemplateModelDistributionList WHERE report_id = :reportId")
+    List<TemplateModelDistributionList> getByReportId(String reportId);
+
+    @Query("UPDATE TemplateModelDistributionList SET report_id = :reportId WHERE report_id = :reportId")
+    void updateReportId(String reportId);
+
+
 }

@@ -25,4 +25,8 @@ import io.reactivex.Flowable;
 
      @Query("DELETE FROM ModelSiteDate")
      void delete();
+
+     @Query("select * from ModelSiteDate WHERE company_id = :companyId")
+     List<ModelSiteDate> getByCompanyId(String companyId);
+
  }

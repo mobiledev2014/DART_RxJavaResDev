@@ -30,8 +30,13 @@ public interface ModelTemplateQuestionDetailsDAO {
     void deleteTemplateId(String template_id);
 
     @Query("SELECT * FROM ModelTemplateQuestionDetails WHERE element_id = :elementId AND template_id = :templateId AND question_id = :questionId")
-    Flowable<ModelTemplateQuestionDetails> findElementTemplateQuestionId(String elementId, String templateId, String questionId);
+    Flowable<ModelTemplateQuestionDetails> getByElementTemplateQuestionId(String elementId, String templateId, String questionId);
 
     @Query("SELECT * FROM ModelTemplateQuestionDetails WHERE element_id = :elementId AND template_id = :templateId AND question_id = :questionId")
-    Flowable<List<ModelTemplateQuestionDetails>> findElementTemplateQuestionIdList(String elementId, String templateId, String questionId);
+    Flowable<List<ModelTemplateQuestionDetails>> getByElementTemplateQuestionIdList(String elementId, String templateId, String questionId);
+
+    @Query("select * from ModelTemplateQuestionDetails WHERE template_id = :templateId")
+    List<ModelTemplateQuestionDetails> getByTemplateId(String templateId);
+
+
 }
