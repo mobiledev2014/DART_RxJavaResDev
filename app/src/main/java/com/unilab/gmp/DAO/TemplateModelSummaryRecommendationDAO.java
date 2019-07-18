@@ -36,7 +36,6 @@ public interface TemplateModelSummaryRecommendationDAO {
     @Query("select * from TemplateModelSummaryRecommendation WHERE report_id = :reportId AND element > '0'")
     List<TemplateModelSummaryRecommendation> getByReportAndElementId(String reportId);
 
-
     @Query("select * from TemplateModelSummaryRecommendation WHERE report_id = :reportId")
     void updateReportId(String reportId);
 

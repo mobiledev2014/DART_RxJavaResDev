@@ -37,6 +37,4 @@ public interface ModelTemplateQuestionDetailsDAO {
 
     @Query("select * from ModelTemplateQuestionDetails WHERE template_id = :templateId")
     List<ModelTemplateQuestionDetails> getByTemplateId(String templateId);
-
-
 }
