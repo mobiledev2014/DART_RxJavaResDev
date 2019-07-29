@@ -14,9 +14,12 @@ import io.reactivex.Flowable;
 
 
 @Dao
-public interface ModelCompanyDAO  {
+public interface ModelCompanyDAO {
     @Query("select * from ModelCompany")
     Flowable<List<ModelCompany>> getList();
+
+    @Query("select * from ModelCompany WHERE company_id =:company_id")
+    List<ModelCompany> getCompanyIDList(String company_id);
 
 
 //    @Query("select * from ModelCompany WHERE approver_id = :approver_id")

@@ -62,4 +62,7 @@ public interface ModelAuditReportsDAO {
     @Query("DELETE FROM ModelAuditReports WHERE report_id = :report_id")
     void deleteId(String report_id);
 
+    @Query("DELETE FROM ModelAuditReports WHERE report_no = :report_no")
+    void deleteReportNo(String report_no);
+
 }

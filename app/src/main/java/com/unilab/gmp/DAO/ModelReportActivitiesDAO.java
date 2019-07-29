@@ -19,6 +19,11 @@ public interface ModelReportActivitiesDAO  {
     Flowable<List<ModelReportActivities>> getList();
 
 
+
+    @Query("select * from ModelReportActivities WHERE report_id = :report_id")
+    List<ModelReportActivities> getReportIdList(String report_id);
+
+
 //    @Query("select * from ModelCompany WHERE approver_id = :approver_id")
 //    Flowable<List<ApproverModel>> getListItem(String approver_id);
 
@@ -30,6 +35,10 @@ public interface ModelReportActivitiesDAO  {
 //                                                 String company,String department,String designation,
 //                                                 String update_date,String email,String status,
 //                                                 String create_date,String rowid);
+
+
+    @Query("UPDATE ModelReportActivities SET report_id=:report_id WHERE report_id=:report_id")
+    Flowable<List<ModelReportActivities>> updateReportId(String report_id);
 
     @Insert
     Completable insert(final ModelReportActivities modelReportActivities);

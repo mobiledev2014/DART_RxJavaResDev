@@ -13,10 +13,13 @@ import io.reactivex.Flowable;
 
 
 @Dao
-public interface ApproverModelDAO  {
+public interface ApproverModelDAO {
 
     @Query("select * from ApproverModel")
     Flowable<List<ApproverModel>> getApproverList();
+
+    @Query("select * from ApproverModel WHERE status > 0")
+    List<ApproverModel> getApproverStatusList();
 
 
     @Query("select * from ApproverModel WHERE approver_id = :approver_id")
@@ -26,10 +29,10 @@ public interface ApproverModelDAO  {
             "middlename =:middlename, lastname =:lastname, designation =:designation, " +
             "company =:company, department =:department, create_date =:create_date, " +
             "update_date =:update_date, email =:email, status =:status WHERE approver_id=:rowid")
-    Flowable<List<ApproverModel>> updateApprover(String approver_id, String firstname,String middlename,String lastname,
-                                                 String company,String department,String designation,
-                                                 String update_date,String email,String status,
-                                                 String create_date,String rowid);
+    Flowable<List<ApproverModel>> updateApprover(String approver_id, String firstname, String middlename, String lastname,
+                                                 String company, String department, String designation,
+                                                 String update_date, String email, String status,
+                                                 String create_date, String rowid);
 
     @Insert
     Completable insert(final List<ApproverModel> approverModel);

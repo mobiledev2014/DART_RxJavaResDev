@@ -3,12 +3,9 @@ package com.unilab.gmp.DAO;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
-
 import com.unilab.gmp.model.ApproverModel;
 import com.unilab.gmp.model.AuditorsModel;
-
 import java.util.List;
-
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 
@@ -17,6 +14,17 @@ import io.reactivex.Flowable;
 public interface AuditorsModelDAO {
     @Query("select * from AuditorsModel WHERE auditor_id = :auditor_id")
     Flowable<List<AuditorsModel>> getItemList(String auditor_id);
+
+    @Query("select * from AuditorsModel WHERE auditor_id = :auditor_id")
+    List<AuditorsModel> getAuditorsIDItemList(String auditor_id);
+
+    @Query("select * from AuditorsModel")
+    List<AuditorsModel> getAllItemList();
+
+    @Query(" SELECT * FROM AuditorsModel WHERE email = :emailUsed  AND status = 1")
+    List<AuditorsModel> getscopeAuditList(String emailUsed);
+
+
 
     @Query("UPDATE AuditorsModel SET auditor_id=:auditor_id, fname =:fname, " +
             "mname =:mname, lname =:lname, designation =:designation, " +

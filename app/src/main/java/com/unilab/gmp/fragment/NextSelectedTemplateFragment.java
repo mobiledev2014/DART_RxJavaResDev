@@ -80,6 +80,7 @@ import com.unilab.gmp.model.TemplateModelTranslator;
 import com.unilab.gmp.retrofit.ApiClient;
 import com.unilab.gmp.retrofit.ApiInterface;
 import com.unilab.gmp.retrofit.Async.PostAsync;
+import com.unilab.gmp.utility.Database.AppDatabase;
 import com.unilab.gmp.utility.DateTimeUtils;
 import com.unilab.gmp.utility.Glovar;
 import com.unilab.gmp.utility.SharedPreferenceManager;
@@ -101,6 +102,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -380,8 +382,9 @@ public class NextSelectedTemplateFragment extends Fragment {
         //--- Lead Auditor setting start
         String emailUsed = sharedPref.getStringData("EMAIL");
         Log.i("EMAILUSED", emailUsed);
-        auditorsModels = AuditorsModel.findWithQuery(AuditorsModel.class,
-                "SELECT * FROM AUDITORS_MODEL WHERE " + "(email = '" + emailUsed + "' AND status = '1')");
+//        auditorsModels = AuditorsModel.findWithQuery(AuditorsModel.class,
+//                "SELECT * FROM AUDITORS_MODEL WHERE " + "(email = '" + emailUsed + "' AND status = '1')");
+        auditorsModels = AppDatabase.getInstance(context).auditorsModelDAO().getscopeAuditList(emailUsed);
 
         Log.i("EMAILUSED", emailUsed + " account status : " + auditorsModels.get(0).getStatus());
         List<String> scopeAuditList = new ArrayList<>();
@@ -929,7 +932,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         }
     }
 
-    private void saveReport2020Onwards(){
+    private void saveReport2020Onwards() {
         int year = Calendar.getInstance().get(Calendar.YEAR);
         String split_year = String.valueOf(year).substring(String.valueOf(year).length() - 2);
         ModelAuditReports mar = new ModelAuditReports();
@@ -940,7 +943,7 @@ public class NextSelectedTemplateFragment extends Fragment {
                 "SELECT * FROM MODEL_AUDIT_REPORTS ORDER BY CAST(reportid as INT) ASC", null);*/
 
         List<ModelAuditReports> auditReps = ModelAuditReports.findWithQuery(ModelAuditReports.class,
-                "SELECT * FROM MODEL_AUDIT_REPORTS WHERE createdate BETWEEN '"+ year +"-01-01' AND '"+ year +"-12-31' ORDER BY CAST(reportid as INT) ASC", null);
+                "SELECT * FROM MODEL_AUDIT_REPORTS WHERE createdate BETWEEN '" + year + "-01-01' AND '" + year + "-12-31' ORDER BY CAST(reportid as INT) ASC", null);
 
         int size = auditReps.size() + 1;
         Log.i("AUDIT-REPORT-SIZE", "VALUE : " + size);
@@ -992,7 +995,7 @@ public class NextSelectedTemplateFragment extends Fragment {
         String[] new_repno = crntrepno.split("-");
 
         mar.setReport_id(report_id);
-        mar.setReport_no("DFT-"+ split_year +"-" + new_repno[0]);
+        mar.setReport_no("DFT-" + split_year + "-" + new_repno[0]);
         mar.setStatus("1");
         mar.setTemplate_id(modelTemplates.getTemplateID());
         mar.setCompany_id(modelTemplates.getCompany_id());
@@ -2062,9 +2065,9 @@ public class NextSelectedTemplateFragment extends Fragment {
             public void onClick(View view) {
                 //save as draft
                 int year = Calendar.getInstance().get(Calendar.YEAR);
-                if(year <= 2019){
+                if (year <= 2019) {
                     saveReport2019();
-                }else{
+                } else {
                     saveReport2020Onwards();
                 }
                 dialogSaveDraft.dismiss();
