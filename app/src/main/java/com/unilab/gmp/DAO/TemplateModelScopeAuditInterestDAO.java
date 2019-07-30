@@ -39,8 +39,10 @@ public interface TemplateModelScopeAuditInterestDAO {
     @Query("select * from TemplateModelScopeAuditInterest WHERE report_id = :reportId AND id = :id")
     List<TemplateModelScopeAuditInterest> getByReportAndPrimaryId(String reportId, String id);
 
-
     @Query("UPDATE TemplateModelScopeAuditInterest SET report_id = :reportId WHERE report_id = :reportId AND id = :id")
-    void updateReportId(String reportId, String id);
+    void updateReportIdByReportAndPrimaryId(String reportId, String id);
+
+    @Query("UPDATE TemplateModelScopeAuditInterest SET report_id = :reportId WHERE report_id = :reportId")
+    void updateReportIdByReportId(String reportId);
 
 }

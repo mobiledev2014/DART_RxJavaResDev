@@ -29,4 +29,7 @@ public interface ModelTemplateActivitiesDAO {
     @Query("select * from ModelTemplateActivities WHERE activityID = :activityId AND template_id = :templateId")
     List<ModelTemplateActivities> searchActIdAndTempId(String activityId, String templateId);
 
+    @Query("select * from ModelTemplateActivities WHERE template_id = :templateId")
+   List<ModelTemplateActivities> getByTemplateId(String templateId);
+
 }

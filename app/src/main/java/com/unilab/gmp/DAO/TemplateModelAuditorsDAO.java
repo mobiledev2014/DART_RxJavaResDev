@@ -35,6 +35,12 @@ public interface TemplateModelAuditorsDAO {
     List<TemplateModelAuditors> getByTemplateAndReportId(String templateId, String reportId);
 
     @Query("UPDATE TemplateModelAuditors SET report_id = :reportId WHERE template_id = :templateId AND report_id = :reportId ")
-    void updateReportId(String templateId, String reportId);
+    void updateReportIdByTemplateAndReportId(String templateId, String reportId);
+
+    @Query("select * from TemplateModelAuditors WHERE report_id = :reportId AND auditor_id != '0'")
+    List<TemplateModelAuditors> getByReportAndAuditorId(String reportId);
+
+    @Query("UPDATE TemplateModelAuditors SET report_id = :reportId WHERE report_id = :reportId AND auditor_id != '0'")
+    void updateReportIdByReportAndAuditorId(String reportId);
 
 }

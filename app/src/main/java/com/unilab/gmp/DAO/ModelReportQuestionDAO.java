@@ -49,11 +49,10 @@ public interface ModelReportQuestionDAO {
     @Query("UPDATE ModelReportQuestion SET report_id = :reportId, question_id = :questionId," +
             " answer_id = :answerId, category_id = :categoryId, answer_details = :answerDetails" +
             "  WHERE report_id = :reportId AND question_id = :questionId")
-    void updateByReportAndQuestionId(String reportId, String questionId,String answerId, String categoryId, String answerDetails);
+    void update(String reportId, String questionId,String answerId, String categoryId, String answerDetails);
 
     @Query("UPDATE ModelReportQuestion SET report_id = :reportId " +
             "  WHERE report_id = :reportId")
-    void updateByReportId(String reportId, String questionId,String answerId, String categoryId, String answerDetails);
-
+    void updateReportId(String reportId);
 
 }

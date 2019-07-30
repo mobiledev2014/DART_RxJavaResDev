@@ -102,7 +102,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -540,7 +539,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
         //--- Approver setting end
         // --- Audit Scope
 //        templateModelScopeAudits = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
-        templateModelScopeAudits = AppDatabase.getInstance(context).templateModelScopeAuditDAO().getReportId(report.getReport_id());
+        templateModelScopeAudits = AppDatabase.getInstance(context).templateModelScopeAuditDAO().getByReportId(report.getReport_id());
 //        templateModelScopeAuditsInterest = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ?", report.getReport_id());
         templateModelScopeAuditsInterest = AppDatabase.getInstance(context).templateModelScopeAuditInterestDAO().getByReportId(report.getReport_id());
         adapterScopeAudit = new AdapterScopeAudit(templateModelScopeAudits, context, modelTemplates.getCompany_id(), null, this, btnTemplateNextScopeAuditAdd);
@@ -1465,7 +1464,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 //                lmrq.get(0).setNaoption_id(mtqd.getNaoption_id());
 //                lmrq.get(0).setCategory_id(mtqd.getCategory_id());
 //                lmrq.get(0).setAnswer_details(mtqd.getAnswer_details());
-                AppDatabase.getInstance(context).modelReportQuestionDAO().updateByReportAndQuestionId(report_id, question_id, answer_id, category_id, answer_details);
+                AppDatabase.getInstance(context).modelReportQuestionDAO().update(report_id, question_id, answer_id, category_id, answer_details);
             } else {
                 ModelReportQuestion mrq = new ModelReportQuestion();
                 mrq.setReport_id(report_id);
@@ -1969,7 +1968,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
 //        List<TemplateModelScopeAudit> tmsa2 = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class,
 //                "reportid = ?", report.getReport_id());
 
-        List<TemplateModelScopeAudit> tmsa2 = AppDatabase.getInstance(context).templateModelScopeAuditDAO().getReportId(report.getReport_id());
+        List<TemplateModelScopeAudit> tmsa2 = AppDatabase.getInstance(context).templateModelScopeAuditDAO().getByReportId(report.getReport_id());
 
         for (TemplateModelScopeAudit t : tmsa2) {
 //            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class,
@@ -2454,12 +2453,12 @@ public class NextSelectedAuditReportFragment extends Fragment {
         for (TemplateModelAuditors t : ltma) {
             t.setReport_id(report_id);
 //            t.save();
-            AppDatabase.getInstance(context).templateModelAuditorsDAO().updateReportId(report.getTemplate_id(), report_id);
+            AppDatabase.getInstance(context).templateModelAuditorsDAO().updateReportIdByTemplateAndReportId(report.getTemplate_id(), report_id);
 
         }
 
 //        List<TemplateModelScopeAudit> tmsa = TemplateModelScopeAudit.find(TemplateModelScopeAudit.class, "reportid = ?", report.getReport_id());
-        List<TemplateModelScopeAudit> tmsa = AppDatabase.getInstance(context).templateModelScopeAuditDAO().getReportId(report.getReport_id());
+        List<TemplateModelScopeAudit> tmsa = AppDatabase.getInstance(context).templateModelScopeAuditDAO().getByReportId(report.getReport_id());
 
         for (TemplateModelScopeAudit t : tmsa) {
 //            List<TemplateModelScopeAuditInterest> mm = TemplateModelScopeAuditInterest.find(TemplateModelScopeAuditInterest.class, "reportid = ? AND id = ?", report.getReport_id(), t.getId() + "");
@@ -2467,7 +2466,7 @@ public class NextSelectedAuditReportFragment extends Fragment {
             for (TemplateModelScopeAuditInterest m : mm) {
                 m.setReport_id(report_id);
 //                m.save();
-                AppDatabase.getInstance(context).templateModelScopeAuditInterestDAO().updateReportId(report_id, t.getId() + "");
+                AppDatabase.getInstance(context).templateModelScopeAuditInterestDAO().updateReportIdByReportAndPrimaryId(report_id, t.getId() +"");
             }
             t.setReport_id(report_id);
 //            t.save();

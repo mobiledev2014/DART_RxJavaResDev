@@ -25,4 +25,7 @@ public interface ModelReportReviewerDAO {
 
     @Query("DELETE FROM ModelReportReviewer")
     void delete();
+
+    @Query("DELETE FROM ModelReportReviewer WHERE report_id = :reportId")
+    void deleteById(String reportId);
 }
